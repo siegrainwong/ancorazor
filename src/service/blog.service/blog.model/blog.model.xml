@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Blog.Model</name>
+    </assembly>
+    <members>
+        <member name="T:Blog.Model.Authentication.JWTTokenModel">
+            <summary>
+            认证实体
+            </summary>
+        </member>
+        <member name="P:Blog.Model.Authentication.JWTTokenModel.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Blog.Model.Authentication.JWTTokenModel.Role">
+            <summary>
+            角色
+            </summary>
+        </member>
+        <member name="P:Blog.Model.Authentication.JWTTokenModel.Work">
+            <summary>
+            职能
+            </summary>
+        </member>
+        <member name="T:Blog.Model.Demo">
+            <summary>
+            Demo
+            </summary>
+        </member>
+        <member name="P:Blog.Model.Demo.Id">
+            <summary>
+            id
+            </summary>
+        </member>
+        <member name="P:Blog.Model.Demo.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:Blog.Model.Demo.Age">
+            <summary>
+            年龄
+            </summary>
+        </member>
+        <member name="T:Blog.Model.Util">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Blog.Model.Util.ObjToInt(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="thisValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Model.Util.ObjToInt(System.Object,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="thisValue"></param>
+            <param name="errorValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Model.Util.ObjToMoney(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="thisValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Model.Util.ObjToMoney(System.Object,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="thisValue"></param>
+            <param name="errorValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Model.Util.ObjToString(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="thisValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Model.Util.ObjToString(System.Object,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="thisValue"></param>
+            <param name="errorValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Model.Util.ObjToDecimal(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="thisValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Model.Util.ObjToDecimal(System.Object,System.Decimal)">
+            <summary>
+            
+            </summary>
+            <param name="thisValue"></param>
+            <param name="errorValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Model.Util.ObjToDate(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="thisValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Model.Util.ObjToDate(System.Object,System.DateTime)">
+            <summary>
+            
+            </summary>
+            <param name="thisValue"></param>
+            <param name="errorValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Model.Util.ObjToBool(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="thisValue"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

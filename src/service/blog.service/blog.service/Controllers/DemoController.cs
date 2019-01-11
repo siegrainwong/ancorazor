@@ -2,19 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Blog.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace blog.service.Controllers
+namespace Blog.Service.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize("Admin")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class DemoController : ControllerBase
     {
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new[] { "value1", "value2" };
         }
 
         // GET api/values/5
@@ -25,8 +28,12 @@ namespace blog.service.Controllers
         }
 
         // POST api/values
+        /// <summary>
+        /// 恩恩
+        /// </summary>
+        /// <param name="value">[FromBody]的意思是，你的这个参数需要从Payload做实体序列化</param>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Demo value)
         {
         }
 

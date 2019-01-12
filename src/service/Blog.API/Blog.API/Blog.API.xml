@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Blog.API</name>
+    </assembly>
+    <members>
+        <member name="M:Blog.API.Authentication.JWTHelper.IssueJWT(Blog.Model.Authentication.JWTTokenModel)">
+            <summary>
+            颁发JWT字符串
+            </summary>
+            <param name="tokenModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.API.Controllers.DemoController.Post(Blog.Model.Advertisement)">
+            <summary>
+            恩恩
+            </summary>
+            <param name="value">[FromBody]的意思是，你的这个参数需要从Payload做实体序列化</param>
+        </member>
+        <member name="M:Blog.API.Controllers.LoginController.GetJWTStr(System.Int64,System.String)">
+            <summary>
+            获取JWT的重写方法，推荐这种，注意在文件夹OverWrite下
+            </summary>
+            <param name="id">id</param>
+            <param name="sub">角色</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.API.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            DI 服务注册
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:Blog.API.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+            <summary>
+            将服务解析出来用于请求管道中
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+        </member>
+    </members>
+</doc>

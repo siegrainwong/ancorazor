@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Blog.API.Caching;
+using Blog.Common.Attributes;
 using Castle.DynamicProxy;
 
 namespace Blog.API.Interceptors
@@ -12,30 +13,40 @@ namespace Blog.API.Interceptors
         {
             _cache = cache;
         }
-        
+
         public void Intercept(IInvocation invocation)
         {
-            //获取自定义缓存键
+            /*
+             * Knowledge: Attributes from invocation.MethodInvocationTarget or invocation.Method
+             * 前者拿的是 invocation.Proceed() 也就是下一个要执行的方法的 MethodInfo，后者拿的是接口的 MethodInfo，所以前者的不确定性要大一些
+             * 因为前者拿到的 MethodInfo 有三个可能：
+             * 1. 如果你有多个 Interceptor 的话，这里拿的可能是你的下一个 Interceptor
+             * 2. 你接口的装饰器，如果有的话
+             * 3. 你接口的最终实现（最后一个继承的实现）
+             * 所以这里要取特性的话，最好在接口上放特性而不是在实现上
+             * Ref: https://stackoverflow.com/questions/42493392/getting-attribute-value-on-member-interception
+             */
+            // 判断是否需要缓存
+            if (invocation.Method.GetCustomAttributes(true).All(x => x.GetType() != typeof(CachingAttribute)))
+            {
+                invocation.Proceed();
+                return;
+            }
+
             var cacheKey = CustomCacheKey(invocation);
-            //根据key获取相应的缓存值
             var cacheValue = _cache.Get(cacheKey);
+            // 拿到缓存则直接返回
             if (cacheValue != null)
             {
-                //将当前获取到的缓存值，赋值给当前执行方法
                 invocation.ReturnValue = cacheValue;
                 return;
             }
 
-            //去执行当前的方法
             invocation.Proceed();
-            //存入缓存
-            if (!string.IsNullOrWhiteSpace(cacheKey))
-            {
-                _cache.Set(cacheKey, invocation.ReturnValue);
-            }
+            if (!string.IsNullOrWhiteSpace(cacheKey)) _cache.Set(cacheKey, invocation.ReturnValue);
         }
 
-        
+
         private static string CustomCacheKey(IInvocation invocation)
         {
             var typeName = invocation.TargetType.Name;
@@ -50,7 +61,7 @@ namespace Blog.API.Interceptors
 
             return key.TrimEnd(':');
         }
-        
+
 
         private static string GetArgumentValue(object arg)
         {

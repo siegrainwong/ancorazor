@@ -9,6 +9,7 @@ using Autofac.Extras.DynamicProxy;
 using Blog.API.Authentication;
 using Blog.API.Caching;
 using Blog.API.Interceptors;
+using Blog.Common.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,11 +42,12 @@ namespace Blog.API
             #region DI
 
             /*
-             * Knowledge:
+             * Knowledge: Interceptor
              * 由于Interceptor内部原理是动态代理，会有较大的性能损耗，不建议在高并发系统上使用
              * 高并发系统应该使用IL静态注入式的AOP，比如这个 https://www.cnblogs.com/mushroom/p/3932698.html
              */
             services.AddScoped<ICaching, MemoryCaching>();
+            services.AddScoped<IRedisCacheManager, RedisCacheManager>();
 
             #endregion
 
@@ -134,7 +136,7 @@ namespace Blog.API
             var builder = new ContainerBuilder();
 
             /*
-             * Knowledge:
+             * Knowledge: AutoFac
              * 这个地方是通过文件方式注入的，原有的程序集注入不知道为什么不行，导致找不到sqlsugar
              * 只能在API这里再用nuget装一次sqlsugar
              */

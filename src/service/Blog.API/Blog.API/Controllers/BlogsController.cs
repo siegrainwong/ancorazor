@@ -1,9 +1,15 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Blog.API.Caching;
+using Blog.Common.Redis;
 using Blog.IService;
 using Blog.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+#endregion
 
 namespace Blog.API.Controllers
 {
@@ -13,14 +19,17 @@ namespace Blog.API.Controllers
     public class BlogsController : ControllerBase
     {
         private IBlogArticleService _service;
-        public BlogsController(IBlogArticleService service)
+        IRedisCacheManager _cache;
+        public BlogsController(IBlogArticleService service, IRedisCacheManager redisCacheManager)
         {
             _service = service;
+            this._cache = redisCacheManager;
         }
 
         [HttpGet]
         public async Task<List<BlogArticle>> Get()
         {
+            // TODO: 作者要在这里用redis
             return await _service.GetBlogs();
         }
 

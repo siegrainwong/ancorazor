@@ -10,11 +10,18 @@ namespace Blog.Service.Base
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class, new()
     {
         public IBaseRepository<TEntity> baseDal;
-
+        
+        /// <summary>
+        /// 功能描述:根据ID查询一条数据
+        /// 作　　者:AZLinli.Blog.Core
+        /// </summary>
+        /// <param name="objId">id（必须指定主键特性 [SugarColumn(IsPrimaryKey=true)]），如果是联合主键，请使用Where条件</param>
+        /// <returns>数据实体</returns>
         public async Task<TEntity> QueryByID(object objId)
         {
-            return await baseDal.QueryByID(objId);
+            return await QueryByID(objId, false);
         }
+
         /// <summary>
         /// 功能描述:根据ID查询一条数据
         /// 作　　者:AZLinli.Blog.Core
@@ -22,7 +29,7 @@ namespace Blog.Service.Base
         /// <param name="objId">id（必须指定主键特性 [SugarColumn(IsPrimaryKey=true)]），如果是联合主键，请使用Where条件</param>
         /// <param name="blnUseCache">是否使用缓存</param>
         /// <returns>数据实体</returns>
-        public async Task<TEntity> QueryByID(object objId, bool blnUseCache = false)
+        public async Task<TEntity> QueryByID(object objId, bool blnUseCache)
         {
             return await baseDal.QueryByID(objId, blnUseCache);
         }

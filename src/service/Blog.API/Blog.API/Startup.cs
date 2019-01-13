@@ -5,7 +5,10 @@ using System.Reflection;
 using System.Text;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Autofac.Extras.DynamicProxy;
 using Blog.API.Authentication;
+using Blog.API.Caching;
+using Blog.API.Interceptors;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +37,17 @@ namespace Blog.API
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             var basePath = Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath;
+
+            #region DI
+
+            /*
+             * Knowledge:
+             * 由于Interceptor内部原理是动态代理，会有较大的性能损耗，不建议在高并发系统上使用
+             * 高并发系统应该使用IL静态注入式的AOP，比如这个 https://www.cnblogs.com/mushroom/p/3932698.html
+             */
+            services.AddScoped<ICaching, MemoryCaching>();
+
+            #endregion
 
             #region Swagger
 
@@ -124,9 +138,14 @@ namespace Blog.API
              * 这个地方是通过文件方式注入的，原有的程序集注入不知道为什么不行，导致找不到sqlsugar
              * 只能在API这里再用nuget装一次sqlsugar
              */
-
+            
+            builder.RegisterType<CacheInterceptor>(); // 拦截器在启用之前要先注册
             var assemblysServices = Assembly.LoadFile(Path.Combine(basePath, "Blog.Service.dll"));
-            builder.RegisterAssemblyTypes(assemblysServices).AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(assemblysServices)
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope()
+                .EnableInterfaceInterceptors()  // 在 Blog.Service上 启用接口拦截
+                .InterceptedBy(typeof(CacheInterceptor));
             var assemblysRepository = Assembly.LoadFile(Path.Combine(basePath, "Blog.Repository.dll"));
             builder.RegisterAssemblyTypes(assemblysRepository).AsImplementedInterfaces();
 
@@ -138,7 +157,7 @@ namespace Blog.API
 
             #endregion
 
-            return new AutofacServiceProvider(ApplicationContainer);    // 第三方IOC接管core内置DI容器
+            return new AutofacServiceProvider(ApplicationContainer);    // 用 Autofac 接管默认 DI 容器
         }
 
         /// <summary>

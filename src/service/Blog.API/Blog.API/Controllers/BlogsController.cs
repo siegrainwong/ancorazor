@@ -15,7 +15,7 @@ namespace Blog.API.Controllers
         private IBlogArticleService _service;
         public BlogsController(IBlogArticleService service)
         {
-            this._service = service;
+            _service = service;
         }
 
         [HttpGet]

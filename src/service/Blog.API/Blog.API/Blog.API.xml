@@ -11,6 +11,11 @@
             <param name="tokenModel"></param>
             <returns></returns>
         </member>
+        <member name="M:Blog.API.AutoMapper.CustomProfile.#ctor">
+            <summary>
+            配置构造函数，用来创建关系映射
+            </summary>
+        </member>
         <member name="M:Blog.API.Controllers.DemoController.Post(Blog.Model.Advertisement)">
             <summary>
             恩恩

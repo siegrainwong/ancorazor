@@ -25,7 +25,7 @@ namespace Blog.Common.Configuration
         /// </summary>
         /// <param name="sections"></param>
         /// <returns></returns>
-        public static string App(params string[] sections)
+        public static string Get(params string[] sections)
         {
             try
             {

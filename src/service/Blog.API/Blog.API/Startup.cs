@@ -6,6 +6,7 @@ using System.Text;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Extras.DynamicProxy;
+using AutoMapper;
 using Blog.API.Authentication;
 using Blog.API.Caching;
 using Blog.API.Interceptors;
@@ -48,7 +49,38 @@ namespace Blog.API
              */
             services.AddScoped<ICaching, MemoryCaching>();
             services.AddScoped<IRedisCacheManager, RedisCacheManager>();
+            services.AddAutoMapper(typeof(Startup));
 
+            #endregion
+
+            #region CORS
+            /*
+             * Knowledge: 跨域配置
+             * 将这种配置添加到Controller或Action上即可生效
+             */
+            services.AddCors(c =>
+            {
+                //↓↓↓↓↓↓↓注意正式环境不要使用这种全开放的处理↓↓↓↓↓↓↓↓↓↓
+                c.AddPolicy("All", policy =>
+                {
+                    policy
+                        .AllowAnyOrigin()//允许任何源
+                        .AllowAnyMethod()//允许任何方式
+                        .AllowAnyHeader()//允许任何头
+                        .AllowCredentials();//允许cookie
+                });
+                //↑↑↑↑↑↑↑注意正式环境不要使用这种全开放的处理↑↑↑↑↑↑↑↑↑↑
+
+
+                //一般采用这种方法
+                c.AddPolicy("LimitHosts", policy =>
+                {
+                    policy
+                        .WithOrigins("http://localhost:8020", "http://blog.core.xxx.com", "")//支持多个域名端口
+                        .WithMethods("GET", "POST", "PUT", "DELETE")//请求方法添加到策略
+                        .WithHeaders("authorization");//标头添加到策略
+                });
+            });
             #endregion
 
             #region Swagger
@@ -191,6 +223,9 @@ namespace Blog.API
 
             // authentication
             app.UseAuthentication();
+
+            // 添加CORS中间件，可以不加，官方建议加上
+            app.UseCors("LimitHosts");
 
             app.UseMvc();
         }

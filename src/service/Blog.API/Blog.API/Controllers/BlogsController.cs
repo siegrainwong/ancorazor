@@ -1,11 +1,14 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Blog.API.Caching;
+using Blog.Common.Configuration;
 using Blog.Common.Redis;
 using Blog.IService;
 using Blog.Model;
+using Blog.Model.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,26 +21,35 @@ namespace Blog.API.Controllers
     [ApiController]
     public class BlogsController : ControllerBase
     {
-        private IBlogArticleService _service;
+        IBlogArticleService _service;
         IRedisCacheManager _cache;
-        public BlogsController(IBlogArticleService service, IRedisCacheManager redisCacheManager)
+        public BlogsController(IBlogArticleService service, IRedisCacheManager cache)
         {
             _service = service;
-            this._cache = redisCacheManager;
+            _cache = cache;
         }
 
         [HttpGet]
         public async Task<List<BlogArticle>> Get()
         {
-            // TODO: 作者要在这里用redis
-            return await _service.GetBlogs();
+            List<BlogArticle> result;
+            const string key = "Blog.GetArticles";
+            if (_cache.Get<object>(key) != null)
+            {
+                result = _cache.Get<List<BlogArticle>>(key);
+            }
+            else
+            {
+                result = await _service.GetArticles();
+                _cache.Set(key, result, TimeSpan.FromHours(2));
+            }
+            return result;
         }
 
-        [HttpGet]
-        [Route("/id")]
-        public async Task<BlogArticle> Get(int id)
+        [HttpGet("{id}", Name = "Get")]
+        public async Task<BlogViewModel> Get(int id)
         {
-            return await _service.QueryByID(id);
+            return await _service.GetArticle(id);
         }
     }
 }

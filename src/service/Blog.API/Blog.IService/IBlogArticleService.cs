@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Blog.Common.Attributes;
 using Blog.IService.Base;
 using Blog.Model;
+using Blog.Model.ViewModel;
 
 namespace Blog.IService
 {
@@ -15,7 +16,8 @@ namespace Blog.IService
     public interface IBlogArticleService : IBaseService<BlogArticle>
     {
         [Caching(Expires = 30)]
-        Task<List<BlogArticle>> GetBlogs();
+        Task<List<BlogArticle>> GetArticles();
+        Task<BlogViewModel> GetArticle(int id);
     }
 }
 

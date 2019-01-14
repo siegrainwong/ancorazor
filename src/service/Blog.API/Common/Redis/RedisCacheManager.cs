@@ -19,7 +19,7 @@ namespace Blog.Common.Redis
 
         public RedisCacheManager()
         {
-            var redisConfiguration = Appsettings.App("AppSettings", "RedisCaching", "ConnectionString");
+            var redisConfiguration = Appsettings.Get("AppSettings", "RedisCaching", "ConnectionString");
 
             if (string.IsNullOrWhiteSpace(redisConfiguration)) throw new ArgumentException("redis config is empty", nameof(redisConfiguration));
 

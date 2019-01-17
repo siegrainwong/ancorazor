@@ -4,24 +4,24 @@
       <div class="container clearfix">
         <div class="l_main">
           <section class="post-list">
-            <div v-for="i in list" :key="i.bID" class="post-wrapper">
+            <div v-for="i in list" :key="i.id" class="post-wrapper">
               <article class="post">
                 <section class="meta">
                   <h2 class="title">
-                    <router-link :to="'/content/' + i.bID">{{ i.btitle }}</router-link>
+                    <router-link :to="'/content/' + i.id">{{ i.title }}</router-link>
                   </h2>
-                  <time>{{i.bCreateTime}}</time>
+                  <time>{{i.createTime}}</time>
                   <div class="cats">
-                    <a href="javascript:void(0)">{{i.bsubmitter}}</a>
+                    <a href="javascript:void(0)">{{i.author}}</a>
                   </div>
                 </section>
                 <section class="article typo">
-                  <article v-html="i.bcontent"></article>
+                  <article v-html="i.content"></article>
                   <div class="readmore">
                     <a href="/dotnet/asp.net core???????????/">查看更多</a>
                   </div>
                   <div class="full-width auto-padding tags">
-                    <a href="javascript:void(0);">{{i.bcategory}}</a>
+                    <a href="javascript:void(0);">{{i.category}}</a>
                   </div>
                 </section>
               </article>
@@ -30,15 +30,15 @@
 
           <nav id="page-nav">
             <router-link
-              :to="'/?page=' + (pageNumber>1?pageNumber-1:1)"
+              :to="'/?page=' + (pageNumber > 1 ? pageNumber - 1 : 1)"
               class="prev"
               rel="prev"
-            >{{pageNumber <= 1? "": "Previous"}}</router-link>
+            >{{ 1 >= pageNumber ? "" : "Previous" }}</router-link>
             <router-link
-              :to="'/?page=' + (pageNumber>=total? total: page+1)"
+              :to="'/?page=' + (pageNumber >= total ? total : page + 1)"
               class="next"
               rel="next"
-            >{{(pageNumber>=total? "": "Next")}}</router-link>
+            >{{(pageNumber >= total ? "" : "Next")}}</router-link>
           </nav>
         </div>
         <aside class="l_side">
@@ -86,7 +86,7 @@ export default class Home extends Vue {
   list: Array<any> = [];
 
   // lifecycle hook
-  mounted() {
+  created() {
     this.getData();
   }
 
@@ -98,7 +98,7 @@ export default class Home extends Vue {
     }
 
     let res = await api.get("Blogs", { page: pageNumber });
-    console.log(res);
+    this.list = res.data;
   }
 }
 </script>

@@ -61,14 +61,14 @@ namespace Blog.API
             services.AddCors(c =>
             {
                 //↓↓↓↓↓↓↓注意正式环境不要使用这种全开放的处理↓↓↓↓↓↓↓↓↓↓
-                c.AddPolicy("All", policy =>
-                {
-                    policy
-                        .AllowAnyOrigin()//允许任何源
-                        .AllowAnyMethod()//允许任何方式
-                        .AllowAnyHeader()//允许任何头
-                        .AllowCredentials();//允许cookie
-                });
+                //c.AddPolicy("All", policy =>
+                //{
+                //    policy
+                //        .AllowAnyOrigin()//允许任何源
+                //        .AllowAnyMethod()//允许任何方式
+                //        .AllowAnyHeader()//允许任何头
+                //        .AllowCredentials();//允许cookie
+                //});
                 //↑↑↑↑↑↑↑注意正式环境不要使用这种全开放的处理↑↑↑↑↑↑↑↑↑↑
 
 
@@ -76,8 +76,8 @@ namespace Blog.API
                 c.AddPolicy("LimitHosts", policy =>
                 {
                     policy
-                        .WithOrigins("http://localhost:8020", "http://blog.core.xxx.com", "")//支持多个域名端口
-                        .WithMethods("GET", "POST", "PUT", "DELETE")//请求方法添加到策略
+                        .WithOrigins("http://localhost:8080")//支持多个域名端口
+                        .WithMethods("GET", "POST", "PUT", "DELETE", "OPTION")//请求方法添加到策略
                         .WithHeaders("authorization");//标头添加到策略
                 });
             });

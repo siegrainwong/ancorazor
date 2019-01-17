@@ -19,6 +19,7 @@ namespace Blog.API.Controllers
     [Route("api/[controller]")]
     [AllowAnonymous]
     [ApiController]
+    
     public class BlogsController : ControllerBase
     {
         IBlogArticleService _service;

@@ -86,7 +86,7 @@ export default class Home extends Vue {
   list: Array<any> = [];
 
   // lifecycle hook
-  created() {
+  mounted() {
     this.getData();
   }
 
@@ -96,7 +96,6 @@ export default class Home extends Vue {
     if (pageNumber) {
       this.pageNumber = pageNumber;
     }
-
     let res = await api.get("Blogs", { page: pageNumber });
     this.list = res.data;
   }

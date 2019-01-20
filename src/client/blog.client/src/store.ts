@@ -1,18 +1,20 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import DialogViewModel from "@/common/viewmodels/dialogViewModel.ts"
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+interface StateType {
+  formDatas: DialogViewModel
+}
+
+export default new Vuex.Store<StateType>({
   state: {
-    formDatas: null
+    formDatas: new DialogViewModel()
   },
   mutations: {
-    getFormData(state, data) {
+    formData(state, data: DialogViewModel) {
       state.formDatas = data
     }
-  },
-  actions: {
-
   }
 })

@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Form from './views/Form.vue'
+import FormVuex from './views/FormVuex.vue'
 
 Vue.use(Router)
 
@@ -25,6 +26,11 @@ export default new Router({
       path: '/form',
       name: 'form',
       component: Form
+    },
+    {
+      path: '/formvuex',
+      name: 'formvuex',
+      component: FormVuex
     },
     // {
     //   path: '/form',

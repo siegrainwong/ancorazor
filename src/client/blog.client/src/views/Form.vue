@@ -29,7 +29,8 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Dialog, { DialogViewModel } from "@/components/dialog.vue"; //导入子组件
+import Dialog from "@/components/dialog.vue"; //导入子组件
+import DialogViewModel from "@/common/viewmodels/dialogViewModel.ts";
 
 @Component({ components: { Dialog } })
 export default class Form extends Vue {

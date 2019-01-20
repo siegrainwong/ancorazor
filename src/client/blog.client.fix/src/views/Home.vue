@@ -71,9 +71,8 @@
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import api from "../common/network/api.request";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
 
-@Component({ components: { HelloWorld } })
+@Component
 export default class Home extends Vue {
     pageNumber: number = 1;
     total: number = 1;

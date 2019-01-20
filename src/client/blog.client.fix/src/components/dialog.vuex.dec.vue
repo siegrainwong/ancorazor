@@ -20,15 +20,16 @@
 <script lang="ts">
 import { Component, Vue, Prop, Watch, Emit } from "vue-property-decorator";
 import DialogViewModel from "@/common/viewmodels/dialogViewModel.ts";
+import { getModule } from "vuex-module-decorators";
+import store, { FormModule } from "@/store";
 
 @Component
 export default class Dialog extends Vue {
     @Prop() model!: DialogViewModel;
 
+    module: FormModule = getModule(FormModule, store);
     mounted() {
-        // 这个地方是把model引用给了store，所以后续“变更”也能直接提交上去
-        // 只要你不修改model的指针
-        this.$store.commit("formData", this.model);
+        this.module.setForm(this.model);
     }
 }
 </script>

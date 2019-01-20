@@ -4,7 +4,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './registerServiceWorker'
-import api from './common/network/api.request'
 
 Vue.config.productionTip = false
 

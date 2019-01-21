@@ -4,6 +4,7 @@ import Home from './views/Home.vue';
 import Form from './views/Form.vue';
 import FormVuex from './views/FormVuex.vue';
 import FormVuexDec from './views/FormVuex.Dec.vue';
+import Login from './views/Login.vue';
 
 Vue.use(Router);
 
@@ -30,6 +31,11 @@ export default new Router({
       path: '/formvuexdec',
       name: 'formvuexdec',
       component: FormVuexDec
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     }
   ],
 });

@@ -21,7 +21,8 @@
 import { Component, Vue, Prop, Watch, Emit } from "vue-property-decorator";
 import DialogViewModel from "@/common/viewmodels/dialogViewModel.ts";
 import { getModule } from "vuex-module-decorators";
-import store, { FormModule } from "@/store";
+import store from "@/store";
+import FormModule from "@/common/stores/formModule";
 
 @Component
 export default class Dialog extends Vue {
@@ -30,6 +31,14 @@ export default class Dialog extends Vue {
     module: FormModule = getModule(FormModule, store);
     mounted() {
         this.module.setForm(this.model);
+    }
+
+    /**
+     * 这里用来测试vuex是否真的存到了值，事实是是的。
+     */
+    @Watch("model", { immediate: true, deep: true })
+    onModelChanged() {
+        console.log(this.module.form);
     }
 }
 </script>

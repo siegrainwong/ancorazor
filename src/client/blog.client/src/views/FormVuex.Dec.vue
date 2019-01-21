@@ -20,7 +20,8 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import Dialog from "@/components/dialog.vuex.dec.vue";
 import DialogViewModel from "@/common/viewmodels/dialogViewModel";
 import { getModule } from "vuex-module-decorators";
-import store, { FormModule } from "@/store";
+import store from "@/store";
+import FormModule from "@/common/stores/formModule";
 
 @Component({ components: { Dialog } })
 export default class Form extends Vue {
@@ -29,7 +30,6 @@ export default class Form extends Vue {
      * 这里按照官方的starup跑不通，我不知道为什么
      * 我这里直接这样getModule就能取到值
      */
-    // TODO: vue-devtool不能取到vuex的即时的值
     module: FormModule = getModule(FormModule, store);
     get model(): DialogViewModel {
         return this.module.form;

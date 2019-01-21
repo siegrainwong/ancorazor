@@ -28,7 +28,7 @@ export default class Dialog extends Vue {
     mounted() {
         // 这个地方是把model引用给了store，所以后续“变更”也能直接提交上去
         // 只要你不修改model的指针
-        this.$store.commit("formData", this.model);
+        this.$store.commit("OldModule2/formData", this.model);
     }
 }
 </script>

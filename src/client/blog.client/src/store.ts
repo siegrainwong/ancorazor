@@ -1,35 +1,40 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import DialogViewModel from "@/common/viewmodels/dialogViewModel"
+/**
+ * New way using vuex-module-decorators
+ */
+import FormModule from "@/common/stores/formModule"
 
 Vue.use(Vuex)
 
-import { Module, VuexModule, Mutation } from 'vuex-module-decorators'
-
-@Module({ name: "FormModule" })
-export class FormModule extends VuexModule {
-  form: DialogViewModel = new DialogViewModel()
-
-  @Mutation
-  setForm(val: DialogViewModel) {
-    this.form = val
-  }
+/**
+ * The traditional way to declare a vuex module
+ */
+export interface Module<S> {
+  namespaced?: boolean;
+  state?: S | (() => S);
+  mutations?: {};
 }
-
 interface StateType {
   formDatas: DialogViewModel
 }
 
-export default new Vuex.Store<StateType>({
+export const OldModule2: Module<StateType> = {
+  namespaced: true,
   state: {
     formDatas: new DialogViewModel()
   },
   mutations: {
-    formData(state, data: DialogViewModel) {
+    formData(state: any, data: DialogViewModel) {
       state.formDatas = data
     }
-  },
+  }
+};
+
+export default new Vuex.Store({
   modules: {
-    FormModule
+    FormModule,
+    OldModule2
   }
 })

@@ -28,7 +28,7 @@ export default class Form extends Vue {
      * 我们把这个获取到，传给子组件，子组件修改后同步到store中，然后我们这里也就能取到了。
      */
     get fatherData(): DialogViewModel {
-        return this.$store.state.formDatas as DialogViewModel;
+        return this.$store.state.OldModule2.formDatas as DialogViewModel;
     }
 }
 </script>

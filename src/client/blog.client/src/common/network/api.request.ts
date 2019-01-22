@@ -1,9 +1,13 @@
 import { AxiosResponse, AxiosRequestConfig } from 'axios';
 import axios from 'axios';
+import router from '@/router';
+
+import { getModule } from "vuex-module-decorators";
+import store from "@/store";
+import UserModule from "@/common/stores/userModule";
 
 const IsDevelopment: boolean = true;
 axios.defaults.headers = {
-    //'X-Requested-With': 'XMLHttpRequest',
     'Content-Type': 'application/x-www-form-urlencoded',
 };
 axios.defaults.baseURL = IsDevelopment ? "https://localhost:5001/api" : "shit";
@@ -15,7 +19,9 @@ const enum Methods {
     PUT = 'PUT',
     DELETE = 'DELETE'
 }
-
+/**
+ * API请求入口
+ */
 export default {
     async get(url: string, query?: any, option?: AxiosRequestConfig) {
         return await handleRequest(Methods.GET, url, null, query, option);
@@ -31,6 +37,47 @@ export default {
     },
 }
 
+const module: UserModule = getModule(UserModule, store)
+/**
+ * 鉴权拦截器
+ */
+axios.interceptors.request.use(
+    config => {
+        // 判断是否存在token，如果存在的话，则每个http header都加上token
+        if (module.isTokenValid) config.headers.Authorization = module.authToken;
+        return config;
+    },
+    err => {
+        return Promise.reject(err);
+    }
+);
+axios.interceptors.response.use(
+    response => {
+        return response;
+    },
+    error => {
+        if (error.response) {
+            switch (error.response.status) {
+                case 401:
+                    // 返回 401 清除token信息并跳转到登录页面
+                    router.replace({
+                        path: "login",
+                        query: { redirect: router.currentRoute.fullPath }
+                    });
+            }
+        }
+        return Promise.reject(error.response.data);
+    }
+);
+
+/**
+ * 请求处理
+ * @param method Method
+ * @param url URL
+ * @param body Payload
+ * @param query QueryString
+ * @param option 选项
+ */
 async function handleRequest(method: Methods, url: string, body?: any, query?: any, option?: AxiosRequestConfig) {
     const res = await axios.request({
         method: method.toString(),
@@ -44,54 +91,32 @@ async function handleRequest(method: Methods, url: string, body?: any, query?: a
 
 /**
  * 响应处理
- * @param res 
+ * @param response 
  */
-function handleResponse(res: AxiosResponse): { succeed: boolean, data: any } {
+function handleResponse(response: AxiosResponse): ResponseModel {
     let result = null;
-    switch (res.status) {
+    switch (response.status) {
         case 200:
-            result = { succeed: true, data: res.data }
-            break;
-        case 302:
-            result = { succeed: false, data: `重定向到` + res.data }
-            break;
-        case 400:
-            // 如果服务器返回错误信息,就显示服务器的信息,否则显示请求错误
-            result = { succeed: false, data: res.data ? res.data : '请求错误' }
-            break;
-        case 401:
-            result = { succeed: false, data: res.data ? res.data : '请求要求用户的身份认证' }
-            break;
-        case 404:
-            result = { succeed: false, data: res.data ? res.data : '不存在的资源' }
-            break;
-        case 413:
-            result = { succeed: false, data: res.data ? res.data : '上传的资源体积过大' }
-            break;
-        case 500:
-            result = { succeed: false, data: res.data ? res.data : '服务器内部错误，无法完成请求' }
-            break;
-        case 501:
-            result = { succeed: false, data: res.data ? res.data : '服务器不支持请求的功能，无法完成请求' }
+            result = new ResponseModel(response.data.data, response.data.succeed)
             break;
         default:
-            result = { succeed: false, data: res.data ? res.data : '未分类的错误, status' + res.status }
-            break;
+            return new ResponseModel(response.data ? response.data : 'Request failed : status' + response.status)
     }
-    function handleError(result: { succeed: boolean, data: any }) {
-        if (result.succeed) {
-            return { succeed: result.succeed, data: result.data }
-        } else {
-            showError(result.data)
-            return { succeed: result.succeed, data: result.data }
-        }
+
+    if (result.succeed) {
+        return new ResponseModel(result.data, true)
+    } else {
+        console.log(result.data);
+        return new ResponseModel(result)
     }
-    function showError(msg: string) {
-        if (IsDevelopment) {
-            alert(msg)
-        } else {
-            console.log(msg);
-        }
+}
+
+class ResponseModel {
+    succeed: boolean = false
+    data?: any
+
+    constructor(data?: any, succeed: boolean = false) {
+        this.data = data;
+        this.succeed = succeed;
     }
-    return handleError(result);
 }

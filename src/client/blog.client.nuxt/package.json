@@ -1,0 +1,36 @@
+{
+  "name": "blog.client.nuxt",
+  "version": "1.0.0",
+  "description": "My fantastic Nuxt.js project",
+  "author": "siegrain",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.3.6",
+    "cookie-universal-nuxt": "^2.0.14",
+    "cross-env": "^5.2.0",
+    "nuxt": "^2.3.4",
+    "nuxt-buefy": "^0.3.2",
+    "vue-class-component": "^6.3.2",
+    "vue-property-decorator": "^7.0.0",
+    "vuex-module-decorators": "^0.9.7"
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^3.1.0",
+    "eslint-plugin-prettier": "2.6.2",
+    "nodemon": "^1.18.9",
+    "prettier": "1.14.3",
+    "typescript": "^3.2.4",
+    "@types/node": "^10.12.18",
+    "@vue/cli-plugin-babel": "^3.3.0",
+    "@vue/cli-plugin-typescript": "^3.3.0",
+    "@vue/cli-service": "^3.3.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2"
+  }
+}

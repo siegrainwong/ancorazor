@@ -8,8 +8,11 @@ import ElementUI from 'element-ui'
 Vue.use(ElementUI)
 Vue.config.productionTip = false;
 
-new Vue({
-  router,
-  store,
-  render: (h) => h(App),
-}).$mount('#app');
+export function createApp(): Vue {
+  const app = new Vue({
+    router,
+    store,
+    render: (h) => h(App),
+  }).$mount('#app');
+  return app;
+}

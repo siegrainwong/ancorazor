@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import { getModule } from "vuex-module-decorators";
 import store from "../../store/store";
-import { UserModule } from "../stores/userModule";
+import UserModule from "../stores/userModule";
 
 const IsDevelopment: boolean = true;
 axios.defaults.headers = {

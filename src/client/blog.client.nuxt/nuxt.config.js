@@ -45,9 +45,9 @@ module.exports = {
     // Doc: https://buefy.github.io/#/documentation
     'nuxt-buefy',
     // Knowledge: Add ts support for nuxt.js
-    "~/modules/typescript.js"
+    "~/modules/typescript.js",
     // Ref: https://github.com/microcipcip/cookie-universal/tree/master/packages/cookie-universal-nuxt
-    // 'cookie-universal-nuxt'
+    'cookie-universal-nuxt'
   ],
   /*
   ** Axios module configuration

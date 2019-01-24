@@ -3,7 +3,7 @@ import axios from 'axios';
 // import router from 'router'
 
 import { getModule } from "vuex-module-decorators";
-import store from "../../store/store";
+import store from "../../store";
 import UserModule from "../stores/userModule";
 
 const IsDevelopment: boolean = true;

@@ -2,23 +2,17 @@
   <div class="column">
     <div class="card">
       <header class="card-header">
-        <p class="card-header-title has-text-grey">
-          {{ title }}
-        </p>
+        <p class="card-header-title has-text-grey">{{ title }}</p>
       </header>
       <div class="card-content">
         <div class="content has-text-centered">
-          <b-icon
-            :icon="icon"
-            size="is-large"
-            type="is-primary"
-          />
+          <b-icon :icon="icon" size="is-large" type="is-primary"/>
         </div>
       </div>
       <footer class="card-footer">
         <div class="card-footer-item">
           <span>
-            <slot />
+            <slot/>
           </span>
         </div>
       </footer>
@@ -26,7 +20,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   props: {
     title: {

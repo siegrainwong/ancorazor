@@ -4,9 +4,14 @@
         <name>Blog.Model</name>
     </assembly>
     <members>
-        <member name="T:Blog.Model.Advertisement">
+        <member name="T:Blog.Model.Article">
             <summary>
-            Advertisement
+            Article
+            </summary>	
+        </member>
+        <member name="T:Blog.Model.ArticleCategories">
+            <summary>
+            ArticleCategories
             </summary>	
         </member>
         <member name="T:Blog.Model.Authentication.JWTTokenModel">
@@ -29,9 +34,9 @@
             职能
             </summary>
         </member>
-        <member name="T:Blog.Model.BlogArticle">
+        <member name="T:Blog.Model.Category">
             <summary>
-            BlogArticle
+            Category
             </summary>	
         </member>
         <member name="T:Blog.Model.Module">
@@ -64,32 +69,32 @@
             RoleModulePermission
             </summary>	
         </member>
-        <member name="T:Blog.Model.SysUser">
-            <summary>
-            SysUser
-            </summary>	
-        </member>
         <member name="T:Blog.Model.UserRole">
             <summary>
             UserRole
             </summary>	
         </member>
-        <member name="P:Blog.Model.ViewModel.BlogViewModel.Previous">
+        <member name="T:Blog.Model.Users">
+            <summary>
+            Users
+            </summary>	
+        </member>
+        <member name="P:Blog.Model.ViewModel.ArticleViewModel.Previous">
             <summary>
             上一篇
             </summary>
         </member>
-        <member name="P:Blog.Model.ViewModel.BlogViewModel.PreviousId">
+        <member name="P:Blog.Model.ViewModel.ArticleViewModel.PreviousId">
             <summary>
             上一篇id
             </summary>
         </member>
-        <member name="P:Blog.Model.ViewModel.BlogViewModel.Next">
+        <member name="P:Blog.Model.ViewModel.ArticleViewModel.Next">
             <summary>
             下一篇
             </summary>
         </member>
-        <member name="P:Blog.Model.ViewModel.BlogViewModel.NextId">
+        <member name="P:Blog.Model.ViewModel.ArticleViewModel.NextId">
             <summary>
             下一篇id
             </summary>

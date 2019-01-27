@@ -59,4 +59,10 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="IRepository\Generated\" />
+    <Folder Include="IService\Generated\" />
+    <Folder Include="Service\Generated\" />
+  </ItemGroup>
+
 </Project>

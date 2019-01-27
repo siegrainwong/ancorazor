@@ -11,7 +11,7 @@ namespace Blog.API.AutoMapper
         /// </summary>
         public CustomProfile()
         {
-            CreateMap<BlogArticle, BlogViewModel>();
+            CreateMap<Article, ArticleViewModel>();
         }
     }
 }

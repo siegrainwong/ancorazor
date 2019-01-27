@@ -24,16 +24,6 @@ namespace Blog.API.Controllers
             return "value";
         }
 
-        // POST api/values
-        /// <summary>
-        /// 恩恩
-        /// </summary>
-        /// <param name="value">[FromBody]的意思是，你的这个参数需要从Payload做实体序列化</param>
-        [HttpPost]
-        public void Post([FromBody] Advertisement value)
-        {
-        }
-
         // PUT api/values/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)

@@ -76,7 +76,7 @@ namespace Blog.API
                 c.AddPolicy("LimitHosts", policy =>
                 {
                     policy
-                        .WithOrigins("http://localhost:8080")//支持多个域名端口
+                        .WithOrigins("http://localhost:4200")//支持多个域名端口
                         .WithMethods("GET", "POST", "PUT", "DELETE", "OPTION")//请求方法添加到策略
                         .WithHeaders("authorization");//标头添加到策略
                 });

@@ -1,4 +1,4 @@
-	//----------SysUser开始----------
+	//----------Category开始----------
     
 
 using Blog.IRepository;
@@ -9,13 +9,13 @@ using Blog.Service.Base;
 namespace Blog.Service
 {	
 	/// <summary>
-	/// SysUserService
+	/// CategoryService
 	/// </summary>	
-	public class SysUserService : BaseService<SysUser>, ISysUserService
+	public class CategoryService : BaseService<Category>, ICategoryService
     {
 	
-        ISysUserRepository dal;
-        public SysUserService(ISysUserRepository dal)
+        ICategoryRepository dal;
+        public CategoryService(ICategoryRepository dal)
         {
             this.dal = dal;
             base.baseDal = dal;
@@ -24,5 +24,5 @@ namespace Blog.Service
     }
 }
 
-	//----------SysUser结束----------
+	//----------Category结束----------
 	

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Blog.Common.Redis;
 using Blog.IService;
 using Blog.Model;
+using Blog.Model.ViewModel;
+using Blog.Model.ViewModel.ParameterModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,14 +17,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace Blog.API.Controllers
 {
     [Route("api/[controller]")]
-    //[AllowAnonymous]
-    [Authorize(Policy = "Admin")]
+    [AllowAnonymous]
+    //[Authorize(Policy = "Admin")]
     [ApiController]
     public class BlogsController : ControllerBase
     {
-        private IBlogArticleService _service;
+        private IArticleService _service;
         private IRedisCacheManager _cache;
-        public BlogsController(IBlogArticleService service, IRedisCacheManager cache)
+        public BlogsController(IArticleService service, IRedisCacheManager cache)
         {
             _service = service;
             _cache = cache;
@@ -31,31 +33,28 @@ namespace Blog.API.Controllers
         /// <summary>
         /// 获取博客列表
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="pageNumber"></param>
-        /// <param name="category"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> Get(int id, int pageNumber, string category)
+        public async Task<object> Get([FromQuery]QueryParameters parameters)
         {
             const int pageSize = 6;
-            List<BlogArticle> list;
+            List<Article> list;
 
-            if (_cache.Get<object>("Redis.Blog") != null)
+            const string key = "Redis.Article";
+
+            if (_cache.Get<object>(key) != null)
             {
-                list = _cache.Get<List<BlogArticle>>("Redis.Blog");
+                list = _cache.Get<List<Article>>(key);
             }
             else
             {
-                list = string.IsNullOrEmpty(category)
-                    ? await _service.Query()
-                    : await _service.Query(a => a.Category == category);
+                list = await _service.Query();
 
-                _cache.Set("Redis.Blog", list, TimeSpan.FromHours(2));
+                _cache.Set(key, list, TimeSpan.FromHours(2));
             }
             var pageCount = list.Count / pageSize;
 
-            list = list.OrderByDescending(d => d.Id).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            list = list.OrderByDescending(d => d.Id).Skip(parameters.PageIndex * pageSize).Take(parameters.PageSize).ToList();
 
             foreach (var item in list)
             {
@@ -65,7 +64,7 @@ namespace Blog.API.Controllers
                 if (item.Content.Length > totalLength) item.Content = item.Content.Substring(0, totalLength);
             }
 
-            return new { succeed = true, data = new { list, pageNumber, pageCount } };
+            return new { succeed = true, data = new { list, parameters.PageNumber, pageCount } };
         }
 
         // GET: api/Blog/5

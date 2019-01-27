@@ -16,13 +16,10 @@
             配置构造函数，用来创建关系映射
             </summary>
         </member>
-        <member name="M:Blog.API.Controllers.BlogsController.Get(System.Int32,System.Int32,System.String)">
+        <member name="M:Blog.API.Controllers.BlogsController.Get(Blog.Model.ViewModel.ParameterModel.QueryParameters)">
             <summary>
             获取博客列表
             </summary>
-            <param name="id"></param>
-            <param name="pageNumber"></param>
-            <param name="category"></param>
             <returns></returns>
         </member>
         <member name="M:Blog.API.Controllers.BlogsController.Get(System.Int32)">
@@ -31,12 +28,6 @@
             </summary>
             <param name="id"></param>
             <returns></returns>
-        </member>
-        <member name="M:Blog.API.Controllers.DemoController.Post(Blog.Model.Advertisement)">
-            <summary>
-            恩恩
-            </summary>
-            <param name="value">[FromBody]的意思是，你的这个参数需要从Payload做实体序列化</param>
         </member>
         <member name="M:Blog.API.Controllers.LoginController.GetToken(System.String,System.String)">
             <summary>

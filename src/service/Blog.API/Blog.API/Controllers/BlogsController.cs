@@ -4,13 +4,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Blog.Common.Extensions;
 using Blog.Common.Redis;
+using Blog.Common.Services;
 using Blog.IService;
 using Blog.Model;
+using Blog.Model.ParameterModel;
+using Blog.Model.ParameterModel.Base;
+using Blog.Model.Resources;
 using Blog.Model.ViewModel;
-using Blog.Model.ViewModel.ParameterModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 #endregion
 
@@ -22,49 +29,60 @@ namespace Blog.API.Controllers
     [ApiController]
     public class BlogsController : ControllerBase
     {
-        private IArticleService _service;
-        private IRedisCacheManager _cache;
-        public BlogsController(IArticleService service, IRedisCacheManager cache)
+        private readonly IArticleService _service;
+        private readonly IRedisCacheManager _cache;
+        private readonly IUrlHelper _urlHelper;
+        private readonly IPropertyMappingContainer _mappingContainer;
+        private readonly ITypeHelperService _typeHelper;
+        private readonly IMapper _mapper;
+        public BlogsController(IArticleService service,
+            IRedisCacheManager cache,
+            IUrlHelper urlHelper,
+            IPropertyMappingContainer mappingContainer,
+            ITypeHelperService typeHelper,
+            IMapper mapper
+            )
         {
             _service = service;
             _cache = cache;
+            _urlHelper = urlHelper;
+            _mappingContainer = mappingContainer;
+            _typeHelper = typeHelper;
+            _mapper = mapper;
         }
 
-        /// <summary>
-        /// 获取博客列表
-        /// </summary>
-        /// <returns></returns>
         [HttpGet]
-        public async Task<object> Get([FromQuery]QueryParameters parameters)
+        public async Task<IActionResult> Get([FromQuery]ArticleParameters parameters)
         {
-            const int pageSize = 6;
-            List<Article> list;
+            if (!_mappingContainer.ValidateMappingExistsFor<ArticleParameters, Article>(parameters.OrderBy))
+                return BadRequest("Can't finds fields for sorting.");
+            if (!_typeHelper.TypeHasProperties<ArticleParameters>(parameters.Fields))
+                return BadRequest("Fields not exist.");
 
-            const string key = "Redis.Article";
+            var postList = await _service.GetPagedArticles(parameters);
 
-            if (_cache.Get<object>(key) != null)
+            var postResources = _mapper.Map<IEnumerable<Article>, IEnumerable<ArticleViewModel>>(postList);
+
+            var previousPageLink = postList.HasPrevious ? CreatePostUri(parameters, PaginationResourceUriType.PreviousPage) : null;
+
+            var nextPageLink = postList.HasNext ? CreatePostUri(parameters, PaginationResourceUriType.NextPage) : null;
+
+            var meta = new
             {
-                list = _cache.Get<List<Article>>(key);
-            }
-            else
+                postList.TotalItemsCount,
+                postList.PageSize,
+                postList.PageIndex,
+                postList.PageCount,
+                previousPageLink,
+                nextPageLink
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(meta, new JsonSerializerSettings
             {
-                list = await _service.Query();
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            }));
 
-                _cache.Set(key, list, TimeSpan.FromHours(2));
-            }
-            var pageCount = list.Count / pageSize;
-
-            list = list.OrderByDescending(d => d.Id).Skip(parameters.PageIndex * pageSize).Take(parameters.PageSize).ToList();
-
-            foreach (var item in list)
-            {
-                if (string.IsNullOrEmpty(item.Content)) continue;
-
-                const int totalLength = 500;
-                if (item.Content.Length > totalLength) item.Content = item.Content.Substring(0, totalLength);
-            }
-
-            return new { succeed = true, data = new { list, parameters.PageNumber, pageCount } };
+            return Ok(postResources.ToDynamicIEnumerable(parameters.Fields));
         }
 
         // GET: api/Blog/5
@@ -79,5 +97,99 @@ namespace Blog.API.Controllers
             var model = await _service.GetArticle(id);
             return new { succeed = true, data = model };
         }
+
+        #region helper methods
+
+        private string CreatePostUri(ArticleParameters parameters, PaginationResourceUriType uriType)
+        {
+            switch (uriType)
+            {
+                case PaginationResourceUriType.PreviousPage:
+                    var previousParameters = new
+                    {
+                        pageIndex = parameters.PageIndex - 1,
+                        pageSize = parameters.PageSize,
+                        orderBy = parameters.OrderBy,
+                        fields = parameters.Fields,
+                        title = parameters.Title
+                    };
+                    return _urlHelper.Link("GetPosts", previousParameters);
+                case PaginationResourceUriType.NextPage:
+                    var nextParameters = new
+                    {
+                        pageIndex = parameters.PageIndex + 1,
+                        pageSize = parameters.PageSize,
+                        orderBy = parameters.OrderBy,
+                        fields = parameters.Fields,
+                        title = parameters.Title
+                    };
+                    return _urlHelper.Link("GetPosts", nextParameters);
+                default:
+                    var currentParameters = new
+                    {
+                        pageIndex = parameters.PageIndex,
+                        pageSize = parameters.PageSize,
+                        orderBy = parameters.OrderBy,
+                        fields = parameters.Fields,
+                        title = parameters.Title
+                    };
+                    return _urlHelper.Link("GetPosts", currentParameters);
+            }
+        }
+
+        private IEnumerable<LinkResource> CreateLinksForPost(int id, string fields = null)
+        {
+            var links = new List<LinkResource>();
+
+            if (string.IsNullOrWhiteSpace(fields))
+            {
+                links.Add(
+                    new LinkResource(
+                        _urlHelper.Link("GetPost", new { id }), "self", "GET"));
+            }
+            else
+            {
+                links.Add(
+                    new LinkResource(
+                        _urlHelper.Link("GetPost", new { id, fields }), "self", "GET"));
+            }
+
+            links.Add(
+                new LinkResource(
+                    _urlHelper.Link("DeletePost", new { id }), "delete_post", "DELETE"));
+
+            return links;
+        }
+
+        private IEnumerable<LinkResource> CreateLinksForPosts(ArticleParameters parameters,
+            bool hasPrevious, bool hasNext)
+        {
+            var links = new List<LinkResource>
+            {
+                new LinkResource(
+                    CreatePostUri(parameters, PaginationResourceUriType.CurrentPage),
+                    "self", "GET")
+            };
+
+            if (hasPrevious)
+            {
+                links.Add(
+                    new LinkResource(
+                        CreatePostUri(parameters, PaginationResourceUriType.PreviousPage),
+                        "previous_page", "GET"));
+            }
+
+            if (hasNext)
+            {
+                links.Add(
+                    new LinkResource(
+                        CreatePostUri(parameters, PaginationResourceUriType.NextPage),
+                        "next_page", "GET"));
+            }
+
+            return links;
+        }
+
+        #endregion
     }
 }

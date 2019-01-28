@@ -10,10 +10,12 @@
 
   <ItemGroup>
     <PackageReference Include="sqlSugarCore" Version="4.9.7.4" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.9.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Blog.IRepository\Blog.IRepository.csproj" />
+    <ProjectReference Include="..\Common\Blog.Common.csproj" />
   </ItemGroup>
 
 </Project>

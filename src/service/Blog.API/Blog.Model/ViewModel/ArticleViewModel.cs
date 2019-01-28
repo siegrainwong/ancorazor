@@ -1,7 +1,8 @@
 ﻿#region
 
 using System;
-using Blog.Model.ViewModel.ParameterModel;
+using Blog.Model.ParameterModel;
+using Blog.Model.ParameterModel.Base;
 
 #endregion
 
@@ -50,5 +51,12 @@ namespace Blog.Model.ViewModel
         public DateTime CreateTime { get; set; }
 
         public string Remark { get; set; }
+
+        public enum PaginationResourceUriType
+        {
+            CurrentPage,
+            PreviousPage,
+            NextPage
+        }
     }
 }

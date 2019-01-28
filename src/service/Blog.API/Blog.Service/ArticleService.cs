@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Blog.IRepository;
@@ -9,6 +10,10 @@ using Blog.IService;
 using Blog.Model;
 using Blog.Model.ViewModel;
 using Blog.Service.Base;
+using System;
+using Blog.Common.Helpers;
+using Blog.Model.ParameterModel;
+using Blog.Model.Resources;
 
 #endregion
 
@@ -21,16 +26,31 @@ namespace Blog.Service
     {
         private IMapper _mapper;
         private IArticleRepository _dal;
-        public ArticleService(IArticleRepository dal, IMapper mapper)
+
+        public ArticleService(IArticleRepository dal
+            //IMapper mapper
+            )
         {
             _dal = dal;
-            _mapper = mapper;
+            //_mapper = mapper;
             baseDal = dal;
         }
         public async Task<List<Article>> GetArticles()
         {
-            var bloglist = await _dal.Query(a => a.Id > 0, a => a.Id);
-            return bloglist;
+            var list = await _dal.Query();
+            return list;
+        }
+
+        public async Task<PaginatedList<Article>> GetPagedArticles(ArticleParameters parameters)
+        {
+            var predicate = PredicateBuilder.True<Article>();
+            if (!string.IsNullOrEmpty(parameters.Title))
+            {
+                var title = parameters.Title.ToLowerInvariant();
+                predicate = predicate.And(x => x.Title.ToLowerInvariant() == title);
+            }
+            
+            return await _dal.QueryPage(predicate, parameters);
         }
 
         public async Task<ArticleViewModel> GetArticle(int id)
@@ -66,6 +86,4 @@ namespace Blog.Service
         }
     }
 }
-
-	//----------Article结束----------
 	

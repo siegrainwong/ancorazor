@@ -4,13 +4,16 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Blog.Model.ParameterModel;
+using Blog.Model.ParameterModel.Base;
+using Blog.Model.Resources;
 
 namespace Blog.IRepository.Base
 {
     public interface IBaseRepository<TEntity> where TEntity : class
     {
         Task<TEntity> QueryByID(object objId);
-        Task<TEntity> QueryByID(object objId, bool blnUseCache = false);
+        Task<TEntity> QueryByID(object objId, bool blnUseCache);
         Task<List<TEntity>> QueryByIDs(object[] lstIds);
 
         Task<int> Add(TEntity model);
@@ -36,10 +39,6 @@ namespace Blog.IRepository.Base
         Task<List<TEntity>> Query(Expression<Func<TEntity, bool>> whereExpression, int intTop, string strOrderByFileds);
         Task<List<TEntity>> Query(string strWhere, int intTop, string strOrderByFileds);
 
-        Task<List<TEntity>> Query(
-            Expression<Func<TEntity, bool>> whereExpression, int intPageIndex, int intPageSize, string strOrderByFileds);
-        Task<List<TEntity>> Query(string strWhere, int intPageIndex, int intPageSize, string strOrderByFileds);
-        
-        Task<List<TEntity>> QueryPage(Expression<Func<TEntity, bool>> whereExpression, int intPageIndex = 0, int intPageSize = 20, string strOrderByFileds = null);
+        Task<PaginatedList<TEntity>> QueryPage(Expression<Func<TEntity, bool>> whereExpression, QueryParameters parameters);
     }
 }

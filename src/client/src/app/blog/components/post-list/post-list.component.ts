@@ -13,8 +13,12 @@ export class PostListComponent implements OnInit {
 
   constructor(private postService: PostService) { }
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.getPost()
+  }
+
+  async getPost() {
     let res = await this.postService.getPagedPosts(this.postParameter);
-    console.log(res);
+
   }
 }

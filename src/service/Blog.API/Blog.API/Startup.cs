@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -11,14 +13,20 @@ using Blog.API.Authentication;
 using Blog.API.Caching;
 using Blog.API.Interceptors;
 using Blog.Common.Redis;
+using Blog.Common.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.DotNet.PlatformAbstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
+
+#endregion
 
 namespace Blog.API
 {
@@ -38,7 +46,7 @@ namespace Blog.API
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            var basePath = Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath;
+            var basePath = ApplicationEnvironment.ApplicationBasePath;
 
             #region DI
 
@@ -49,6 +57,20 @@ namespace Blog.API
              */
             services.AddScoped<ICaching, MemoryCaching>();
             services.AddScoped<IRedisCacheManager, RedisCacheManager>();
+
+            // UrlHelper
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddScoped<IUrlHelper>(factory =>
+            {
+                var actionContext = factory.GetService<IActionContextAccessor>().ActionContext;
+                return new UrlHelper(actionContext);
+            });
+
+            // Model.Services
+            //var propertyMappingContainer = new PropertyMappingContainer();
+            services.AddScoped<IPropertyMappingContainer, PropertyMappingContainer>();
+            services.AddScoped<ITypeHelperService, TypeHelperService>();
+
             services.AddAutoMapper(typeof(Startup));
 
             #endregion
@@ -60,19 +82,6 @@ namespace Blog.API
              */
             services.AddCors(c =>
             {
-                //↓↓↓↓↓↓↓注意正式环境不要使用这种全开放的处理↓↓↓↓↓↓↓↓↓↓
-                //c.AddPolicy("All", policy =>
-                //{
-                //    policy
-                //        .AllowAnyOrigin()//允许任何源
-                //        .AllowAnyMethod()//允许任何方式
-                //        .AllowAnyHeader()//允许任何头
-                //        .AllowCredentials();//允许cookie
-                //});
-                //↑↑↑↑↑↑↑注意正式环境不要使用这种全开放的处理↑↑↑↑↑↑↑↑↑↑
-
-
-                //一般采用这种方法
                 c.AddPolicy("LimitHosts", policy =>
                 {
                     policy

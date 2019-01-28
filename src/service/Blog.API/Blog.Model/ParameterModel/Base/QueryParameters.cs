@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 using Blog.Model.Base;
 
-namespace Blog.Model.ViewModel.ParameterModel
+namespace Blog.Model.ParameterModel.Base
 {
     public class QueryParameters : INotifyPropertyChanged
     {
@@ -78,5 +76,12 @@ namespace Blog.Model.ViewModel.ParameterModel
             }
             _pageSize = _pageSize > _maxPageSize ? _maxPageSize : _pageSize;
         }
+    }
+
+    public enum PaginationResourceUriType
+    {
+        CurrentPage,
+        PreviousPage,
+        NextPage
     }
 }

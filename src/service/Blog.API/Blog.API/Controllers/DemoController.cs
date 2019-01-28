@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Blog.IService;
 using Blog.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,15 +8,23 @@ using Microsoft.AspNetCore.Mvc;
 namespace Blog.API.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize("Admin")]
+    //[Authorize("Admin")]
+    [AllowAnonymous]
     [ApiController]
     public class DemoController : ControllerBase
     {
+        private readonly IArticleService _service;
+
+        public DemoController(IArticleService service)
+        {
+            _service = service;
+        }
+
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<List<Article>> Get()
         {
-            return new[] { "value1", "value2" };
+            return await _service.GetArticles();
         }
 
         // GET api/values/5

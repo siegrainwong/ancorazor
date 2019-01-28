@@ -16,12 +16,6 @@
             配置构造函数，用来创建关系映射
             </summary>
         </member>
-        <member name="M:Blog.API.Controllers.BlogsController.Get(Blog.Model.ViewModel.ParameterModel.QueryParameters)">
-            <summary>
-            获取博客列表
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Blog.API.Controllers.BlogsController.Get(System.Int32)">
             <summary>
             获取详情

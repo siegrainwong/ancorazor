@@ -27,7 +27,7 @@ namespace Blog.API.Controllers
     [AllowAnonymous]
     //[Authorize(Policy = "Admin")]
     [ApiController]
-    public class ArticleController : ControllerBase
+    public class ArticlesController : ControllerBase
     {
         private readonly IArticleService _service;
         private readonly IRedisCacheManager _cache;
@@ -35,7 +35,7 @@ namespace Blog.API.Controllers
         private readonly IPropertyMappingContainer _mappingContainer;
         private readonly ITypeHelperService _typeHelper;
         private readonly IMapper _mapper;
-        public ArticleController(IArticleService service,
+        public ArticlesController(IArticleService service,
             IRedisCacheManager cache,
             IUrlHelper urlHelper,
             IPropertyMappingContainer mappingContainer,
@@ -77,12 +77,19 @@ namespace Blog.API.Controllers
                 nextPageLink
             }; 
 
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(meta, new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            }));
+            //Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(meta, new JsonSerializerSettings
+            //{
+            //    ContractResolver = new CamelCasePropertyNamesContractResolver()
+            //}));
 
-            return Ok(viewModels.ToDynamicIEnumerable(parameters.Fields));
+            var result = new
+            {
+                succeed = true,
+                data = viewModels.ToDynamicIEnumerable(parameters.Fields),
+                pagination = meta
+            };
+
+            return Ok(result);
         }
 
         // GET: api/Blog/5

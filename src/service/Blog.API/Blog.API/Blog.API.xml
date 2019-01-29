@@ -16,7 +16,7 @@
             配置构造函数，用来创建关系映射
             </summary>
         </member>
-        <member name="M:Blog.API.Controllers.ArticleController.Get(System.Int32)">
+        <member name="M:Blog.API.Controllers.ArticlesController.Get(System.Int32)">
             <summary>
             获取详情
             </summary>

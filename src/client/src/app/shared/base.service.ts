@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AxiosResponse, AxiosRequestConfig } from 'axios';
+import ResponseModel, { Pagination } from '../shared/models/response-model'
 import axios from 'axios';
 
 axios.defaults.baseURL = environment.apiUrlBase;
@@ -48,8 +49,12 @@ export abstract class BaseService {
       })
       return this.handleResponse(res)
     } catch (error) {
-      console.log(error.response)
-      return this.handleResponse(error.response as AxiosResponse)
+      if (error.response) {
+        console.log(error.response)
+        return this.handleResponse(error.response as AxiosResponse)
+      } else {
+        console.log(error)
+      }
     }
   }
 
@@ -57,7 +62,7 @@ export abstract class BaseService {
    * 响应处理
    * @param response 
    */
-  handleResponse(response: AxiosResponse): ResponseModel {
+  handleResponse(response: AxiosResponse): ResponseModel<any> {
     let result = null;
     switch (response.status) {
       case 200:
@@ -68,7 +73,7 @@ export abstract class BaseService {
     }
 
     if (result.succeed) {
-      return new ResponseModel(result.data, true)
+      return new ResponseModel(result.data, true, response.data.pagination)
     } else {
       console.log(result.data);
       return new ResponseModel(result)
@@ -81,14 +86,4 @@ const enum Methods {
   POST = 'POST',
   PUT = 'PUT',
   DELETE = 'DELETE'
-}
-
-class ResponseModel {
-  succeed: boolean = false
-  data?: any
-
-  constructor(data?: any, succeed: boolean = false) {
-    this.data = data;
-    this.succeed = succeed;
-  }
 }

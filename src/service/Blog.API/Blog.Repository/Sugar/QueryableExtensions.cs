@@ -59,7 +59,7 @@ namespace Blog.Repository.Sugar
                     {
                         orderDescending = !orderDescending;
                     }
-                    source = source.OrderBy(destinationProperty.Name + (orderDescending ? " descending" : " ascending"));
+                    source = source.OrderBy(destinationProperty.Name + (orderDescending ? " desc" : " asc"));
                 }
             }
 

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Blog.IService;
 using Blog.Model;
+using Blog.Model.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,17 +15,24 @@ namespace Blog.API.Controllers
     [ApiController]
     public class DemoController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IArticleService _service;
 
-        public DemoController(IArticleService service)
+        public DemoController(
+            IMapper mapper,
+            IArticleService service)
         {
             _service = service;
+            _mapper = mapper;
         }
 
         // GET api/values
         [HttpGet]
         public async Task<List<Article>> Get()
         {
+            var result = _mapper.Map(new Article(), new ArticleViewModel());
+
+            //return null;
             return await _service.GetArticles();
         }
 

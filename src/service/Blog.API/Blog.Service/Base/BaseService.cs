@@ -1,16 +1,22 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Blog.IRepository.Base;
 using Blog.IService.Base;
+using Blog.Model.ParameterModel.Base;
+using Blog.Model.Resources;
+
+#endregion
 
 namespace Blog.Service.Base
 {
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class, new()
     {
         public IBaseRepository<TEntity> baseDal;
-        
+
         /// <summary>
         /// 功能描述:根据ID查询一条数据
         /// 作　　者:AZLinli.Blog.Core
@@ -64,17 +70,18 @@ namespace Blog.Service.Base
         {
             return await baseDal.Update(entity);
         }
+
         public async Task<bool> Update(TEntity entity, string strWhere)
         {
             return await baseDal.Update(entity, strWhere);
         }
 
         public async Task<bool> Update(
-         TEntity entity,
-         List<string> lstColumns = null,
-         List<string> lstIgnoreColumns = null,
-         string strWhere = ""
-            )
+            TEntity entity,
+            List<string> lstColumns = null,
+            List<string> lstIgnoreColumns = null,
+            string strWhere = ""
+        )
         {
             return await baseDal.Update(entity, lstColumns, lstIgnoreColumns, strWhere);
         }
@@ -143,6 +150,7 @@ namespace Blog.Service.Base
         {
             return await baseDal.Query(whereExpression);
         }
+
         /// <summary>
         /// 功能描述:查询一个列表
         /// 作　　者:AZLinli.Blog.Core
@@ -150,7 +158,8 @@ namespace Blog.Service.Base
         /// <param name="whereExpression">条件表达式</param>
         /// <param name="strOrderByFileds">排序字段，如name asc,age desc</param>
         /// <returns>数据列表</returns>
-        public async Task<List<TEntity>> Query(Expression<Func<TEntity, bool>> whereExpression, Expression<Func<TEntity, object>> orderByExpression, bool isAsc = true)
+        public async Task<List<TEntity>> Query(Expression<Func<TEntity, bool>> whereExpression,
+            Expression<Func<TEntity, object>> orderByExpression, bool isAsc = true)
         {
             return await baseDal.Query(whereExpression, orderByExpression, isAsc);
         }
@@ -180,7 +189,8 @@ namespace Blog.Service.Base
         /// <param name="intTop">前N条</param>
         /// <param name="strOrderByFileds">排序字段，如name asc,age desc</param>
         /// <returns>数据列表</returns>
-        public async Task<List<TEntity>> Query(Expression<Func<TEntity, bool>> whereExpression, int intTop, string strOrderByFileds)
+        public async Task<List<TEntity>> Query(Expression<Func<TEntity, bool>> whereExpression, int intTop,
+            string strOrderByFileds)
         {
             return await baseDal.Query(whereExpression, intTop, strOrderByFileds);
         }
@@ -201,59 +211,11 @@ namespace Blog.Service.Base
             return await baseDal.Query(strWhere, intTop, strOrderByFileds);
         }
 
-        /// <summary>
-        /// 功能描述:分页查询
-        /// 作　　者:AZLinli.Blog.Core
-        /// </summary>
-        /// <param name="whereExpression">条件表达式</param>
-        /// <param name="intPageIndex">页码（下标0）</param>
-        /// <param name="intPageSize">页大小</param>
-        /// <param name="intTotalCount">数据总量</param>
-        /// <param name="strOrderByFileds">排序字段，如name asc,age desc</param>
-        /// <returns>数据列表</returns>
-        public async Task<List<TEntity>> Query(
-            Expression<Func<TEntity, bool>> whereExpression,
-            int intPageIndex,
-            int intPageSize,
-            string strOrderByFileds)
-        {
-            return await baseDal.Query(
-              whereExpression,
-              intPageIndex,
-              intPageSize,
-              strOrderByFileds);
-        }
 
-        /// <summary>
-        /// 功能描述:分页查询
-        /// 作　　者:AZLinli.Blog.Core
-        /// </summary>
-        /// <param name="strWhere">条件</param>
-        /// <param name="intPageIndex">页码（下标0）</param>
-        /// <param name="intPageSize">页大小</param>
-        /// <param name="intTotalCount">数据总量</param>
-        /// <param name="strOrderByFileds">排序字段，如name asc,age desc</param>
-        /// <returns>数据列表</returns>
-        public async Task<List<TEntity>> Query(
-          string strWhere,
-          int intPageIndex,
-          int intPageSize,
-          string strOrderByFileds)
+        public async Task<PaginatedList<TEntity>> QueryPage(Expression<Func<TEntity, bool>> whereExpression,
+            QueryParameters parameters)
         {
-            return await baseDal.Query(
-            strWhere,
-            intPageIndex,
-            intPageSize,
-            strOrderByFileds);
+            return await baseDal.QueryPage(whereExpression, parameters);
         }
-
-        public async Task<List<TEntity>> QueryPage(Expression<Func<TEntity, bool>> whereExpression,
-        int intPageIndex = 0, int intPageSize = 20, string strOrderByFileds = null)
-        {
-            return await baseDal.QueryPage(whereExpression,
-         intPageIndex = 0, intPageSize, strOrderByFileds);
-        }
-
     }
-
 }

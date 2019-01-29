@@ -44,3 +44,5 @@ db.json
 node_modules/
 public/
 .deploy*/
+.nuxt/
+dist/

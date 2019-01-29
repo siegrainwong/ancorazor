@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Blog.Model\Blog.Model.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="Microsoft.Extensions.Configuration">
       <HintPath>C:\Users\Siegrain\.nuget\packages\microsoft.extensions.configuration\1.1.2\lib\netstandard1.1\Microsoft.Extensions.Configuration.dll</HintPath>
     </Reference>

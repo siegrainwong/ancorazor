@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Blog.Common.Extensions;
 using Blog.Common.Redis;
-using Blog.Common.Services;
 using Blog.IService;
 using Blog.Model;
+using Blog.Model.Mapping;
 using Blog.Model.ParameterModel;
 using Blog.Model.ParameterModel.Base;
 using Blog.Model.Resources;
@@ -27,7 +27,7 @@ namespace Blog.API.Controllers
     [AllowAnonymous]
     //[Authorize(Policy = "Admin")]
     [ApiController]
-    public class BlogsController : ControllerBase
+    public class ArticleController : ControllerBase
     {
         private readonly IArticleService _service;
         private readonly IRedisCacheManager _cache;
@@ -35,7 +35,7 @@ namespace Blog.API.Controllers
         private readonly IPropertyMappingContainer _mappingContainer;
         private readonly ITypeHelperService _typeHelper;
         private readonly IMapper _mapper;
-        public BlogsController(IArticleService service,
+        public ArticleController(IArticleService service,
             IRedisCacheManager cache,
             IUrlHelper urlHelper,
             IPropertyMappingContainer mappingContainer,
@@ -54,35 +54,35 @@ namespace Blog.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery]ArticleParameters parameters)
         {
-            if (!_mappingContainer.ValidateMappingExistsFor<ArticleParameters, Article>(parameters.OrderBy))
+            if (!_mappingContainer.ValidateMappingExistsFor<ArticleViewModel, Article>(parameters.OrderBy))
                 return BadRequest("Can't finds fields for sorting.");
-            if (!_typeHelper.TypeHasProperties<ArticleParameters>(parameters.Fields))
+            if (!_typeHelper.TypeHasProperties<ArticleViewModel>(parameters.Fields))
                 return BadRequest("Fields not exist.");
 
-            var postList = await _service.GetPagedArticles(parameters);
+            var list = await _service.GetPagedArticles(parameters);
 
-            var postResources = _mapper.Map<IEnumerable<Article>, IEnumerable<ArticleViewModel>>(postList);
+            var viewModels = _mapper.Map<IEnumerable<Article>, IEnumerable<ArticleViewModel>>(list);
 
-            var previousPageLink = postList.HasPrevious ? CreatePostUri(parameters, PaginationResourceUriType.PreviousPage) : null;
+            var previousPageLink = list.HasPrevious ? CreatePostUri(parameters, PaginationResourceUriType.PreviousPage) : null;
 
-            var nextPageLink = postList.HasNext ? CreatePostUri(parameters, PaginationResourceUriType.NextPage) : null;
+            var nextPageLink = list.HasNext ? CreatePostUri(parameters, PaginationResourceUriType.NextPage) : null;
 
             var meta = new
             {
-                postList.TotalItemsCount,
-                postList.PageSize,
-                postList.PageIndex,
-                postList.PageCount,
+                list.TotalItemsCount,
+                list.PageSize,
+                list.PageIndex,
+                list.PageCount,
                 previousPageLink,
                 nextPageLink
-            };
+            }; 
 
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(meta, new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             }));
 
-            return Ok(postResources.ToDynamicIEnumerable(parameters.Fields));
+            return Ok(viewModels.ToDynamicIEnumerable(parameters.Fields));
         }
 
         // GET: api/Blog/5

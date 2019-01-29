@@ -4,14 +4,18 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Blog.Model.Mapping;
 using Blog.Model.ParameterModel;
 using Blog.Model.ParameterModel.Base;
 using Blog.Model.Resources;
+using Blog.Model.ViewModel;
 
 namespace Blog.IRepository.Base
 {
     public interface IBaseRepository<TEntity> where TEntity : class
     {
+        void SetMapperContainer(IPropertyMappingContainer container);
+
         Task<TEntity> QueryByID(object objId);
         Task<TEntity> QueryByID(object objId, bool blnUseCache);
         Task<List<TEntity>> QueryByIDs(object[] lstIds);
@@ -39,6 +43,7 @@ namespace Blog.IRepository.Base
         Task<List<TEntity>> Query(Expression<Func<TEntity, bool>> whereExpression, int intTop, string strOrderByFileds);
         Task<List<TEntity>> Query(string strWhere, int intTop, string strOrderByFileds);
 
-        Task<PaginatedList<TEntity>> QueryPage(Expression<Func<TEntity, bool>> whereExpression, QueryParameters parameters);
+        Task<PaginatedList<TEntity>> QueryPage<TMapping>(Expression<Func<TEntity, bool>> whereExpression,
+            QueryParameters parameters) where TMapping : BaseViewModel;
     }
 }

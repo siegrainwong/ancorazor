@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Blog.Common.Services
+namespace Blog.Model.Mapping
 {
     public class TypeHelperService : ITypeHelperService
     {

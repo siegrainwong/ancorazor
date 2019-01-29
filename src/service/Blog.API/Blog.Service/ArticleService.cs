@@ -11,7 +11,9 @@ using Blog.Model;
 using Blog.Model.ViewModel;
 using Blog.Service.Base;
 using System;
+using AutoMapper.Configuration;
 using Blog.Common.Helpers;
+using Blog.Model.Mapping;
 using Blog.Model.ParameterModel;
 using Blog.Model.Resources;
 
@@ -27,18 +29,22 @@ namespace Blog.Service
         private IMapper _mapper;
         private IArticleRepository _dal;
 
-        public ArticleService(IArticleRepository dal
-            //IMapper mapper
-            )
+        public ArticleService(IArticleRepository dal, IMapper mapper, IPropertyMappingContainer mappingContainer)
         {
             _dal = dal;
-            //_mapper = mapper;
+            _mapper = mapper;
             baseDal = dal;
+            baseDal.SetMapperContainer(mappingContainer);
         }
         public async Task<List<Article>> GetArticles()
         {
             var list = await _dal.Query();
             return list;
+        }
+
+        public Task<ArticleViewModel> GetArticle(int id)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<PaginatedList<Article>> GetPagedArticles(ArticleParameters parameters)
@@ -50,39 +56,7 @@ namespace Blog.Service
                 predicate = predicate.And(x => x.Title.ToLowerInvariant() == title);
             }
             
-            return await _dal.QueryPage(predicate, parameters);
-        }
-
-        public async Task<ArticleViewModel> GetArticle(int id)
-        {
-            var list = await GetArticles();
-            var article = (await _dal.Query(a => a.Id == id)).FirstOrDefault();
-            if (article == null) return new ArticleViewModel();
-
-            var models = _mapper.Map<ArticleViewModel>(article);
-
-            var index = list.FindIndex(item => item.Id == id);
-            if (index >= 0)
-            {
-                // 上一篇
-                var prev = index > 0 ? list[index - 1] : null;
-                if (prev != null)
-                {
-                    models.Previous = prev.Title;
-                    models.PreviousId = prev.Id;
-                }
-                // 下一篇
-                var next = index + 1 < list.Count ? list[index + 1] : null;
-                if (next != null)
-                {
-                    models.Next = next.Title;
-                    models.NextId = next.Id;
-                }
-            }
-            article.ViewCount += 1;
-            await _dal.Update(article, new List<string> { nameof(article.ViewCount) });
-
-            return models;
+            return await _dal.QueryPage<ArticleViewModel>(predicate, parameters);
         }
     }
 }

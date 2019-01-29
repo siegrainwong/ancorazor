@@ -1,6 +1,6 @@
 ﻿using Blog.Model.Base;
 
-namespace Blog.Common.Services
+namespace Blog.Model.Mapping
 {
     public interface IPropertyMappingContainer
     {

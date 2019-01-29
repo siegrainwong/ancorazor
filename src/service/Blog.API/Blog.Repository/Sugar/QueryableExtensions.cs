@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using Blog.Common.Services;
+using Blog.Model.Mapping;
 using SqlSugar;
 
 namespace Blog.Repository.Sugar

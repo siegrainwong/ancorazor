@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Blog.Common.Services
+namespace Blog.Model.Mapping
 {
     public interface IPropertyMapping
     {

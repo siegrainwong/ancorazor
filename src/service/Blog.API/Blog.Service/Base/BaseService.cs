@@ -8,6 +8,7 @@ using Blog.IRepository.Base;
 using Blog.IService.Base;
 using Blog.Model.ParameterModel.Base;
 using Blog.Model.Resources;
+using Blog.Model.ViewModel;
 
 #endregion
 
@@ -212,10 +213,9 @@ namespace Blog.Service.Base
         }
 
 
-        public async Task<PaginatedList<TEntity>> QueryPage(Expression<Func<TEntity, bool>> whereExpression,
-            QueryParameters parameters)
+        public async Task<PaginatedList<TEntity>> QueryPage<TMapping>(Expression<Func<TEntity, bool>> whereExpression, QueryParameters parameters) where TMapping : BaseViewModel
         {
-            return await baseDal.QueryPage(whereExpression, parameters);
+            return await baseDal.QueryPage<TMapping>(whereExpression, parameters);
         }
     }
 }

@@ -4,12 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Blog.Common.Services;
 using Blog.IRepository.Base;
 using Blog.Model.Base;
+using Blog.Model.Mapping;
 using Blog.Model.ParameterModel;
 using Blog.Model.ParameterModel.Base;
 using Blog.Model.Resources;
+using Blog.Model.ViewModel;
 using Blog.Repository.Sugar;
 using SqlSugar;
 
@@ -23,8 +24,7 @@ namespace Blog.Repository.Base
         internal SqlSugarClient Db { get; private set; }
         internal SimpleClient<TEntity> EntityDB { get; private set; }
 
-        // TODO: 想办法DI
-        private readonly IPropertyMappingContainer _mappingContainer = new PropertyMappingContainer();
+        internal IPropertyMappingContainer MappingContainer { get; set; }
 
         public BaseRepository()
         {
@@ -32,6 +32,12 @@ namespace Blog.Repository.Base
             Context = DbContext.GetDbContext();
             Db = Context.Db;
             EntityDB = Context.GetEntityDB<TEntity>(Db);
+        }
+
+        // TODO: 想办法找个更好的方式DI
+        public void SetMapperContainer(IPropertyMappingContainer container)
+        {
+            this.MappingContainer = container;
         }
 
         public async Task<TEntity> QueryByID(object objId)
@@ -247,14 +253,15 @@ namespace Blog.Repository.Base
             return await Task.FromResult(Db.Queryable<TEntity>().OrderByIF(!string.IsNullOrEmpty(strOrderByFileds), strOrderByFileds).WhereIF(!string.IsNullOrEmpty(strWhere), strWhere).Take(intTop).ToList());
         }
 
-        public async Task<PaginatedList<TEntity>> QueryPage(Expression<Func<TEntity, bool>> whereExpression, QueryParameters parameters) {
+        public async Task<PaginatedList<TEntity>> QueryPage<TMapping>(Expression<Func<TEntity, bool>> whereExpression, QueryParameters parameters) where TMapping : BaseViewModel {
             var query = Db.Queryable<TEntity>();
-            query = query.ApplySort(parameters.OrderBy, _mappingContainer.Resolve<QueryParameters, TEntity>());
+            query = query.ApplySort(parameters.OrderBy, MappingContainer.Resolve<TMapping, TEntity>());
 
-            var count = await query.CountAsync();
-            var data = await query.Skip(parameters.PageIndex * parameters.PageSize).Take(parameters.PageSize).ToListAsync();
+            // TODO: SqlSugarException，IsShardSameThread = true 下不能调用async方法
+            var count = query.Count();
+            var data = query.Skip(parameters.PageIndex * parameters.PageSize).Take(parameters.PageSize).ToList();
 
-            return new PaginatedList<TEntity>(parameters.PageIndex, parameters.PageSize, count, data);
+            return await Task.FromResult(new PaginatedList<TEntity>(parameters.PageIndex, parameters.PageSize, count, data));
         }
     }
 }

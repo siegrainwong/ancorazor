@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Blog.Model.ParameterModel.Base;
 using Blog.Model.Resources;
+using Blog.Model.ViewModel;
 
 namespace Blog.IService.Base
 {
@@ -41,9 +42,9 @@ namespace Blog.IService.Base
 
         Task<List<TEntity>> Query(Expression<Func<TEntity, bool>> whereExpression, int intTop, string strOrderByFileds);
         Task<List<TEntity>> Query(string strWhere, int intTop, string strOrderByFileds);
-        
-        Task<PaginatedList<TEntity>> QueryPage(Expression<Func<TEntity, bool>> whereExpression,
-            QueryParameters parameters);
+
+        Task<PaginatedList<TEntity>> QueryPage<TMapping>(Expression<Func<TEntity, bool>> whereExpression,
+            QueryParameters parameters) where TMapping : BaseViewModel;
     }
 
 }

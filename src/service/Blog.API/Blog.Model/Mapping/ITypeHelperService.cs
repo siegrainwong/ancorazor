@@ -1,4 +1,4 @@
-﻿namespace Blog.Common.Services
+﻿namespace Blog.Model.Mapping
 {
     public interface ITypeHelperService
     {

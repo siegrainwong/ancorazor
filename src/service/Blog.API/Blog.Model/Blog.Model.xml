@@ -79,25 +79,5 @@
             Users
             </summary>	
         </member>
-        <member name="P:Blog.Model.ViewModel.ArticleViewModel.Previous">
-            <summary>
-            上一篇
-            </summary>
-        </member>
-        <member name="P:Blog.Model.ViewModel.ArticleViewModel.PreviousId">
-            <summary>
-            上一篇id
-            </summary>
-        </member>
-        <member name="P:Blog.Model.ViewModel.ArticleViewModel.Next">
-            <summary>
-            下一篇
-            </summary>
-        </member>
-        <member name="P:Blog.Model.ViewModel.ArticleViewModel.NextId">
-            <summary>
-            下一篇id
-            </summary>
-        </member>
     </members>
 </doc>

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Blog.Model.Base;
 
-namespace Blog.Common.Services
+namespace Blog.Model.Mapping
 {
     public abstract class PropertyMapping<TSource, TDestination> : IPropertyMapping 
         where TDestination : BaseModel

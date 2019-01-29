@@ -1,6 +1,8 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
+using Blog.Model.Mapping;
 using Blog.Model.ParameterModel;
 using Blog.Model.ParameterModel.Base;
 
@@ -8,55 +10,35 @@ using Blog.Model.ParameterModel.Base;
 
 namespace Blog.Model.ViewModel
 {
-    public class ArticleViewModel : QueryParameters
+    public class ArticleViewModel : BaseViewModel
     {
-        public int Id { get; set; }
-
         public string Author { get; set; }
 
         public string Title { get; set; }
         
         public string Digest { get; set; }
 
-        /// <summary>
-        /// 上一篇
-        /// </summary>
-        public string Previous { get; set; }
-
-        /// <summary>
-        /// 上一篇id
-        /// </summary>
-        public int PreviousId { get; set; }
-
-        /// <summary>
-        /// 下一篇
-        /// </summary>
-        public string Next { get; set; }
-
-        /// <summary>
-        /// 下一篇id
-        /// </summary>
-        public int NextId { get; set; }
-
         public string Category { get; set; }
 
         public string Content { get; set; }
 
-        public int Traffic { get; set; }
+        public int ViewCount { get; set; }
 
         public int CommentCount { get; set; }
+    }
 
-        public DateTime UpdateTime { get; set; }
-
-        public DateTime CreateTime { get; set; }
-
-        public string Remark { get; set; }
-
-        public enum PaginationResourceUriType
+    public class ArticlePropertyMapping : PropertyMapping<ArticleViewModel, Article>
+    {
+        public ArticlePropertyMapping() : base(
+            new Dictionary<string, List<MappedProperty>>
+                (StringComparer.OrdinalIgnoreCase)
+                {
+                    [nameof(ArticleViewModel.Title)] = new List<MappedProperty>
+                    {
+                        new MappedProperty{ Name = nameof(Article.Title), Revert = false}
+                    }
+                })
         {
-            CurrentPage,
-            PreviousPage,
-            NextPage
         }
     }
 }

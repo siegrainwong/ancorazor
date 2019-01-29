@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Blog.Model\Blog.Model.csproj" />
+    <ProjectReference Include="..\Common\Blog.Common.csproj" />
   </ItemGroup>
 
 </Project>

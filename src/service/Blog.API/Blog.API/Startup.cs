@@ -13,7 +13,8 @@ using Blog.API.Authentication;
 using Blog.API.Caching;
 using Blog.API.Interceptors;
 using Blog.Common.Redis;
-using Blog.Common.Services;
+using Blog.Model.Mapping;
+using Blog.Model.ViewModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -67,8 +68,10 @@ namespace Blog.API
             });
 
             // Model.Services
-            //var propertyMappingContainer = new PropertyMappingContainer();
-            services.AddScoped<IPropertyMappingContainer, PropertyMappingContainer>();
+            var mappingContainer = new PropertyMappingContainer();
+            mappingContainer.Register<ArticlePropertyMapping>();
+            services.AddSingleton<IPropertyMappingContainer>(mappingContainer);
+
             services.AddScoped<ITypeHelperService, TypeHelperService>();
 
             services.AddAutoMapper(typeof(Startup));

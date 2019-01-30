@@ -136,35 +136,37 @@ namespace Blog.API
 
             #region JWT
 
-            services.AddAuthorization(options =>
-            {
-                // 添加权限组（策略）
-                options.AddPolicy("Client", policy => policy.RequireRole("Client").Build());
-                options.AddPolicy("Admin", policy => policy.RequireRole("Admin").Build());
-                options.AddPolicy("SystemAdmin", policy => policy.RequireRole("Admin", "System"));
-                options.AddPolicy("SystemAdminOther", policy => policy.RequireRole("Admin", "System", "Other"));
-            })
-            .AddAuthentication(x =>
-            {
-                // 
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(o =>
-            {
-                o.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = JWTHelper.Issuer,
-                    ValidAudience = "wr",
-                    ValidateLifetime = true,// 是否验证超时，当设置exp和nbf时有效，同时启用ClockSkew 
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JWTHelper.SecretKey)),
-                    // 注意这是缓冲过期时间，总的有效时间等于这个时间加上jwt的过期时间，如果不配置，默认是5分钟
-                    ClockSkew = TimeSpan.FromSeconds(30)
-                };
-            });
+            // 现在用ID4，也可以随时切换回JWT
+
+            //services.AddAuthorization(options =>
+            //{
+            //    // 添加权限组（策略）
+            //    options.AddPolicy("Client", policy => policy.RequireRole("Client").Build());
+            //    options.AddPolicy("Admin", policy => policy.RequireRole("Admin").Build());
+            //    options.AddPolicy("SystemAdmin", policy => policy.RequireRole("Admin", "System"));
+            //    options.AddPolicy("SystemAdminOther", policy => policy.RequireRole("Admin", "System", "Other"));
+            //})
+            //.AddAuthentication(x =>
+            //{
+            //    // 
+            //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //})
+            //.AddJwtBearer(o =>
+            //{
+            //    o.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuer = true,
+            //        ValidateAudience = true,
+            //        ValidateIssuerSigningKey = true,
+            //        ValidIssuer = JWTHelper.Issuer,
+            //        ValidAudience = "wr",
+            //        ValidateLifetime = true,// 是否验证超时，当设置exp和nbf时有效，同时启用ClockSkew 
+            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JWTHelper.SecretKey)),
+            //        // 注意这是缓冲过期时间，总的有效时间等于这个时间加上jwt的过期时间，如果不配置，默认是5分钟
+            //        ClockSkew = TimeSpan.FromSeconds(30)
+            //    };
+            //});
 
             #endregion
 
@@ -213,7 +215,6 @@ namespace Blog.API
         /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -231,14 +232,11 @@ namespace Blog.API
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-
-            // authentication
-            app.UseAuthentication();
-
             // 添加CORS中间件，可以不加，官方建议加上
             app.UseCors("LimitHosts");
-
+            app.UseHttpsRedirection();
+            // authentication
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

@@ -1,0 +1,82 @@
+2019-01-30 21:36:38.538 +08:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-01-30 21:36:38.601 +08:00 [DBG] Using Identity.Application as default scheme for authentication
+2019-01-30 21:36:38.605 +08:00 [DBG] Using Identity.External as default scheme for sign-in
+2019-01-30 21:36:38.606 +08:00 [DBG] Using Identity.External as default scheme for sign-out
+2019-01-30 21:36:38.607 +08:00 [DBG] Using Identity.Application as default scheme for challenge
+2019-01-30 21:36:38.609 +08:00 [DBG] Using Identity.Application as default scheme for forbid
+2019-01-30 21:39:14.716 +08:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-01-30 21:39:14.754 +08:00 [DBG] Using Identity.Application as default scheme for authentication
+2019-01-30 21:39:14.756 +08:00 [DBG] Using Identity.External as default scheme for sign-in
+2019-01-30 21:39:14.757 +08:00 [DBG] Using Identity.External as default scheme for sign-out
+2019-01-30 21:39:14.757 +08:00 [DBG] Using Identity.Application as default scheme for challenge
+2019-01-30 21:39:14.757 +08:00 [DBG] Using Identity.Application as default scheme for forbid
+2019-01-30 21:39:41.839 +08:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-01-30 21:39:41.876 +08:00 [DBG] Using Identity.Application as default scheme for authentication
+2019-01-30 21:39:41.879 +08:00 [DBG] Using Identity.External as default scheme for sign-in
+2019-01-30 21:39:41.879 +08:00 [DBG] Using Identity.External as default scheme for sign-out
+2019-01-30 21:39:41.879 +08:00 [DBG] Using Identity.Application as default scheme for challenge
+2019-01-30 21:39:41.880 +08:00 [DBG] Using Identity.Application as default scheme for forbid
+2019-01-30 21:43:37.552 +08:00 [INF] Starting IdentityServer4 version 2.3.2.0
+2019-01-30 21:43:37.608 +08:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-01-30 21:43:37.618 +08:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-01-30 21:43:37.618 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-01-30 21:43:37.619 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-01-30 21:43:37.620 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-01-30 21:43:37.620 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-01-30 21:43:37.620 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-01-30 21:50:35.331 +08:00 [INF] Starting IdentityServer4 version 2.3.2.0
+2019-01-30 21:50:35.385 +08:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-01-30 21:50:35.399 +08:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-01-30 21:50:35.401 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-01-30 21:50:35.402 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-01-30 21:50:35.405 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-01-30 21:50:35.412 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-01-30 21:50:35.413 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-01-30 21:54:24.439 +08:00 [INF] Starting IdentityServer4 version 2.3.2.0
+2019-01-30 21:54:24.490 +08:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-01-30 21:54:24.502 +08:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-01-30 21:54:24.505 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-01-30 21:54:24.513 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-01-30 21:54:24.514 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-01-30 21:54:24.522 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-01-30 21:54:24.524 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-01-30 21:55:40.394 +08:00 [INF] Starting IdentityServer4 version 2.3.2.0
+2019-01-30 21:55:40.446 +08:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-01-30 21:55:40.458 +08:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-01-30 21:55:40.460 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-01-30 21:55:40.464 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-01-30 21:55:40.467 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-01-30 21:55:40.472 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-01-30 21:55:40.476 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-01-30 21:56:42.572 +08:00 [INF] Starting IdentityServer4 version 2.3.2.0
+2019-01-30 21:56:42.623 +08:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-01-30 21:56:42.639 +08:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-01-30 21:56:42.640 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-01-30 21:56:42.641 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-01-30 21:56:42.647 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-01-30 21:56:42.650 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-01-30 21:56:42.654 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-01-30 21:59:28.983 +08:00 [INF] Starting IdentityServer4 version 2.3.2.0
+2019-01-30 21:59:29.040 +08:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-01-30 21:59:29.053 +08:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-01-30 21:59:29.054 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-01-30 21:59:29.056 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-01-30 21:59:29.057 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-01-30 21:59:29.059 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-01-30 21:59:29.060 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-01-30 22:04:36.976 +08:00 [INF] Starting IdentityServer4 version 2.3.2.0
+2019-01-30 22:04:37.021 +08:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-01-30 22:04:37.029 +08:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-01-30 22:04:37.030 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-01-30 22:04:37.030 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-01-30 22:04:37.031 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-01-30 22:04:37.031 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-01-30 22:04:37.032 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid
+2019-01-30 22:14:43.495 +08:00 [INF] Starting IdentityServer4 version 2.3.2.0
+2019-01-30 22:14:43.547 +08:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-01-30 22:14:43.556 +08:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-01-30 22:14:43.556 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-01-30 22:14:43.557 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-01-30 22:14:43.558 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-01-30 22:14:43.558 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-01-30 22:14:43.559 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid

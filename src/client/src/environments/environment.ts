@@ -4,7 +4,24 @@
 
 export const environment = {
   production: false,
-  apiUrlBase: 'https://localhost:5001/api'
+  apiUrlBase: 'https://localhost:5001/api',
+  // oidc
+  openIdConnectSettings: {
+    authority: 'https://localhost:5033/',
+
+    client_id: 'siegrain-blog-client',
+    scope: 'openid profile email restapi',
+    response_type: 'id_token token',
+
+    // 登录后跳转地址
+    redirect_uri: 'http://localhost:4200/signin-oidc',
+    // 注销后跳转地址
+    post_logout_redirect_uri: 'http://localhost:4200/',
+
+    // 静默更新用户的 Token
+    automaticSilentRenew: true,
+    silent_redirect_uri: 'http://localhost:4200/redirect-silentrenew'
+  }
 };
 
 /*

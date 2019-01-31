@@ -7,7 +7,7 @@ export const environment = {
   apiUrlBase: 'https://localhost:5001/api',
   // oidc
   openIdConnectSettings: {
-    authority: 'https://localhost:5033/',
+    authority: 'https://localhost:7000/',
 
     client_id: 'siegrain-blog-client',
     scope: 'openid profile email restapi',

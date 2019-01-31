@@ -1,6 +1,6 @@
-﻿using BlogIdentityServer.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using BlogIdentityServer.Models;
 
 namespace BlogIdentityServer.Data
 {

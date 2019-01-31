@@ -1,10 +1,10 @@
-﻿#region
+﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
+
+using IdentityServer4.Models;
 using System.Collections.Generic;
 using IdentityServer4;
-using IdentityServer4.Models;
-
-#endregion
 
 namespace BlogIdentityServer
 {
@@ -28,46 +28,27 @@ namespace BlogIdentityServer
             };
         }
 
-        public static IEnumerable<Client> GetClients(string clientHost)
-        {   
+        /// <summary>
+        /// Mark: 指定客户端
+        /// 放置你需要使用ID4认证的客户端
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<Client> GetClients()
+        {
             return new[]
             {
-                // Angular client using implicit flow
-                new Client
-                {
-                    ClientId = "siegrain-blog-client",
-                    ClientName = "Siegrain's blog client",
-                    ClientUri = clientHost,
-
-                    AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowAccessTokensViaBrowser = true,
-                    RequireConsent = false, // 是否需要同意
-                    AccessTokenLifetime = 180,  // Access token 有效期，秒
-
-                    RedirectUris =
-                    {
-                        $"{clientHost}signin-oidc",
-                        $"{clientHost}redirect-silentrenew"
-                    },
-
-                    PostLogoutRedirectUris = { clientHost },
-                    AllowedCorsOrigins = { clientHost },
-
-                    AllowedScopes = {"openid", "profile", "email", "restapi"}
-                },
-
                 // MVC client using hybrid flow
                 new Client
                 {
-                    ClientId = "mvcclient",
-                    ClientName = "MVC 客户端",
+                    ClientId = "mvc",
+                    ClientName = "MVC Client",
 
                     AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
                     ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
 
-                    RedirectUris = { "https://localhost:7001/signin-oidc" },
-                    FrontChannelLogoutUri = "https://localhost:7001/signout-oidc",
-                    PostLogoutRedirectUris = { "https://localhost:7001/signout-callback-oidc" },
+                    RedirectUris = { "https://localhost:7000/signin-oidc" },
+                    FrontChannelLogoutUri = "https://localhost:7000/signout-oidc",
+                    PostLogoutRedirectUris = { "https://localhost:7000/signout-callback-oidc" },
 
                     AllowOfflineAccess = true, // offline_access
                     AllowedScopes =
@@ -77,6 +58,34 @@ namespace BlogIdentityServer
                         IdentityServerConstants.StandardScopes.Email,
                         "restapi"
                     }
+                },
+
+                // Angular client using implicit flow
+                new Client
+                {
+                    ClientId = "siegrain-blog-client",
+                    ClientName = "Siegrain's Blog Client",
+                    ClientUri = "http://localhost:4200",
+
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RequireConsent = false,
+                    AccessTokenLifetime = 180,
+
+                    RedirectUris =
+                    {
+                        "http://localhost:4200/signin-oidc",
+                        "http://localhost:4200/redirect-silentrenew"
+                    },
+
+                    PostLogoutRedirectUris = { "http://localhost:4200/" },
+                    AllowedCorsOrigins = { "http://localhost:4200" },
+
+                    AllowedScopes = {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "restapi" }
                 }
             };
         }

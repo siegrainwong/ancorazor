@@ -2,16 +2,16 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using System;
 using BlogIdentityServer.Data;
 using BlogIdentityServer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using Microsoft.AspNetCore.Http;
 
 namespace BlogIdentityServer
 {
@@ -28,6 +28,7 @@ namespace BlogIdentityServer
 
         public void ConfigureServices(IServiceCollection services)
         {
+            // sqlite with ef
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -35,7 +36,7 @@ namespace BlogIdentityServer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc();
+            services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
 
             services.Configure<IISOptions>(iis =>
             {
@@ -43,7 +44,7 @@ namespace BlogIdentityServer
                 iis.AutomaticAuthentication = false;
             });
 
-            var clientHost = Configuration.GetSection("AppSettings:ClientHost").Value;
+            // identity server configurations
             var builder = services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -53,7 +54,7 @@ namespace BlogIdentityServer
             })
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApis())
-                .AddInMemoryClients(Config.GetClients(clientHost))
+                .AddInMemoryClients(Config.GetClients())
                 .AddAspNetIdentity<ApplicationUser>();
 
             if (Environment.IsDevelopment())
@@ -62,16 +63,21 @@ namespace BlogIdentityServer
             }
             else
             {
+                // 生产时需要配置
                 throw new Exception("need to configure key material");
             }
 
+            // 添加了谷歌认证
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {
-                    options.ClientId = "708996912208-9m4dkjb5hscn7cjrn5u0r4tbgkbj1fko.apps.googleusercontent.com";
-                    options.ClientSecret = "wdfPY6t8H8cecgjlxud__4Gh";
+                    // register your IdentityServer with Google at https://console.developers.google.com
+                    // enable the Google+ API
+                    // set the redirect URI to http://localhost:5000/signin-google
+                    options.ClientId = "copy client ID from Google here";
+                    options.ClientSecret = "copy client secret from Google here";
                 });
-            
+
             services.AddHsts(options =>
             {
                 options.Preload = true;
@@ -84,14 +90,14 @@ namespace BlogIdentityServer
             services.AddHttpsRedirection(options =>
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-                options.HttpsPort = 5001;
+                options.HttpsPort = 7000;
             });
 
             services.AddCors(options =>
             {
                 options.AddPolicy("AngularDev", policy =>
                 {
-                    policy.WithOrigins(clientHost)
+                    policy.WithOrigins("http://localhost:4200")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });

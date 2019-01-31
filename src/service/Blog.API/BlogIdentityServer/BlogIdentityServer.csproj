@@ -1,10 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <UserSecretsId>aspnet-Host-12ED8ECC-9EF1-4D31-87B4-1405B3198E5E</UserSecretsId>
   </PropertyGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Serilog" Version="2.8.0" />
@@ -14,8 +12,12 @@
     
     <PackageReference Include="IdentityServer4" Version="2.3.2" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.1" />
+    
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.1" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.1" PrivateAssets="All" />
   </ItemGroup>
-
 </Project>

@@ -1,16 +1,18 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityServer4.Services;
+using IdentityServer4.Stores;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using IdentityServer4.Events;
+using IdentityServer4.Extensions;
 
-namespace BlogIdentityServer.Quickstart.Grants
+namespace IdentityServer4.Quickstart.UI
 {
     /// <summary>
     /// This sample controller allows a user to revoke grants given to clients
@@ -22,14 +24,17 @@ namespace BlogIdentityServer.Quickstart.Grants
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clients;
         private readonly IResourceStore _resources;
+        private readonly IEventService _events;
 
         public GrantsController(IIdentityServerInteractionService interaction,
             IClientStore clients,
-            IResourceStore resources)
+            IResourceStore resources,
+            IEventService events)
         {
             _interaction = interaction;
             _clients = clients;
             _resources = resources;
+            _events = events;
         }
 
         /// <summary>
@@ -49,6 +54,8 @@ namespace BlogIdentityServer.Quickstart.Grants
         public async Task<IActionResult> Revoke(string clientId)
         {
             await _interaction.RevokeUserConsentAsync(clientId);
+            await _events.RaiseAsync(new GrantsRevokedEvent(User.GetSubjectId(), clientId));
+
             return RedirectToAction("Index");
         }
 

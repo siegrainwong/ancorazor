@@ -1,27 +1,13 @@
 {
-    "iisSettings": {
-        "windowsAuthentication": false,
-        "anonymousAuthentication": true,
-        "iisExpress": {
-            "applicationUrl": "http://localhost:57553/",
-            "sslPort": 0
-        }
-    },
-    "profiles": {
-        "IIS Express": {
-            "commandName": "IISExpress",
-            "launchBrowser": true,
-            "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            }
+  "profiles": {
+    "SelfHost": {
+        "commandName": "Project",
+        "launchBrowser": true,
+        "launchUrl": "https://localhost:7000",
+        "environmentVariables": {
+            "ASPNETCORE_ENVIRONMENT": "Development"
         },
-        "BlogIdentityServer": {
-            "commandName": "Project",
-            "launchBrowser": true,
-            "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "applicationUrl": "http://localhost:57555/"
-        }
+        "applicationUrl": "http://localhost:7001;https://localhost:7000"
     }
+  }
 }

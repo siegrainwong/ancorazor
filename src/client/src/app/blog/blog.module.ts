@@ -9,6 +9,7 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { PostService } from './services/post.service';
 import { ArticleListComponent } from './components/article-list/article-list.component';
 import { ArticleItemComponent } from './components/article-item/article-item.component';
+import { WriteArticleComponent } from './components/write-article/write-article.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { ArticleItemComponent } from './components/article-item/article-item.com
     NavComponent,
     ToolbarComponent,
     ArticleListComponent,
-    ArticleItemComponent
+    ArticleItemComponent,
+    WriteArticleComponent
   ],
   imports: [
     CommonModule,

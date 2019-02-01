@@ -5656,3 +5656,692 @@ System.IO.IOException: Failed to bind to address https://127.0.0.1:5055: address
 2019-02-01 17:21:08.140 +08:00 [DBG] Scopes in access token: openid profile email restapi
 2019-02-01 17:21:08.141 +08:00 [INF] Profile service returned the following claim types: sub name given_name family_name email email_verified website preferred_username
 2019-02-01 17:21:08.142 +08:00 [DBG] End userinfo request
+2019-02-01 17:23:08.219 +08:00 [DBG] Request path /connect/authorize matched to endpoint type Authorize
+2019-02-01 17:23:08.220 +08:00 [DBG] Endpoint enabled: Authorize, successfully created handler: IdentityServer4.Endpoints.AuthorizeEndpoint
+2019-02-01 17:23:08.221 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2019-02-01 17:23:08.229 +08:00 [DBG] Start authorize request
+2019-02-01 17:23:08.230 +08:00 [DBG] User in authorize request: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:23:08.230 +08:00 [DBG] Start authorize request protocol validation
+2019-02-01 17:23:08.230 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:23:08.231 +08:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2019-02-01 17:23:08.231 +08:00 [INF] ValidatedAuthorizeRequest
+{"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","AllowedRedirectUris":["http://localhost:4200/signin-oidc","http://localhost:4200/redirect-silentrenew"],"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ResponseType":"id_token token","ResponseMode":"fragment","GrantType":"implicit","RequestedScopes":"openid profile email restapi","State":"8a884d8dacd142a2b2835d5fb1b92cf7","UiLocales":null,"Nonce":"d688ac41717d4b5e8e4c5a010db624ed","AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"none","MaxAge":null,"LoginHint":null,"SessionId":"944dbcd3dea2df668c68fd3f55963ecd","Raw":{"client_id":"siegrain-blog-client","redirect_uri":"http://localhost:4200/redirect-silentrenew","response_type":"id_token token","scope":"openid profile email restapi","state":"8a884d8dacd142a2b2835d5fb1b92cf7","nonce":"d688ac41717d4b5e8e4c5a010db624ed","prompt":"none","id_token_hint":"***REDACTED***"},"$type":"AuthorizeRequestValidationLog"}
+2019-02-01 17:23:08.236 +08:00 [DBG] Client is configured to not require consent, no consent is required
+2019-02-01 17:23:08.237 +08:00 [DBG] Creating Implicit Flow response.
+2019-02-01 17:23:08.237 +08:00 [DBG] Getting claims for access token for client: siegrain-blog-client
+2019-02-01 17:23:08.237 +08:00 [DBG] Getting claims for access token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:23:08.241 +08:00 [DBG] Getting claims for identity token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1 and client: siegrain-blog-client
+2019-02-01 17:23:08.242 +08:00 [DBG] In addition to an id_token, an access_token was requested. No claims other than sub are included in the id_token. To obtain more user claims, either use the user info endpoint or set AlwaysIncludeUserClaimsInIdToken on the client configuration.
+2019-02-01 17:23:08.244 +08:00 [INF] {"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","Endpoint":"Authorize","SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","Scopes":"openid profile email restapi","GrantType":"implicit","Tokens":[{"TokenType":"id_token","TokenValue":"****VQpw","$type":"Token"},{"TokenType":"access_token","TokenValue":"****cSaA","$type":"Token"}],"Category":"Token","Name":"Token Issued Success","EventType":"Success","Id":2000,"Message":null,"ActivityId":"0HLK81L47S43H:00000002","TimeStamp":"2019-02-01T09:23:08.0000000Z","ProcessId":13968,"LocalIpAddress":"::1:7000","RemoteIpAddress":"::1","$type":"TokenIssuedSuccessEvent"}
+2019-02-01 17:23:08.247 +08:00 [INF] Authorize endpoint response
+{"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ClientId":"siegrain-blog-client","RedirectUri":"http://localhost:4200/redirect-silentrenew","State":"8a884d8dacd142a2b2835d5fb1b92cf7","Scope":"openid profile email restapi","Error":null,"ErrorDescription":null,"$type":"AuthorizeResponseLog"}
+2019-02-01 17:25:06.375 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:25:06.378 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:25:06.391 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:25:06.396 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:25:06.397 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:25:06.405 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:25:06.405 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:25:06.405 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:25:06.407 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:25:06.408 +08:00 [DBG] Start discovery request
+2019-02-01 17:25:06.408 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:25:06.421 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:25:06.422 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:25:06.422 +08:00 [DBG] Start discovery request
+2019-02-01 17:25:06.448 +08:00 [DBG] Request path /connect/checksession matched to endpoint type Checksession
+2019-02-01 17:25:06.450 +08:00 [DBG] Endpoint enabled: Checksession, successfully created handler: IdentityServer4.Endpoints.CheckSessionEndpoint
+2019-02-01 17:25:06.458 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.CheckSessionEndpoint for /connect/checksession
+2019-02-01 17:25:06.460 +08:00 [DBG] Rendering check session result
+2019-02-01 17:25:06.482 +08:00 [DBG] Request path /connect/authorize matched to endpoint type Authorize
+2019-02-01 17:25:06.482 +08:00 [DBG] Endpoint enabled: Authorize, successfully created handler: IdentityServer4.Endpoints.AuthorizeEndpoint
+2019-02-01 17:25:06.483 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2019-02-01 17:25:06.483 +08:00 [DBG] Start authorize request
+2019-02-01 17:25:06.483 +08:00 [DBG] User in authorize request: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:25:06.484 +08:00 [DBG] Start authorize request protocol validation
+2019-02-01 17:25:06.485 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:25:06.485 +08:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2019-02-01 17:25:06.496 +08:00 [INF] ValidatedAuthorizeRequest
+{"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/signin-oidc","AllowedRedirectUris":["http://localhost:4200/signin-oidc","http://localhost:4200/redirect-silentrenew"],"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ResponseType":"id_token token","ResponseMode":"fragment","GrantType":"implicit","RequestedScopes":"openid profile email restapi","State":"ad53b03c496a4ab89e5545a9f061d972","UiLocales":null,"Nonce":"27ee61c541f7490f9191d0c9db1f7e33","AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":null,"MaxAge":null,"LoginHint":null,"SessionId":"944dbcd3dea2df668c68fd3f55963ecd","Raw":{"client_id":"siegrain-blog-client","redirect_uri":"http://localhost:4200/signin-oidc","response_type":"id_token token","scope":"openid profile email restapi","state":"ad53b03c496a4ab89e5545a9f061d972","nonce":"27ee61c541f7490f9191d0c9db1f7e33"},"$type":"AuthorizeRequestValidationLog"}
+2019-02-01 17:25:06.502 +08:00 [DBG] Client is configured to not require consent, no consent is required
+2019-02-01 17:25:06.503 +08:00 [DBG] Creating Implicit Flow response.
+2019-02-01 17:25:06.503 +08:00 [DBG] Getting claims for access token for client: siegrain-blog-client
+2019-02-01 17:25:06.505 +08:00 [DBG] Getting claims for access token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:25:06.514 +08:00 [DBG] Getting claims for identity token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1 and client: siegrain-blog-client
+2019-02-01 17:25:06.515 +08:00 [DBG] In addition to an id_token, an access_token was requested. No claims other than sub are included in the id_token. To obtain more user claims, either use the user info endpoint or set AlwaysIncludeUserClaimsInIdToken on the client configuration.
+2019-02-01 17:25:06.518 +08:00 [INF] {"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/signin-oidc","Endpoint":"Authorize","SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","Scopes":"openid profile email restapi","GrantType":"implicit","Tokens":[{"TokenType":"id_token","TokenValue":"****damw","$type":"Token"},{"TokenType":"access_token","TokenValue":"****tl7Q","$type":"Token"}],"Category":"Token","Name":"Token Issued Success","EventType":"Success","Id":2000,"Message":null,"ActivityId":"0HLK81L47S43L:00000001","TimeStamp":"2019-02-01T09:25:06.0000000Z","ProcessId":13968,"LocalIpAddress":"::1:7000","RemoteIpAddress":"::1","$type":"TokenIssuedSuccessEvent"}
+2019-02-01 17:25:06.522 +08:00 [INF] Authorize endpoint response
+{"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ClientId":"siegrain-blog-client","RedirectUri":"http://localhost:4200/signin-oidc","State":"ad53b03c496a4ab89e5545a9f061d972","Scope":"openid profile email restapi","Error":null,"ErrorDescription":null,"$type":"AuthorizeResponseLog"}
+2019-02-01 17:25:07.391 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:25:07.392 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:25:07.392 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:25:07.393 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:25:07.394 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:25:07.394 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:25:07.394 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:25:07.394 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:25:07.394 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:25:07.395 +08:00 [DBG] Start discovery request
+2019-02-01 17:25:07.395 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:25:07.395 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:25:07.395 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:25:07.396 +08:00 [DBG] Start discovery request
+2019-02-01 17:25:07.481 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration/jwks from origin: http://localhost:4200
+2019-02-01 17:25:07.482 +08:00 [DBG] Request path /connect/checksession matched to endpoint type Checksession
+2019-02-01 17:25:07.493 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:25:07.493 +08:00 [DBG] Endpoint enabled: Checksession, successfully created handler: IdentityServer4.Endpoints.CheckSessionEndpoint
+2019-02-01 17:25:07.493 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:25:07.493 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.CheckSessionEndpoint for /connect/checksession
+2019-02-01 17:25:07.494 +08:00 [DBG] Request path /.well-known/openid-configuration/jwks matched to endpoint type Discovery
+2019-02-01 17:25:07.494 +08:00 [DBG] Rendering check session result
+2019-02-01 17:25:07.495 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryKeyEndpoint
+2019-02-01 17:25:07.497 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+2019-02-01 17:25:07.497 +08:00 [DBG] Start key discovery request
+2019-02-01 17:25:07.543 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:25:07.544 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:25:07.545 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:25:07.562 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:25:07.563 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:25:07.563 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:25:07.563 +08:00 [DBG] Request path /connect/userinfo matched to endpoint type Userinfo
+2019-02-01 17:25:07.563 +08:00 [DBG] Endpoint enabled: Userinfo, successfully created handler: IdentityServer4.Endpoints.UserInfoEndpoint
+2019-02-01 17:25:07.564 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.UserInfoEndpoint for /connect/userinfo
+2019-02-01 17:25:07.564 +08:00 [DBG] Start userinfo request
+2019-02-01 17:25:07.564 +08:00 [DBG] Bearer token found in header
+2019-02-01 17:25:07.566 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:25:07.566 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:25:07.568 +08:00 [DBG] Calling into custom token validator: IdentityServer4.Validation.DefaultCustomTokenValidator
+2019-02-01 17:25:07.568 +08:00 [DBG] Token validation success
+{"ClientId":null,"ClientName":null,"ValidateLifetime":true,"AccessTokenType":"Jwt","ExpectedScope":"openid","TokenHandle":null,"JwtId":null,"Claims":{"nbf":1549013106,"exp":1549013286,"iss":"https://localhost:7000","aud":["https://localhost:7000/resources","restapi"],"client_id":"siegrain-blog-client","sub":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","auth_time":1548993091,"idp":"local","scope":["openid","profile","email","restapi"],"amr":"pwd"},"$type":"TokenValidationLog"}
+2019-02-01 17:25:07.569 +08:00 [DBG] Creating userinfo response
+2019-02-01 17:25:07.570 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:25:07.570 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:25:07.571 +08:00 [DBG] Requested claim types: sub name family_name given_name middle_name nickname preferred_username profile picture website gender birthdate zoneinfo locale updated_at email email_verified
+2019-02-01 17:25:07.572 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:25:07.575 +08:00 [INF] Profile service returned the following claim types: sub name given_name family_name email email_verified website preferred_username
+2019-02-01 17:25:07.588 +08:00 [DBG] End userinfo request
+2019-02-01 17:27:07.657 +08:00 [DBG] Request path /connect/authorize matched to endpoint type Authorize
+2019-02-01 17:27:07.658 +08:00 [DBG] Endpoint enabled: Authorize, successfully created handler: IdentityServer4.Endpoints.AuthorizeEndpoint
+2019-02-01 17:27:07.658 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2019-02-01 17:27:07.658 +08:00 [DBG] Start authorize request
+2019-02-01 17:27:07.659 +08:00 [DBG] User in authorize request: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:27:07.659 +08:00 [DBG] Start authorize request protocol validation
+2019-02-01 17:27:07.659 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:27:07.660 +08:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2019-02-01 17:27:07.660 +08:00 [INF] ValidatedAuthorizeRequest
+{"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","AllowedRedirectUris":["http://localhost:4200/signin-oidc","http://localhost:4200/redirect-silentrenew"],"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ResponseType":"id_token token","ResponseMode":"fragment","GrantType":"implicit","RequestedScopes":"openid profile email restapi","State":"71228ee417534fa2a5d93862d484c0bc","UiLocales":null,"Nonce":"6dc64c84050649cb998a8177db6a9406","AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"none","MaxAge":null,"LoginHint":null,"SessionId":"944dbcd3dea2df668c68fd3f55963ecd","Raw":{"client_id":"siegrain-blog-client","redirect_uri":"http://localhost:4200/redirect-silentrenew","response_type":"id_token token","scope":"openid profile email restapi","state":"71228ee417534fa2a5d93862d484c0bc","nonce":"6dc64c84050649cb998a8177db6a9406","prompt":"none","id_token_hint":"***REDACTED***"},"$type":"AuthorizeRequestValidationLog"}
+2019-02-01 17:27:07.666 +08:00 [DBG] Client is configured to not require consent, no consent is required
+2019-02-01 17:27:07.666 +08:00 [DBG] Creating Implicit Flow response.
+2019-02-01 17:27:07.666 +08:00 [DBG] Getting claims for access token for client: siegrain-blog-client
+2019-02-01 17:27:07.667 +08:00 [DBG] Getting claims for access token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:27:07.670 +08:00 [DBG] Getting claims for identity token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1 and client: siegrain-blog-client
+2019-02-01 17:27:07.671 +08:00 [DBG] In addition to an id_token, an access_token was requested. No claims other than sub are included in the id_token. To obtain more user claims, either use the user info endpoint or set AlwaysIncludeUserClaimsInIdToken on the client configuration.
+2019-02-01 17:27:07.673 +08:00 [INF] {"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","Endpoint":"Authorize","SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","Scopes":"openid profile email restapi","GrantType":"implicit","Tokens":[{"TokenType":"id_token","TokenValue":"****527Q","$type":"Token"},{"TokenType":"access_token","TokenValue":"****zeZQ","$type":"Token"}],"Category":"Token","Name":"Token Issued Success","EventType":"Success","Id":2000,"Message":null,"ActivityId":"0HLK81L47S43L:00000003","TimeStamp":"2019-02-01T09:27:07.0000000Z","ProcessId":13968,"LocalIpAddress":"::1:7000","RemoteIpAddress":"::1","$type":"TokenIssuedSuccessEvent"}
+2019-02-01 17:27:07.675 +08:00 [INF] Authorize endpoint response
+{"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ClientId":"siegrain-blog-client","RedirectUri":"http://localhost:4200/redirect-silentrenew","State":"71228ee417534fa2a5d93862d484c0bc","Scope":"openid profile email restapi","Error":null,"ErrorDescription":null,"$type":"AuthorizeResponseLog"}
+2019-02-01 17:27:08.537 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:27:08.538 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:27:08.538 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:27:08.539 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:27:08.539 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:27:08.539 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:27:08.540 +08:00 [DBG] Start discovery request
+2019-02-01 17:27:08.579 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:27:08.579 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:27:08.580 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:27:08.587 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:27:08.587 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:27:08.587 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:27:08.588 +08:00 [DBG] Request path /connect/userinfo matched to endpoint type Userinfo
+2019-02-01 17:27:08.588 +08:00 [DBG] Endpoint enabled: Userinfo, successfully created handler: IdentityServer4.Endpoints.UserInfoEndpoint
+2019-02-01 17:27:08.588 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.UserInfoEndpoint for /connect/userinfo
+2019-02-01 17:27:08.589 +08:00 [DBG] Start userinfo request
+2019-02-01 17:27:08.589 +08:00 [DBG] Bearer token found in header
+2019-02-01 17:27:08.591 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:27:08.591 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:27:08.593 +08:00 [DBG] Calling into custom token validator: IdentityServer4.Validation.DefaultCustomTokenValidator
+2019-02-01 17:27:08.594 +08:00 [DBG] Token validation success
+{"ClientId":null,"ClientName":null,"ValidateLifetime":true,"AccessTokenType":"Jwt","ExpectedScope":"openid","TokenHandle":null,"JwtId":null,"Claims":{"nbf":1549013227,"exp":1549013407,"iss":"https://localhost:7000","aud":["https://localhost:7000/resources","restapi"],"client_id":"siegrain-blog-client","sub":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","auth_time":1548993091,"idp":"local","scope":["openid","profile","email","restapi"],"amr":"pwd"},"$type":"TokenValidationLog"}
+2019-02-01 17:27:08.595 +08:00 [DBG] Creating userinfo response
+2019-02-01 17:27:08.596 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:27:08.596 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:27:08.596 +08:00 [DBG] Requested claim types: sub name family_name given_name middle_name nickname preferred_username profile picture website gender birthdate zoneinfo locale updated_at email email_verified
+2019-02-01 17:27:08.597 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:27:08.601 +08:00 [INF] Profile service returned the following claim types: sub name given_name family_name email email_verified website preferred_username
+2019-02-01 17:27:08.602 +08:00 [DBG] End userinfo request
+2019-02-01 17:29:08.952 +08:00 [DBG] Request path /connect/authorize matched to endpoint type Authorize
+2019-02-01 17:29:08.954 +08:00 [DBG] Endpoint enabled: Authorize, successfully created handler: IdentityServer4.Endpoints.AuthorizeEndpoint
+2019-02-01 17:29:08.955 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2019-02-01 17:29:08.956 +08:00 [DBG] Start authorize request
+2019-02-01 17:29:08.956 +08:00 [DBG] User in authorize request: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:29:08.956 +08:00 [DBG] Start authorize request protocol validation
+2019-02-01 17:29:08.956 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:29:08.957 +08:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2019-02-01 17:29:08.957 +08:00 [INF] ValidatedAuthorizeRequest
+{"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","AllowedRedirectUris":["http://localhost:4200/signin-oidc","http://localhost:4200/redirect-silentrenew"],"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ResponseType":"id_token token","ResponseMode":"fragment","GrantType":"implicit","RequestedScopes":"openid profile email restapi","State":"60ee3bde03464ae0a2922778dcd481df","UiLocales":null,"Nonce":"30a6d8485f4e4d6c8f63f664a5be982c","AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"none","MaxAge":null,"LoginHint":null,"SessionId":"944dbcd3dea2df668c68fd3f55963ecd","Raw":{"client_id":"siegrain-blog-client","redirect_uri":"http://localhost:4200/redirect-silentrenew","response_type":"id_token token","scope":"openid profile email restapi","state":"60ee3bde03464ae0a2922778dcd481df","nonce":"30a6d8485f4e4d6c8f63f664a5be982c","prompt":"none","id_token_hint":"***REDACTED***"},"$type":"AuthorizeRequestValidationLog"}
+2019-02-01 17:29:08.972 +08:00 [DBG] Client is configured to not require consent, no consent is required
+2019-02-01 17:29:08.972 +08:00 [DBG] Creating Implicit Flow response.
+2019-02-01 17:29:08.972 +08:00 [DBG] Getting claims for access token for client: siegrain-blog-client
+2019-02-01 17:29:08.973 +08:00 [DBG] Getting claims for access token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:29:08.976 +08:00 [DBG] Getting claims for identity token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1 and client: siegrain-blog-client
+2019-02-01 17:29:08.977 +08:00 [DBG] In addition to an id_token, an access_token was requested. No claims other than sub are included in the id_token. To obtain more user claims, either use the user info endpoint or set AlwaysIncludeUserClaimsInIdToken on the client configuration.
+2019-02-01 17:29:08.980 +08:00 [INF] {"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","Endpoint":"Authorize","SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","Scopes":"openid profile email restapi","GrantType":"implicit","Tokens":[{"TokenType":"id_token","TokenValue":"****ktPw","$type":"Token"},{"TokenType":"access_token","TokenValue":"****zU8Q","$type":"Token"}],"Category":"Token","Name":"Token Issued Success","EventType":"Success","Id":2000,"Message":null,"ActivityId":"0HLK81L47S43L:00000004","TimeStamp":"2019-02-01T09:29:08.0000000Z","ProcessId":13968,"LocalIpAddress":"::1:7000","RemoteIpAddress":"::1","$type":"TokenIssuedSuccessEvent"}
+2019-02-01 17:29:08.982 +08:00 [INF] Authorize endpoint response
+{"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ClientId":"siegrain-blog-client","RedirectUri":"http://localhost:4200/redirect-silentrenew","State":"60ee3bde03464ae0a2922778dcd481df","Scope":"openid profile email restapi","Error":null,"ErrorDescription":null,"$type":"AuthorizeResponseLog"}
+2019-02-01 17:29:09.952 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:29:09.952 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:29:09.952 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:29:09.953 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:29:09.953 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:29:09.953 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:29:09.954 +08:00 [DBG] Start discovery request
+2019-02-01 17:29:10.015 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:29:10.016 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:29:10.016 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:29:10.022 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:29:10.022 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:29:10.023 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:29:10.023 +08:00 [DBG] Request path /connect/userinfo matched to endpoint type Userinfo
+2019-02-01 17:29:10.024 +08:00 [DBG] Endpoint enabled: Userinfo, successfully created handler: IdentityServer4.Endpoints.UserInfoEndpoint
+2019-02-01 17:29:10.024 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.UserInfoEndpoint for /connect/userinfo
+2019-02-01 17:29:10.024 +08:00 [DBG] Start userinfo request
+2019-02-01 17:29:10.024 +08:00 [DBG] Bearer token found in header
+2019-02-01 17:29:10.026 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:29:10.026 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:29:10.029 +08:00 [DBG] Calling into custom token validator: IdentityServer4.Validation.DefaultCustomTokenValidator
+2019-02-01 17:29:10.031 +08:00 [DBG] Token validation success
+{"ClientId":null,"ClientName":null,"ValidateLifetime":true,"AccessTokenType":"Jwt","ExpectedScope":"openid","TokenHandle":null,"JwtId":null,"Claims":{"nbf":1549013348,"exp":1549013528,"iss":"https://localhost:7000","aud":["https://localhost:7000/resources","restapi"],"client_id":"siegrain-blog-client","sub":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","auth_time":1548993091,"idp":"local","scope":["openid","profile","email","restapi"],"amr":"pwd"},"$type":"TokenValidationLog"}
+2019-02-01 17:29:10.042 +08:00 [DBG] Creating userinfo response
+2019-02-01 17:29:10.043 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:29:10.044 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:29:10.045 +08:00 [DBG] Requested claim types: sub name family_name given_name middle_name nickname preferred_username profile picture website gender birthdate zoneinfo locale updated_at email email_verified
+2019-02-01 17:29:10.046 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:29:10.049 +08:00 [INF] Profile service returned the following claim types: sub name given_name family_name email email_verified website preferred_username
+2019-02-01 17:29:10.049 +08:00 [DBG] End userinfo request
+2019-02-01 17:31:10.941 +08:00 [DBG] Request path /connect/authorize matched to endpoint type Authorize
+2019-02-01 17:31:10.941 +08:00 [DBG] Endpoint enabled: Authorize, successfully created handler: IdentityServer4.Endpoints.AuthorizeEndpoint
+2019-02-01 17:31:10.942 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2019-02-01 17:31:10.942 +08:00 [DBG] Start authorize request
+2019-02-01 17:31:10.942 +08:00 [DBG] User in authorize request: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:31:10.943 +08:00 [DBG] Start authorize request protocol validation
+2019-02-01 17:31:10.943 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:31:10.944 +08:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2019-02-01 17:31:10.945 +08:00 [INF] ValidatedAuthorizeRequest
+{"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","AllowedRedirectUris":["http://localhost:4200/signin-oidc","http://localhost:4200/redirect-silentrenew"],"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ResponseType":"id_token token","ResponseMode":"fragment","GrantType":"implicit","RequestedScopes":"openid profile email restapi","State":"28516ac5f4db4b88bec2cf02a2c7e64f","UiLocales":null,"Nonce":"bfebc0b7fd534e5f9f9ce4b7e056d46e","AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"none","MaxAge":null,"LoginHint":null,"SessionId":"944dbcd3dea2df668c68fd3f55963ecd","Raw":{"client_id":"siegrain-blog-client","redirect_uri":"http://localhost:4200/redirect-silentrenew","response_type":"id_token token","scope":"openid profile email restapi","state":"28516ac5f4db4b88bec2cf02a2c7e64f","nonce":"bfebc0b7fd534e5f9f9ce4b7e056d46e","prompt":"none","id_token_hint":"***REDACTED***"},"$type":"AuthorizeRequestValidationLog"}
+2019-02-01 17:31:10.956 +08:00 [DBG] Client is configured to not require consent, no consent is required
+2019-02-01 17:31:10.956 +08:00 [DBG] Creating Implicit Flow response.
+2019-02-01 17:31:10.956 +08:00 [DBG] Getting claims for access token for client: siegrain-blog-client
+2019-02-01 17:31:10.957 +08:00 [DBG] Getting claims for access token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:31:10.960 +08:00 [DBG] Getting claims for identity token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1 and client: siegrain-blog-client
+2019-02-01 17:31:10.961 +08:00 [DBG] In addition to an id_token, an access_token was requested. No claims other than sub are included in the id_token. To obtain more user claims, either use the user info endpoint or set AlwaysIncludeUserClaimsInIdToken on the client configuration.
+2019-02-01 17:31:10.963 +08:00 [INF] {"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","Endpoint":"Authorize","SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","Scopes":"openid profile email restapi","GrantType":"implicit","Tokens":[{"TokenType":"id_token","TokenValue":"****8j0A","$type":"Token"},{"TokenType":"access_token","TokenValue":"****t1QQ","$type":"Token"}],"Category":"Token","Name":"Token Issued Success","EventType":"Success","Id":2000,"Message":null,"ActivityId":"0HLK81L47S43N:00000001","TimeStamp":"2019-02-01T09:31:10.0000000Z","ProcessId":13968,"LocalIpAddress":"::1:7000","RemoteIpAddress":"::1","$type":"TokenIssuedSuccessEvent"}
+2019-02-01 17:31:10.973 +08:00 [INF] Authorize endpoint response
+{"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ClientId":"siegrain-blog-client","RedirectUri":"http://localhost:4200/redirect-silentrenew","State":"28516ac5f4db4b88bec2cf02a2c7e64f","Scope":"openid profile email restapi","Error":null,"ErrorDescription":null,"$type":"AuthorizeResponseLog"}
+2019-02-01 17:37:27.284 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:37:27.284 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:37:27.284 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:37:27.285 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:37:27.286 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:37:27.286 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:37:27.287 +08:00 [DBG] Start discovery request
+2019-02-01 17:37:27.350 +08:00 [DBG] Request path /connect/checksession matched to endpoint type Checksession
+2019-02-01 17:37:27.352 +08:00 [DBG] Endpoint enabled: Checksession, successfully created handler: IdentityServer4.Endpoints.CheckSessionEndpoint
+2019-02-01 17:37:27.354 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.CheckSessionEndpoint for /connect/checksession
+2019-02-01 17:37:27.362 +08:00 [DBG] Rendering check session result
+2019-02-01 17:37:57.645 +08:00 [DBG] Request path /connect/authorize matched to endpoint type Authorize
+2019-02-01 17:37:57.647 +08:00 [DBG] Endpoint enabled: Authorize, successfully created handler: IdentityServer4.Endpoints.AuthorizeEndpoint
+2019-02-01 17:37:57.647 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2019-02-01 17:37:57.648 +08:00 [DBG] Start authorize request
+2019-02-01 17:37:57.649 +08:00 [DBG] User in authorize request: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:37:57.649 +08:00 [DBG] Start authorize request protocol validation
+2019-02-01 17:37:57.649 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:37:57.649 +08:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2019-02-01 17:37:57.650 +08:00 [INF] ValidatedAuthorizeRequest
+{"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/signin-oidc","AllowedRedirectUris":["http://localhost:4200/signin-oidc","http://localhost:4200/redirect-silentrenew"],"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ResponseType":"id_token token","ResponseMode":"fragment","GrantType":"implicit","RequestedScopes":"openid profile email restapi","State":"4fb2fdca37d146dfaf39a1c5d33e48c4","UiLocales":null,"Nonce":"57d1de826e53405787d170407ede9ed1","AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":null,"MaxAge":null,"LoginHint":null,"SessionId":"944dbcd3dea2df668c68fd3f55963ecd","Raw":{"client_id":"siegrain-blog-client","redirect_uri":"http://localhost:4200/signin-oidc","response_type":"id_token token","scope":"openid profile email restapi","state":"4fb2fdca37d146dfaf39a1c5d33e48c4","nonce":"57d1de826e53405787d170407ede9ed1"},"$type":"AuthorizeRequestValidationLog"}
+2019-02-01 17:37:57.654 +08:00 [DBG] Client is configured to not require consent, no consent is required
+2019-02-01 17:37:57.655 +08:00 [DBG] Creating Implicit Flow response.
+2019-02-01 17:37:57.657 +08:00 [DBG] Getting claims for access token for client: siegrain-blog-client
+2019-02-01 17:37:57.664 +08:00 [DBG] Getting claims for access token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:37:57.671 +08:00 [DBG] Getting claims for identity token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1 and client: siegrain-blog-client
+2019-02-01 17:37:57.671 +08:00 [DBG] In addition to an id_token, an access_token was requested. No claims other than sub are included in the id_token. To obtain more user claims, either use the user info endpoint or set AlwaysIncludeUserClaimsInIdToken on the client configuration.
+2019-02-01 17:37:57.674 +08:00 [INF] {"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/signin-oidc","Endpoint":"Authorize","SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","Scopes":"openid profile email restapi","GrantType":"implicit","Tokens":[{"TokenType":"id_token","TokenValue":"****sPSA","$type":"Token"},{"TokenType":"access_token","TokenValue":"****Lf-Q","$type":"Token"}],"Category":"Token","Name":"Token Issued Success","EventType":"Success","Id":2000,"Message":null,"ActivityId":"0HLK81L47S43P:00000002","TimeStamp":"2019-02-01T09:37:57.0000000Z","ProcessId":13968,"LocalIpAddress":"::1:7000","RemoteIpAddress":"::1","$type":"TokenIssuedSuccessEvent"}
+2019-02-01 17:37:57.676 +08:00 [INF] Authorize endpoint response
+{"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ClientId":"siegrain-blog-client","RedirectUri":"http://localhost:4200/signin-oidc","State":"4fb2fdca37d146dfaf39a1c5d33e48c4","Scope":"openid profile email restapi","Error":null,"ErrorDescription":null,"$type":"AuthorizeResponseLog"}
+2019-02-01 17:37:58.725 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:37:58.725 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:37:58.725 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:37:58.726 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:37:58.726 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:37:58.727 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:37:58.728 +08:00 [DBG] Start discovery request
+2019-02-01 17:37:58.741 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:37:58.742 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:37:58.742 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:37:58.742 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:37:58.743 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:37:58.743 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:37:58.743 +08:00 [DBG] Start discovery request
+2019-02-01 17:37:58.814 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration/jwks from origin: http://localhost:4200
+2019-02-01 17:37:58.815 +08:00 [DBG] Request path /connect/checksession matched to endpoint type Checksession
+2019-02-01 17:37:58.815 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:37:58.815 +08:00 [DBG] Endpoint enabled: Checksession, successfully created handler: IdentityServer4.Endpoints.CheckSessionEndpoint
+2019-02-01 17:37:58.816 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:37:58.817 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.CheckSessionEndpoint for /connect/checksession
+2019-02-01 17:37:58.818 +08:00 [DBG] Request path /.well-known/openid-configuration/jwks matched to endpoint type Discovery
+2019-02-01 17:37:58.818 +08:00 [DBG] Rendering check session result
+2019-02-01 17:37:58.820 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryKeyEndpoint
+2019-02-01 17:37:58.820 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+2019-02-01 17:37:58.821 +08:00 [DBG] Start key discovery request
+2019-02-01 17:37:58.860 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:37:58.860 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:37:58.860 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:37:58.885 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:37:58.896 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:37:58.901 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:37:58.902 +08:00 [DBG] Request path /connect/userinfo matched to endpoint type Userinfo
+2019-02-01 17:37:58.903 +08:00 [DBG] Endpoint enabled: Userinfo, successfully created handler: IdentityServer4.Endpoints.UserInfoEndpoint
+2019-02-01 17:37:58.904 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.UserInfoEndpoint for /connect/userinfo
+2019-02-01 17:37:58.904 +08:00 [DBG] Start userinfo request
+2019-02-01 17:37:58.904 +08:00 [DBG] Bearer token found in header
+2019-02-01 17:37:58.907 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:37:58.907 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:37:58.910 +08:00 [DBG] Calling into custom token validator: IdentityServer4.Validation.DefaultCustomTokenValidator
+2019-02-01 17:37:58.911 +08:00 [DBG] Token validation success
+{"ClientId":null,"ClientName":null,"ValidateLifetime":true,"AccessTokenType":"Jwt","ExpectedScope":"openid","TokenHandle":null,"JwtId":null,"Claims":{"nbf":1549013877,"exp":1549014057,"iss":"https://localhost:7000","aud":["https://localhost:7000/resources","restapi"],"client_id":"siegrain-blog-client","sub":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","auth_time":1548993091,"idp":"local","scope":["openid","profile","email","restapi"],"amr":"pwd"},"$type":"TokenValidationLog"}
+2019-02-01 17:37:58.912 +08:00 [DBG] Creating userinfo response
+2019-02-01 17:37:58.913 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:37:58.913 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:37:58.913 +08:00 [DBG] Requested claim types: sub name family_name given_name middle_name nickname preferred_username profile picture website gender birthdate zoneinfo locale updated_at email email_verified
+2019-02-01 17:37:58.913 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:37:58.916 +08:00 [INF] Profile service returned the following claim types: sub name given_name family_name email email_verified website preferred_username
+2019-02-01 17:37:58.916 +08:00 [DBG] End userinfo request
+2019-02-01 17:39:05.810 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:39:05.810 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:39:05.811 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:39:05.811 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:39:05.812 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:39:05.812 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:39:05.812 +08:00 [DBG] Start discovery request
+2019-02-01 17:39:05.901 +08:00 [DBG] Request path /connect/checksession matched to endpoint type Checksession
+2019-02-01 17:39:05.902 +08:00 [DBG] Endpoint enabled: Checksession, successfully created handler: IdentityServer4.Endpoints.CheckSessionEndpoint
+2019-02-01 17:39:05.902 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.CheckSessionEndpoint for /connect/checksession
+2019-02-01 17:39:05.902 +08:00 [DBG] Rendering check session result
+2019-02-01 17:40:00.914 +08:00 [DBG] Request path /connect/authorize matched to endpoint type Authorize
+2019-02-01 17:40:00.914 +08:00 [DBG] Endpoint enabled: Authorize, successfully created handler: IdentityServer4.Endpoints.AuthorizeEndpoint
+2019-02-01 17:40:00.914 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2019-02-01 17:40:00.915 +08:00 [DBG] Start authorize request
+2019-02-01 17:40:00.915 +08:00 [DBG] User in authorize request: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:40:00.915 +08:00 [DBG] Start authorize request protocol validation
+2019-02-01 17:40:00.915 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:40:00.916 +08:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2019-02-01 17:40:00.916 +08:00 [INF] ValidatedAuthorizeRequest
+{"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","AllowedRedirectUris":["http://localhost:4200/signin-oidc","http://localhost:4200/redirect-silentrenew"],"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ResponseType":"id_token token","ResponseMode":"fragment","GrantType":"implicit","RequestedScopes":"openid profile email restapi","State":"8a0012eb75a94398b95df2052f226ac4","UiLocales":null,"Nonce":"8110890d388d410a801ad465329ec658","AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"none","MaxAge":null,"LoginHint":null,"SessionId":"944dbcd3dea2df668c68fd3f55963ecd","Raw":{"client_id":"siegrain-blog-client","redirect_uri":"http://localhost:4200/redirect-silentrenew","response_type":"id_token token","scope":"openid profile email restapi","state":"8a0012eb75a94398b95df2052f226ac4","nonce":"8110890d388d410a801ad465329ec658","prompt":"none","id_token_hint":"***REDACTED***"},"$type":"AuthorizeRequestValidationLog"}
+2019-02-01 17:40:00.920 +08:00 [DBG] Client is configured to not require consent, no consent is required
+2019-02-01 17:40:00.920 +08:00 [DBG] Creating Implicit Flow response.
+2019-02-01 17:40:00.921 +08:00 [DBG] Getting claims for access token for client: siegrain-blog-client
+2019-02-01 17:40:00.922 +08:00 [DBG] Getting claims for access token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:40:00.926 +08:00 [DBG] Getting claims for identity token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1 and client: siegrain-blog-client
+2019-02-01 17:40:00.926 +08:00 [DBG] In addition to an id_token, an access_token was requested. No claims other than sub are included in the id_token. To obtain more user claims, either use the user info endpoint or set AlwaysIncludeUserClaimsInIdToken on the client configuration.
+2019-02-01 17:40:00.929 +08:00 [INF] {"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","Endpoint":"Authorize","SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","Scopes":"openid profile email restapi","GrantType":"implicit","Tokens":[{"TokenType":"id_token","TokenValue":"****Y9Jw","$type":"Token"},{"TokenType":"access_token","TokenValue":"****1WYw","$type":"Token"}],"Category":"Token","Name":"Token Issued Success","EventType":"Success","Id":2000,"Message":null,"ActivityId":"0HLK81L47S43P:00000005","TimeStamp":"2019-02-01T09:40:00.0000000Z","ProcessId":13968,"LocalIpAddress":"::1:7000","RemoteIpAddress":"::1","$type":"TokenIssuedSuccessEvent"}
+2019-02-01 17:40:00.941 +08:00 [INF] Authorize endpoint response
+{"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ClientId":"siegrain-blog-client","RedirectUri":"http://localhost:4200/redirect-silentrenew","State":"8a0012eb75a94398b95df2052f226ac4","Scope":"openid profile email restapi","Error":null,"ErrorDescription":null,"$type":"AuthorizeResponseLog"}
+2019-02-01 17:40:01.715 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:40:01.715 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:40:01.716 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:40:01.716 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:40:01.717 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:40:01.718 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:40:01.719 +08:00 [DBG] Start discovery request
+2019-02-01 17:40:01.757 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration/jwks from origin: http://localhost:4200
+2019-02-01 17:40:01.757 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:40:01.757 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:40:01.758 +08:00 [DBG] Request path /.well-known/openid-configuration/jwks matched to endpoint type Discovery
+2019-02-01 17:40:01.758 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryKeyEndpoint
+2019-02-01 17:40:01.758 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+2019-02-01 17:40:01.759 +08:00 [DBG] Start key discovery request
+2019-02-01 17:40:01.784 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:40:01.785 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:40:01.785 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:40:01.793 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:40:01.794 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:40:01.794 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:40:01.795 +08:00 [DBG] Request path /connect/userinfo matched to endpoint type Userinfo
+2019-02-01 17:40:01.795 +08:00 [DBG] Endpoint enabled: Userinfo, successfully created handler: IdentityServer4.Endpoints.UserInfoEndpoint
+2019-02-01 17:40:01.796 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.UserInfoEndpoint for /connect/userinfo
+2019-02-01 17:40:01.796 +08:00 [DBG] Start userinfo request
+2019-02-01 17:40:01.797 +08:00 [DBG] Bearer token found in header
+2019-02-01 17:40:01.798 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:40:01.799 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:40:01.800 +08:00 [DBG] Calling into custom token validator: IdentityServer4.Validation.DefaultCustomTokenValidator
+2019-02-01 17:40:01.801 +08:00 [DBG] Token validation success
+{"ClientId":null,"ClientName":null,"ValidateLifetime":true,"AccessTokenType":"Jwt","ExpectedScope":"openid","TokenHandle":null,"JwtId":null,"Claims":{"nbf":1549014000,"exp":1549014180,"iss":"https://localhost:7000","aud":["https://localhost:7000/resources","restapi"],"client_id":"siegrain-blog-client","sub":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","auth_time":1548993091,"idp":"local","scope":["openid","profile","email","restapi"],"amr":"pwd"},"$type":"TokenValidationLog"}
+2019-02-01 17:40:01.802 +08:00 [DBG] Creating userinfo response
+2019-02-01 17:40:01.802 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:40:01.803 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:40:01.803 +08:00 [DBG] Requested claim types: sub name family_name given_name middle_name nickname preferred_username profile picture website gender birthdate zoneinfo locale updated_at email email_verified
+2019-02-01 17:40:01.803 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:40:01.805 +08:00 [INF] Profile service returned the following claim types: sub name given_name family_name email email_verified website preferred_username
+2019-02-01 17:40:01.805 +08:00 [DBG] End userinfo request
+2019-02-01 17:42:01.913 +08:00 [DBG] Request path /connect/authorize matched to endpoint type Authorize
+2019-02-01 17:42:01.914 +08:00 [DBG] Endpoint enabled: Authorize, successfully created handler: IdentityServer4.Endpoints.AuthorizeEndpoint
+2019-02-01 17:42:01.914 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2019-02-01 17:42:01.914 +08:00 [DBG] Start authorize request
+2019-02-01 17:42:01.915 +08:00 [DBG] User in authorize request: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:42:01.915 +08:00 [DBG] Start authorize request protocol validation
+2019-02-01 17:42:01.915 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:42:01.915 +08:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2019-02-01 17:42:01.916 +08:00 [INF] ValidatedAuthorizeRequest
+{"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","AllowedRedirectUris":["http://localhost:4200/signin-oidc","http://localhost:4200/redirect-silentrenew"],"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ResponseType":"id_token token","ResponseMode":"fragment","GrantType":"implicit","RequestedScopes":"openid profile email restapi","State":"70eff7393c97483f82371cbdd125a6cf","UiLocales":null,"Nonce":"86ec68e714a0450081fd33bb43a0a68e","AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"none","MaxAge":null,"LoginHint":null,"SessionId":"944dbcd3dea2df668c68fd3f55963ecd","Raw":{"client_id":"siegrain-blog-client","redirect_uri":"http://localhost:4200/redirect-silentrenew","response_type":"id_token token","scope":"openid profile email restapi","state":"70eff7393c97483f82371cbdd125a6cf","nonce":"86ec68e714a0450081fd33bb43a0a68e","prompt":"none","id_token_hint":"***REDACTED***"},"$type":"AuthorizeRequestValidationLog"}
+2019-02-01 17:42:01.919 +08:00 [DBG] Client is configured to not require consent, no consent is required
+2019-02-01 17:42:01.919 +08:00 [DBG] Creating Implicit Flow response.
+2019-02-01 17:42:01.919 +08:00 [DBG] Getting claims for access token for client: siegrain-blog-client
+2019-02-01 17:42:01.919 +08:00 [DBG] Getting claims for access token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:42:01.923 +08:00 [DBG] Getting claims for identity token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1 and client: siegrain-blog-client
+2019-02-01 17:42:01.924 +08:00 [DBG] In addition to an id_token, an access_token was requested. No claims other than sub are included in the id_token. To obtain more user claims, either use the user info endpoint or set AlwaysIncludeUserClaimsInIdToken on the client configuration.
+2019-02-01 17:42:01.926 +08:00 [INF] {"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","Endpoint":"Authorize","SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","Scopes":"openid profile email restapi","GrantType":"implicit","Tokens":[{"TokenType":"id_token","TokenValue":"****176A","$type":"Token"},{"TokenType":"access_token","TokenValue":"****Oavw","$type":"Token"}],"Category":"Token","Name":"Token Issued Success","EventType":"Success","Id":2000,"Message":null,"ActivityId":"0HLK81L47S43P:00000006","TimeStamp":"2019-02-01T09:42:01.0000000Z","ProcessId":13968,"LocalIpAddress":"::1:7000","RemoteIpAddress":"::1","$type":"TokenIssuedSuccessEvent"}
+2019-02-01 17:42:01.927 +08:00 [INF] Authorize endpoint response
+{"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ClientId":"siegrain-blog-client","RedirectUri":"http://localhost:4200/redirect-silentrenew","State":"70eff7393c97483f82371cbdd125a6cf","Scope":"openid profile email restapi","Error":null,"ErrorDescription":null,"$type":"AuthorizeResponseLog"}
+2019-02-01 17:42:02.805 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:42:02.805 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:42:02.805 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:42:02.806 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:42:02.806 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:42:02.807 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:42:02.808 +08:00 [DBG] Start discovery request
+2019-02-01 17:42:02.841 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:42:02.841 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:42:02.841 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:42:02.895 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:42:02.896 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:42:02.896 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:42:02.896 +08:00 [DBG] Request path /connect/userinfo matched to endpoint type Userinfo
+2019-02-01 17:42:02.897 +08:00 [DBG] Endpoint enabled: Userinfo, successfully created handler: IdentityServer4.Endpoints.UserInfoEndpoint
+2019-02-01 17:42:02.897 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.UserInfoEndpoint for /connect/userinfo
+2019-02-01 17:42:02.898 +08:00 [DBG] Start userinfo request
+2019-02-01 17:42:02.898 +08:00 [DBG] Bearer token found in header
+2019-02-01 17:42:02.900 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:42:02.900 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:42:02.902 +08:00 [DBG] Calling into custom token validator: IdentityServer4.Validation.DefaultCustomTokenValidator
+2019-02-01 17:42:02.902 +08:00 [DBG] Token validation success
+{"ClientId":null,"ClientName":null,"ValidateLifetime":true,"AccessTokenType":"Jwt","ExpectedScope":"openid","TokenHandle":null,"JwtId":null,"Claims":{"nbf":1549014121,"exp":1549014301,"iss":"https://localhost:7000","aud":["https://localhost:7000/resources","restapi"],"client_id":"siegrain-blog-client","sub":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","auth_time":1548993091,"idp":"local","scope":["openid","profile","email","restapi"],"amr":"pwd"},"$type":"TokenValidationLog"}
+2019-02-01 17:42:02.904 +08:00 [DBG] Creating userinfo response
+2019-02-01 17:42:02.904 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:42:02.904 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:42:02.904 +08:00 [DBG] Requested claim types: sub name family_name given_name middle_name nickname preferred_username profile picture website gender birthdate zoneinfo locale updated_at email email_verified
+2019-02-01 17:42:02.905 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:42:02.906 +08:00 [INF] Profile service returned the following claim types: sub name given_name family_name email email_verified website preferred_username
+2019-02-01 17:42:02.907 +08:00 [DBG] End userinfo request
+2019-02-01 17:44:02.950 +08:00 [DBG] Request path /connect/authorize matched to endpoint type Authorize
+2019-02-01 17:44:02.951 +08:00 [DBG] Endpoint enabled: Authorize, successfully created handler: IdentityServer4.Endpoints.AuthorizeEndpoint
+2019-02-01 17:44:02.952 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2019-02-01 17:44:02.952 +08:00 [DBG] Start authorize request
+2019-02-01 17:44:02.952 +08:00 [DBG] User in authorize request: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:44:02.952 +08:00 [DBG] Start authorize request protocol validation
+2019-02-01 17:44:02.953 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:44:02.953 +08:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2019-02-01 17:44:02.953 +08:00 [INF] ValidatedAuthorizeRequest
+{"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","AllowedRedirectUris":["http://localhost:4200/signin-oidc","http://localhost:4200/redirect-silentrenew"],"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ResponseType":"id_token token","ResponseMode":"fragment","GrantType":"implicit","RequestedScopes":"openid profile email restapi","State":"b8b46ae58f9b4fb09e62c89daa427af9","UiLocales":null,"Nonce":"744ba5cee64842fabd1abe182b8ae45c","AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"none","MaxAge":null,"LoginHint":null,"SessionId":"944dbcd3dea2df668c68fd3f55963ecd","Raw":{"client_id":"siegrain-blog-client","redirect_uri":"http://localhost:4200/redirect-silentrenew","response_type":"id_token token","scope":"openid profile email restapi","state":"b8b46ae58f9b4fb09e62c89daa427af9","nonce":"744ba5cee64842fabd1abe182b8ae45c","prompt":"none","id_token_hint":"***REDACTED***"},"$type":"AuthorizeRequestValidationLog"}
+2019-02-01 17:44:02.957 +08:00 [DBG] Client is configured to not require consent, no consent is required
+2019-02-01 17:44:02.957 +08:00 [DBG] Creating Implicit Flow response.
+2019-02-01 17:44:02.957 +08:00 [DBG] Getting claims for access token for client: siegrain-blog-client
+2019-02-01 17:44:02.957 +08:00 [DBG] Getting claims for access token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:44:02.961 +08:00 [DBG] Getting claims for identity token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1 and client: siegrain-blog-client
+2019-02-01 17:44:02.961 +08:00 [DBG] In addition to an id_token, an access_token was requested. No claims other than sub are included in the id_token. To obtain more user claims, either use the user info endpoint or set AlwaysIncludeUserClaimsInIdToken on the client configuration.
+2019-02-01 17:44:02.964 +08:00 [INF] {"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","Endpoint":"Authorize","SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","Scopes":"openid profile email restapi","GrantType":"implicit","Tokens":[{"TokenType":"id_token","TokenValue":"****hkTg","$type":"Token"},{"TokenType":"access_token","TokenValue":"****H-1w","$type":"Token"}],"Category":"Token","Name":"Token Issued Success","EventType":"Success","Id":2000,"Message":null,"ActivityId":"0HLK81L47S43P:00000007","TimeStamp":"2019-02-01T09:44:02.0000000Z","ProcessId":13968,"LocalIpAddress":"::1:7000","RemoteIpAddress":"::1","$type":"TokenIssuedSuccessEvent"}
+2019-02-01 17:44:02.967 +08:00 [INF] Authorize endpoint response
+{"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ClientId":"siegrain-blog-client","RedirectUri":"http://localhost:4200/redirect-silentrenew","State":"b8b46ae58f9b4fb09e62c89daa427af9","Scope":"openid profile email restapi","Error":null,"ErrorDescription":null,"$type":"AuthorizeResponseLog"}
+2019-02-01 17:44:03.853 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:44:03.854 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:44:03.854 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:44:03.854 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:44:03.855 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:44:03.855 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:44:03.855 +08:00 [DBG] Start discovery request
+2019-02-01 17:44:03.884 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:44:03.886 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:44:03.887 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:44:03.893 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:44:03.897 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:44:03.898 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:44:03.899 +08:00 [DBG] Request path /connect/userinfo matched to endpoint type Userinfo
+2019-02-01 17:44:03.899 +08:00 [DBG] Endpoint enabled: Userinfo, successfully created handler: IdentityServer4.Endpoints.UserInfoEndpoint
+2019-02-01 17:44:03.900 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.UserInfoEndpoint for /connect/userinfo
+2019-02-01 17:44:03.900 +08:00 [DBG] Start userinfo request
+2019-02-01 17:44:03.900 +08:00 [DBG] Bearer token found in header
+2019-02-01 17:44:03.902 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:44:03.902 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:44:03.905 +08:00 [DBG] Calling into custom token validator: IdentityServer4.Validation.DefaultCustomTokenValidator
+2019-02-01 17:44:03.908 +08:00 [DBG] Token validation success
+{"ClientId":null,"ClientName":null,"ValidateLifetime":true,"AccessTokenType":"Jwt","ExpectedScope":"openid","TokenHandle":null,"JwtId":null,"Claims":{"nbf":1549014242,"exp":1549014422,"iss":"https://localhost:7000","aud":["https://localhost:7000/resources","restapi"],"client_id":"siegrain-blog-client","sub":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","auth_time":1548993091,"idp":"local","scope":["openid","profile","email","restapi"],"amr":"pwd"},"$type":"TokenValidationLog"}
+2019-02-01 17:44:03.909 +08:00 [DBG] Creating userinfo response
+2019-02-01 17:44:03.910 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:44:03.910 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:44:03.911 +08:00 [DBG] Requested claim types: sub name family_name given_name middle_name nickname preferred_username profile picture website gender birthdate zoneinfo locale updated_at email email_verified
+2019-02-01 17:44:03.912 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:44:03.914 +08:00 [INF] Profile service returned the following claim types: sub name given_name family_name email email_verified website preferred_username
+2019-02-01 17:44:03.914 +08:00 [DBG] End userinfo request
+2019-02-01 17:44:29.385 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:44:29.386 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:44:29.386 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:44:29.386 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:44:29.386 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:44:29.387 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:44:29.387 +08:00 [DBG] Start discovery request
+2019-02-01 17:44:29.454 +08:00 [DBG] Request path /connect/checksession matched to endpoint type Checksession
+2019-02-01 17:44:29.454 +08:00 [DBG] Endpoint enabled: Checksession, successfully created handler: IdentityServer4.Endpoints.CheckSessionEndpoint
+2019-02-01 17:44:29.455 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.CheckSessionEndpoint for /connect/checksession
+2019-02-01 17:44:29.455 +08:00 [DBG] Rendering check session result
+2019-02-01 17:44:37.672 +08:00 [DBG] Request path /connect/authorize matched to endpoint type Authorize
+2019-02-01 17:44:37.672 +08:00 [DBG] Endpoint enabled: Authorize, successfully created handler: IdentityServer4.Endpoints.AuthorizeEndpoint
+2019-02-01 17:44:37.674 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2019-02-01 17:44:37.674 +08:00 [DBG] Start authorize request
+2019-02-01 17:44:37.675 +08:00 [DBG] User in authorize request: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:44:37.675 +08:00 [DBG] Start authorize request protocol validation
+2019-02-01 17:44:37.675 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:44:37.676 +08:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2019-02-01 17:44:37.676 +08:00 [INF] ValidatedAuthorizeRequest
+{"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/signin-oidc","AllowedRedirectUris":["http://localhost:4200/signin-oidc","http://localhost:4200/redirect-silentrenew"],"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ResponseType":"id_token token","ResponseMode":"fragment","GrantType":"implicit","RequestedScopes":"openid profile email restapi","State":"931e4eb967c74c919b60d660cdf5c168","UiLocales":null,"Nonce":"82a545aa53aa4d88b93db2a31c97ffd0","AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":null,"MaxAge":null,"LoginHint":null,"SessionId":"944dbcd3dea2df668c68fd3f55963ecd","Raw":{"client_id":"siegrain-blog-client","redirect_uri":"http://localhost:4200/signin-oidc","response_type":"id_token token","scope":"openid profile email restapi","state":"931e4eb967c74c919b60d660cdf5c168","nonce":"82a545aa53aa4d88b93db2a31c97ffd0"},"$type":"AuthorizeRequestValidationLog"}
+2019-02-01 17:44:37.679 +08:00 [DBG] Client is configured to not require consent, no consent is required
+2019-02-01 17:44:37.679 +08:00 [DBG] Creating Implicit Flow response.
+2019-02-01 17:44:37.679 +08:00 [DBG] Getting claims for access token for client: siegrain-blog-client
+2019-02-01 17:44:37.679 +08:00 [DBG] Getting claims for access token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:44:37.683 +08:00 [DBG] Getting claims for identity token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1 and client: siegrain-blog-client
+2019-02-01 17:44:37.684 +08:00 [DBG] In addition to an id_token, an access_token was requested. No claims other than sub are included in the id_token. To obtain more user claims, either use the user info endpoint or set AlwaysIncludeUserClaimsInIdToken on the client configuration.
+2019-02-01 17:44:37.686 +08:00 [INF] {"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/signin-oidc","Endpoint":"Authorize","SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","Scopes":"openid profile email restapi","GrantType":"implicit","Tokens":[{"TokenType":"id_token","TokenValue":"****SiYQ","$type":"Token"},{"TokenType":"access_token","TokenValue":"****JnJw","$type":"Token"}],"Category":"Token","Name":"Token Issued Success","EventType":"Success","Id":2000,"Message":null,"ActivityId":"0HLK81L47S43P:00000009","TimeStamp":"2019-02-01T09:44:37.0000000Z","ProcessId":13968,"LocalIpAddress":"::1:7000","RemoteIpAddress":"::1","$type":"TokenIssuedSuccessEvent"}
+2019-02-01 17:44:37.688 +08:00 [INF] Authorize endpoint response
+{"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ClientId":"siegrain-blog-client","RedirectUri":"http://localhost:4200/signin-oidc","State":"931e4eb967c74c919b60d660cdf5c168","Scope":"openid profile email restapi","Error":null,"ErrorDescription":null,"$type":"AuthorizeResponseLog"}
+2019-02-01 17:44:38.083 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:44:38.084 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:44:38.084 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:44:38.085 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:44:38.086 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:44:38.087 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:44:38.087 +08:00 [DBG] Start discovery request
+2019-02-01 17:44:38.093 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:44:38.094 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:44:38.094 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:44:38.094 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:44:38.095 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:44:38.095 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:44:38.096 +08:00 [DBG] Start discovery request
+2019-02-01 17:44:38.121 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration/jwks from origin: http://localhost:4200
+2019-02-01 17:44:38.121 +08:00 [DBG] Request path /connect/checksession matched to endpoint type Checksession
+2019-02-01 17:44:38.121 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:44:38.122 +08:00 [DBG] Endpoint enabled: Checksession, successfully created handler: IdentityServer4.Endpoints.CheckSessionEndpoint
+2019-02-01 17:44:38.122 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:44:38.122 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.CheckSessionEndpoint for /connect/checksession
+2019-02-01 17:44:38.122 +08:00 [DBG] Request path /.well-known/openid-configuration/jwks matched to endpoint type Discovery
+2019-02-01 17:44:38.123 +08:00 [DBG] Rendering check session result
+2019-02-01 17:44:38.123 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryKeyEndpoint
+2019-02-01 17:44:38.124 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+2019-02-01 17:44:38.124 +08:00 [DBG] Start key discovery request
+2019-02-01 17:44:38.162 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:44:38.163 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:44:38.163 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:44:38.190 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:44:38.193 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:44:38.193 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:44:38.194 +08:00 [DBG] Request path /connect/userinfo matched to endpoint type Userinfo
+2019-02-01 17:44:38.194 +08:00 [DBG] Endpoint enabled: Userinfo, successfully created handler: IdentityServer4.Endpoints.UserInfoEndpoint
+2019-02-01 17:44:38.194 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.UserInfoEndpoint for /connect/userinfo
+2019-02-01 17:44:38.195 +08:00 [DBG] Start userinfo request
+2019-02-01 17:44:38.195 +08:00 [DBG] Bearer token found in header
+2019-02-01 17:44:38.198 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:44:38.206 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:44:38.212 +08:00 [DBG] Calling into custom token validator: IdentityServer4.Validation.DefaultCustomTokenValidator
+2019-02-01 17:44:38.212 +08:00 [DBG] Token validation success
+{"ClientId":null,"ClientName":null,"ValidateLifetime":true,"AccessTokenType":"Jwt","ExpectedScope":"openid","TokenHandle":null,"JwtId":null,"Claims":{"nbf":1549014277,"exp":1549014457,"iss":"https://localhost:7000","aud":["https://localhost:7000/resources","restapi"],"client_id":"siegrain-blog-client","sub":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","auth_time":1548993091,"idp":"local","scope":["openid","profile","email","restapi"],"amr":"pwd"},"$type":"TokenValidationLog"}
+2019-02-01 17:44:38.214 +08:00 [DBG] Creating userinfo response
+2019-02-01 17:44:38.214 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:44:38.215 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:44:38.215 +08:00 [DBG] Requested claim types: sub name family_name given_name middle_name nickname preferred_username profile picture website gender birthdate zoneinfo locale updated_at email email_verified
+2019-02-01 17:44:38.215 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:44:38.219 +08:00 [INF] Profile service returned the following claim types: sub name given_name family_name email email_verified website preferred_username
+2019-02-01 17:44:38.219 +08:00 [DBG] End userinfo request
+2019-02-01 17:46:38.902 +08:00 [DBG] Request path /connect/authorize matched to endpoint type Authorize
+2019-02-01 17:46:38.902 +08:00 [DBG] Endpoint enabled: Authorize, successfully created handler: IdentityServer4.Endpoints.AuthorizeEndpoint
+2019-02-01 17:46:38.903 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2019-02-01 17:46:38.903 +08:00 [DBG] Start authorize request
+2019-02-01 17:46:38.903 +08:00 [DBG] User in authorize request: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:46:38.904 +08:00 [DBG] Start authorize request protocol validation
+2019-02-01 17:46:38.904 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:46:38.905 +08:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2019-02-01 17:46:38.906 +08:00 [INF] ValidatedAuthorizeRequest
+{"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","AllowedRedirectUris":["http://localhost:4200/signin-oidc","http://localhost:4200/redirect-silentrenew"],"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ResponseType":"id_token token","ResponseMode":"fragment","GrantType":"implicit","RequestedScopes":"openid profile email restapi","State":"1228fc132efd4d3a8061bac969f6e77e","UiLocales":null,"Nonce":"7a12575d5e9645f29f8fc785b28c4cfa","AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"none","MaxAge":null,"LoginHint":null,"SessionId":"944dbcd3dea2df668c68fd3f55963ecd","Raw":{"client_id":"siegrain-blog-client","redirect_uri":"http://localhost:4200/redirect-silentrenew","response_type":"id_token token","scope":"openid profile email restapi","state":"1228fc132efd4d3a8061bac969f6e77e","nonce":"7a12575d5e9645f29f8fc785b28c4cfa","prompt":"none","id_token_hint":"***REDACTED***"},"$type":"AuthorizeRequestValidationLog"}
+2019-02-01 17:46:38.912 +08:00 [DBG] Client is configured to not require consent, no consent is required
+2019-02-01 17:46:38.919 +08:00 [DBG] Creating Implicit Flow response.
+2019-02-01 17:46:38.919 +08:00 [DBG] Getting claims for access token for client: siegrain-blog-client
+2019-02-01 17:46:38.920 +08:00 [DBG] Getting claims for access token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:46:38.926 +08:00 [DBG] Getting claims for identity token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1 and client: siegrain-blog-client
+2019-02-01 17:46:38.926 +08:00 [DBG] In addition to an id_token, an access_token was requested. No claims other than sub are included in the id_token. To obtain more user claims, either use the user info endpoint or set AlwaysIncludeUserClaimsInIdToken on the client configuration.
+2019-02-01 17:46:38.929 +08:00 [INF] {"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","Endpoint":"Authorize","SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","Scopes":"openid profile email restapi","GrantType":"implicit","Tokens":[{"TokenType":"id_token","TokenValue":"****WAYA","$type":"Token"},{"TokenType":"access_token","TokenValue":"****4FEA","$type":"Token"}],"Category":"Token","Name":"Token Issued Success","EventType":"Success","Id":2000,"Message":null,"ActivityId":"0HLK81L47S43S:00000001","TimeStamp":"2019-02-01T09:46:38.0000000Z","ProcessId":13968,"LocalIpAddress":"::1:7000","RemoteIpAddress":"::1","$type":"TokenIssuedSuccessEvent"}
+2019-02-01 17:46:38.932 +08:00 [INF] Authorize endpoint response
+{"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ClientId":"siegrain-blog-client","RedirectUri":"http://localhost:4200/redirect-silentrenew","State":"1228fc132efd4d3a8061bac969f6e77e","Scope":"openid profile email restapi","Error":null,"ErrorDescription":null,"$type":"AuthorizeResponseLog"}
+2019-02-01 17:46:39.737 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:46:39.738 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:46:39.738 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:46:39.739 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:46:39.739 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:46:39.739 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:46:39.740 +08:00 [DBG] Start discovery request
+2019-02-01 17:46:39.815 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:46:39.815 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:46:39.816 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:46:39.850 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:46:39.850 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:46:39.851 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:46:39.851 +08:00 [DBG] Request path /connect/userinfo matched to endpoint type Userinfo
+2019-02-01 17:46:39.853 +08:00 [DBG] Endpoint enabled: Userinfo, successfully created handler: IdentityServer4.Endpoints.UserInfoEndpoint
+2019-02-01 17:46:39.853 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.UserInfoEndpoint for /connect/userinfo
+2019-02-01 17:46:39.853 +08:00 [DBG] Start userinfo request
+2019-02-01 17:46:39.854 +08:00 [DBG] Bearer token found in header
+2019-02-01 17:46:39.856 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:46:39.856 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:46:39.857 +08:00 [DBG] Calling into custom token validator: IdentityServer4.Validation.DefaultCustomTokenValidator
+2019-02-01 17:46:39.858 +08:00 [DBG] Token validation success
+{"ClientId":null,"ClientName":null,"ValidateLifetime":true,"AccessTokenType":"Jwt","ExpectedScope":"openid","TokenHandle":null,"JwtId":null,"Claims":{"nbf":1549014398,"exp":1549014578,"iss":"https://localhost:7000","aud":["https://localhost:7000/resources","restapi"],"client_id":"siegrain-blog-client","sub":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","auth_time":1548993091,"idp":"local","scope":["openid","profile","email","restapi"],"amr":"pwd"},"$type":"TokenValidationLog"}
+2019-02-01 17:46:39.867 +08:00 [DBG] Creating userinfo response
+2019-02-01 17:46:39.867 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:46:39.867 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:46:39.867 +08:00 [DBG] Requested claim types: sub name family_name given_name middle_name nickname preferred_username profile picture website gender birthdate zoneinfo locale updated_at email email_verified
+2019-02-01 17:46:39.868 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:46:39.870 +08:00 [INF] Profile service returned the following claim types: sub name given_name family_name email email_verified website preferred_username
+2019-02-01 17:46:39.870 +08:00 [DBG] End userinfo request
+2019-02-01 17:48:40.896 +08:00 [DBG] Request path /connect/authorize matched to endpoint type Authorize
+2019-02-01 17:48:40.897 +08:00 [DBG] Endpoint enabled: Authorize, successfully created handler: IdentityServer4.Endpoints.AuthorizeEndpoint
+2019-02-01 17:48:40.897 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2019-02-01 17:48:40.897 +08:00 [DBG] Start authorize request
+2019-02-01 17:48:40.898 +08:00 [DBG] User in authorize request: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:48:40.898 +08:00 [DBG] Start authorize request protocol validation
+2019-02-01 17:48:40.898 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:48:40.899 +08:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2019-02-01 17:48:40.899 +08:00 [INF] ValidatedAuthorizeRequest
+{"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","AllowedRedirectUris":["http://localhost:4200/signin-oidc","http://localhost:4200/redirect-silentrenew"],"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ResponseType":"id_token token","ResponseMode":"fragment","GrantType":"implicit","RequestedScopes":"openid profile email restapi","State":"2af9c5435d814b61af040ed210e61f9d","UiLocales":null,"Nonce":"e86216131a484ff9a8cf9a7ef5dc3bf4","AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"none","MaxAge":null,"LoginHint":null,"SessionId":"944dbcd3dea2df668c68fd3f55963ecd","Raw":{"client_id":"siegrain-blog-client","redirect_uri":"http://localhost:4200/redirect-silentrenew","response_type":"id_token token","scope":"openid profile email restapi","state":"2af9c5435d814b61af040ed210e61f9d","nonce":"e86216131a484ff9a8cf9a7ef5dc3bf4","prompt":"none","id_token_hint":"***REDACTED***"},"$type":"AuthorizeRequestValidationLog"}
+2019-02-01 17:48:40.903 +08:00 [DBG] Client is configured to not require consent, no consent is required
+2019-02-01 17:48:40.903 +08:00 [DBG] Creating Implicit Flow response.
+2019-02-01 17:48:40.904 +08:00 [DBG] Getting claims for access token for client: siegrain-blog-client
+2019-02-01 17:48:40.905 +08:00 [DBG] Getting claims for access token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:48:40.909 +08:00 [DBG] Getting claims for identity token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1 and client: siegrain-blog-client
+2019-02-01 17:48:40.910 +08:00 [DBG] In addition to an id_token, an access_token was requested. No claims other than sub are included in the id_token. To obtain more user claims, either use the user info endpoint or set AlwaysIncludeUserClaimsInIdToken on the client configuration.
+2019-02-01 17:48:40.912 +08:00 [INF] {"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","Endpoint":"Authorize","SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","Scopes":"openid profile email restapi","GrantType":"implicit","Tokens":[{"TokenType":"id_token","TokenValue":"****yQ-Q","$type":"Token"},{"TokenType":"access_token","TokenValue":"****EUCA","$type":"Token"}],"Category":"Token","Name":"Token Issued Success","EventType":"Success","Id":2000,"Message":null,"ActivityId":"0HLK81L47S43U:00000001","TimeStamp":"2019-02-01T09:48:40.0000000Z","ProcessId":13968,"LocalIpAddress":"::1:7000","RemoteIpAddress":"::1","$type":"TokenIssuedSuccessEvent"}
+2019-02-01 17:48:40.914 +08:00 [INF] Authorize endpoint response
+{"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ClientId":"siegrain-blog-client","RedirectUri":"http://localhost:4200/redirect-silentrenew","State":"2af9c5435d814b61af040ed210e61f9d","Scope":"openid profile email restapi","Error":null,"ErrorDescription":null,"$type":"AuthorizeResponseLog"}
+2019-02-01 17:48:41.733 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:48:41.734 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:48:41.734 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:48:41.735 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:48:41.735 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:48:41.735 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:48:41.736 +08:00 [DBG] Start discovery request
+2019-02-01 17:48:41.803 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:48:41.804 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:48:41.804 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:48:41.808 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:48:41.809 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:48:41.810 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:48:41.810 +08:00 [DBG] Request path /connect/userinfo matched to endpoint type Userinfo
+2019-02-01 17:48:41.811 +08:00 [DBG] Endpoint enabled: Userinfo, successfully created handler: IdentityServer4.Endpoints.UserInfoEndpoint
+2019-02-01 17:48:41.811 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.UserInfoEndpoint for /connect/userinfo
+2019-02-01 17:48:41.812 +08:00 [DBG] Start userinfo request
+2019-02-01 17:48:41.812 +08:00 [DBG] Bearer token found in header
+2019-02-01 17:48:41.814 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:48:41.814 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:48:41.816 +08:00 [DBG] Calling into custom token validator: IdentityServer4.Validation.DefaultCustomTokenValidator
+2019-02-01 17:48:41.816 +08:00 [DBG] Token validation success
+{"ClientId":null,"ClientName":null,"ValidateLifetime":true,"AccessTokenType":"Jwt","ExpectedScope":"openid","TokenHandle":null,"JwtId":null,"Claims":{"nbf":1549014520,"exp":1549014700,"iss":"https://localhost:7000","aud":["https://localhost:7000/resources","restapi"],"client_id":"siegrain-blog-client","sub":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","auth_time":1548993091,"idp":"local","scope":["openid","profile","email","restapi"],"amr":"pwd"},"$type":"TokenValidationLog"}
+2019-02-01 17:48:41.818 +08:00 [DBG] Creating userinfo response
+2019-02-01 17:48:41.818 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:48:41.819 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:48:41.819 +08:00 [DBG] Requested claim types: sub name family_name given_name middle_name nickname preferred_username profile picture website gender birthdate zoneinfo locale updated_at email email_verified
+2019-02-01 17:48:41.819 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:48:41.821 +08:00 [INF] Profile service returned the following claim types: sub name given_name family_name email email_verified website preferred_username
+2019-02-01 17:48:41.822 +08:00 [DBG] End userinfo request
+2019-02-01 17:50:41.896 +08:00 [DBG] Request path /connect/authorize matched to endpoint type Authorize
+2019-02-01 17:50:41.896 +08:00 [DBG] Endpoint enabled: Authorize, successfully created handler: IdentityServer4.Endpoints.AuthorizeEndpoint
+2019-02-01 17:50:41.897 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2019-02-01 17:50:41.897 +08:00 [DBG] Start authorize request
+2019-02-01 17:50:41.897 +08:00 [DBG] User in authorize request: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:50:41.898 +08:00 [DBG] Start authorize request protocol validation
+2019-02-01 17:50:41.898 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:50:41.898 +08:00 [DBG] Calling into custom validator: IdentityServer4.Validation.DefaultCustomAuthorizeRequestValidator
+2019-02-01 17:50:41.899 +08:00 [INF] ValidatedAuthorizeRequest
+{"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","AllowedRedirectUris":["http://localhost:4200/signin-oidc","http://localhost:4200/redirect-silentrenew"],"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ResponseType":"id_token token","ResponseMode":"fragment","GrantType":"implicit","RequestedScopes":"openid profile email restapi","State":"7e21340cd5a044eba4da943f02ba5e8b","UiLocales":null,"Nonce":"0de945f446df407f8b908c531534b931","AuthenticationContextReferenceClasses":null,"DisplayMode":null,"PromptMode":"none","MaxAge":null,"LoginHint":null,"SessionId":"944dbcd3dea2df668c68fd3f55963ecd","Raw":{"client_id":"siegrain-blog-client","redirect_uri":"http://localhost:4200/redirect-silentrenew","response_type":"id_token token","scope":"openid profile email restapi","state":"7e21340cd5a044eba4da943f02ba5e8b","nonce":"0de945f446df407f8b908c531534b931","prompt":"none","id_token_hint":"***REDACTED***"},"$type":"AuthorizeRequestValidationLog"}
+2019-02-01 17:50:41.906 +08:00 [DBG] Client is configured to not require consent, no consent is required
+2019-02-01 17:50:41.907 +08:00 [DBG] Creating Implicit Flow response.
+2019-02-01 17:50:41.907 +08:00 [DBG] Getting claims for access token for client: siegrain-blog-client
+2019-02-01 17:50:41.907 +08:00 [DBG] Getting claims for access token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1
+2019-02-01 17:50:41.911 +08:00 [DBG] Getting claims for identity token for subject: 8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1 and client: siegrain-blog-client
+2019-02-01 17:50:41.912 +08:00 [DBG] In addition to an id_token, an access_token was requested. No claims other than sub are included in the id_token. To obtain more user claims, either use the user info endpoint or set AlwaysIncludeUserClaimsInIdToken on the client configuration.
+2019-02-01 17:50:41.915 +08:00 [INF] {"ClientId":"siegrain-blog-client","ClientName":"Siegrain's Blog Client","RedirectUri":"http://localhost:4200/redirect-silentrenew","Endpoint":"Authorize","SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","Scopes":"openid profile email restapi","GrantType":"implicit","Tokens":[{"TokenType":"id_token","TokenValue":"****NCFA","$type":"Token"},{"TokenType":"access_token","TokenValue":"****j4XQ","$type":"Token"}],"Category":"Token","Name":"Token Issued Success","EventType":"Success","Id":2000,"Message":null,"ActivityId":"0HLK81L47S43U:00000002","TimeStamp":"2019-02-01T09:50:41.0000000Z","ProcessId":13968,"LocalIpAddress":"::1:7000","RemoteIpAddress":"::1","$type":"TokenIssuedSuccessEvent"}
+2019-02-01 17:50:41.917 +08:00 [INF] Authorize endpoint response
+{"SubjectId":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","ClientId":"siegrain-blog-client","RedirectUri":"http://localhost:4200/redirect-silentrenew","State":"7e21340cd5a044eba4da943f02ba5e8b","Scope":"openid profile email restapi","Error":null,"ErrorDescription":null,"$type":"AuthorizeResponseLog"}
+2019-02-01 17:50:42.841 +08:00 [DBG] CORS request made for path: /.well-known/openid-configuration from origin: http://localhost:4200
+2019-02-01 17:50:42.842 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:50:42.843 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:50:42.844 +08:00 [DBG] Request path /.well-known/openid-configuration matched to endpoint type Discovery
+2019-02-01 17:50:42.844 +08:00 [DBG] Endpoint enabled: Discovery, successfully created handler: IdentityServer4.Endpoints.DiscoveryEndpoint
+2019-02-01 17:50:42.845 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2019-02-01 17:50:42.845 +08:00 [DBG] Start discovery request
+2019-02-01 17:50:42.895 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:50:42.895 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:50:42.895 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:50:42.914 +08:00 [DBG] CORS request made for path: /connect/userinfo from origin: http://localhost:4200
+2019-02-01 17:50:42.914 +08:00 [DBG] Client list checked and origin: http://localhost:4200 is allowed
+2019-02-01 17:50:42.914 +08:00 [DBG] CorsPolicyService allowed origin: http://localhost:4200
+2019-02-01 17:50:42.915 +08:00 [DBG] Request path /connect/userinfo matched to endpoint type Userinfo
+2019-02-01 17:50:42.915 +08:00 [DBG] Endpoint enabled: Userinfo, successfully created handler: IdentityServer4.Endpoints.UserInfoEndpoint
+2019-02-01 17:50:42.915 +08:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.UserInfoEndpoint for /connect/userinfo
+2019-02-01 17:50:42.916 +08:00 [DBG] Start userinfo request
+2019-02-01 17:50:42.916 +08:00 [DBG] Bearer token found in header
+2019-02-01 17:50:42.918 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:50:42.919 +08:00 [DBG] client configuration validation for client siegrain-blog-client succeeded.
+2019-02-01 17:50:42.921 +08:00 [DBG] Calling into custom token validator: IdentityServer4.Validation.DefaultCustomTokenValidator
+2019-02-01 17:50:42.922 +08:00 [DBG] Token validation success
+{"ClientId":null,"ClientName":null,"ValidateLifetime":true,"AccessTokenType":"Jwt","ExpectedScope":"openid","TokenHandle":null,"JwtId":null,"Claims":{"nbf":1549014641,"exp":1549014821,"iss":"https://localhost:7000","aud":["https://localhost:7000/resources","restapi"],"client_id":"siegrain-blog-client","sub":"8a7e9ff4-d2cd-4c1a-b6a3-a3028fe110a1","auth_time":1548993091,"idp":"local","scope":["openid","profile","email","restapi"],"amr":"pwd"},"$type":"TokenValidationLog"}
+2019-02-01 17:50:42.925 +08:00 [DBG] Creating userinfo response
+2019-02-01 17:50:42.925 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:50:42.925 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:50:42.926 +08:00 [DBG] Requested claim types: sub name family_name given_name middle_name nickname preferred_username profile picture website gender birthdate zoneinfo locale updated_at email email_verified
+2019-02-01 17:50:42.926 +08:00 [DBG] Scopes in access token: openid profile email restapi
+2019-02-01 17:50:42.928 +08:00 [INF] Profile service returned the following claim types: sub name given_name family_name email email_verified website preferred_username
+2019-02-01 17:50:42.928 +08:00 [DBG] End userinfo request

@@ -6345,3 +6345,11 @@ System.IO.IOException: Failed to bind to address https://127.0.0.1:5055: address
 2019-02-01 17:50:42.926 +08:00 [DBG] Scopes in access token: openid profile email restapi
 2019-02-01 17:50:42.928 +08:00 [INF] Profile service returned the following claim types: sub name given_name family_name email email_verified website preferred_username
 2019-02-01 17:50:42.928 +08:00 [DBG] End userinfo request
+2019-02-01 17:58:26.131 +08:00 [INF] Starting IdentityServer4 version 2.3.2.0
+2019-02-01 17:58:26.177 +08:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2019-02-01 17:58:26.187 +08:00 [INF] Using the default authentication scheme Identity.Application for IdentityServer
+2019-02-01 17:58:26.187 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for authentication
+2019-02-01 17:58:26.188 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-in
+2019-02-01 17:58:26.188 +08:00 [DBG] Using Identity.External as default ASP.NET Core scheme for sign-out
+2019-02-01 17:58:26.188 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for challenge
+2019-02-01 17:58:26.188 +08:00 [DBG] Using Identity.Application as default ASP.NET Core scheme for forbid

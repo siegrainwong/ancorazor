@@ -24,7 +24,6 @@ using Newtonsoft.Json.Serialization;
 namespace Blog.API.Controllers
 {
     [Route("api/[controller]")]
-    [AllowAnonymous]
     //[Authorize(Policy = "Admin")]
     [ApiController]
     public class ArticlesController : ControllerBase

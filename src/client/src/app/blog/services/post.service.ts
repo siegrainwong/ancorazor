@@ -8,15 +8,6 @@ import ArticleModel from '../models/article-model';
   providedIn: 'root'
 })
 export class PostService extends BaseService {
-
-  /**
-   * Mark: Angular DI
-   * @param http 
-   */
-  constructor() {
-    super();
-  }
-
   /**
    * Mark: 多类型声明
    * @param postParameter any 或 ArticleParameters
@@ -24,7 +15,6 @@ export class PostService extends BaseService {
   async getPagedPosts(params?: any | ArticleParameters): Promise<ResponseModel<ArticleModel>> {
     var res = await this.get("articles", params)
     res.data = res.data as ArticleModel[]
-    console.log(res.data)
     return res
   }
 }

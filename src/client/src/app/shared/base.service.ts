@@ -1,33 +1,29 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AxiosResponse, AxiosRequestConfig } from 'axios';
-import ResponseModel, { Pagination } from '../shared/models/response-model'
+import ResponseModel from '../shared/models/response-model'
+import { OpenIdConnectService } from './oidc/open-id-connect.service';
 import axios from 'axios';
-
-axios.defaults.baseURL = environment.apiUrlBase;
-axios.defaults.timeout = 20000;
-axios.defaults.headers = {
-  'Content-Type': 'application/x-www-form-urlencoded',
-};
 
 @Injectable({
   providedIn: 'root'
 })
 export abstract class BaseService {
-
-  constructor() { }
+  constructor(private userService: OpenIdConnectService) {
+    this.setup()
+  }
 
   async get(url: string, query?: any, option?: AxiosRequestConfig) {
-    return await this.handleRequest(Methods.GET, url, null, query, option);
+    return await this.handleRequest(Methods.GET, url, null, query, option)
   }
   async post(url: string, body: any, query?: any, option?: AxiosRequestConfig) {
-    return await this.handleRequest(Methods.POST, url, body, query, option);
+    return await this.handleRequest(Methods.POST, url, body, query, option)
   }
   async put(url: string, body?: any, query?: any, option?: AxiosRequestConfig) {
-    return await this.handleRequest(Methods.PUT, url, body, query, option);
+    return await this.handleRequest(Methods.PUT, url, body, query, option)
   }
   async delete(url: string, query?: any, option?: AxiosRequestConfig) {
-    return await this.handleRequest(Methods.DELETE, url, null, query, option);
+    return await this.handleRequest(Methods.DELETE, url, null, query, option)
   }
 
   /**
@@ -78,6 +74,23 @@ export abstract class BaseService {
       console.log(result.data);
       return new ResponseModel(result)
     }
+  }
+
+  setup() {
+    axios.defaults.baseURL = environment.apiUrlBase;
+    axios.defaults.timeout = 20000;
+    axios.defaults.headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+    axios.interceptors.request.use(
+      config => {
+        if (this.userService.userIsAvailable) config.headers.Authorization = `${this.userService.user.token_type} ${this.userService.user.access_token}`
+        return config;
+      },
+      err => {
+        return Promise.reject(err);
+      }
+    );
   }
 }
 

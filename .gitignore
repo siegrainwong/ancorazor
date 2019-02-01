@@ -46,3 +46,4 @@ public/
 .deploy*/
 .nuxt/
 dist/
+src/service/Blog.API/BlogIdentityServer/identityserver4_log.txt

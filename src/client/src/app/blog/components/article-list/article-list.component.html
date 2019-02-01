@@ -3,7 +3,6 @@
 </div>
 <div *ngIf="articles">
   <p *ngFor="let item of articles">
-    <!-- TODO: 这里模型是转换过来了，但是全都是大写的 -->
-    {{item.Title}}
+    <app-article-item [item]="item"></app-article-item>
   </p>
 </div>

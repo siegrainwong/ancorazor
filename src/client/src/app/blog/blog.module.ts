@@ -7,14 +7,16 @@ import { BlogAppComponent } from './blog-app.component';
 import { NavComponent } from './components/nav/nav.component'
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { PostService } from './services/post.service';
-import { PostListComponent } from './components/post-list/post-list.component';
+import { ArticleListComponent } from './components/article-list/article-list.component';
+import { ArticleItemComponent } from './components/article-item/article-item.component';
 
 @NgModule({
   declarations: [
     BlogAppComponent,
     NavComponent,
     ToolbarComponent,
-    PostListComponent
+    ArticleListComponent,
+    ArticleItemComponent
   ],
   imports: [
     CommonModule,

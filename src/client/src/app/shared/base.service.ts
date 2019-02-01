@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AxiosResponse, AxiosRequestConfig } from 'axios';
-import ResponseModel from '../shared/models/response-model'
+import ResponseResult from './models/response-result'
 import { OpenIdConnectService } from './oidc/open-id-connect.service';
 import axios from 'axios';
 
@@ -13,16 +13,31 @@ export abstract class BaseService {
     this.setup()
   }
 
-  async get(url: string, query?: any, option?: AxiosRequestConfig) {
+  setup() {
+    axios.defaults.baseURL = environment.apiUrlBase;
+    axios.defaults.timeout = 20000;
+    axios.defaults.headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    axios.interceptors.request.use(
+      config => {
+        if (this.userService.userIsAvailable) config.headers.Authorization = `${this.userService.user.token_type} ${this.userService.user.access_token}`
+        return config;
+      },
+      err => {
+        return Promise.reject(err);
+      }
+    );
+  }
+
+  async get(url: string, query?: any, option?: AxiosRequestConfig): Promise<ResponseResult> {
     return await this.handleRequest(Methods.GET, url, null, query, option)
   }
-  async post(url: string, body: any, query?: any, option?: AxiosRequestConfig) {
+  async post(url: string, body: any, query?: any, option?: AxiosRequestConfig): Promise<ResponseResult> {
     return await this.handleRequest(Methods.POST, url, body, query, option)
   }
-  async put(url: string, body?: any, query?: any, option?: AxiosRequestConfig) {
+  async put(url: string, body?: any, query?: any, option?: AxiosRequestConfig): Promise<ResponseResult> {
     return await this.handleRequest(Methods.PUT, url, body, query, option)
   }
-  async delete(url: string, query?: any, option?: AxiosRequestConfig) {
+  async delete(url: string, query?: any, option?: AxiosRequestConfig): Promise<ResponseResult> {
     return await this.handleRequest(Methods.DELETE, url, null, query, option)
   }
 
@@ -32,9 +47,9 @@ export abstract class BaseService {
    * @param url URL
    * @param body Payload
    * @param query QueryString
-   * @param option 选项
+   * @param option 选项（未实装）
    */
-  async handleRequest(method: Methods, url: string, body?: any, query?: any, option?: AxiosRequestConfig) {
+  async handleRequest(method: Methods, url: string, body?: any, query?: any, option?: AxiosRequestConfig): Promise<ResponseResult> {
     try {
       const res = await axios.request({
         method: method.toString(),
@@ -46,7 +61,6 @@ export abstract class BaseService {
       return this.handleResponse(res)
     } catch (error) {
       if (error.response) {
-        console.log(error.response)
         return this.handleResponse(error.response as AxiosResponse)
       } else {
         console.log(error)
@@ -58,39 +72,30 @@ export abstract class BaseService {
    * 响应处理
    * @param response 
    */
-  handleResponse(response: AxiosResponse): ResponseModel<any> {
-    let result = null;
+  handleResponse(response: AxiosResponse): ResponseResult {
+    let result: ResponseResult = null;
     switch (response.status) {
       case 200:
-        result = new ResponseModel(response.data.data, response.data.succeed)
+        result = new ResponseResult(response.data.data, response.data.succeed, response.data.pagination)
         break;
       default:
-        return new ResponseModel(`Request failed : status ${response.status} ${response.statusText}`)
+        return this.handleError(new ResponseResult(`Request failed : status ${response.status} ${response.statusText}`))
     }
 
     if (result.succeed) {
-      return new ResponseModel(result.data, true, response.data.pagination)
+      return result
     } else {
-      console.log(result.data);
-      return new ResponseModel(result)
+      return this.handleError(new ResponseResult(result))
     }
   }
 
-  setup() {
-    axios.defaults.baseURL = environment.apiUrlBase;
-    axios.defaults.timeout = 20000;
-    axios.defaults.headers = {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    };
-    axios.interceptors.request.use(
-      config => {
-        if (this.userService.userIsAvailable) config.headers.Authorization = `${this.userService.user.token_type} ${this.userService.user.access_token}`
-        return config;
-      },
-      err => {
-        return Promise.reject(err);
-      }
-    );
+  /**
+   * 错误处理
+   * @param result 
+   */
+  handleError(result: ResponseResult): ResponseResult {
+    console.log(result.data);
+    return new ResponseResult(result)
   }
 }
 

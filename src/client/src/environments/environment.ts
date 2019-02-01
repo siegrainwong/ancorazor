@@ -2,25 +2,29 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+const clientHost = 'http://localhost:4200'
+const apiHost = 'https://localhost:5001'
+const idServerHost = 'https://localhost:7000'
+
 export const environment = {
   production: false,
-  apiUrlBase: 'https://localhost:5001/api',
+  apiUrlBase: `${apiHost}/api`,
   // oidc
   openIdConnectSettings: {
-    authority: 'https://localhost:7000/',
+    authority: idServerHost,
 
     client_id: 'siegrain-blog-client',
     scope: 'openid profile email restapi',
     response_type: 'id_token token',
 
     // 登录后跳转地址
-    redirect_uri: 'http://localhost:4200/signin-oidc',
+    redirect_uri: `${clientHost}/signin-oidc`,
     // 注销后跳转地址
-    post_logout_redirect_uri: 'http://localhost:4200/',
+    post_logout_redirect_uri: `${clientHost}`,
 
     // 静默更新用户的 Token
     automaticSilentRenew: true,
-    silent_redirect_uri: 'http://localhost:4200/redirect-silentrenew'
+    silent_redirect_uri: `${clientHost}/redirect-silentrenew`
   }
 };
 

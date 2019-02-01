@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ArticleParameters } from '../../models/article-parameters';
 import { PostService } from '../../services/post.service';
 import ArticleModel from '../../models/article-model';
-import { Pagination } from 'src/app/shared/models/response-model';
+import { Pagination } from 'src/app/shared/models/response-result';
 
 @Component({
-  selector: 'app-post-list',
-  templateUrl: './post-list.component.html',
-  styleUrls: ['./post-list.component.scss']
+  selector: 'app-article-list',
+  templateUrl: './article-list.component.html',
+  styleUrls: ['./article-list.component.scss']
 })
-export class PostListComponent implements OnInit {
+export class ArticleListComponent implements OnInit {
 
   parameter = new ArticleParameters({ orderBy: 'id desc', pageSize: 10, pageIndex: 0 })
 
@@ -24,8 +24,7 @@ export class PostListComponent implements OnInit {
 
   async getPost() {
     let res = await this.postService.getPagedPosts(this.parameter)
-    this.articles = res.data
+    this.articles = res.data as ArticleModel[]
     this.pagiation = res.pagination
-    console.log(this.articles)
   }
 }

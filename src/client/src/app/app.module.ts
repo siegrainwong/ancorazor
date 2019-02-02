@@ -9,7 +9,6 @@ import { RequireAuthenticatedUserRouteGuard } from './shared/oidc/require-authen
 import { SigninOidcComponent } from './shared/oidc/signin-oidc/signin-oidc.component';
 import { RedirectSilentRenewComponent } from './shared/oidc/redirect-silent-renew/redirect-silent-renew.component';
 import { OpenIdConnectService } from './shared/oidc/open-id-connect.service';
-import { CovalentTextEditorModule } from '@covalent/text-editor';
 
 const routes: Routes = [
   { path: 'blog', loadChildren: './blog/blog.module#BlogModule' },
@@ -28,7 +27,6 @@ const routes: Routes = [
     AppRoutingModule,
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
-    CovalentTextEditorModule
   ],
   providers: [
     OpenIdConnectService,

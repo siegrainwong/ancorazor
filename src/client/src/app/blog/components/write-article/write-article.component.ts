@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { TdTextEditorComponent } from '@covalent/text-editor';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-write-article',
@@ -7,17 +6,13 @@ import { TdTextEditorComponent } from '@covalent/text-editor';
   styleUrls: ['./write-article.component.scss']
 })
 export class WriteArticleComponent implements OnInit {
-  @ViewChild('textEditor') private _textEditor: TdTextEditorComponent;
-
   options: any = {
     lineWrapping: true,
     toolbar: false,
-  };
+  }
+  someText: string = "asdfasdfasdfasdf"
 
   constructor() { }
   ngOnInit() {
-  }
-  ngAfterViewInit(): void {
-    this._textEditor.togglePreview();
   }
 }

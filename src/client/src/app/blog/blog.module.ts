@@ -10,6 +10,7 @@ import { PostService } from './services/post.service';
 import { ArticleListComponent } from './components/article-list/article-list.component';
 import { ArticleItemComponent } from './components/article-item/article-item.component';
 import { WriteArticleComponent } from './components/write-article/write-article.component';
+import { CovalentTextEditorModule } from '@covalent/text-editor'
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { WriteArticleComponent } from './components/write-article/write-article.
   imports: [
     CommonModule,
     BlogRoutingModule,
-    MaterialModule
+    MaterialModule,
+    CovalentTextEditorModule
   ],
   providers: [
     PostService

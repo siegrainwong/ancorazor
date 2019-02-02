@@ -24,7 +24,7 @@ export class ArticleService extends BaseService implements ISubService {
    * @param params
    */
   async add(params?: ArticleParameters) {
-    var res = await this.post(`${this.serviceName}/add`, params)
+    var res = await this.post(this.serviceName, params)
     console.log(res)
   }
 }

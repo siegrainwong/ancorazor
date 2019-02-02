@@ -17,7 +17,7 @@ export abstract class BaseService {
   setup() {
     axios.defaults.baseURL = environment.apiUrlBase;
     axios.defaults.timeout = 20000;
-    axios.defaults.headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    axios.defaults.headers = { 'Content-Type': 'application/json' };
     axios.interceptors.request.use(
       config => {
         if (this.userService.userIsAvailable) config.headers.Authorization = `${this.userService.user.token_type} ${this.userService.user.access_token}`

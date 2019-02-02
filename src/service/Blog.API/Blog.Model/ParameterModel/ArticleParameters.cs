@@ -8,5 +8,6 @@ namespace Blog.Model.ParameterModel
     public class ArticleParameters : QueryParameters
     {
         public string Title { get; set; }
+        public string Content { get; set; }
     }
 }

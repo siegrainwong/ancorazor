@@ -89,8 +89,8 @@ namespace Blog.API
                 {
                     policy
                         .WithOrigins("http://localhost:4200")//支持多个域名端口
-                        .WithMethods("GET", "POST", "PUT", "DELETE", "OPTION")//请求方法添加到策略
-                        .WithHeaders("authorization");//标头添加到策略
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                 });
             });
             #endregion

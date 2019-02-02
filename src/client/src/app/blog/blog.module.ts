@@ -6,7 +6,7 @@ import { MaterialModule } from '../shared/material/material.module';
 import { BlogAppComponent } from './blog-app.component';
 import { NavComponent } from './components/nav/nav.component'
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { PostService } from './services/post.service';
+import { ArticleService } from './services/article.service';
 import { ArticleListComponent } from './components/article-list/article-list.component';
 import { ArticleItemComponent } from './components/article-item/article-item.component';
 import { WriteArticleComponent } from './components/write-article/write-article.component';
@@ -28,7 +28,7 @@ import { CovalentTextEditorModule } from '@covalent/text-editor'
     CovalentTextEditorModule
   ],
   providers: [
-    PostService
+    ArticleService
   ]
 })
 export class BlogModule { }

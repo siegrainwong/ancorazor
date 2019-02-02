@@ -1,0 +1,15 @@
+* {
+  &:active,
+  :focus {
+    outline: none !important;  // 1
+  }
+}
+
+label {
+  margin-bottom: 0; // 2
+}
+
+
+a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not([mat-list-item]) {
+  color: #3f51b5; // 3
+}

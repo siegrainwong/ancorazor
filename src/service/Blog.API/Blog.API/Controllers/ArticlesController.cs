@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Blog.API.Helpers;
 using Blog.Common.Extensions;
 using Blog.Common.Redis;
 using Blog.IService;
@@ -74,12 +75,7 @@ namespace Blog.API.Controllers
                 list.PageCount,
                 previousPageLink,
                 nextPageLink
-            }; 
-
-            //Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(meta, new JsonSerializerSettings
-            //{
-            //    ContractResolver = new CamelCasePropertyNamesContractResolver()
-            //}));
+            };
 
             var result = new
             {
@@ -102,6 +98,40 @@ namespace Blog.API.Controllers
         {
             var model = await _service.GetArticle(id);
             return new { succeed = true, data = model };
+        }
+
+        [HttpPost(Name = "Add")]
+        public async Task<IActionResult> Add([FromBody] ArticleParameters parameters)
+        {
+            if (parameters == null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return new MyUnprocessableEntityObjectResult(ModelState);
+            }
+
+            var model = _mapper.Map<ArticleParameters, Article>(parameters);
+
+            model.Author = 1;
+            model.UpdatedAt = DateTime.Now;
+            model.CreatedAt = DateTime.Now;
+
+            await _service.Add(model);
+
+            var viewModel = _mapper.Map<Article, ArticleViewModel>(model);
+
+            var links = CreateLinksForPost(model.Id);
+
+            var result = new
+            {
+                succeed = true,
+                data = viewModel
+            };
+
+            return CreatedAtRoute($"{model.Id}", result);
         }
 
         #region helper methods

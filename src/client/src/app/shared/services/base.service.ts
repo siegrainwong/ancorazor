@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AxiosResponse, AxiosRequestConfig } from 'axios';
-import ResponseResult from './models/response-result'
-import { OpenIdConnectService } from './oidc/open-id-connect.service';
+import ResponseResult from '../models/response-result'
+import { OpenIdConnectService } from '../oidc/open-id-connect.service';
 import axios from 'axios';
 
 @Injectable({
   providedIn: 'root'
 })
 export abstract class BaseService {
+
   constructor(private userService: OpenIdConnectService) {
     this.setup()
   }
@@ -70,7 +71,7 @@ export abstract class BaseService {
 
   /**
    * 响应处理
-   * @param response 
+   * @param response
    */
   handleResponse(response: AxiosResponse): ResponseResult {
     let result: ResponseResult = null;
@@ -91,12 +92,17 @@ export abstract class BaseService {
 
   /**
    * 错误处理
-   * @param result 
+   * @param result
    */
   handleError(result: ResponseResult): ResponseResult {
     console.log(result.data);
     return new ResponseResult(result)
   }
+}
+
+export interface ISubService {
+  /** 服务名称 */
+  serviceName: string
 }
 
 const enum Methods {

@@ -1,1 +1,17 @@
-<td-text-editor></td-text-editor>
+<div class="container">
+  <div class="row">
+    <mat-form-field class="col">
+      <input matInput [value]="parameters.title" required>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <div class="col">
+      <td-text-editor [value]="parameters.content" [options]="mdService.getConfigs()"></td-text-editor>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button mat-raised-button color="primary" (click)="submit()">Submit</button>
+    </div>
+  </div>
+</div>

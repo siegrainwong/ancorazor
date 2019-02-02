@@ -103,35 +103,24 @@ namespace Blog.API.Controllers
         [HttpPost(Name = "Add")]
         public async Task<IActionResult> Add([FromBody] ArticleParameters parameters)
         {
-            if (parameters == null)
-            {
-                return BadRequest();
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return new MyUnprocessableEntityObjectResult(ModelState);
-            }
+            if (parameters == null) return BadRequest();
+            if (!ModelState.IsValid) return new MyUnprocessableEntityObjectResult(ModelState);
 
             var model = _mapper.Map<ArticleParameters, Article>(parameters);
-
             model.Author = 1;
             model.UpdatedAt = DateTime.Now;
             model.CreatedAt = DateTime.Now;
 
-            await _service.Add(model);
-
             var viewModel = _mapper.Map<Article, ArticleViewModel>(model);
-
-            var links = CreateLinksForPost(model.Id);
+            viewModel.Id = await _service.Add(model);
+            var links = CreateLinksForPost(viewModel.Id);
 
             var result = new
             {
                 succeed = true,
                 data = viewModel
             };
-
-            return CreatedAtRoute($"{model.Id}", result);
+            return CreatedAtRoute("Get", new { id = viewModel.Id }, result);
         }
 
         #region helper methods

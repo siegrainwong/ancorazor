@@ -1,6 +1,7 @@
 ﻿using Blog.Model;
 using Blog.Model.ViewModel;
 using AutoMapper;
+using Blog.Model.ParameterModel;
 
 namespace Blog.API.AutoMapper
 {
@@ -12,6 +13,7 @@ namespace Blog.API.AutoMapper
         public CustomProfile()
         {
             CreateMap<Article, ArticleViewModel>();
+            CreateMap<ArticleParameters, Article>().IgnoreAllPropertiesWithAnInaccessibleSetter();
         }
     }
 }

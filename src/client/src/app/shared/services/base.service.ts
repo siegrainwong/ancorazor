@@ -75,13 +75,10 @@ export abstract class BaseService {
    */
   handleResponse(response: AxiosResponse): ResponseResult {
     let result: ResponseResult = null;
-    switch (response.status) {
-      case 200:
-        result = new ResponseResult(response.data.data, response.data.succeed, response.data.pagination)
-        break;
-      default:
-        return this.handleError(new ResponseResult(`Request failed : status ${response.status} ${response.statusText}`))
-    }
+    if (response.status >= 200 && response.status < 300)
+      result = new ResponseResult(response.data.data, response.data.succeed, response.data.pagination)
+    else
+      return this.handleError(new ResponseResult(`Request failed : status ${response.status} ${response.statusText}`))
 
     if (result.succeed) {
       return result

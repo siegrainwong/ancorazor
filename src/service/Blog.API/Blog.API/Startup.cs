@@ -10,6 +10,7 @@ using Autofac.Extensions.DependencyInjection;
 using Autofac.Extras.DynamicProxy;
 using AutoMapper;
 using Blog.API.Authentication;
+using Blog.API.AutoMapper;
 using Blog.API.Caching;
 using Blog.API.Interceptors;
 using Blog.Common.Redis;
@@ -74,6 +75,7 @@ namespace Blog.API
 
             services.AddScoped<ITypeHelperService, TypeHelperService>();
 
+            Mapper.Initialize(cfg => cfg.AddProfile<CustomProfile>());
             services.AddAutoMapper(typeof(Startup));
 
             #endregion

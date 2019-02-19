@@ -1,17 +1,18 @@
-import { Injectable } from '@angular/core';
-import { UserManager, User } from 'oidc-client';
-import { environment } from 'src/environments/environment';
-import { ReplaySubject } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { UserManager, User } from "oidc-client";
+import { environment } from "src/environments/environment";
+import { ReplaySubject } from "rxjs";
 
 /**
  * oidc连接模块，负责管理用户的登录注销状态
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class OpenIdConnectService {
-
-  private userManager: UserManager = new UserManager(environment.openIdConnectSettings);
+  private userManager: UserManager = new UserManager(
+    environment.openIdConnectSettings
+  );
 
   private currentUser: User;
 
@@ -38,59 +39,57 @@ export class OpenIdConnectService {
      */
     this.userManager.events.addUserLoaded(user => {
       if (!environment.production) {
-        console.log('User loaded.', user);
+        console.log("User loaded.", user);
       }
       this.currentUser = user;
-      // 广播给订阅者用户登录的状态
+      // 广播给订阅者 用户登录的状态
       this.userLoaded$.next(true);
     });
 
-    this.userManager.events.addUserUnloaded((e) => {
+    this.userManager.events.addUserUnloaded(e => {
       if (!environment.production) {
-        console.log('User unloaded');
+        console.log("User unloaded");
       }
       this.currentUser = null;
-      // 广播给订阅者用户注销的状态
+      // 广播给订阅者 用户注销的状态
       this.userLoaded$.next(false);
     });
-  }
 
+    /**
+     * 加载用户状态
+     */
+    this.userManager.getUser().then(user => {
+      this.currentUser = user;
+    });
+  }
 
   triggerSignIn() {
-    this.userManager.signinRedirect().then(() => {
-      if (!environment.production) {
-        console.log('Redirection to signin triggered.');
-      }
+    this.userManager.signinRedirect(() => {
+      if (!environment.production) console.log("Redirect to signin triggered.");
     });
   }
-  triggerSignOut() {
-    this.userManager.signoutRedirect().then(resp => {
-      if (!environment.production) {
-        console.log('Redirection to sign out triggered.', resp);
-      }
-    });
+  async triggerSignOut() {
+    let resp = await this.userManager.signoutRedirect();
+    if (!environment.production)
+      console.log("Redirect to sign out triggered.", resp);
   }
 
   /**
    * 在登录操作结束后，不论结果
    */
-  handleCallback() {
-    this.userManager.signinRedirectCallback().then(user => {
-      if (!environment.production) {
-        console.log('Callback after signin handled.', user);
-      }
-    });
+  async handleCallback() {
+    let user = await this.userManager.signinRedirectCallback();
+    if (!environment.production)
+      console.log("Callback after signin handled.", user);
   }
   /**
    * 在静默登录操作结束后
    */
-  handleSilentCallback() {
-    this.userManager.signinSilentCallback().then(user => {
-      // 刷新用户
-      this.currentUser = user;
-      if (!environment.production) {
-        console.log('Callback after silent signin handled.', user);
-      }
-    });
+  async handleSilentCallback() {
+    let user = await this.userManager.signinSilentCallback();
+    this.currentUser = user;
+    if (!environment.production)
+      // TODO: 很奇怪这个地方user为undefined。。。
+      console.log("Silent renew handled.", user);
   }
 }

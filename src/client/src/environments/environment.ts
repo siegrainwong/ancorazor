@@ -1,10 +1,12 @@
+import { WebStorageStateStore } from "oidc-client";
+
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-const clientHost = 'http://localhost:4200'
-const apiHost = 'https://localhost:5001'
-const idServerHost = 'https://localhost:7000'
+const clientHost = "http://localhost:4200";
+const apiHost = "https://localhost:5001";
+const idServerHost = "https://localhost:7000";
 
 export const environment = {
   production: false,
@@ -13,9 +15,9 @@ export const environment = {
   openIdConnectSettings: {
     authority: idServerHost,
 
-    client_id: 'siegrain-blog-client',
-    scope: 'openid profile email restapi',
-    response_type: 'id_token token',
+    client_id: "siegrain-blog-client",
+    scope: "openid profile email restapi",
+    response_type: "id_token token",
 
     // 登录后跳转地址
     redirect_uri: `${clientHost}/signin-oidc`,

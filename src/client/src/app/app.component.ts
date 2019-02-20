@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { OpenIdConnectService } from "./shared/oidc/open-id-connect.service";
 
 @Component({
   selector: "app-root",
@@ -8,7 +7,5 @@ import { OpenIdConnectService } from "./shared/oidc/open-id-connect.service";
 })
 export class AppComponent {
   title = "client";
-  constructor(private userService: OpenIdConnectService) {
-    // if (!userService.userIsAvailable) userService.triggerSignIn();
-  }
+  constructor() {}
 }

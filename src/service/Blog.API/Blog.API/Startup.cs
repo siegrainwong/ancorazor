@@ -13,6 +13,7 @@ using Blog.API.Authentication;
 using Blog.API.AutoMapper;
 using Blog.API.Caching;
 using Blog.API.Interceptors;
+using Blog.Common.Configuration;
 using Blog.Common.Redis;
 using Blog.Model.Mapping;
 using Blog.Model.ViewModel;
@@ -208,6 +209,15 @@ namespace Blog.API
 
             #endregion
 
+            #region SSR
+
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = $"{AppSettings.Get("AppSettings", "ClientPath")}/dist";
+            });
+
+            #endregion
+
             return new AutofacServiceProvider(ApplicationContainer);    // 用 Autofac 接管默认 DI 容器
         }
 
@@ -239,11 +249,11 @@ namespace Blog.API
             // https://docs.microsoft.com/en-us/aspnet/core/client-side/spa/angular?view=aspnetcore-2.1&tabs=visual-studio&utm_source=jeliknes&utm_medium=blog&utm_campaign=medium&WT.mc_id=medium-blog-jeliknes#server-side-rendering
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = AppSettings.Get("AppSettings", "ClientPath");
 
                 spa.UseSpaPrerendering(options =>
                 {
-                    options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.bundle.js";
+                    options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.js";
                     options.BootModuleBuilder = env.IsDevelopment()
                         ? new AngularCliBuilder("build:ssr")
                         : null;

@@ -10,10 +10,10 @@ namespace Blog.Common.Configuration
     /// <summary>
     /// appsettings.json 操作类
     /// </summary>
-    public class Appsettings
+    public class AppSettings
     {
         static IConfiguration Configuration { get; }
-        static Appsettings()
+        static AppSettings()
         {
             //ReloadOnChange = true 当appsettings.json被修改时重新加载
             Configuration = new ConfigurationBuilder()

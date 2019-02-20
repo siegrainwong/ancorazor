@@ -7,12 +7,26 @@
   <span class="toolbar-spacer"></span>
 
   <!-- right side -->
-  <span *ngIf="userService.userIsAvailable">{{userService.user.profile.name}}</span>
+  <span *ngIf="userService && userService.userIsAvailable">{{
+    userService.user.profile.name
+  }}</span>
   <button mat-button [matMenuTriggerFor]="menu">
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button *ngIf="!userService.userIsAvailable" (click)="userService.triggerSignIn()" mat-menu-item>Sign In</button>
-    <button *ngIf="userService.userIsAvailable" (click)="userService.triggerSignOut()" mat-menu-item>Sign out</button>
+    <button
+      *ngIf="!userService.userIsAvailable"
+      (click)="userService.triggerSignIn()"
+      mat-menu-item
+    >
+      Sign In
+    </button>
+    <button
+      *ngIf="userService.userIsAvailable"
+      (click)="userService.triggerSignOut()"
+      mat-menu-item
+    >
+      Sign out
+    </button>
   </mat-menu>
 </mat-toolbar>

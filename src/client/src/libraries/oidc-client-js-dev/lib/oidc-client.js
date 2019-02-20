@@ -6619,7 +6619,7 @@ var AccessTokenEvents = exports.AccessTokenEvents = function () {
         // only register events if there's an access token and it has an expiration
         if (container.access_token && container.expires_in !== undefined) {
             var duration = container.expires_in;
-            _Log.Log.debug("AccessTokenEvents.load: access token present, remaining duration:", duration);
+            console.log("AccessTokenEvents.load: access token present, remaining duration:", duration);
 
             if (duration > 0) {
                 // only register expiring if we still have time
@@ -6628,16 +6628,16 @@ var AccessTokenEvents = exports.AccessTokenEvents = function () {
                     expiring = 1;
                 }
 
-                _Log.Log.debug("AccessTokenEvents.load: registering expiring timer in:", expiring);
+                console.log("AccessTokenEvents.load: registering expiring timer in:", expiring);
                 this._accessTokenExpiring.init(expiring);
             } else {
-                _Log.Log.debug("AccessTokenEvents.load: canceling existing expiring timer becase we're past expiration.");
+                console.log("AccessTokenEvents.load: canceling existing expiring timer becase we're past expiration.");
                 this._accessTokenExpiring.cancel();
             }
 
             // if it's negative, it will still fire
             var expired = duration + 1;
-            _Log.Log.debug("AccessTokenEvents.load: registering expired timer in:", expired);
+            console.log("AccessTokenEvents.load: registering expired timer in:", expired);
             this._accessTokenExpired.init(expired);
         } else {
             this._accessTokenExpiring.cancel();
@@ -6646,7 +6646,7 @@ var AccessTokenEvents = exports.AccessTokenEvents = function () {
     };
 
     AccessTokenEvents.prototype.unload = function unload() {
-        _Log.Log.debug("AccessTokenEvents.unload: canceling existing access token timers");
+        console.log("AccessTokenEvents.unload: canceling existing access token timers");
         this._accessTokenExpiring.cancel();
         this._accessTokenExpired.cancel();
     };
@@ -6743,11 +6743,11 @@ var CheckSessionIFrame = exports.CheckSessionIFrame = function () {
                     this.stop();
                 }
             } else if (e.data === "changed") {
-                _Log.Log.debug("CheckSessionIFrame: changed message from check session op iframe");
+                console.log("CheckSessionIFrame: changed message from check session op iframe");
                 this.stop();
                 this._callback();
             } else {
-                _Log.Log.debug("CheckSessionIFrame: " + e.data + " message from check session op iframe");
+                console.log("CheckSessionIFrame: " + e.data + " message from check session op iframe");
             }
         }
     };
@@ -6756,7 +6756,7 @@ var CheckSessionIFrame = exports.CheckSessionIFrame = function () {
         var _this2 = this;
 
         if (this._session_state !== session_state) {
-            _Log.Log.debug("CheckSessionIFrame.start");
+            console.log("CheckSessionIFrame.start");
 
             this.stop();
 
@@ -6778,7 +6778,7 @@ var CheckSessionIFrame = exports.CheckSessionIFrame = function () {
         this._session_state = null;
 
         if (this._timer) {
-            _Log.Log.debug("CheckSessionIFrame.stop");
+            console.log("CheckSessionIFrame.stop");
 
             window.clearInterval(this._timer);
             this._timer = null;
@@ -6901,7 +6901,7 @@ var CordovaPopupWindow = exports.CordovaPopupWindow = function () {
         this.target = params.popupWindowTarget || DefaultPopupTarget;
 
         this.redirect_uri = params.startUrl;
-        _Log.Log.debug("CordovaPopupWindow.ctor: redirect_uri: " + this.redirect_uri);
+        console.log("CordovaPopupWindow.ctor: redirect_uri: " + this.redirect_uri);
     }
 
     CordovaPopupWindow.prototype._isInAppBrowserInstalled = function _isInAppBrowserInstalled(cordovaMetadata) {
@@ -6924,7 +6924,7 @@ var CordovaPopupWindow = exports.CordovaPopupWindow = function () {
             }
             this._popup = cordova.InAppBrowser.open(params.url, this.target, this.features);
             if (this._popup) {
-                _Log.Log.debug("CordovaPopupWindow.navigate: popup successfully created");
+                console.log("CordovaPopupWindow.navigate: popup successfully created");
 
                 this._exitCallbackEvent = this._exitCallback.bind(this);
                 this._loadStartCallbackEvent = this._loadStartCallback.bind(this);
@@ -6951,7 +6951,7 @@ var CordovaPopupWindow = exports.CordovaPopupWindow = function () {
     CordovaPopupWindow.prototype._success = function _success(data) {
         this._cleanup();
 
-        _Log.Log.debug("CordovaPopupWindow: Successful response from cordova popup window");
+        console.log("CordovaPopupWindow: Successful response from cordova popup window");
         this._resolve(data);
     };
 
@@ -6968,7 +6968,7 @@ var CordovaPopupWindow = exports.CordovaPopupWindow = function () {
 
     CordovaPopupWindow.prototype._cleanup = function _cleanup() {
         if (this._popup) {
-            _Log.Log.debug("CordovaPopupWindow: cleaning up popup");
+            console.log("CordovaPopupWindow: cleaning up popup");
             this._popup.removeEventListener("exit", this._exitCallbackEvent, false);
             this._popup.removeEventListener("loadstart", this._loadStartCallbackEvent, false);
             this._popup.close();
@@ -7088,7 +7088,7 @@ var Event = exports.Event = function () {
     };
 
     Event.prototype.raise = function raise() {
-        _Log.Log.debug("Event: Raising event: " + this._name);
+        console.log("Event: Raising event: " + this._name);
         for (var i = 0; i < this._callbacks.length; i++) {
             var _callbacks;
 
@@ -7242,7 +7242,7 @@ var IFrameNavigator = exports.IFrameNavigator = function () {
     };
 
     IFrameNavigator.prototype.callback = function callback(url) {
-        _Log.Log.debug("IFrameNavigator.callback");
+        console.log("IFrameNavigator.callback");
 
         try {
             _IFrameWindow.IFrameWindow.notifyParent(url);
@@ -7312,7 +7312,7 @@ var IFrameWindow = exports.IFrameWindow = function () {
             this._error("No url provided");
         } else {
             var timeout = params.silentRequestTimeout || DefaultTimeout;
-            _Log.Log.debug("IFrameWindow.navigate: Using timeout of:", timeout);
+            console.log("IFrameWindow.navigate: Using timeout of:", timeout);
             this._timer = window.setTimeout(this._timeout.bind(this), timeout);
             this._frame.src = params.url;
         }
@@ -7323,7 +7323,7 @@ var IFrameWindow = exports.IFrameWindow = function () {
     IFrameWindow.prototype._success = function _success(data) {
         this._cleanup();
 
-        _Log.Log.debug("IFrameWindow: Successful response from frame window");
+        console.log("IFrameWindow: Successful response from frame window");
         this._resolve(data);
     };
 
@@ -7340,7 +7340,7 @@ var IFrameWindow = exports.IFrameWindow = function () {
 
     IFrameWindow.prototype._cleanup = function _cleanup() {
         if (this._frame) {
-            _Log.Log.debug("IFrameWindow: cleanup");
+            console.log("IFrameWindow: cleanup");
 
             window.removeEventListener("message", this._boundMessageEvent, false);
             window.clearTimeout(this._timer);
@@ -7353,12 +7353,12 @@ var IFrameWindow = exports.IFrameWindow = function () {
     };
 
     IFrameWindow.prototype._timeout = function _timeout() {
-        _Log.Log.debug("IFrameWindow.timeout");
+        console.log("IFrameWindow.timeout");
         this._error("Frame window timed out");
     };
 
     IFrameWindow.prototype._message = function _message(e) {
-        _Log.Log.debug("IFrameWindow.message");
+        console.log("IFrameWindow.message");
 
         if (this._timer && e.origin === this._origin && e.source === this._frame.contentWindow) {
             var url = e.data;
@@ -7371,11 +7371,11 @@ var IFrameWindow = exports.IFrameWindow = function () {
     };
 
     IFrameWindow.notifyParent = function notifyParent(url) {
-        _Log.Log.debug("IFrameWindow.notifyParent");
+        console.log("IFrameWindow.notifyParent");
         if (window.frameElement) {
             url = url || window.location.href;
             if (url) {
-                _Log.Log.debug("IFrameWindow.notifyParent: posting url message to parent");
+                console.log("IFrameWindow.notifyParent: posting url message to parent");
                 window.parent.postMessage(url, location.protocol + "//" + location.host);
             }
         }
@@ -7428,17 +7428,17 @@ var InMemoryWebStorage = exports.InMemoryWebStorage = function () {
     }
 
     InMemoryWebStorage.prototype.getItem = function getItem(key) {
-        _Log.Log.debug("InMemoryWebStorage.getItem", key);
+        console.log("InMemoryWebStorage.getItem", key);
         return this._data[key];
     };
 
     InMemoryWebStorage.prototype.setItem = function setItem(key, value) {
-        _Log.Log.debug("InMemoryWebStorage.setItem", key);
+        console.log("InMemoryWebStorage.setItem", key);
         this._data[key] = value;
     };
 
     InMemoryWebStorage.prototype.removeItem = function removeItem(key) {
-        _Log.Log.debug("InMemoryWebStorage.removeItem", key);
+        console.log("InMemoryWebStorage.removeItem", key);
         delete this._data[key];
     };
 
@@ -7491,7 +7491,7 @@ var JoseUtil = exports.JoseUtil = function () {
     }
 
     JoseUtil.parseJwt = function parseJwt(jwt) {
-        _Log.Log.debug("JoseUtil.parseJwt");
+        console.log("JoseUtil.parseJwt");
         try {
             var token = _jsrsasign.jws.JWS.parse(jwt);
             return {
@@ -7504,7 +7504,7 @@ var JoseUtil = exports.JoseUtil = function () {
     };
 
     JoseUtil.validateJwt = function validateJwt(jwt, key, issuer, audience, clockSkew, now, timeInsensitive) {
-        _Log.Log.debug("JoseUtil.validateJwt");
+        console.log("JoseUtil.validateJwt");
 
         try {
             if (key.kty === "RSA") {
@@ -7691,7 +7691,7 @@ var JsonService = exports.JsonService = function () {
             throw new Error("url");
         }
 
-        _Log.Log.debug("JsonService.getJson, url: ", url);
+        console.log("JsonService.getJson, url: ", url);
 
         return new Promise(function (resolve, reject) {
 
@@ -7702,7 +7702,7 @@ var JsonService = exports.JsonService = function () {
             var jwtHandler = _this._jwtHandler;
 
             req.onload = function () {
-                _Log.Log.debug("JsonService.getJson: HTTP response received, status", req.status);
+                console.log("JsonService.getJson: HTTP response received, status", req.status);
 
                 if (req.status === 200) {
 
@@ -7744,7 +7744,7 @@ var JsonService = exports.JsonService = function () {
             };
 
             if (token) {
-                _Log.Log.debug("JsonService.getJson: token passed, setting Authorization header");
+                console.log("JsonService.getJson: token passed, setting Authorization header");
                 req.setRequestHeader("Authorization", "Bearer " + token);
             }
 
@@ -7760,7 +7760,7 @@ var JsonService = exports.JsonService = function () {
             throw new Error("url");
         }
 
-        _Log.Log.debug("JsonService.postForm, url: ", url);
+        console.log("JsonService.postForm, url: ", url);
 
         return new Promise(function (resolve, reject) {
 
@@ -7770,7 +7770,7 @@ var JsonService = exports.JsonService = function () {
             var allowedContentTypes = _this2._contentTypes;
 
             req.onload = function () {
-                _Log.Log.debug("JsonService.postForm: HTTP response received, status", req.status);
+                console.log("JsonService.postForm: HTTP response received, status", req.status);
 
                 if (req.status === 200) {
 
@@ -8057,7 +8057,7 @@ var MetadataService = exports.MetadataService = function () {
         var _this = this;
 
         if (this._settings.metadata) {
-            _Log.Log.debug("MetadataService.getMetadata: Returning metadata from settings");
+            console.log("MetadataService.getMetadata: Returning metadata from settings");
             return Promise.resolve(this._settings.metadata);
         }
 
@@ -8066,10 +8066,10 @@ var MetadataService = exports.MetadataService = function () {
             return Promise.reject(new Error("No authority or metadataUrl configured on settings"));
         }
 
-        _Log.Log.debug("MetadataService.getMetadata: getting metadata from", this.metadataUrl);
+        console.log("MetadataService.getMetadata: getting metadata from", this.metadataUrl);
 
         return this._jsonService.getJson(this.metadataUrl).then(function (metadata) {
-            _Log.Log.debug("MetadataService.getMetadata: json received");
+            console.log("MetadataService.getMetadata: json received");
             _this._settings.metadata = metadata;
             return metadata;
         });
@@ -8112,10 +8112,10 @@ var MetadataService = exports.MetadataService = function () {
     MetadataService.prototype._getMetadataProperty = function _getMetadataProperty(name) {
         var optional = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-        _Log.Log.debug("MetadataService.getMetadataProperty for: " + name);
+        console.log("MetadataService.getMetadataProperty for: " + name);
 
         return this.getMetadata().then(function (metadata) {
-            _Log.Log.debug("MetadataService.getMetadataProperty: metadata recieved");
+            console.log("MetadataService.getMetadataProperty: metadata recieved");
 
             if (metadata[name] === undefined) {
 
@@ -8136,15 +8136,15 @@ var MetadataService = exports.MetadataService = function () {
         var _this2 = this;
 
         if (this._settings.signingKeys) {
-            _Log.Log.debug("MetadataService.getSigningKeys: Returning signingKeys from settings");
+            console.log("MetadataService.getSigningKeys: Returning signingKeys from settings");
             return Promise.resolve(this._settings.signingKeys);
         }
 
         return this._getMetadataProperty("jwks_uri").then(function (jwks_uri) {
-            _Log.Log.debug("MetadataService.getSigningKeys: jwks_uri received", jwks_uri);
+            console.log("MetadataService.getSigningKeys: jwks_uri received", jwks_uri);
 
             return _this2._jsonService.getJson(jwks_uri).then(function (keySet) {
-                _Log.Log.debug("MetadataService.getSigningKeys: key set received", keySet);
+                console.log("MetadataService.getSigningKeys: key set received", keySet);
 
                 if (!keySet.keys) {
                     _Log.Log.error("MetadataService.getSigningKeys: Missing keys on keyset");
@@ -8259,7 +8259,7 @@ var OidcClient = exports.OidcClient = function () {
 
         var stateStore = arguments[1];
 
-        _Log.Log.debug("OidcClient.createSigninRequest");
+        console.log("OidcClient.createSigninRequest");
 
         var client_id = this._settings.client_id;
         response_type = response_type || this._settings.response_type;
@@ -8283,7 +8283,7 @@ var OidcClient = exports.OidcClient = function () {
         }
 
         return this._metadataService.getAuthorizationEndpoint().then(function (url) {
-            _Log.Log.debug("OidcClient.createSigninRequest: Received authorization endpoint", url);
+            console.log("OidcClient.createSigninRequest: Received authorization endpoint", url);
 
             var signinRequest = new _SigninRequest.SigninRequest({
                 url: url,
@@ -8309,7 +8309,7 @@ var OidcClient = exports.OidcClient = function () {
     OidcClient.prototype.processSigninResponse = function processSigninResponse(url, stateStore) {
         var _this2 = this;
 
-        _Log.Log.debug("OidcClient.processSigninResponse");
+        console.log("OidcClient.processSigninResponse");
 
         var useQuery = this._settings.response_mode === "query" || !this._settings.response_mode && _SigninRequest.SigninRequest.isCode(this._settings.response_type);
         var delimiter = useQuery ? "?" : "#";
@@ -8331,7 +8331,7 @@ var OidcClient = exports.OidcClient = function () {
 
             var state = _SigninState.SigninState.fromStorageString(storedStateString);
 
-            _Log.Log.debug("OidcClient.processSigninResponse: Received state from storage; validating response");
+            console.log("OidcClient.processSigninResponse: Received state from storage; validating response");
             return _this2._validator.validateSigninResponse(state, response);
         });
     };
@@ -8348,7 +8348,7 @@ var OidcClient = exports.OidcClient = function () {
 
         var stateStore = arguments[1];
 
-        _Log.Log.debug("OidcClient.createSignoutRequest");
+        console.log("OidcClient.createSignoutRequest");
 
         post_logout_redirect_uri = post_logout_redirect_uri || this._settings.post_logout_redirect_uri;
         extraQueryParams = extraQueryParams || this._settings.extraQueryParams;
@@ -8359,7 +8359,7 @@ var OidcClient = exports.OidcClient = function () {
                 throw new Error("no end session endpoint");
             }
 
-            _Log.Log.debug("OidcClient.createSignoutRequest: Received end session endpoint", url);
+            console.log("OidcClient.createSignoutRequest: Received end session endpoint", url);
 
             var request = new _SignoutRequest.SignoutRequest({
                 url: url,
@@ -8371,7 +8371,7 @@ var OidcClient = exports.OidcClient = function () {
 
             var signoutState = request.state;
             if (signoutState) {
-                _Log.Log.debug("OidcClient.createSignoutRequest: Signout request has state to persist");
+                console.log("OidcClient.createSignoutRequest: Signout request has state to persist");
 
                 stateStore = stateStore || _this3._stateStore;
                 stateStore.set(signoutState.id, signoutState.toStorageString());
@@ -8384,11 +8384,11 @@ var OidcClient = exports.OidcClient = function () {
     OidcClient.prototype.processSignoutResponse = function processSignoutResponse(url, stateStore) {
         var _this4 = this;
 
-        _Log.Log.debug("OidcClient.processSignoutResponse");
+        console.log("OidcClient.processSignoutResponse");
 
         var response = new _SignoutResponse.SignoutResponse(url);
         if (!response.state) {
-            _Log.Log.debug("OidcClient.processSignoutResponse: No state in response");
+            console.log("OidcClient.processSignoutResponse: No state in response");
 
             if (response.error) {
                 _Log.Log.warn("OidcClient.processSignoutResponse: Response was error: ", response.error);
@@ -8410,13 +8410,13 @@ var OidcClient = exports.OidcClient = function () {
 
             var state = _State.State.fromStorageString(storedStateString);
 
-            _Log.Log.debug("OidcClient.processSignoutResponse: Received state from storage; validating response");
+            console.log("OidcClient.processSignoutResponse: Received state from storage; validating response");
             return _this4._validator.validateSignoutResponse(state, response);
         });
     };
 
     OidcClient.prototype.clearStaleState = function clearStaleState(stateStore) {
-        _Log.Log.debug("OidcClient.clearStaleState");
+        console.log("OidcClient.clearStaleState");
 
         stateStore = stateStore || this._stateStore;
 
@@ -8798,7 +8798,7 @@ var PopupNavigator = exports.PopupNavigator = function () {
     };
 
     PopupNavigator.prototype.callback = function callback(url, keepOpen, delimiter) {
-        _Log.Log.debug("PopupNavigator.callback");
+        console.log("PopupNavigator.callback");
 
         try {
             _PopupWindow.PopupWindow.notifyOpener(url, keepOpen, delimiter);
@@ -8859,7 +8859,7 @@ var PopupWindow = exports.PopupWindow = function () {
 
         this._popup = window.open('', target, features);
         if (this._popup) {
-            _Log.Log.debug("PopupWindow.ctor: popup successfully created");
+            console.log("PopupWindow.ctor: popup successfully created");
             this._checkForPopupClosedTimer = window.setInterval(this._checkForPopupClosed.bind(this), CheckForPopupClosedInterval);
         }
     }
@@ -8871,7 +8871,7 @@ var PopupWindow = exports.PopupWindow = function () {
             this._error("PopupWindow.navigate: no url provided");
             this._error("No url provided");
         } else {
-            _Log.Log.debug("PopupWindow.navigate: Setting URL in popup");
+            console.log("PopupWindow.navigate: Setting URL in popup");
 
             this._id = params.id;
             if (this._id) {
@@ -8886,7 +8886,7 @@ var PopupWindow = exports.PopupWindow = function () {
     };
 
     PopupWindow.prototype._success = function _success(data) {
-        _Log.Log.debug("PopupWindow.callback: Successful response from popup window");
+        console.log("PopupWindow.callback: Successful response from popup window");
 
         this._cleanup();
         this._resolve(data);
@@ -8904,7 +8904,7 @@ var PopupWindow = exports.PopupWindow = function () {
     };
 
     PopupWindow.prototype._cleanup = function _cleanup(keepOpen) {
-        _Log.Log.debug("PopupWindow.cleanup");
+        console.log("PopupWindow.cleanup");
 
         window.clearInterval(this._checkForPopupClosedTimer);
         this._checkForPopupClosedTimer = null;
@@ -8927,10 +8927,10 @@ var PopupWindow = exports.PopupWindow = function () {
         this._cleanup(keepOpen);
 
         if (url) {
-            _Log.Log.debug("PopupWindow.callback success");
+            console.log("PopupWindow.callback success");
             this._success({ url: url });
         } else {
-            _Log.Log.debug("PopupWindow.callback: Invalid response from popup");
+            console.log("PopupWindow.callback: Invalid response from popup");
             this._error("Invalid response from popup");
         }
     };
@@ -8945,7 +8945,7 @@ var PopupWindow = exports.PopupWindow = function () {
                     var name = "popupCallback_" + data.state;
                     var callback = window.opener[name];
                     if (callback) {
-                        _Log.Log.debug("PopupWindow.notifyOpener: passing url message to opener");
+                        console.log("PopupWindow.notifyOpener: passing url message to opener");
                         callback(url, keepOpen);
                     } else {
                         _Log.Log.warn("PopupWindow.notifyOpener: no matching callback found on opener");
@@ -9083,14 +9083,14 @@ var ResponseValidator = exports.ResponseValidator = function () {
     ResponseValidator.prototype.validateSigninResponse = function validateSigninResponse(state, response) {
         var _this = this;
 
-        _Log.Log.debug("ResponseValidator.validateSigninResponse");
+        console.log("ResponseValidator.validateSigninResponse");
 
         return this._processSigninParams(state, response).then(function (response) {
-            _Log.Log.debug("ResponseValidator.validateSigninResponse: state processed");
+            console.log("ResponseValidator.validateSigninResponse: state processed");
             return _this._validateTokens(state, response).then(function (response) {
-                _Log.Log.debug("ResponseValidator.validateSigninResponse: tokens validated");
+                console.log("ResponseValidator.validateSigninResponse: tokens validated");
                 return _this._processClaims(response).then(function (response) {
-                    _Log.Log.debug("ResponseValidator.validateSigninResponse: claims processed");
+                    console.log("ResponseValidator.validateSigninResponse: claims processed");
                     return response;
                 });
             });
@@ -9106,7 +9106,7 @@ var ResponseValidator = exports.ResponseValidator = function () {
         // now that we know the state matches, take the stored data
         // and set it into the response so callers can get their state
         // this is important for both success & error outcomes
-        _Log.Log.debug("ResponseValidator.validateSignoutResponse: state validated");
+        console.log("ResponseValidator.validateSignoutResponse: state validated");
         response.state = state.data;
 
         if (response.error) {
@@ -9155,7 +9155,7 @@ var ResponseValidator = exports.ResponseValidator = function () {
         // now that we know the state matches, take the stored data
         // and set it into the response so callers can get their state
         // this is important for both success & error outcomes
-        _Log.Log.debug("ResponseValidator._processSigninParams: state validated");
+        console.log("ResponseValidator._processSigninParams: state validated");
         response.state = state.data;
 
         if (response.error) {
@@ -9190,15 +9190,15 @@ var ResponseValidator = exports.ResponseValidator = function () {
         var _this2 = this;
 
         if (response.isOpenIdConnect) {
-            _Log.Log.debug("ResponseValidator._processClaims: response is OIDC, processing claims");
+            console.log("ResponseValidator._processClaims: response is OIDC, processing claims");
 
             response.profile = this._filterProtocolClaims(response.profile);
 
             if (this._settings.loadUserInfo && response.access_token) {
-                _Log.Log.debug("ResponseValidator._processClaims: loading user info");
+                console.log("ResponseValidator._processClaims: loading user info");
 
                 return this._userInfoService.getClaims(response.access_token).then(function (claims) {
-                    _Log.Log.debug("ResponseValidator._processClaims: user info claims received from user info endpoint");
+                    console.log("ResponseValidator._processClaims: user info claims received from user info endpoint");
 
                     if (claims.sub !== response.profile.sub) {
                         _Log.Log.error("ResponseValidator._processClaims: sub from user info endpoint does not match sub in access_token");
@@ -9206,15 +9206,15 @@ var ResponseValidator = exports.ResponseValidator = function () {
                     }
 
                     response.profile = _this2._mergeClaims(response.profile, claims);
-                    _Log.Log.debug("ResponseValidator._processClaims: user info claims received, updated profile:", response.profile);
+                    console.log("ResponseValidator._processClaims: user info claims received, updated profile:", response.profile);
 
                     return response;
                 });
             } else {
-                _Log.Log.debug("ResponseValidator._processClaims: not loading user info");
+                console.log("ResponseValidator._processClaims: not loading user info");
             }
         } else {
-            _Log.Log.debug("ResponseValidator._processClaims: response is not OIDC, not processing claims");
+            console.log("ResponseValidator._processClaims: response is not OIDC, not processing claims");
         }
 
         return Promise.resolve(response);
@@ -9251,7 +9251,7 @@ var ResponseValidator = exports.ResponseValidator = function () {
     };
 
     ResponseValidator.prototype._filterProtocolClaims = function _filterProtocolClaims(claims) {
-        _Log.Log.debug("ResponseValidator._filterProtocolClaims, incoming claims:", claims);
+        console.log("ResponseValidator._filterProtocolClaims, incoming claims:", claims);
 
         var result = Object.assign({}, claims);
 
@@ -9260,9 +9260,9 @@ var ResponseValidator = exports.ResponseValidator = function () {
                 delete result[type];
             });
 
-            _Log.Log.debug("ResponseValidator._filterProtocolClaims: protocol claims filtered", result);
+            console.log("ResponseValidator._filterProtocolClaims: protocol claims filtered", result);
         } else {
-            _Log.Log.debug("ResponseValidator._filterProtocolClaims: protocol claims not filtered");
+            console.log("ResponseValidator._filterProtocolClaims: protocol claims not filtered");
         }
 
         return result;
@@ -9270,21 +9270,21 @@ var ResponseValidator = exports.ResponseValidator = function () {
 
     ResponseValidator.prototype._validateTokens = function _validateTokens(state, response) {
         if (response.code) {
-            _Log.Log.debug("ResponseValidator._validateTokens: Validating code");
+            console.log("ResponseValidator._validateTokens: Validating code");
             return this._processCode(state, response);
         }
 
         if (response.id_token) {
             if (response.access_token) {
-                _Log.Log.debug("ResponseValidator._validateTokens: Validating id_token and access_token");
+                console.log("ResponseValidator._validateTokens: Validating id_token and access_token");
                 return this._validateIdTokenAndAccessToken(state, response);
             }
 
-            _Log.Log.debug("ResponseValidator._validateTokens: Validating id_token");
+            console.log("ResponseValidator._validateTokens: Validating id_token");
             return this._validateIdToken(state, response);
         }
 
-        _Log.Log.debug("ResponseValidator._validateTokens: No code to process or id_token to validate");
+        console.log("ResponseValidator._validateTokens: No code to process or id_token to validate");
         return Promise.resolve(response);
     };
 
@@ -9306,10 +9306,10 @@ var ResponseValidator = exports.ResponseValidator = function () {
             }
 
             if (response.id_token) {
-                _Log.Log.debug("ResponseValidator._processCode: token response successful, processing id_token");
+                console.log("ResponseValidator._processCode: token response successful, processing id_token");
                 return _this3._validateIdTokenAttributes(state, response);
             } else {
-                _Log.Log.debug("ResponseValidator._processCode: token response successful, returning response");
+                console.log("ResponseValidator._processCode: token response successful, returning response");
             }
 
             return response;
@@ -9323,7 +9323,7 @@ var ResponseValidator = exports.ResponseValidator = function () {
 
             var audience = state.client_id;
             var clockSkewInSeconds = _this4._settings.clockSkew;
-            _Log.Log.debug("ResponseValidator._validateIdTokenAttributes: Validaing JWT attributes; using clock skew (in seconds) of: ", clockSkewInSeconds);
+            console.log("ResponseValidator._validateIdTokenAttributes: Validaing JWT attributes; using clock skew (in seconds) of: ", clockSkewInSeconds);
 
             return _this4._joseUtil.validateJwtAttributes(response.id_token, issuer, audience, clockSkewInSeconds).then(function (payload) {
 
@@ -9373,7 +9373,7 @@ var ResponseValidator = exports.ResponseValidator = function () {
         var kid = jwt.header.kid;
 
         return this._metadataService.getIssuer().then(function (issuer) {
-            _Log.Log.debug("ResponseValidator._validateIdToken: Received issuer");
+            console.log("ResponseValidator._validateIdToken: Received issuer");
 
             return _this6._metadataService.getSigningKeys().then(function (keys) {
                 if (!keys) {
@@ -9381,7 +9381,7 @@ var ResponseValidator = exports.ResponseValidator = function () {
                     return Promise.reject(new Error("No signing keys from metadata"));
                 }
 
-                _Log.Log.debug("ResponseValidator._validateIdToken: Received signing keys");
+                console.log("ResponseValidator._validateIdToken: Received signing keys");
                 var key = void 0;
                 if (!kid) {
                     keys = _this6._filterByAlg(keys, jwt.header.alg);
@@ -9408,10 +9408,10 @@ var ResponseValidator = exports.ResponseValidator = function () {
                 var audience = state.client_id;
 
                 var clockSkewInSeconds = _this6._settings.clockSkew;
-                _Log.Log.debug("ResponseValidator._validateIdToken: Validaing JWT; using clock skew (in seconds) of: ", clockSkewInSeconds);
+                console.log("ResponseValidator._validateIdToken: Validaing JWT; using clock skew (in seconds) of: ", clockSkewInSeconds);
 
                 return _this6._joseUtil.validateJwt(response.id_token, key, issuer, audience, clockSkewInSeconds).then(function () {
-                    _Log.Log.debug("ResponseValidator._validateIdToken: JWT validation successful");
+                    console.log("ResponseValidator._validateIdToken: JWT validation successful");
 
                     if (!jwt.payload.sub) {
                         _Log.Log.error("ResponseValidator._validateIdToken: No sub present in id_token");
@@ -9435,17 +9435,17 @@ var ResponseValidator = exports.ResponseValidator = function () {
         } else if (alg.startsWith("ES")) {
             kty = "EC";
         } else {
-            _Log.Log.debug("ResponseValidator._filterByAlg: alg not supported: ", alg);
+            console.log("ResponseValidator._filterByAlg: alg not supported: ", alg);
             return [];
         }
 
-        _Log.Log.debug("ResponseValidator._filterByAlg: Looking for keys that match kty: ", kty);
+        console.log("ResponseValidator._filterByAlg: Looking for keys that match kty: ", kty);
 
         keys = keys.filter(function (key) {
             return key.kty === kty;
         });
 
-        _Log.Log.debug("ResponseValidator._filterByAlg: Number of keys that match kty: ", kty, keys.length);
+        console.log("ResponseValidator._filterByAlg: Number of keys that match kty: ", kty, keys.length);
 
         return keys;
     };
@@ -9504,7 +9504,7 @@ var ResponseValidator = exports.ResponseValidator = function () {
             return Promise.reject(new Error("Failed to validate at_hash"));
         }
 
-        _Log.Log.debug("ResponseValidator._validateAccessToken: success");
+        console.log("ResponseValidator._validateAccessToken: success");
 
         return Promise.resolve(response);
     };
@@ -9577,12 +9577,12 @@ var SessionMonitor = exports.SessionMonitor = function () {
         if (session_state) {
             this._sub = user.profile.sub;
             this._sid = user.profile.sid;
-            _Log.Log.debug("SessionMonitor._start: session_state:", session_state, ", sub:", this._sub);
+            console.log("SessionMonitor._start: session_state:", session_state, ", sub:", this._sub);
 
             if (!this._checkSessionIFrame) {
                 this._metadataService.getCheckSessionIframe().then(function (url) {
                     if (url) {
-                        _Log.Log.debug("SessionMonitor._start: Initializing check session iframe");
+                        console.log("SessionMonitor._start: Initializing check session iframe");
 
                         var client_id = _this2._client_id;
                         var interval = _this2._checkSessionInterval;
@@ -9610,7 +9610,7 @@ var SessionMonitor = exports.SessionMonitor = function () {
         this._sid = null;
 
         if (this._checkSessionIFrame) {
-            _Log.Log.debug("SessionMonitor._stop");
+            console.log("SessionMonitor._stop");
             this._checkSessionIFrame.stop();
         }
     };
@@ -9627,24 +9627,24 @@ var SessionMonitor = exports.SessionMonitor = function () {
                     _this3._checkSessionIFrame.start(session.session_state);
 
                     if (session.sid === _this3._sid) {
-                        _Log.Log.debug("SessionMonitor._callback: Same sub still logged in at OP, restarting check session iframe; session_state:", session.session_state);
+                        console.log("SessionMonitor._callback: Same sub still logged in at OP, restarting check session iframe; session_state:", session.session_state);
                     } else {
-                        _Log.Log.debug("SessionMonitor._callback: Same sub still logged in at OP, session state has changed, restarting check session iframe; session_state:", session.session_state);
+                        console.log("SessionMonitor._callback: Same sub still logged in at OP, session state has changed, restarting check session iframe; session_state:", session.session_state);
                         _this3._userManager.events._raiseUserSessionChanged();
                     }
                 } else {
-                    _Log.Log.debug("SessionMonitor._callback: Different subject signed into OP:", session.sub);
+                    console.log("SessionMonitor._callback: Different subject signed into OP:", session.sub);
                 }
             } else {
-                _Log.Log.debug("SessionMonitor._callback: Subject no longer signed into OP");
+                console.log("SessionMonitor._callback: Subject no longer signed into OP");
             }
 
             if (raiseUserSignedOutEvent) {
-                _Log.Log.debug("SessionMonitor._callback: SessionMonitor._callback; raising signed out event");
+                console.log("SessionMonitor._callback: SessionMonitor._callback; raising signed out event");
                 _this3._userManager.events._raiseUserSignedOut();
             }
         }).catch(function (err) {
-            _Log.Log.debug("SessionMonitor._callback: Error calling queryCurrentSigninSession; raising signed out event", err.message);
+            console.log("SessionMonitor._callback: Error calling queryCurrentSigninSession; raising signed out event", err.message);
             _this3._userManager.events._raiseUserSignedOut();
         });
     };
@@ -9978,7 +9978,7 @@ var SigninState = exports.SigninState = function (_State) {
     }
 
     SigninState.prototype.toStorageString = function toStorageString() {
-        _Log.Log.debug("SigninState.toStorageString");
+        console.log("SigninState.toStorageString");
         return JSON.stringify({
             id: this.id,
             data: this.data,
@@ -9992,7 +9992,7 @@ var SigninState = exports.SigninState = function (_State) {
     };
 
     SigninState.fromStorageString = function fromStorageString(storageString) {
-        _Log.Log.debug("SigninState.fromStorageString");
+        console.log("SigninState.fromStorageString");
         var data = JSON.parse(storageString);
         return new SigninState(data);
     };
@@ -10182,7 +10182,7 @@ var SilentRenewService = exports.SilentRenewService = function () {
         var _this = this;
 
         this._userManager.signinSilent().then(function (user) {
-            _Log.Log.debug("SilentRenewService._tokenExpiring: Silent token renewal successful");
+            console.log("SilentRenewService._tokenExpiring: Silent token renewal successful");
         }, function (err) {
             _Log.Log.error("SilentRenewService._tokenExpiring: Error from signinSilent:", err.message);
             _this._userManager.events._raiseSilentRenewError(err);
@@ -10242,7 +10242,7 @@ var State = exports.State = function () {
     }
 
     State.prototype.toStorageString = function toStorageString() {
-        _Log.Log.debug("State.toStorageString");
+        console.log("State.toStorageString");
         return JSON.stringify({
             id: this.id,
             data: this.data,
@@ -10251,7 +10251,7 @@ var State = exports.State = function () {
     };
 
     State.fromStorageString = function fromStorageString(storageString) {
-        _Log.Log.debug("State.fromStorageString");
+        console.log("State.fromStorageString");
         return new State(JSON.parse(storageString));
     };
 
@@ -10260,7 +10260,7 @@ var State = exports.State = function () {
         var cutoff = Date.now() / 1000 - age;
 
         return storage.getAllKeys().then(function (keys) {
-            _Log.Log.debug("State.clearStaleState: got keys", keys);
+            console.log("State.clearStaleState: got keys", keys);
 
             var promises = [];
 
@@ -10273,7 +10273,7 @@ var State = exports.State = function () {
                         try {
                             var state = State.fromStorageString(item);
 
-                            _Log.Log.debug("State.clearStaleState: got item from key: ", key, state.created);
+                            console.log("State.clearStaleState: got item from key: ", key, state.created);
 
                             if (state.created <= cutoff) {
                                 remove = true;
@@ -10283,12 +10283,12 @@ var State = exports.State = function () {
                             remove = true;
                         }
                     } else {
-                        _Log.Log.debug("State.clearStaleState: no item in storage for key: ", key);
+                        console.log("State.clearStaleState: no item in storage for key: ", key);
                         remove = true;
                     }
 
                     if (remove) {
-                        _Log.Log.debug("State.clearStaleState: removed item for key: ", key);
+                        console.log("State.clearStaleState: removed item for key: ", key);
                         return storage.remove(key);
                     }
                 });
@@ -10303,7 +10303,7 @@ var State = exports.State = function () {
                 _loop(i);
             }
 
-            _Log.Log.debug("State.clearStaleState: waiting on promise count:", promises.length);
+            console.log("State.clearStaleState: waiting on promise count:", promises.length);
             return Promise.all(promises);
         });
     };
@@ -10394,13 +10394,13 @@ var Timer = exports.Timer = function (_Event) {
         var expiration = this.now + duration;
         if (this.expiration === expiration && this._timerHandle) {
             // no need to reinitialize to same expiration, so bail out
-            _Log.Log.debug("Timer.init timer " + this._name + " skipping initialization since already initialized for expiration:", this.expiration);
+            console.log("Timer.init timer " + this._name + " skipping initialization since already initialized for expiration:", this.expiration);
             return;
         }
 
         this.cancel();
 
-        _Log.Log.debug("Timer.init timer " + this._name + " for duration:", duration);
+        console.log("Timer.init timer " + this._name + " for duration:", duration);
         this._expiration = expiration;
 
         // we're using a fairly short timer and then checking the expiration in the
@@ -10415,7 +10415,7 @@ var Timer = exports.Timer = function (_Event) {
 
     Timer.prototype.cancel = function cancel() {
         if (this._timerHandle) {
-            _Log.Log.debug("Timer.cancel: ", this._name);
+            console.log("Timer.cancel: ", this._name);
             this._timer.clearInterval(this._timerHandle);
             this._timerHandle = null;
         }
@@ -10423,7 +10423,7 @@ var Timer = exports.Timer = function (_Event) {
 
     Timer.prototype._callback = function _callback() {
         var diff = this._expiration - this.now;
-        _Log.Log.debug("Timer.callback; " + this._name + " timer expires in:", diff);
+        console.log("Timer.callback; " + this._name + " timer expires in:", diff);
 
         if (this._expiration <= this.now) {
             this.cancel();
@@ -10516,10 +10516,10 @@ var TokenClient = exports.TokenClient = function () {
         }
 
         return this._metadataService.getTokenEndpoint(false).then(function (url) {
-            _Log.Log.debug("TokenClient.exchangeCode: Received token endpoint");
+            console.log("TokenClient.exchangeCode: Received token endpoint");
 
             return _this._jsonService.postForm(url, args).then(function (response) {
-                _Log.Log.debug("TokenClient.exchangeCode: response received");
+                console.log("TokenClient.exchangeCode: response received");
                 return response;
             });
         });
@@ -10543,10 +10543,10 @@ var TokenClient = exports.TokenClient = function () {
         }
 
         return this._metadataService.getTokenEndpoint(false).then(function (url) {
-            _Log.Log.debug("TokenClient.exchangeRefreshToken: Received token endpoint");
+            console.log("TokenClient.exchangeRefreshToken: Received token endpoint");
 
             return _this2._jsonService.postForm(url, args).then(function (response) {
-                _Log.Log.debug("TokenClient.exchangeRefreshToken: response received");
+                console.log("TokenClient.exchangeRefreshToken: response received");
                 return response;
             });
         });
@@ -10627,7 +10627,7 @@ var TokenRevocationClient = exports.TokenRevocationClient = function () {
                 return;
             }
 
-            _Log.Log.debug("TokenRevocationClient.revoke: Revoking " + type);
+            console.log("TokenRevocationClient.revoke: Revoking " + type);
             var client_id = _this._settings.client_id;
             var client_secret = _this._settings.client_secret;
             return _this._revoke(url, client_id, client_secret, token, type);
@@ -10643,7 +10643,7 @@ var TokenRevocationClient = exports.TokenRevocationClient = function () {
             xhr.open("POST", url);
 
             xhr.onload = function () {
-                _Log.Log.debug("TokenRevocationClient.revoke: HTTP response received, status", xhr.status);
+                console.log("TokenRevocationClient.revoke: HTTP response received, status", xhr.status);
 
                 if (xhr.status === 200) {
                     resolve();
@@ -10652,7 +10652,7 @@ var TokenRevocationClient = exports.TokenRevocationClient = function () {
                 }
             };
             xhr.onerror = function () {
-                _Log.Log.debug("TokenRevocationClient.revoke: Network Error.");
+                console.log("TokenRevocationClient.revoke: Network Error.");
                 reject("Network Error");
             };
 
@@ -10812,7 +10812,7 @@ var User = exports.User = function () {
     }
 
     User.prototype.toStorageString = function toStorageString() {
-        _Log.Log.debug("User.toStorageString");
+        console.log("User.toStorageString");
         return JSON.stringify({
             id_token: this.id_token,
             session_state: this.session_state,
@@ -10826,7 +10826,7 @@ var User = exports.User = function () {
     };
 
     User.fromStorageString = function fromStorageString(storageString) {
-        _Log.Log.debug("User.fromStorageString");
+        console.log("User.fromStorageString");
         return new User(JSON.parse(storageString));
     };
 
@@ -10921,10 +10921,10 @@ var UserInfoService = exports.UserInfoService = function () {
         }
 
         return this._metadataService.getUserInfoEndpoint().then(function (url) {
-            _Log.Log.debug("UserInfoService.getClaims: received userinfo url", url);
+            console.log("UserInfoService.getClaims: received userinfo url", url);
 
             return _this._jsonService.getJson(url, token).then(function (claims) {
-                _Log.Log.debug("UserInfoService.getClaims: claims received", claims);
+                console.log("UserInfoService.getClaims: claims received", claims);
                 return claims;
             });
         });
@@ -10956,7 +10956,7 @@ var UserInfoService = exports.UserInfoService = function () {
             }
 
             return issuerPromise.then(function (issuer) {
-                _Log.Log.debug("UserInfoService._getClaimsFromJwt: Received issuer:" + issuer);
+                console.log("UserInfoService._getClaimsFromJwt: Received issuer:" + issuer);
 
                 return _this2._metadataService.getSigningKeys().then(function (keys) {
                     if (!keys) {
@@ -10964,7 +10964,7 @@ var UserInfoService = exports.UserInfoService = function () {
                         return Promise.reject(new Error("No signing keys from metadata"));
                     }
 
-                    _Log.Log.debug("UserInfoService._getClaimsFromJwt: Received signing keys");
+                    console.log("UserInfoService._getClaimsFromJwt: Received signing keys");
                     var key = void 0;
                     if (!kid) {
                         keys = _this2._filterByAlg(keys, jwt.header.alg);
@@ -10991,10 +10991,10 @@ var UserInfoService = exports.UserInfoService = function () {
                     var audience = _this2._settings.client_id;
 
                     var clockSkewInSeconds = _this2._settings.clockSkew;
-                    _Log.Log.debug("UserInfoService._getClaimsFromJwt: Validaing JWT; using clock skew (in seconds) of: ", clockSkewInSeconds);
+                    console.log("UserInfoService._getClaimsFromJwt: Validaing JWT; using clock skew (in seconds) of: ", clockSkewInSeconds);
 
                     return _this2._joseUtil.validateJwt(req.responseText, key, issuer, audience, clockSkewInSeconds, undefined, true).then(function () {
-                        _Log.Log.debug("UserInfoService._getClaimsFromJwt: JWT validation successful");
+                        console.log("UserInfoService._getClaimsFromJwt: JWT validation successful");
                         return jwt.payload;
                     });
                 });
@@ -11016,17 +11016,17 @@ var UserInfoService = exports.UserInfoService = function () {
         } else if (alg.startsWith("ES")) {
             kty = "EC";
         } else {
-            _Log.Log.debug("UserInfoService._filterByAlg: alg not supported: ", alg);
+            console.log("UserInfoService._filterByAlg: alg not supported: ", alg);
             return [];
         }
 
-        _Log.Log.debug("UserInfoService._filterByAlg: Looking for keys that match kty: ", kty);
+        console.log("UserInfoService._filterByAlg: Looking for keys that match kty: ", kty);
 
         keys = keys.filter(function (key) {
             return key.kty === kty;
         });
 
-        _Log.Log.debug("UserInfoService._filterByAlg: Number of keys that match kty: ", kty, keys.length);
+        console.log("UserInfoService._filterByAlg: Number of keys that match kty: ", kty, keys.length);
 
         return keys;
     };
@@ -11104,12 +11104,12 @@ var UserManager = exports.UserManager = function (_OidcClient) {
 
         // order is important for the following properties; these services depend upon the events.
         if (_this.settings.automaticSilentRenew) {
-            _Log.Log.debug("UserManager.ctor: automaticSilentRenew is configured, setting up silent renew");
+            console.log("UserManager.ctor: automaticSilentRenew is configured, setting up silent renew");
             _this.startSilentRenew();
         }
 
         if (_this.settings.monitorSession) {
-            _Log.Log.debug("UserManager.ctor: monitorSession is configured, setting up session monitor");
+            console.log("UserManager.ctor: monitorSession is configured, setting up session monitor");
             _this._sessionMonitor = new SessionMonitorCtor(_this);
         }
 
@@ -11250,7 +11250,7 @@ var UserManager = exports.UserManager = function (_OidcClient) {
                     }
 
                     return idTokenValidation.then(function () {
-                        _Log.Log.debug("UserManager._useRefreshToken: refresh token response success");
+                        console.log("UserManager._useRefreshToken: refresh token response success");
                         user.access_token = result.access_token;
                         user.refresh_token = result.refresh_token || user.refresh_token;
                         user.expires_in = result.expires_in;
@@ -11359,7 +11359,7 @@ var UserManager = exports.UserManager = function (_OidcClient) {
             silentRequestTimeout: args.silentRequestTimeout || this.settings.silentRequestTimeout
         }).then(function (navResponse) {
             return _this7.processSigninResponse(navResponse.url).then(function (signinResponse) {
-                _Log.Log.debug("UserManager.querySessionStatus: got signin response");
+                console.log("UserManager.querySessionStatus: got signin response");
 
                 if (signinResponse.session_state && signinResponse.profile.sub) {
                     _Log.Log.info("UserManager.querySessionStatus: querySessionStatus success for sub: ", signinResponse.profile.sub);
@@ -11392,10 +11392,10 @@ var UserManager = exports.UserManager = function (_OidcClient) {
 
 
         return navigator.prepare(navigatorParams).then(function (handle) {
-            _Log.Log.debug("UserManager._signinStart: got navigator window handle");
+            console.log("UserManager._signinStart: got navigator window handle");
 
             return _this9.createSigninRequest(args).then(function (signinRequest) {
-                _Log.Log.debug("UserManager._signinStart: got signin request");
+                console.log("UserManager._signinStart: got signin request");
 
                 navigatorParams.url = signinRequest.url;
                 navigatorParams.id = signinRequest.state.id;
@@ -11403,7 +11403,7 @@ var UserManager = exports.UserManager = function (_OidcClient) {
                 return handle.navigate(navigatorParams);
             }).catch(function (err) {
                 if (handle.close) {
-                    _Log.Log.debug("UserManager._signinStart: Error after preparing navigator, closing navigator window");
+                    console.log("UserManager._signinStart: Error after preparing navigator, closing navigator window");
                     handle.close();
                 }
                 throw err;
@@ -11415,12 +11415,12 @@ var UserManager = exports.UserManager = function (_OidcClient) {
         var _this10 = this;
 
         return this.processSigninResponse(url).then(function (signinResponse) {
-            _Log.Log.debug("UserManager._signinEnd: got signin response");
+            console.log("UserManager._signinEnd: got signin response");
 
             var user = new _User.User(signinResponse);
 
             return _this10.storeUser(user).then(function () {
-                _Log.Log.debug("UserManager._signinEnd: user stored");
+                console.log("UserManager._signinEnd: user stored");
 
                 _this10._events.load(user);
 
@@ -11430,7 +11430,7 @@ var UserManager = exports.UserManager = function (_OidcClient) {
     };
 
     UserManager.prototype._signinCallback = function _signinCallback(url, navigator) {
-        _Log.Log.debug("UserManager._signinCallback");
+        console.log("UserManager._signinCallback");
         return navigator.callback(url);
     };
 
@@ -11508,25 +11508,25 @@ var UserManager = exports.UserManager = function (_OidcClient) {
         var navigatorParams = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
         return navigator.prepare(navigatorParams).then(function (handle) {
-            _Log.Log.debug("UserManager._signoutStart: got navigator window handle");
+            console.log("UserManager._signoutStart: got navigator window handle");
 
             return _this12._loadUser().then(function (user) {
-                _Log.Log.debug("UserManager._signoutStart: loaded current user from storage");
+                console.log("UserManager._signoutStart: loaded current user from storage");
 
                 var revokePromise = _this12._settings.revokeAccessTokenOnSignout ? _this12._revokeInternal(user) : Promise.resolve();
                 return revokePromise.then(function () {
 
                     var id_token = args.id_token_hint || user && user.id_token;
                     if (id_token) {
-                        _Log.Log.debug("UserManager._signoutStart: Setting id_token into signout request");
+                        console.log("UserManager._signoutStart: Setting id_token into signout request");
                         args.id_token_hint = id_token;
                     }
 
                     return _this12.removeUser().then(function () {
-                        _Log.Log.debug("UserManager._signoutStart: user removed, creating signout request");
+                        console.log("UserManager._signoutStart: user removed, creating signout request");
 
                         return _this12.createSignoutRequest(args).then(function (signoutRequest) {
-                            _Log.Log.debug("UserManager._signoutStart: got signout request");
+                            console.log("UserManager._signoutStart: got signout request");
 
                             navigatorParams.url = signoutRequest.url;
                             if (signoutRequest.state) {
@@ -11538,7 +11538,7 @@ var UserManager = exports.UserManager = function (_OidcClient) {
                 });
             }).catch(function (err) {
                 if (handle.close) {
-                    _Log.Log.debug("UserManager._signoutStart: Error after preparing navigator, closing navigator window");
+                    console.log("UserManager._signoutStart: Error after preparing navigator, closing navigator window");
                     handle.close();
                 }
                 throw err;
@@ -11548,7 +11548,7 @@ var UserManager = exports.UserManager = function (_OidcClient) {
 
     UserManager.prototype._signoutEnd = function _signoutEnd(url) {
         return this.processSignoutResponse(url).then(function (signoutResponse) {
-            _Log.Log.debug("UserManager._signoutEnd: got signout response");
+            console.log("UserManager._signoutEnd: got signout response");
 
             return signoutResponse;
         });
@@ -11560,7 +11560,7 @@ var UserManager = exports.UserManager = function (_OidcClient) {
         return this._loadUser().then(function (user) {
             return _this13._revokeInternal(user, true).then(function (success) {
                 if (success) {
-                    _Log.Log.debug("UserManager.revokeAccessToken: removing token properties from user and re-storing");
+                    console.log("UserManager.revokeAccessToken: removing token properties from user and re-storing");
 
                     user.access_token = null;
                     user.refresh_token = null;
@@ -11568,7 +11568,7 @@ var UserManager = exports.UserManager = function (_OidcClient) {
                     user.token_type = null;
 
                     return _this13.storeUser(user).then(function () {
-                        _Log.Log.debug("UserManager.revokeAccessToken: user stored");
+                        console.log("UserManager.revokeAccessToken: user stored");
                         _this13._events.load(user);
                     });
                 }
@@ -11588,7 +11588,7 @@ var UserManager = exports.UserManager = function (_OidcClient) {
             return this._revokeAccessTokenInternal(access_token, required).then(function (atSuccess) {
                 return _this14._revokeRefreshTokenInternal(refresh_token, required).then(function (rtSuccess) {
                     if (!atSuccess && !rtSuccess) {
-                        _Log.Log.debug("UserManager.revokeAccessToken: no need to revoke due to no token(s), or JWT format");
+                        console.log("UserManager.revokeAccessToken: no need to revoke due to no token(s), or JWT format");
                     }
 
                     return atSuccess || rtSuccess;
@@ -11631,23 +11631,23 @@ var UserManager = exports.UserManager = function (_OidcClient) {
     UserManager.prototype._loadUser = function _loadUser() {
         return this._userStore.get(this._userStoreKey).then(function (storageString) {
             if (storageString) {
-                _Log.Log.debug("UserManager._loadUser: user storageString loaded");
+                console.log("UserManager._loadUser: user storageString loaded");
                 return _User.User.fromStorageString(storageString);
             }
 
-            _Log.Log.debug("UserManager._loadUser: no user storageString");
+            console.log("UserManager._loadUser: no user storageString");
             return null;
         });
     };
 
     UserManager.prototype.storeUser = function storeUser(user) {
         if (user) {
-            _Log.Log.debug("UserManager.storeUser: storing user");
+            console.log("UserManager.storeUser: storing user");
 
             var storageString = user.toStorageString();
             return this._userStore.set(this._userStoreKey, storageString);
         } else {
-            _Log.Log.debug("storeUser.storeUser: removing user");
+            console.log("storeUser.storeUser: removing user");
             return this._userStore.remove(this._userStoreKey);
         }
     };
@@ -11736,7 +11736,7 @@ var UserManagerEvents = exports.UserManagerEvents = function (_AccessTokenEvents
     UserManagerEvents.prototype.load = function load(user) {
         var raiseEvent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
-        _Log.Log.debug("UserManagerEvents.load");
+        console.log("UserManagerEvents.load");
         _AccessTokenEvents.prototype.load.call(this, user);
         if (raiseEvent) {
             this._userLoaded.raise(user);
@@ -11744,7 +11744,7 @@ var UserManagerEvents = exports.UserManagerEvents = function (_AccessTokenEvents
     };
 
     UserManagerEvents.prototype.unload = function unload() {
-        _Log.Log.debug("UserManagerEvents.unload");
+        console.log("UserManagerEvents.unload");
         _AccessTokenEvents.prototype.unload.call(this);
         this._userUnloaded.raise();
     };
@@ -11774,7 +11774,7 @@ var UserManagerEvents = exports.UserManagerEvents = function (_AccessTokenEvents
     };
 
     UserManagerEvents.prototype._raiseSilentRenewError = function _raiseSilentRenewError(e) {
-        _Log.Log.debug("UserManagerEvents._raiseSilentRenewError", e.message);
+        console.log("UserManagerEvents._raiseSilentRenewError", e.message);
         this._silentRenewError.raise(e);
     };
 
@@ -11787,7 +11787,7 @@ var UserManagerEvents = exports.UserManagerEvents = function (_AccessTokenEvents
     };
 
     UserManagerEvents.prototype._raiseUserSignedOut = function _raiseUserSignedOut(e) {
-        _Log.Log.debug("UserManagerEvents._raiseUserSignedOut");
+        console.log("UserManagerEvents._raiseUserSignedOut");
         this._userSignedOut.raise(e);
     };
 
@@ -11800,7 +11800,7 @@ var UserManagerEvents = exports.UserManagerEvents = function (_AccessTokenEvents
     };
 
     UserManagerEvents.prototype._raiseUserSessionChanged = function _raiseUserSessionChanged(e) {
-        _Log.Log.debug("UserManagerEvents._raiseUserSessionChanged");
+        console.log("UserManagerEvents._raiseUserSessionChanged");
         this._userSessionChanged.raise(e);
     };
 
@@ -12050,7 +12050,7 @@ var WebStorageStateStore = exports.WebStorageStateStore = function () {
     }
 
     WebStorageStateStore.prototype.set = function set(key, value) {
-        _Log.Log.debug("WebStorageStateStore.set", key);
+        console.log("WebStorageStateStore.set", key);
 
         key = this._prefix + key;
 
@@ -12060,7 +12060,7 @@ var WebStorageStateStore = exports.WebStorageStateStore = function () {
     };
 
     WebStorageStateStore.prototype.get = function get(key) {
-        _Log.Log.debug("WebStorageStateStore.get", key);
+        console.log("WebStorageStateStore.get", key);
 
         key = this._prefix + key;
 
@@ -12070,7 +12070,7 @@ var WebStorageStateStore = exports.WebStorageStateStore = function () {
     };
 
     WebStorageStateStore.prototype.remove = function remove(key) {
-        _Log.Log.debug("WebStorageStateStore.remove", key);
+        console.log("WebStorageStateStore.remove", key);
 
         key = this._prefix + key;
 
@@ -12081,7 +12081,7 @@ var WebStorageStateStore = exports.WebStorageStateStore = function () {
     };
 
     WebStorageStateStore.prototype.getAllKeys = function getAllKeys() {
-        _Log.Log.debug("WebStorageStateStore.getAllKeys");
+        console.log("WebStorageStateStore.getAllKeys");
 
         var keys = [];
 

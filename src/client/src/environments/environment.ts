@@ -1,8 +1,11 @@
+import { WebStorageStateStore } from "src/libraries/oidc-client-js-dev";
+import { CookieStorage } from "cookie-storage";
+
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-const clientHost = "http://localhost:4200";
+const clientHost = "https://localhost:5001";
 const apiHost = "https://localhost:5001";
 const idServerHost = "https://localhost:7000";
 
@@ -22,8 +25,11 @@ export const environment = {
     // 注销后跳转地址
     post_logout_redirect_uri: `${clientHost}`,
 
+    // userStore: new WebStorageStateStore({ store: window.localStorage }),
+    // userStore: new WebStorageStateStore({ store: CookieStorage }),
+
     // 静默更新用户的 Token
-    // automaticSilentRenew: true,
+    automaticSilentRenew: true,
     silent_redirect_uri: `${clientHost}/redirect-silentrenew`
   }
 };

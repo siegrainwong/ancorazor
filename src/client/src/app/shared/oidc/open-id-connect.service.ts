@@ -1,5 +1,8 @@
 import { Injectable } from "@angular/core";
-import { UserManager, User } from "src/libraries/oidc-client-js-dev";
+import {
+  UserManager,
+  User
+} from "src/libraries/oidc-client-js-dev/lib/oidc-client.js";
 import { environment } from "src/environments/environment";
 import { ReplaySubject } from "rxjs";
 import { Variables } from "../variables";
@@ -27,6 +30,7 @@ export class OpenIdConnectService {
   }
 
   constructor(variables: Variables) {
+    // SSR 时不允许创建 userManager 实例
     if (variables.renderFromServer) return;
 
     this.userManager = new UserManager(environment.openIdConnectSettings);
@@ -61,9 +65,9 @@ export class OpenIdConnectService {
     /**
      * 加载用户状态
      */
-    // this.userManager.getUser().then(user => {
-    //   this.currentUser = user;
-    // });
+    this.userManager.getUser().then(user => {
+      this.currentUser = user;
+    });
   }
 
   triggerSignIn() {

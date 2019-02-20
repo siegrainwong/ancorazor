@@ -4,12 +4,14 @@
 
 using IdentityServer4.Models;
 using System.Collections.Generic;
+using Blog.Common.Configuration;
 using IdentityServer4;
 
 namespace BlogIdentityServer
 {
     public static class Config
     {
+        private const string ClientHost = "https://localhost:5001";
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new IdentityResource[]
@@ -65,7 +67,7 @@ namespace BlogIdentityServer
                 {
                     ClientId = "siegrain-blog-client",
                     ClientName = "Siegrain's Blog Client",
-                    ClientUri = "http://localhost:4200",
+                    ClientUri = ClientHost,
 
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowAccessTokensViaBrowser = true,
@@ -74,12 +76,12 @@ namespace BlogIdentityServer
 
                     RedirectUris =
                     {
-                        "http://localhost:4200/signin-oidc",
-                        "http://localhost:4200/redirect-silentrenew"
+                        $"{ClientHost}/signin-oidc",
+                        $"{ClientHost}/redirect-silentrenew"
                     },
 
-                    PostLogoutRedirectUris = { "http://localhost:4200/" },
-                    AllowedCorsOrigins = { "http://localhost:4200" },
+                    PostLogoutRedirectUris = { ClientHost },
+                    AllowedCorsOrigins = { ClientHost },
 
                     AllowedScopes = {
                         IdentityServerConstants.StandardScopes.OpenId,

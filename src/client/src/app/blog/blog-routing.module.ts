@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { BlogAppComponent } from "./blog-app.component";
 import { ArticleListComponent } from "./components/article-list/article-list.component";
-// import { RequireAuthenticatedUserRouteGuard } from '../shared/oidc/require-authenticated-user-route.guard';
+import { RequireAuthenticatedUserRouteGuard } from "../shared/oidc/require-authenticated-user-route.guard";
 import { WriteArticleComponent } from "./components/write-article/write-article.component";
 
 const routes: Routes = [
@@ -17,8 +17,8 @@ const routes: Routes = [
        */
       {
         path: "add",
-        component: WriteArticleComponent
-        // canActivate: [RequireAuthenticatedUserRouteGuard]
+        component: WriteArticleComponent,
+        canActivate: [RequireAuthenticatedUserRouteGuard]
       },
       { path: "**", redirectTo: "list" }
     ]

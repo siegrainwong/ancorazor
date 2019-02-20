@@ -47,3 +47,4 @@ public/
 .deploy*/
 .nuxt/
 dist/
+identityserver4_log.txt

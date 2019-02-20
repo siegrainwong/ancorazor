@@ -261,7 +261,7 @@ namespace Blog.API
 
                 spa.UseSpaPrerendering(options =>
                 {
-                    options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.js";
+                    options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.js"; 
                     options.BootModuleBuilder = env.IsDevelopment()
                         ? new AngularCliBuilder("build:ssr")
                         : null;

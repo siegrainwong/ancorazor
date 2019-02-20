@@ -58,9 +58,9 @@ export class OpenIdConnectService {
     /**
      * 加载用户状态
      */
-    this.userManager.getUser().then(user => {
-      this.currentUser = user;
-    });
+    // this.userManager.getUser().then(user => {
+    //   this.currentUser = user;
+    // });
   }
 
   triggerSignIn() {

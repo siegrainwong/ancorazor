@@ -28,8 +28,8 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     BrowserAnimationsModule
   ],
-  // providers: [OpenIdConnectService, RequireAuthenticatedUserRouteGuard],
-  providers: [],
+  providers: [OpenIdConnectService, RequireAuthenticatedUserRouteGuard],
+  // providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

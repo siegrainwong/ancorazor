@@ -4,12 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Extras.DynamicProxy;
 using AutoMapper;
-using Blog.API.Authentication;
 using Blog.API.AutoMapper;
 using Blog.API.Caching;
 using Blog.API.Interceptors;
@@ -17,7 +15,6 @@ using Blog.Common.Configuration;
 using Blog.Common.Redis;
 using Blog.Model.Mapping;
 using Blog.Model.ViewModel;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +24,6 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.DotNet.PlatformAbstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 
 #endregion
@@ -92,7 +88,7 @@ namespace Blog.API
                 c.AddPolicy("LimitHosts", policy =>
                 {
                     policy
-                        .WithOrigins("http://localhost:4200")//支持多个域名端口
+                        .WithOrigins("http://localhost:4200", "http://localhost:5000", "https://localhost:5001")//支持多个域名端口
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
@@ -246,7 +242,19 @@ namespace Blog.API
             }
 
             #region SSR
-            // https://docs.microsoft.com/en-us/aspnet/core/client-side/spa/angular?view=aspnetcore-2.1&tabs=visual-studio&utm_source=jeliknes&utm_medium=blog&utm_campaign=medium&WT.mc_id=medium-blog-jeliknes#server-side-rendering
+
+            // 手动映射下 api 的路由，不然所有的请求都会走 SPA
+            app.MapWhen(context => context.Request.Path.StartsWithSegments("/api"),
+                apiApp =>
+                {
+                    apiApp.UseMvc(routes =>
+                    {
+                        routes.MapRoute("default", "{controller}/{action=Index}/{id?}");
+                    });
+                });
+
+            // https://github.com/joshberry/dotnetcore-angular-ssr
+            // 多 SPA 场景：https://stackoverflow.com/questions/48216929/how-to-configure-asp-net-core-server-routing-for-multiple-spas-hosted-with-spase
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = AppSettings.Get("AppSettings", "ClientPath");
@@ -266,7 +274,6 @@ namespace Blog.API
                 }
             });
             #endregion
-
 
             // 添加CORS中间件，可以不加，官方建议加上
             app.UseCors("LimitHosts");

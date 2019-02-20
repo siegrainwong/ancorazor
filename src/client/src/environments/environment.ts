@@ -23,7 +23,7 @@ export const environment = {
     post_logout_redirect_uri: `${clientHost}`,
 
     // 静默更新用户的 Token
-    automaticSilentRenew: true,
+    // automaticSilentRenew: true,
     silent_redirect_uri: `${clientHost}/redirect-silentrenew`
   }
 };

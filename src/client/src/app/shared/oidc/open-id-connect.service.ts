@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { UserManager, User } from "src/libraries/oidc-client-js-dev";
 import { environment } from "src/environments/environment";
 import { ReplaySubject } from "rxjs";
+import { Variables } from "../variables";
 
 /**
  * oidc连接模块，负责管理用户的登录注销状态
@@ -10,9 +11,7 @@ import { ReplaySubject } from "rxjs";
   providedIn: "root"
 })
 export class OpenIdConnectService {
-  private userManager: UserManager = new UserManager(
-    environment.openIdConnectSettings
-  );
+  private userManager: UserManager = null;
 
   private currentUser: User;
 
@@ -27,7 +26,11 @@ export class OpenIdConnectService {
     return this.currentUser;
   }
 
-  constructor() {
+  constructor(variables: Variables) {
+    if (variables.renderFromServer) return;
+
+    this.userManager = new UserManager(environment.openIdConnectSettings);
+
     /**
      * TODO: 之前有请求在过程中没有执行完毕，需要调用这个方法清除一下之前的执行状态
      * 不是很懂，需要测试

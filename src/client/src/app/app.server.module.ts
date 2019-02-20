@@ -4,6 +4,7 @@ import { ModuleMapLoaderModule } from "@nguniversal/module-map-ngfactory-loader"
 
 import { AppModule } from "./app.module";
 import { AppComponent } from "./app.component";
+import { Variables } from "./shared/variables";
 
 // SSR: Added
 
@@ -19,4 +20,8 @@ import { AppComponent } from "./app.component";
   // imported AppModule, it needs to be repeated here.
   bootstrap: [AppComponent]
 })
-export class AppServerModule {}
+export class AppServerModule {
+  constructor(variables: Variables) {
+    variables.renderFromServer = true;
+  }
+}

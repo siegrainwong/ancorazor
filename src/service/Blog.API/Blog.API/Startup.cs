@@ -87,6 +87,7 @@ namespace Blog.API
             {
                 c.AddPolicy("LimitHosts", policy =>
                 {
+                    // TODO：这里如果request是http请求到https，会被CORS栏掉，暂不清楚原因
                     policy
                         .WithOrigins("http://localhost:4200", "http://localhost:5000", "https://localhost:5001")//支持多个域名端口
                         .AllowAnyHeader()

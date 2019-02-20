@@ -3,7 +3,7 @@ import { ArticleParameters } from "../../models/article-parameters";
 import { ArticleService } from "../../services/article.service";
 import ArticleModel from "../../models/article-model";
 import { Pagination } from "src/app/shared/models/response-result";
-// import { OpenIdConnectService } from 'src/app/shared/oidc/open-id-connect.service';
+import { OpenIdConnectService } from "src/app/shared/oidc/open-id-connect.service";
 
 @Component({
   selector: "app-article-list",
@@ -12,9 +12,9 @@ import { Pagination } from "src/app/shared/models/response-result";
 })
 export class ArticleListComponent implements OnInit {
   constructor(
-    private postService: ArticleService
-  ) // private userService: OpenIdConnectService
-  {}
+    private postService: ArticleService,
+    private userService: OpenIdConnectService
+  ) {}
   ngOnInit() {
     this.getPost();
   }

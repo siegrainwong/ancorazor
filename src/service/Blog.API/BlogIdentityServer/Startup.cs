@@ -97,7 +97,7 @@ namespace BlogIdentityServer
             {
                 options.AddPolicy("AngularDev", policy =>
                 {
-                    policy.WithOrigins("https://localhost:5001", "http://localhost:5000")
+                    policy.WithOrigins("https://localhost:5001", "http://localhost:5000", "http://localhost:4200")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });

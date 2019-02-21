@@ -12,6 +12,7 @@ namespace BlogIdentityServer
     public static class Config
     {
         private const string ClientHost = "https://localhost:5001";
+        //private const string ClientHost = "http://localhost:4200";
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new IdentityResource[]

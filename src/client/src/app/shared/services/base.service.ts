@@ -91,7 +91,7 @@ export abstract class BaseService {
         return this.handleResponse(error.response as AxiosResponse);
       } else {
         console.log(error);
-        return Promise.reject(error);
+        return null;
       }
     }
   }

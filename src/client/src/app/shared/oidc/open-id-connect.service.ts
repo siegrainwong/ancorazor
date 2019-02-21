@@ -1,8 +1,6 @@
 import { Injectable } from "@angular/core";
-import {
-  UserManager,
-  User
-} from "src/libraries/oidc-client-js-dev/lib/oidc-client.js";
+import { UserManager, User } from "src/libraries/oidc-client-js-dev";
+// import { UserManager, User } from "oidc-client";
 import { environment } from "src/environments/environment";
 import { ReplaySubject } from "rxjs";
 import { Variables } from "../variables";

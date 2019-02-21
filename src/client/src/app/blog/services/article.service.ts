@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { BaseService, ISubService } from 'src/app/shared/services/base.service';
-import { ArticleParameters } from '../models/article-parameters';
-import { Result } from 'src/app/shared/models/response-result';
-import ArticleModel from '../models/article-model';
+import { Injectable } from "@angular/core";
+import { BaseService, ISubService } from "src/app/shared/services/base.service";
+import { ArticleParameters } from "../models/article-parameters";
+import { Result } from "src/app/shared/models/response-result";
+import ArticleModel from "../models/article-model";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class ArticleService extends BaseService implements ISubService {
   serviceName = "articles";
@@ -14,9 +14,11 @@ export class ArticleService extends BaseService implements ISubService {
    * Mark: 多类型声明
    * @param postParameter any 或 ArticleParameters
    */
-  async getPagedArticles(params?: ArticleParameters): Promise<Result<ArticleModel>> {
-    var res = await this.get(this.serviceName, params)
-    return res.castTo<ArticleModel>()
+  async getPagedArticles(
+    params?: ArticleParameters
+  ): Promise<Result<ArticleModel>> {
+    var res = await this.get(this.serviceName, params);
+    return res && res.castTo<ArticleModel>();
   }
 
   /**
@@ -24,7 +26,7 @@ export class ArticleService extends BaseService implements ISubService {
    * @param params
    */
   async add(params?: ArticleParameters): Promise<Result<ArticleModel>> {
-    var res = await this.post(this.serviceName, params)
-    return res.castTo<ArticleModel>()
+    var res = await this.post(this.serviceName, params);
+    return res && res.castTo<ArticleModel>();
   }
 }

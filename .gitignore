@@ -48,3 +48,4 @@ public/
 .nuxt/
 dist/
 identityserver4_log.txt
+/src/service/Blog.API/Common/Secrets/KeyVault.cs

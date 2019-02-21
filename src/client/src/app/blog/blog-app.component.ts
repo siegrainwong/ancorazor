@@ -6,18 +6,17 @@
  * --inline-style --inline-template：不分开生成scss和html文件，只生成一个ts
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-blog-app',
-  template: `<app-nav></app-nav>`,
+  selector: "app-blog-app",
+  template: `
+    <app-layout></app-layout>
+  `,
   styles: []
 })
 export class BlogAppComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

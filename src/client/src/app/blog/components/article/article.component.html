@@ -1,0 +1,16 @@
+<ng-container *ngIf="model">
+  <app-header [title]="model.title" [description]="model.digest"></app-header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          {{ model.content }}
+        </div>
+      </div>
+    </div>
+  </article>
+</ng-container>
+
+<hr />

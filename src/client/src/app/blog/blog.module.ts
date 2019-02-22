@@ -11,6 +11,10 @@ import { ArticleItemComponent } from "./components/article-item/article-item.com
 import { WriteArticleComponent } from "./components/write-article/write-article.component";
 import { LayoutComponent } from "./components/layout/layout.component";
 import { HeaderComponent } from "./components/header/header.component";
+import { FooterComponent } from './components/footer/footer.component';
+import { HomeComponent } from './components/home/home.component';
+import { AboutComponent } from './components/about/about.component';
+import { ArticleComponent } from './components/article/article.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +24,11 @@ import { HeaderComponent } from "./components/header/header.component";
     ArticleItemComponent,
     WriteArticleComponent,
     LayoutComponent,
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent,
+    HomeComponent,
+    AboutComponent,
+    ArticleComponent
   ],
   imports: [CommonModule, BlogRoutingModule, MaterialModule],
   providers: [ArticleService]

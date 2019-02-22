@@ -22,6 +22,14 @@ export class ArticleService extends BaseService implements ISubService {
   }
 
   /**
+   * 获取文章
+   */
+  async getArticle(id: number): Promise<Result<ArticleModel>> {
+    var res = await this.get(`${this.serviceName}/${id}`);
+    return res && res.castTo<ArticleModel>();
+  }
+
+  /**
    * 添加文章
    * @param params
    */

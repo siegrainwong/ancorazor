@@ -1,5 +1,5 @@
 <div class="post-preview">
-  <a href="post.html">
+  <a [routerLink]="['/blog/article', item.id]">
     <h2 class="post-title">
       {{ item.title }}
     </h2>
@@ -9,7 +9,7 @@
   </a>
   <p class="post-meta">
     Posted by
-    <a href="#">{{ item.author }}</a>
+    <a>{{ item.author }}</a>
     {{ item.createdAt | date: "medium" }}
   </p>
 </div>

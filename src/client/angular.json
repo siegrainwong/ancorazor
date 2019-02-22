@@ -32,7 +32,7 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.scss"],
             "stylePreprocessorOptions": {
-              "includePaths": ["./src"]
+              "includePaths": ["./src", "./src/app/shared/styles"]
             },
             "scripts": []
           },
@@ -106,7 +106,7 @@
             "main": "src/main.server.ts",
             "tsConfig": "src/tsconfig.server.json",
             "stylePreprocessorOptions": {
-              "includePaths": ["./src"]
+              "includePaths": ["./src", "./src/app/shared/styles"]
             }
           },
           "configurations": {

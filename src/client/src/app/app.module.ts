@@ -4,19 +4,12 @@ import { NgModule } from "@angular/core";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { Routes, RouterModule } from "@angular/router";
 import { RequireAuthenticatedUserRouteGuard } from "./shared/oidc/require-authenticated-user-route.guard";
 import { SigninOidcComponent } from "./shared/oidc/signin-oidc/signin-oidc.component";
 import { RedirectSilentRenewComponent } from "./shared/oidc/redirect-silent-renew/redirect-silent-renew.component";
 import { OpenIdConnectService } from "./shared/oidc/open-id-connect.service";
 import { Variables } from "./shared/variables";
 
-const routes: Routes = [
-  { path: "blog", loadChildren: "./blog/blog.module#BlogModule" },
-  { path: "signin-oidc", component: SigninOidcComponent },
-  { path: "redirect-silentrenew", component: RedirectSilentRenewComponent },
-  { path: "**", redirectTo: "blog" }
-];
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,9 +17,12 @@ const routes: Routes = [
     RedirectSilentRenewComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: "app" }), // SSR: Modified
+    // Add .withServerTransition() to support Universal rendering.
+    // The application ID can be any identifier which is unique on
+    // the page.
+    BrowserModule.withServerTransition({ appId: "siegrain.blog" }), // SSR: Modified
+    // Add TransferHttpCacheModule to install a Http interceptor
     AppRoutingModule,
-    RouterModule.forRoot(routes),
     BrowserAnimationsModule
   ],
   providers: [OpenIdConnectService, RequireAuthenticatedUserRouteGuard],

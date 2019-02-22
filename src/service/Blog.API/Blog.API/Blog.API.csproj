@@ -10,12 +10,12 @@
   </PropertyGroup>
 
   <!-- 这个节点是因为他把客户端放在project内，所以要用这个做一些排除操作 -->
-  <!--<ItemGroup>
-    --><!-- Don't publish the SPA source files, but do show them in the project files list --><!--
+  <ItemGroup>
+     <!--Don't publish the SPA source files, but do show them in the project files list--> 
     <Content Remove="$(SpaRoot)**" />
     <None Remove="$(SpaRoot)**" />
-    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
-  </ItemGroup>-->
+    <!--<None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />-->
+  </ItemGroup>
 
   <!-- 检查 Nodejs 环境，如果环境ok的话就执行 npm install -->
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

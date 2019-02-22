@@ -11,7 +11,7 @@ export { AppServerModule } from "./app/app.server.module";
 
 enableProdMode();
 
-export default createServerRenderer(async params => {
+export default createServerRenderer(params => {
   const {
     AppServerModule,
     AppServerModuleNgFactory,
@@ -35,6 +35,5 @@ export default createServerRenderer(async params => {
     ? /* AoT */ renderModuleFactory(AppServerModuleNgFactory, options)
     : /* dev */ renderModule(AppServerModule, options);
 
-  const html = await renderPromise;
-  return { html };
+  return renderPromise.then(html => ({ html }));
 });

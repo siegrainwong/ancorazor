@@ -1,27 +1,16 @@
-<mat-card class="article-item">
-  <mat-card-header class="article-item-header">
-    <div mat-card-avatar>
-      <!-- 这里单引号是字符串的意思，不加单引号就是引用 -->
-      <!-- <img class="avatar" [src]="'/assets/default-user.png'" /> -->
-    </div>
-    <mat-card-title>
-      <b>{{ item.title }}</b>
-    </mat-card-title>
-    <mat-card-subtitle
-      >{{ item.createdAt | date: "medium" }} by
-      {{ item.author }}</mat-card-subtitle
-    >
-  </mat-card-header>
-  <!-- <mat-card-content>
-      
-    </mat-card-content> -->
-  <mat-card-actions>
-    <button mat-button>
-      LIKE
-    </button>
-
-    <button mat-button>
-      SHARE
-    </button>
-  </mat-card-actions>
-</mat-card>
+<div class="post-preview">
+  <a href="post.html">
+    <h2 class="post-title">
+      {{ item.title }}
+    </h2>
+    <h3 class="post-subtitle">
+      {{ item.digest }}
+    </h3>
+  </a>
+  <p class="post-meta">
+    Posted by
+    <a href="#">{{ item.author }}</a>
+    {{ item.createdAt | date: "medium" }}
+  </p>
+</div>
+<hr />

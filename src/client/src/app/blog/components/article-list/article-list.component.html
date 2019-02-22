@@ -1,17 +1,13 @@
-<!-- <div *ngIf="!articles">
-  <mat-spinner></mat-spinner>
-</div> -->
-<div *ngIf="articles">
-  <button
-    mat-fab
-    color="warn"
-    class="add-fab"
-    [routerLink]="'/blog/add'"
-    *ngIf="userService.userIsAvailable"
-  >
-    <mat-icon aria-label="Add Article" svgIcon="baseline-add"></mat-icon>
-  </button>
-  <ng-container *ngFor="let item of articles">
-    <app-article-item [item]="item"></app-article-item>
-  </ng-container>
+<div class="container" *ngIf="articles">
+  <div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
+      <ng-container *ngFor="let item of articles">
+        <app-article-item [item]="item"></app-article-item>
+      </ng-container>
+      <!-- Pager -->
+      <div class="clearfix">
+        <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
+      </div>
+    </div>
+  </div>
 </div>

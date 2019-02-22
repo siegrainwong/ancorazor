@@ -28,7 +28,7 @@ export class ArticleListComponent implements OnInit {
   });
   async getPost() {
     let res = await this.postService.getPagedArticles(this.parameter);
-    if (!res) return;
+    if (!res || !res.succeed) return;
     this.articles = res.data as ArticleModel[];
     this.pagiation = res.pagination;
   }

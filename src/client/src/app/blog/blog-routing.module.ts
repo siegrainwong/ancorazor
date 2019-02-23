@@ -12,7 +12,7 @@ const routes: Routes = [
     path: "",
     component: BlogAppComponent,
     children: [
-      { path: "home", component: HomeComponent },
+      { path: "", component: HomeComponent },
       /**
        * Mark: canActivate，在进入这个路由之前需要做的操作
        * 在这里就是鉴权，其实这一坨就是类似Attribute的东西，也可以有多个
@@ -24,7 +24,7 @@ const routes: Routes = [
       },
       { path: "article/:id", component: ArticleComponent },
       { path: "about", component: AboutComponent },
-      { path: "**", redirectTo: "home" }
+      { path: "**", redirectTo: "" }
     ]
   }
 ];

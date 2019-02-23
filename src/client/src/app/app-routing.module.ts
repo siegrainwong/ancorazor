@@ -4,10 +4,10 @@ import { SigninOidcComponent } from "./shared/oidc/signin-oidc/signin-oidc.compo
 import { RedirectSilentRenewComponent } from "./shared/oidc/redirect-silent-renew/redirect-silent-renew.component";
 
 const routes: Routes = [
-  { path: "blog", loadChildren: "./blog/blog.module#BlogModule" },
+  { path: "", loadChildren: "./blog/blog.module#BlogModule" },
   { path: "signin-oidc", component: SigninOidcComponent },
   { path: "redirect-silentrenew", component: RedirectSilentRenewComponent },
-  { path: "**", redirectTo: "blog" }
+  { path: "**", redirectTo: "404" } // TODO:
 ];
 @NgModule({
   // https://github.com/angular/angular/issues/15716

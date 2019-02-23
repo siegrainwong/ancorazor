@@ -1,10 +1,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
   <div class="container">
-    <a class="navbar-brand" href="index.html">siegrain.wang</a>
-    <span *ngIf="userService.userIsAvailable">{{
-      userService.user.profile.name
-    }}</span>
+    <a class="navbar-brand" href="/">{{ title }} </a>
     <button
       class="navbar-toggler navbar-toggler-right"
       type="button"

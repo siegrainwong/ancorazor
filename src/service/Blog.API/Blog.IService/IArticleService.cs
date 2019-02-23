@@ -20,7 +20,7 @@ namespace Blog.IService
 	{
         [Caching(Expires = 30)]
         Task<List<Article>> GetArticles();
-        Task<ArticleViewModel> GetArticle(int id);
+        Task<Article> GetArticle(int id);
         Task<PaginatedList<Article>> GetPagedArticles(ArticleParameters parameters);
     }
 }

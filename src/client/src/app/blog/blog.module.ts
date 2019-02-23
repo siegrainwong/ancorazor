@@ -9,12 +9,11 @@ import { ArticleService } from "./services/article.service";
 import { ArticleListComponent } from "./components/article-list/article-list.component";
 import { ArticleItemComponent } from "./components/article-item/article-item.component";
 import { WriteArticleComponent } from "./components/write-article/write-article.component";
-import { LayoutComponent } from "./components/layout/layout.component";
 import { HeaderComponent } from "./components/header/header.component";
-import { FooterComponent } from './components/footer/footer.component';
-import { HomeComponent } from './components/home/home.component';
-import { AboutComponent } from './components/about/about.component';
-import { ArticleComponent } from './components/article/article.component';
+import { FooterComponent } from "./components/footer/footer.component";
+import { HomeComponent } from "./components/home/home.component";
+import { AboutComponent } from "./components/about/about.component";
+import { ArticleComponent } from "./components/article/article.component";
 
 @NgModule({
   declarations: [
@@ -23,7 +22,6 @@ import { ArticleComponent } from './components/article/article.component';
     ArticleListComponent,
     ArticleItemComponent,
     WriteArticleComponent,
-    LayoutComponent,
     HeaderComponent,
     FooterComponent,
     HomeComponent,

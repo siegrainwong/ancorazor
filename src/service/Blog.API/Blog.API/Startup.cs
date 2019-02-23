@@ -15,15 +15,21 @@ using Blog.Common.Configuration;
 using Blog.Common.Redis;
 using Blog.Model.Mapping;
 using Blog.Model.ViewModel;
+using FluentValidation.AspNetCore;
+using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.DotNet.PlatformAbstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 
 #endregion
@@ -45,7 +51,12 @@ namespace Blog.API
         /// <param name="services"></param>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).
+                AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                })
+                .AddFluentValidation();
             var basePath = ApplicationEnvironment.ApplicationBasePath;
 
             #region DI
@@ -211,6 +222,28 @@ namespace Blog.API
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = $"{AppSettings.Get("AppSettings", "ClientPath")}/dist";
+            });
+
+            #endregion
+
+            #region Identity Server
+
+            services
+                .AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = AppSettings.Get("AppSettings", "AuthorityHost");
+                    options.ApiName = "restapi";
+                });
+
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("LimitHosts"));
+
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
             });
 
             #endregion

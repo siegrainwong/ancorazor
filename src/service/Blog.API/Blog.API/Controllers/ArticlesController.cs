@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Blog.API.Helpers;
 using Blog.Common.Extensions;
-using Blog.Common.Redis;
 using Blog.IService;
 using Blog.Model;
 using Blog.Model.Mapping;
@@ -25,18 +24,15 @@ using Newtonsoft.Json.Serialization;
 namespace Blog.API.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize(Policy = "Admin")]
     [ApiController]
     public class ArticlesController : ControllerBase
     {
         private readonly IArticleService _service;
-        private readonly IRedisCacheManager _cache;
         private readonly IUrlHelper _urlHelper;
         private readonly IPropertyMappingContainer _mappingContainer;
         private readonly ITypeHelperService _typeHelper;
         private readonly IMapper _mapper;
         public ArticlesController(IArticleService service,
-            IRedisCacheManager cache,
             IUrlHelper urlHelper,
             IPropertyMappingContainer mappingContainer,
             ITypeHelperService typeHelper,
@@ -44,7 +40,6 @@ namespace Blog.API.Controllers
             )
         {
             _service = service;
-            _cache = cache;
             _urlHelper = urlHelper;
             _mappingContainer = mappingContainer;
             _typeHelper = typeHelper;
@@ -94,12 +89,18 @@ namespace Blog.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}", Name = "Get")]
-        public async Task<object> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var model = await _service.GetArticle(id);
-            return new { succeed = true, data = model };
-        }
+            if (id <= 0) return BadRequest("Parameter invalid.");
 
+            var model = await _service.GetArticle(id);
+            if (model == null) return NotFound(id);
+
+            var viewModel = _mapper.Map<Article, ArticleViewModel>(model);
+
+            return Ok(new { succeed = true, data = viewModel });
+        }
+        
         [HttpPost(Name = "Add")]
         public async Task<IActionResult> Add([FromBody] ArticleParameters parameters)
         {

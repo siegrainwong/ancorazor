@@ -28,8 +28,4 @@ import { Variables } from "./shared/variables";
   providers: [OpenIdConnectService, RequireAuthenticatedUserRouteGuard],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-  constructor(variables: Variables) {
-    variables.renderFromServer = false;
-  }
-}
+export class AppModule {}

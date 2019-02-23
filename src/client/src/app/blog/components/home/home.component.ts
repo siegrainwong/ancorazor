@@ -3,7 +3,7 @@ import { Component, OnInit } from "@angular/core";
 @Component({
   selector: "app-home",
   template: `
-    <app-header></app-header>
+    <app-header [title]="'siegrain.wang'"></app-header>
     <app-article-list></app-article-list>
   `
 })

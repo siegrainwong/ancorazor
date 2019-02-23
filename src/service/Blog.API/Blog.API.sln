@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.API", "Blog.API\Blog.API.csproj", "{47F0D34D-8655-4914-B419-72B2169A7130}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A9BEA257-4D1D-4734-9CD5-E5DDDCD6D0C7} = {A9BEA257-4D1D-4734-9CD5-E5DDDCD6D0C7}
+		{8DEAFBD8-67C3-402D-A00D-81495E86B57E} = {8DEAFBD8-67C3-402D-A00D-81495E86B57E}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Model", "Blog.Model\Blog.Model.csproj", "{3621E5A2-D61C-465E-925D-AE441AFF16F6}"
 EndProject

@@ -42,9 +42,10 @@ namespace Blog.Service
             return list;
         }
 
-        public Task<ArticleViewModel> GetArticle(int id)
+        public async Task<Article> GetArticle(int id)
         {
-            throw new NotImplementedException();
+            if (id <= 0) throw new ArgumentException(nameof(id));
+            return await _dal.QueryByID(id);
         }
 
         public async Task<PaginatedList<Article>> GetPagedArticles(ArticleParameters parameters)

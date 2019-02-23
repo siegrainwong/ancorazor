@@ -18,28 +18,26 @@ namespace Blog.API.Helpers
                 throw new ArgumentNullException(nameof(modelState));
             }
 
-            foreach (var keyModelStatePair in modelState)
+            foreach (var (key, value) in modelState)
             {
-                var key = keyModelStatePair.Key;
-                var errors = keyModelStatePair.Value.Errors;
-                if (errors != null && errors.Count > 0)
-                {
-                    var errorsToAdd = new List<ResourceValidationError>();
-                    foreach (var error in errors)
-                    {
-                        var keyAndMessage = error.ErrorMessage.Split('|');
+                var errors = value.Errors;
+                if (errors == null || errors.Count <= 0) continue;
 
-                        if (keyAndMessage.Length > 1)
-                        {
-                            errorsToAdd.Add(new ResourceValidationError(keyAndMessage[1], keyAndMessage[0]));
-                        }
-                        else
-                        {
-                            errorsToAdd.Add(new ResourceValidationError(keyAndMessage[0]));
-                        }
+                var errorsToAdd = new List<ResourceValidationError>();
+                foreach (var error in errors)
+                {
+                    var keyAndMessage = error.ErrorMessage.Split('|');
+
+                    if (keyAndMessage.Length > 1)
+                    {
+                        errorsToAdd.Add(new ResourceValidationError(keyAndMessage[1], keyAndMessage[0]));
                     }
-                    Add(key, errorsToAdd);
+                    else
+                    {
+                        errorsToAdd.Add(new ResourceValidationError(keyAndMessage[0]));
+                    }
                 }
+                Add(key, errorsToAdd);
             }
         }
     }

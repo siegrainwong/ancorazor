@@ -7,16 +7,35 @@
  */
 
 import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
+import { filter } from "rxjs/operators";
+import { Variables } from "../shared/variables";
+import RouteData from "../shared/models/route-data.model";
 
 @Component({
   selector: "app-blog-app",
-  template: `
-    <app-layout></app-layout>
-  `,
+  templateUrl: "./blog-app.component.html",
   styles: []
 })
 export class BlogAppComponent implements OnInit {
-  constructor() {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private variables: Variables
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.observeRoute();
+  }
+
+  observeRoute() {
+    this.variables.currentRouteData = this.route.firstChild.snapshot
+      .data as RouteData;
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.variables.currentRouteData = this.route.firstChild.snapshot
+          .data as RouteData;
+      });
+  }
 }

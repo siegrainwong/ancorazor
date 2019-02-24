@@ -277,7 +277,7 @@ namespace Blog.API
 
             #region SSR
 
-            // 手动映射下 api 的路由，不然所有的请求都会走 SPA
+            // 把 api 映射到 MVC 上
             app.MapWhen(context => context.Request.Path.StartsWithSegments("/api"),
                 apiApp =>
                 {
@@ -289,24 +289,32 @@ namespace Blog.API
 
             // https://github.com/joshberry/dotnetcore-angular-ssr
             // 多 SPA 场景：https://stackoverflow.com/questions/48216929/how-to-configure-asp-net-core-server-routing-for-multiple-spas-hosted-with-spase
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = AppSettings.Get("AppSettings", "ClientPath");
-
-                spa.UseSpaPrerendering(options =>
+            // 只在个别页面开启 SSR
+            app.MapWhen(context => 
+                //context.Request.Path.Equals("") || 
+                //context.Request.Path.StartsWithSegments("/article"), 
+                true,
+                client => {
+                client.UseSpa(spa =>
                 {
-                    options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.js"; 
-                    options.BootModuleBuilder = env.IsDevelopment()
-                        ? new AngularCliBuilder("build:ssr")
-                        : null;
-                    options.ExcludeUrls = new[] { "/sockjs-node" };
+                    spa.Options.SourcePath = AppSettings.Get("AppSettings", "ClientPath");
+                    spa.UseSpaPrerendering(options =>
+                    {
+                        options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.js";
+                        options.BootModuleBuilder = env.IsDevelopment()
+                            ? new AngularCliBuilder("build:ssr")
+                            : null;
+                        options.ExcludeUrls = new[] { "/sockjs-node" };
+                    });
+
+                    if (env.IsDevelopment())
+                    {
+                        spa.UseAngularCliServer("start");
+                    }
                 });
-
-                if (env.IsDevelopment())
-                {
-                    spa.UseAngularCliServer("start");
-                }
+                client.UseStaticFiles();
             });
+            
             #endregion
 
             // 添加CORS中间件，可以不加，官方建议加上

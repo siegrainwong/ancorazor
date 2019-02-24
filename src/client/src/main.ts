@@ -1,3 +1,6 @@
+import "codemirror/mode/javascript/javascript";
+import "codemirror/mode/markdown/markdown";
+
 import { enableProdMode } from "@angular/core";
 import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
 
@@ -7,6 +10,14 @@ import { environment } from "./environments/environment";
 import "hammerjs";
 
 // SSR: Modified
+
+/**
+ * Load scripts while its browser
+ */
+if (window) {
+  require("jquery");
+  require("bootstrap/dist/js/bootstrap.bundle.min");
+}
 
 export function getBaseUrl() {
   return document.getElementsByTagName("base")[0].href;

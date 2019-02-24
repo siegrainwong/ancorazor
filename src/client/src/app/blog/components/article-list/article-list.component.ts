@@ -14,9 +14,12 @@ export class ArticleListComponent implements OnInit {
   constructor(
     private postService: ArticleService,
     private userService: OpenIdConnectService
-  ) {}
+  ) {
+    console.log("article-list ctor.");
+  }
   ngOnInit() {
     this.getPost();
+    console.log("article-list init.");
   }
 
   articles: ArticleModel[];

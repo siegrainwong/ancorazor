@@ -27,7 +27,9 @@ export class OpenIdConnectService {
     return this.currentUser;
   }
 
-  constructor(variables: Variables) {
+  constructor(private variables: Variables) {
+    console.log("oidc ctor.");
+
     // SSR 时不允许创建 userManager 实例
     if (variables.renderFromServer) return;
 
@@ -63,16 +65,28 @@ export class OpenIdConnectService {
     /**
      * 加载用户状态
      */
-    this.userManager.getUser().then(user => {
-      this.currentUser = user;
-    });
+    this.userManager
+      .getUser()
+      .then(user => {
+        this.currentUser = user;
+      })
+      .finally(() => {
+        this.variables.userLoaded = true;
+      });
   }
 
-  triggerSignIn() {
-    this.userManager.signinRedirect(() => {
-      if (!environment.production) console.log("Redirect to signin triggered.");
-    });
+  getUser(): Promise<User> {
+    return this.userManager.getUser();
   }
+
+  async triggerSignIn() {
+    let user = await this.userManager.getUser();
+    if (!user) {
+      await this.userManager.signinRedirect();
+      if (!environment.production) console.log("Redirect to signin triggered.");
+    }
+  }
+
   async triggerSignOut() {
     let resp = await this.userManager.signoutRedirect();
     if (!environment.production)
@@ -87,6 +101,7 @@ export class OpenIdConnectService {
     if (!environment.production)
       console.log("Callback after signin handled.", user);
   }
+
   /**
    * 在静默登录操作结束后
    */

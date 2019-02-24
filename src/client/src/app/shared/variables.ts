@@ -10,6 +10,7 @@ import RouteData from "./models/route-data.model";
 })
 export class Variables {
   renderFromServer: Boolean = false;
+  userLoaded: Boolean = false;
 
   private routeData: RouteData = new RouteData("home");
   routeDataChanged$ = new BehaviorSubject<RouteData>(this.routeData);

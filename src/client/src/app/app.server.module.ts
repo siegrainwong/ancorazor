@@ -26,6 +26,7 @@ import { Variables } from "./shared/variables";
 })
 export class AppServerModule {
   constructor(variables: Variables) {
+    console.log("app.server ctor.");
     variables.renderFromServer = true;
   }
 }

@@ -14,6 +14,8 @@ import { FooterComponent } from "./components/footer/footer.component";
 import { HomeComponent } from "./components/home/home.component";
 import { AboutComponent } from "./components/about/about.component";
 import { ArticleComponent } from "./components/article/article.component";
+import { CodemirrorModule } from "@ctrl/ngx-codemirror";
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -28,7 +30,17 @@ import { ArticleComponent } from "./components/article/article.component";
     AboutComponent,
     ArticleComponent
   ],
-  imports: [CommonModule, BlogRoutingModule, MaterialModule],
+  imports: [
+    CommonModule,
+    BlogRoutingModule,
+    MaterialModule,
+    FormsModule,
+    CodemirrorModule
+  ],
   providers: [ArticleService]
 })
-export class BlogModule {}
+export class BlogModule {
+  constructor() {
+    console.log("blog ctor.");
+  }
+}

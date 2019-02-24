@@ -4,6 +4,10 @@
 // Imports functions, variables, and mixins that are needed by other Bootstrap files
 @import "~bootstrap/scss/bootstrap";
 
+// codemirror
+@import "~codemirror/lib/codemirror.css";
+@import "~codemirror/theme/material.css";
+
 body {
   margin: 0;
 }

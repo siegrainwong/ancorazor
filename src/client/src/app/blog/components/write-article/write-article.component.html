@@ -1,19 +1,10 @@
-<div class="container">
-  <div class="row">
-    <!-- <mat-form-field class="col">
-      <input matInput [value]="parameters.title" (input)="parameters.title = $event.target.value" required>
-    </mat-form-field> -->
-  </div>
-  <div class="row">
-    <div class="col">
-      <!-- <td-text-editor [value]="parameters.content" [options]="mdService.getConfigs()" #editor required></td-text-editor> -->
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
-      <button mat-raised-button color="primary" (click)="submit()">
-        Submit
-      </button>
-    </div>
-  </div>
-</div>
+<app-header [title]="model.title" [description]="model.digest"></app-header>
+<ngx-codemirror
+  [(ngModel)]="model.content"
+  [options]="{
+    lineNumbers: true,
+    theme: 'material',
+    mode: 'markdown'
+  }"
+></ngx-codemirror>
+<hr />

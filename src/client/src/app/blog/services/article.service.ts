@@ -33,7 +33,7 @@ export class ArticleService extends BaseService implements ISubService {
    * 添加文章
    * @param params
    */
-  async add(params?: ArticleParameters): Promise<Result<ArticleModel>> {
+  async add(params?: ArticleModel): Promise<Result<ArticleModel>> {
     var res = await this.post(this.serviceName, params);
     return res && res.castTo<ArticleModel>();
   }

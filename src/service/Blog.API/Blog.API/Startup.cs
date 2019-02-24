@@ -20,16 +20,19 @@ using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.DotNet.PlatformAbstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using ProxyKit;
 using Swashbuckle.AspNetCore.Swagger;
 
 #endregion
@@ -60,6 +63,9 @@ namespace Blog.API
             var basePath = ApplicationEnvironment.ApplicationBasePath;
 
             #region DI
+
+            // for proxykit
+            services.AddProxy();
 
             /*
              * Knowledge: Interceptor
@@ -224,6 +230,8 @@ namespace Blog.API
                 configuration.RootPath = $"{AppSettings.Get("AppSettings", "ClientPath")}/dist";
             });
 
+            
+
             #endregion
 
             #region Identity Server
@@ -275,9 +283,9 @@ namespace Blog.API
                 app.UseHsts();
             }
 
-            #region SSR
+            app.UseHttpsRedirection();
 
-            // 把 api 映射到 MVC 上
+            // api route
             app.MapWhen(context => context.Request.Path.StartsWithSegments("/api"),
                 apiApp =>
                 {
@@ -287,42 +295,61 @@ namespace Blog.API
                     });
                 });
 
+            #region SSR
+
+            // add route prefix for SSR
+            app.Use((context, next) =>
+            {
+                // you can have different conditions to add different prefixes
+                context.Request.Path = "/client" + context.Request.Path;
+                return next.Invoke();
+            });
+
+            // now the static files will be served by new request URL
+            app.UseStaticFiles();
+
             // https://github.com/joshberry/dotnetcore-angular-ssr
             // 多 SPA 场景：https://stackoverflow.com/questions/48216929/how-to-configure-asp-net-core-server-routing-for-multiple-spas-hosted-with-spase
-            // 只在个别页面开启 SSR
-            app.MapWhen(context => 
-                //context.Request.Path.Equals("") || 
-                //context.Request.Path.StartsWithSegments("/article"), 
-                true,
-                client => {
-                client.UseSpa(spa =>
-                {
-                    spa.Options.SourcePath = AppSettings.Get("AppSettings", "ClientPath");
-                    spa.UseSpaPrerendering(options =>
+            app.Map("/client", spaApp =>
+            {
+                // 只在个别路由开启 SSR
+                spaApp.MapWhen(context =>
+                        !context.Request.Path.Equals("/add"),
+                    client =>
                     {
-                        options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.js";
-                        options.BootModuleBuilder = env.IsDevelopment()
-                            ? new AngularCliBuilder("build:ssr")
-                            : null;
-                        options.ExcludeUrls = new[] { "/sockjs-node" };
-                    });
+                        client.UseSpa(spa =>
+                        {
+                            spa.Options.SourcePath = AppSettings.Get("AppSettings", "ClientPath");
+                            spa.UseSpaPrerendering(options =>
+                            {
+                                options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.js";
+                                options.BootModuleBuilder = env.IsDevelopment()
+                                    ? new AngularCliBuilder("build:ssr")
+                                    : null;
+                                options.ExcludeUrls = new[] {"/sockjs-node"};
+                            });
 
-                    if (env.IsDevelopment())
-                    {
-                        spa.UseAngularCliServer("start");
-                    }
+                            if (env.IsDevelopment())
+                            {
+                                spa.UseAngularCliServer("start");
+                            }
+                        });
+                    });
+                // 剩下的路由直接代理到 Angular Server 上去
+                // TODO: 有点慢。
+                spaApp.MapWhen(context => context.Request.Path.Equals("/add"), client => {
+                    client.RunProxy(context => context
+                        .ForwardTo($"{AppSettings.Get("AppSettings", "ClientHost")}{context.Request.Path}")
+                        .Send());
                 });
-                client.UseStaticFiles();
             });
-            
+
             #endregion
 
             // 添加CORS中间件，可以不加，官方建议加上
             app.UseCors("LimitHosts");
-            app.UseHttpsRedirection();
             // authentication
             app.UseAuthentication();
-            app.UseMvc();
         }
     }
 }

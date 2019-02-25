@@ -11,6 +11,9 @@ import { Variables } from "src/app/shared/variables";
 })
 export class WriteArticleComponent implements OnInit {
   @Input() model = new ArticleModel();
+  options: any = {
+    lineWrapping: true
+  };
   constructor(
     private service: ArticleService,
     private router: Router,

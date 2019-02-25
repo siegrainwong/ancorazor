@@ -294,8 +294,8 @@ namespace Blog.API
 
             #region SSR
 
-            //// now the static files will be served by new request URL
-            app.UseStaticFiles("/client");
+            // now the static files will be served by new request URL
+            app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
             // add route prefix for SSR
@@ -305,10 +305,6 @@ namespace Blog.API
                 context.Request.Path = "/client" + context.Request.Path;
                 return next.Invoke();
             });
-
-            // now the static files will be served by new request URL
-            app.UseStaticFiles();
-            app.UseSpaStaticFiles();
 
             // https://github.com/joshberry/dotnetcore-angular-ssr
             // 多 SPA 场景：https://stackoverflow.com/questions/48216929/how-to-configure-asp-net-core-server-routing-for-multiple-spas-hosted-with-spase
@@ -329,6 +325,7 @@ namespace Blog.API
                                     ? new AngularCliBuilder("build:ssr")
                                     : null;
                                 options.ExcludeUrls = new[] { "/sockjs-node" };
+                                options.SupplyData = (context, objects) => { objects["env"] = "fuck"; };
                             });
 
                             if (env.IsDevelopment())

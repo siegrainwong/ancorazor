@@ -9,6 +9,11 @@ import { AppModule } from "./app.module";
 import { AppComponent } from "./app.component";
 import { Variables } from "./shared/variables";
 
+// const DefinePlugin = require("webpack/lib/DefinePlugin");
+// new DefinePlugin({
+//   window: undefined,
+//   document: undefined
+// });
 // SSR: Added
 
 @NgModule({

@@ -306,101 +306,49 @@ namespace Blog.API
                 return next.Invoke();
             });
 
-            // 只在个别路由开启 SSR
-            app.Map("/client", client =>
-            {
-                
+            // now the static files will be served by new request URL
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
 
+            // https://github.com/joshberry/dotnetcore-angular-ssr
+            // 多 SPA 场景：https://stackoverflow.com/questions/48216929/how-to-configure-asp-net-core-server-routing-for-multiple-spas-hosted-with-spase
+            app.Map("/client", spaApp =>
+            {
                 // 只在个别路由开启 SSR
-                client.MapWhen(context =>
+                spaApp.MapWhen(context =>
                         !context.Request.Path.Equals("/add"),
-                    partialRoute =>
+                    client =>
                     {
-                        partialRoute.UseSpa(spa =>
+                        client.UseSpa(spa =>
                         {
-                            //spa.Options.SourcePath = AppSettings.Get("AppSettings", "ClientPath");
-                            
+                            spa.Options.SourcePath = AppSettings.Get("AppSettings", "ClientPath");
                             spa.UseSpaPrerendering(options =>
                             {
                                 options.BootModulePath = $"{spa.Options.SourcePath}/dist/server/main.js";
                                 options.BootModuleBuilder = env.IsDevelopment()
                                     ? new AngularCliBuilder("build:ssr")
                                     : null;
-                                options.ExcludeUrls = new[] {"/sockjs-node"};
+                                options.ExcludeUrls = new[] { "/sockjs-node" };
                             });
 
                             if (env.IsDevelopment())
                             {
-                                // 从这里启动会被强制指定一个随机port
-                                //spa.UseAngularCliServer("start");
+                                spa.UseAngularCliServer("start");
                             }
                         });
                     });
-
-                client.RunProxy("/client", context => context
-                    .ForwardTo($"{AppSettings.Get("AppSettings", "ClientHost")}{context.Request.Path}")
-                    .Send());
-
-                //client.RunProxy(context => context
-                //    .ForwardTo($"{AppSettings.Get("AppSettings", "ClientHost")}{context.Request.Path}")
-                //    .Send());
+                // 剩下的路由直接代理到 Angular Server 上去
+                // TODO: 有点慢。
+                spaApp.MapWhen(context => context.Request.Path.Equals("/add"), client => {
+                    client.RunProxy(context => context
+                        .ForwardTo($"{AppSettings.Get("AppSettings", "ClientHost")}{context.Request.Path}")
+                        .Send());
+                });
             });
-
-            //// https://github.com/joshberry/dotnetcore-angular-ssr
-            //// 多 SPA 场景：https://stackoverflow.com/questions/48216929/how-to-configure-asp-net-core-server-routing-for-multiple-spas-hosted-with-spase
-            //// remove prefix and route
-            //app.Map("/client", client =>
-            //{
-            //    // now the static files will be served by new request URL
-            //    client.UseStaticFiles();
-
-            //    // 只在个别路由开启 SSR
-            //    client.MapWhen(context =>
-            //        !context.Request.Path.Equals("/add"),
-            //        partialRoute =>
-            //        {
-            //            partialRoute.UseSpa(spa =>
-            //            {
-            //                spa.Options.SourcePath = AppSettings.Get("AppSettings", "ClientPath");
-            //                spa.UseSpaPrerendering(options =>
-            //                {
-            //                    options.BootModulePath = $"{spa.Options.SourcePath}/dist/server/main.js";
-            //                    options.BootModuleBuilder = env.IsDevelopment()
-            //                        ? new AngularCliBuilder("build:ssr")
-            //                        : null;
-            //                    options.ExcludeUrls = new[] {"/sockjs-node"};
-            //                });
-
-            //                if (env.IsDevelopment())
-            //                {
-            //                    // 从这里启动会被强制指定一个随机port
-            //                    //spa.UseAngularCliServer("start");
-            //                }
-            //            });
-
-            //            partialRoute.RunProxy(context => context
-            //                .ForwardTo($"{AppSettings.Get("AppSettings", "ClientHost")}{context.Request.Path}")
-            //                .Send());
-            //        });
-
-            //    // TODO: 有点慢。
-            //    //client.RunProxy(context => context
-            //    //    .ForwardTo($"{AppSettings.Get("AppSettings", "ClientHost")}{context.Request.Path}")
-            //    //    .Send());
-
-            //    client.MapWhen(context => context.Request.Path.Equals("/add"), spa =>
-            //    {
-            //        spa.RunProxy(context => context
-            //            .ForwardTo($"{AppSettings.Get("AppSettings", "ClientHost")}{context.Request.Path}")
-            //            .Send());
-            //    });
-            //});
 
             #endregion
 
-            // 添加CORS中间件，可以不加，官方建议加上
             app.UseCors("LimitHosts");
-            // authentication
             app.UseAuthentication();
         }
     }

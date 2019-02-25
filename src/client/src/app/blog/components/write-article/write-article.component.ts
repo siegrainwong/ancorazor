@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { ArticleService } from "../../services/article.service";
 import { Router } from "@angular/router";
 import ArticleModel from "../../models/article-model";
@@ -10,8 +10,7 @@ import { Variables } from "src/app/shared/variables";
   styleUrls: ["./write-article.component.scss"]
 })
 export class WriteArticleComponent implements OnInit {
-  model = new ArticleModel();
-
+  @Input() model = new ArticleModel();
   constructor(
     private service: ArticleService,
     private router: Router,

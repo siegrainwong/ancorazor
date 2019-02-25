@@ -1,5 +1,5 @@
 <ng-container *ngIf="model">
-  <app-header [title]="model.title" [description]="model.digest"></app-header>
+  <app-header [model]="model"></app-header>
 
   <!-- Post Content -->
   <article>
@@ -11,9 +11,6 @@
       </div>
     </div>
   </article>
-</ng-container>
-<ng-container *ngIf="!model">
-  <app-header></app-header>
 </ng-container>
 
 <hr />

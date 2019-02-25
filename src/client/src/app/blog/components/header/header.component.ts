@@ -1,4 +1,12 @@
-import { Component, OnInit, Input } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  EventEmitter,
+  Output,
+  SimpleChange
+} from "@angular/core";
+import ArticleModel from "../../models/article-model";
 
 @Component({
   selector: "app-header",
@@ -6,10 +14,18 @@ import { Component, OnInit, Input } from "@angular/core";
   styleUrls: ["./header.component.scss"]
 })
 export class HeaderComponent implements OnInit {
-  @Input() title?: string;
-  @Input() description?: string;
+  @Input() model: ArticleModel = new ArticleModel();
+  @Input() isEditing: boolean = false;
+  @Output() modelChanged = new EventEmitter<ArticleModel>();
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (!this.model.cover) this.model.cover = "assets/img/home-bg.jpg";
+  }
+
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    console.log(changes);
+    // this.modelChanged.emit(this.model);
+  }
 }

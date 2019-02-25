@@ -1,15 +1,23 @@
 <!-- Page Header -->
 <header
   class="masthead"
-  style="background-image: url('assets/img/home-bg.jpg')"
+  [ngStyle]="{ 'background-image': 'url(' + model.cover + ')' }"
 >
   <div class="overlay"></div>
   <div class="container">
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
-        <div class="site-heading">
-          <h1>{{ title }}</h1>
-          <span class="subheading">{{ description }}</span>
+        <div class="site-heading" *ngIf="!isEditing">
+          <h1>{{ model.title }}</h1>
+          <span class="subheading">{{ model.digest }}</span>
+        </div>
+        <div class="site-heading" *ngIf="isEditing">
+          <mat-form-field class="example-full-width">
+            <input matInput [value]="model.title" />
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <textarea matInput [value]="model.digest"></textarea>
+          </mat-form-field>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-<app-header [title]="model.title" [description]="model.digest"></app-header>
+<app-header [model]="model" isEditing="true"></app-header>
 <ngx-codemirror
   [(ngModel)]="model.content"
   [options]="{

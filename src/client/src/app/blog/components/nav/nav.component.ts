@@ -12,17 +12,22 @@ export class NavComponent implements OnInit {
   @Output() toggleSidenav = new EventEmitter<void>();
   title: String;
 
-  constructor(public userService: OpenIdConnectService, variables: Variables) {
-    console.log(userService);
+  constructor(
+    public userService: OpenIdConnectService,
+    private variables: Variables
+  ) {}
 
-    variables.routeDataChanged$.subscribe(data => {
-      if (data.kind == "home") this.title = "";
+  ngOnInit() {
+    this.registerRouteChanged();
+  }
+
+  registerRouteChanged() {
+    this.variables.routeDataChanged$.subscribe(data => {
+      if (data && data.kind == "home") this.title = "";
       else
         this.title = `siegrain.wang ${
-          userService.userIsAvailable ? ", welcome back!" : ""
+          this.userService.userIsAvailable ? ", welcome back!" : ""
         }`;
     });
   }
-
-  ngOnInit() {}
 }

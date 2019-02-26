@@ -48,7 +48,12 @@ console.log("process.env.renderFromServer:", process.env.renderFromServer);
     AboutComponent,
     ArticleComponent
   ],
-  imports: imports,
+  imports: [
+    CommonModule,
+    BlogRoutingModule,
+    MaterialModule,
+    FormsModule
+  ],
   providers: [ArticleService]
 })
 export class BlogModule {

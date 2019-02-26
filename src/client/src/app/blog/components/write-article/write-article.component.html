@@ -1,11 +1,20 @@
-<app-header [model]="model" isEditing="true"></app-header>
-<!-- <ngx-codemirror
-  [(ngModel)]="model.content"
-  [options]="{
-    lineNumbers: true,
-    theme: 'darkula',
-    mode: 'markdown'
-  }"
-></ngx-codemirror> -->
-<!-- <td-text-editor *ngIf="!variables.renderFromServer"></td-text-editor> -->
+<app-header
+  [model]="model"
+  isEditing="true"
+  (modelChanged)="onHeaderChanged($event)"
+></app-header>
+<div id="editor"></div>
+<div class="padding-md clearfix">
+  <button class="btn float-left" mat-flat-button (click)="preview()">
+    Preview
+  </button>
+  <button
+    class="btn btn-primary float-right"
+    mat-flat-button
+    (click)="submit()"
+  >
+    Post
+  </button>
+</div>
+
 <hr />

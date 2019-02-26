@@ -12,16 +12,22 @@
           <span class="subheading">{{ model.digest }}</span>
         </div>
         <div class="site-heading" *ngIf="isEditing">
-          <div class="row justify-content-md-center">
-            <mat-form-field class="col-12 title">
-              <input matInput [value]="model.title" />
-            </mat-form-field>
-          </div>
-          <div class="row justify-content-md-center digest">
-            <mat-form-field class="col-12">
-              <textarea matInput [value]="model.digest"></textarea>
-            </mat-form-field>
-          </div>
+          <mat-form-field class="col-10 title">
+            <input
+              matInput
+              #title
+              (blur)="onTitleBlured(title.value)"
+              [value]="model.title"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-10">
+            <textarea
+              matInput
+              #digest
+              (blur)="onDigestBlured(digest.value)"
+              [value]="model.digest"
+            ></textarea>
+          </mat-form-field>
         </div>
       </div>
     </div>

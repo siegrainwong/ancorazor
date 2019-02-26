@@ -330,6 +330,7 @@ namespace Blog.API
 
                             if (env.IsDevelopment())
                             {
+                                // 从这里启动会被强制指定一个随机port
                                 spa.UseAngularCliServer("start");
                             }
                         });

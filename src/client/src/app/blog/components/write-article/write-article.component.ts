@@ -42,16 +42,16 @@ export class WriteArticleComponent implements OnInit {
   onHeaderChanged(model: ArticleModel) {
     this.model.title = model.title;
     this.model.digest = model.digest;
+    this.model.cover = model.cover;
   }
 
   async submit() {
     this.model.content = this.editor.getValue();
-
+    console.log("posting: ", this.model);
     var res = await this.service.add(this.model);
     if (!res.succeed) return;
 
     var model = res.data as ArticleModel;
-    console.log(model);
     this.router.navigate([`article/${model.id}`]);
   }
 

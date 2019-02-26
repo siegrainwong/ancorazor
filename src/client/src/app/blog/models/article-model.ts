@@ -6,7 +6,7 @@ export default class ArticleModel extends BaseModel {
   digest: string = "";
   category: string;
   content: string = "";
-  cover: string;
   viewCount: number = 0;
   commentCount: number = 0;
+  cover: string;
 }

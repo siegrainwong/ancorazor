@@ -9,5 +9,8 @@ namespace Blog.Model.ParameterModel
     {
         public string Title { get; set; }
         public string Content { get; set; }
+
+        public string Digest { get; set; }
+        public string Cover { get; set; }
     }
 }

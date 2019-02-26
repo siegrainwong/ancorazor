@@ -16,6 +16,8 @@ namespace Blog.Model.ViewModel
 
         public string Title { get; set; }
         
+        public string Cover { get; set; }
+
         public string Digest { get; set; }
 
         public string Category { get; set; }

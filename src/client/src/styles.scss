@@ -1,13 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
-
-// Imports functions, variables, and mixins that are needed by other Bootstrap files
 @import "~bootstrap/scss/bootstrap";
 
-// codemirror
-@import "~codemirror/lib/codemirror.css";
-@import "~codemirror/theme/material.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-body {
-  margin: 0;
-}
+// TODO: 不能在component页面引入，不知道为啥，只能先全局
+@import "~codemirror/lib/codemirror.css";
+@import "~tui-editor/dist/tui-editor.css";
+@import "~tui-editor/dist/tui-editor-contents.css";
+@import "~highlight.js/styles/github.css";
+
+@import "reset";

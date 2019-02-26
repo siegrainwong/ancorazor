@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  EventEmitter,
-  Output,
-  SimpleChange
-} from "@angular/core";
+import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 import ArticleModel from "../../models/article-model";
 
 @Component({
@@ -24,8 +17,12 @@ export class HeaderComponent implements OnInit {
     if (!this.model.cover) this.model.cover = "assets/img/home-bg.jpg";
   }
 
-  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-    console.log(changes);
-    // this.modelChanged.emit(this.model);
+  onTitleBlured(val) {
+    this.model.title = val;
+    this.modelChanged.emit(this.model);
+  }
+  onDigestBlured(val) {
+    this.model.digest = val;
+    this.modelChanged.emit(this.model);
   }
 }

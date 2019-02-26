@@ -1,0 +1,18 @@
+body {
+  margin: 0;
+}
+
+.mat-button,
+.mat-fab,
+.mat-flat-button,
+.mat-icon-button,
+.mat-mini-fab,
+.mat-raised-button,
+.mat-stroked-button {
+  font-family: inherit;
+}
+
+button:focus,
+.btn:focus {
+  outline: none;
+}

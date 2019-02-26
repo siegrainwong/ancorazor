@@ -14,7 +14,6 @@ import { FooterComponent } from "./components/footer/footer.component";
 import { HomeComponent } from "./components/home/home.component";
 import { AboutComponent } from "./components/about/about.component";
 import { ArticleComponent } from "./components/article/article.component";
-import { CodemirrorModule } from "@ctrl/ngx-codemirror";
 import { FormsModule } from "@angular/forms";
 
 @NgModule({
@@ -34,8 +33,7 @@ import { FormsModule } from "@angular/forms";
     CommonModule,
     BlogRoutingModule,
     MaterialModule,
-    FormsModule,
-    CodemirrorModule
+    FormsModule
   ],
   providers: [ArticleService]
 })

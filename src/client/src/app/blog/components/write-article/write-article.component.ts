@@ -46,12 +46,15 @@ export class WriteArticleComponent implements OnInit {
 
   async submit() {
     this.model.content = this.editor.getValue();
-    console.log(this.model);
 
     var res = await this.service.add(this.model);
+    if (!res.succeed) return;
+
     var model = res.data as ArticleModel;
-    this.router.navigate([`[./${model.id}]`]);
+    console.log(model);
+    this.router.navigate([`article/${model.id}`]);
   }
 
+  // TODO:
   preview() {}
 }

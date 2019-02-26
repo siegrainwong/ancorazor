@@ -112,8 +112,8 @@ namespace Blog.API.Controllers
             model.UpdatedAt = DateTime.Now;
             model.CreatedAt = DateTime.Now;
 
+            model.Id = await _service.Add(model);
             var viewModel = _mapper.Map<Article, ArticleViewModel>(model);
-            viewModel.Id = await _service.Add(model);
             var links = CreateLinksForPost(viewModel.Id);
 
             var result = new

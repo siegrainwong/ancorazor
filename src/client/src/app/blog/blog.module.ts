@@ -14,26 +14,6 @@ import { HomeComponent } from "./components/home/home.component";
 import { AboutComponent } from "./components/about/about.component";
 import { ArticleComponent } from "./components/article/article.component";
 import { FormsModule } from "@angular/forms";
-import { Variables } from "../shared/variables";
-import { CodemirrorModule } from "@ctrl/ngx-codemirror";
-
-let imports = [
-  CommonModule,
-  BlogRoutingModule,
-  MaterialModule,
-  FormsModule,
-  CodemirrorModule
-];
-
-console.log("process.env.renderFromServer:", process.env.renderFromServer);
-
-// if (window) {
-//   console.log("import extra modules");
-
-//   let CovalentTextEditorModule = require("@covalent/text-editor")
-//     .CovalentTextEditorModule;
-//   imports.push(CovalentTextEditorModule);
-// }
 
 @NgModule({
   declarations: [
@@ -48,43 +28,11 @@ console.log("process.env.renderFromServer:", process.env.renderFromServer);
     AboutComponent,
     ArticleComponent
   ],
-  imports: [
-    CommonModule,
-    BlogRoutingModule,
-    MaterialModule,
-    FormsModule
-  ],
+  imports: [CommonModule, BlogRoutingModule, MaterialModule, FormsModule],
   providers: [ArticleService]
 })
 export class BlogModule {
-  constructor(
-    private variables: Variables,
-    private compiler: Compiler,
-    private injector: Injector
-  ) {
+  constructor() {
     console.log("blog ctor.");
   }
-
-  // async ngOnInit() {
-  //   if (this.variables.renderFromServer) return;
-
-  //   SystemJS.set("@angular/core", SystemJS.newModule(AngularCore));
-  //   SystemJS.set("@angular/common", SystemJS.newModule(AngularCommon));
-
-  //   // now, import the new module
-  //   let module = await SystemJS.import("@covalent/text-editor/index.d.ts");
-  //   console.log("module loaded:", module);
-  //   this.compiler
-  //     .compileModuleAndAllComponentsAsync(module.default)
-  //     .then(compiled => {
-  //       let moduleRef = compiled.ngModuleFactory.create(this.injector);
-  //       let factory = compiled.componentFactories[0];
-  //       if (factory) {
-  //         console.log("module loaded:", factory);
-
-  //         // let component = this.vc.createComponent(factory);
-  //         // let instance = component.instance;
-  //       }
-  //     });
-  // }
 }

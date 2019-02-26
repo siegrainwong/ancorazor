@@ -9,16 +9,6 @@ export { AppServerModule } from "./app/app.server.module";
 
 // SSR: Added
 
-// const domino = require("domino");
-// const fs = require("fs");
-// const path = require("path");
-// const template = fs
-//   .readFileSync(path.join(__dirname, ".", "dist", "index.html"))
-//   .toString();
-// const win = domino.createWindow(template);
-// global["window"] = win;
-// global["document"] = win.document;
-
 enableProdMode();
 
 export default createServerRenderer(params => {

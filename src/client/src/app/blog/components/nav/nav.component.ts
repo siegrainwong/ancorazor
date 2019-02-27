@@ -24,10 +24,7 @@ export class NavComponent implements OnInit {
   registerRouteChanged() {
     this.variables.routeDataChanged$.subscribe(data => {
       if (data && data.kind == "home") this.title = "";
-      else
-        this.title = `siegrain.wang ${
-          this.userService.userIsAvailable ? ", welcome back!" : ""
-        }`;
+      else this.title = "siegrain🌌wang";
     });
   }
 }

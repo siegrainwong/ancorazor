@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
 
   constructor() {
     console.log("home ctor.");
-    this.headerModel.title = "siegrain.wang";
+    this.headerModel.title = "siegrain🌌wang";
   }
 
   ngOnInit() {}

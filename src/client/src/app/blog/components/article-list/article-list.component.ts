@@ -1,9 +1,8 @@
-import { Component, OnInit, NgModule } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ArticleParameters } from "../../models/article-parameters";
 import { ArticleService } from "../../services/article.service";
 import ArticleModel from "../../models/article-model";
 import { Pagination } from "src/app/shared/models/response-result";
-import { OpenIdConnectService } from "src/app/shared/oidc/open-id-connect.service";
 
 @Component({
   selector: "app-article-list",
@@ -11,22 +10,19 @@ import { OpenIdConnectService } from "src/app/shared/oidc/open-id-connect.servic
   styleUrls: ["./article-list.component.scss"]
 })
 export class ArticleListComponent implements OnInit {
-  constructor(private postService: ArticleService) {
+  articles: ArticleModel[];
+  pagination: Pagination;
+  parameter = new ArticleParameters();
+
+  constructor(private service: ArticleService) {
     console.log("article-list ctor.");
   }
   ngOnInit() {
-    this.getPost();
+    this.getPosts();
   }
 
-  articles: ArticleModel[];
-  pagination: Pagination;
-  parameter = new ArticleParameters({
-    orderBy: "id desc",
-    pageSize: 10,
-    pageIndex: 0
-  });
-  async getPost() {
-    let res = await this.postService.getPagedArticles(this.parameter);
+  async getPosts() {
+    let res = await this.service.getPagedArticles(this.parameter);
     if (!res || !res.succeed) return;
     this.articles = res.data as ArticleModel[];
     this.pagination = res.pagination;
@@ -34,12 +30,12 @@ export class ArticleListComponent implements OnInit {
   previous() {
     if (!this.pagination.previousPageLink) return;
     this.parameter.pageIndex--;
-    this.getPost();
+    this.getPosts();
   }
 
   next() {
     if (!this.pagination.nextPageLink) return;
     this.parameter.pageIndex++;
-    this.getPost();
+    this.getPosts();
   }
 }

@@ -25,8 +25,11 @@ export class HeaderComponent implements OnInit {
         case "article":
           this.model.cover = "assets/img/post-bg.jpg";
           break;
-        default:
+        case "add":
           this.model.cover = "assets/img/home-bg.jpg";
+          break;
+        default:
+          this.model.cover = "assets/img/bg4.jpg";
           break;
       }
     });

@@ -7,6 +7,7 @@ import { environment } from "./environments/environment";
 import "hammerjs";
 import "jquery";
 import "bootstrap/dist/js/bootstrap.bundle.min";
+import "./app/shared/scripts/clean-blog.js";
 
 export function getBaseUrl() {
   return document.getElementsByTagName("base")[0].href;

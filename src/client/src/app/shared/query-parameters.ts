@@ -1,11 +1,10 @@
 export abstract class QueryParameters {
+  pageIndex: number = 0;
+  pageSize: number = 10;
+  fields?: string;
+  orderBy: string = "id desc";
 
-    pageIndex?: number;
-    pageSize?: number;
-    fields?: string;
-    orderBy?: string;
-
-    constructor(init?: Partial<QueryParameters>) {
-        Object.assign(this, init);
-    }
+  constructor(init?: Partial<QueryParameters>) {
+    Object.assign(this, init);
+  }
 }

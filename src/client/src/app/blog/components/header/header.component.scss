@@ -8,10 +8,12 @@ header.masthead {
   // TIP: Background images are set within the HTML using inline CSS!
   margin-bottom: 50px;
   background: no-repeat center center;
-  background-color: $gray-600;
+  background-color: $white;
   background-attachment: scroll;
   position: relative;
   word-break: break-all;
+  transition: background-image 2s;
+  -webkit-transition: background-image 2s;
   @include background-cover;
   .overlay {
     position: absolute;

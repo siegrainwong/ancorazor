@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 import ArticleModel from "../../models/article-model";
 import { Variables } from "src/app/shared/variables";
 import { random } from "src/app/shared/utils/siegrain.utils";
+import * as $ from "jquery";
 
 @Component({
   selector: "app-header",
@@ -34,6 +35,12 @@ export class HeaderComponent implements OnInit {
           this.model.cover = `assets/img/bg${random(1, 7)}.jpg`;
           break;
       }
+
+      let image = new Image();
+      image.onload = function() {
+        $(".masthead").css("background-image", "url('" + image.src + "')");
+      };
+      image.src = this.model.cover;
     });
   }
 

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 import ArticleModel from "../../models/article-model";
 import { Variables } from "src/app/shared/variables";
+import { random } from "src/app/shared/utils/siegrain.utils";
 
 @Component({
   selector: "app-header",
@@ -20,7 +21,8 @@ export class HeaderComponent implements OnInit {
 
   registerRouteChanged() {
     this.variables.routeDataChanged$.subscribe(data => {
-      if (this.model.cover) return;
+      if (this.variables.renderFromServer) this.model.cover = "";
+      if (this.model.cover || this.variables.renderFromServer) return;
       switch (data.kind) {
         case "article":
           this.model.cover = "assets/img/post-bg.jpg";
@@ -29,7 +31,7 @@ export class HeaderComponent implements OnInit {
           this.model.cover = "assets/img/home-bg.jpg";
           break;
         default:
-          this.model.cover = "assets/img/bg4.jpg";
+          this.model.cover = `assets/img/bg${random(1, 7)}.jpg`;
           break;
       }
     });

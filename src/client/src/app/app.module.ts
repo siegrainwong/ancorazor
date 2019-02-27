@@ -10,9 +10,6 @@ import { RedirectSilentRenewComponent } from "./shared/oidc/redirect-silent-rene
 import { OpenIdConnectService } from "./shared/oidc/open-id-connect.service";
 import { Variables } from "./shared/variables";
 
-// let clientDeclarations = [];
-// let clientProviders
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,5 +31,8 @@ import { Variables } from "./shared/variables";
 export class AppModule {
   constructor(private variables: Variables) {
     console.log("app.module ctor.");
+  }
+  ngOnInit(): void {
+    if (this.variables.renderFromServer) return;
   }
 }

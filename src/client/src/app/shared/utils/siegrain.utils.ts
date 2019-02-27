@@ -1,3 +1,6 @@
+export function random(from: number, to: number): number {
+  return Math.floor(Math.random() * to + from);
+}
 export function getKeyByValue(object, value) {
   return Object.keys(object).find(key => object[key] === value);
 }

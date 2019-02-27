@@ -1,5 +1,30 @@
+@import "variables";
+
 body {
   margin: 0;
+
+  &.scrollbar {
+    &::-webkit-scrollbar {
+      width: 6px;
+      background-color: $gray-200;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $primary;
+      background-image: -webkit-gradient(
+        linear,
+        0 0,
+        0 100%,
+        color-stop(0.5, rgba(255, 255, 255, 0.2)),
+        color-stop(0.5, transparent),
+        to(transparent)
+      );
+      opacity: 1;
+    }
+    &::-webkit-scrollbar-track {
+      border-radius: 10px;
+      background: transparent;
+    }
+  }
 }
 
 .mat-button,

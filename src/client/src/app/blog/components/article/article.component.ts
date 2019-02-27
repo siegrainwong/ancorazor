@@ -14,7 +14,7 @@ export class ArticleComponent implements OnInit {
   constructor(
     private articleService: ArticleService,
     private route: ActivatedRoute,
-    private variables: Variables
+    public variables: Variables
   ) {}
   ngOnInit() {
     this.getArticle();

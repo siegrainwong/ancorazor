@@ -46,7 +46,11 @@ namespace Blog.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        private const string ListRouteName = "GetArticles";
+        private const string ArticleRouteName = "GetArticle";
+
+
+        [HttpGet(Name = ListRouteName)]
         public async Task<IActionResult> Get([FromQuery]ArticleParameters parameters)
         {
             if (!_mappingContainer.ValidateMappingExistsFor<ArticleViewModel, Article>(parameters.OrderBy))
@@ -88,7 +92,7 @@ namespace Blog.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}", Name = ArticleRouteName)]
         public async Task<IActionResult> Get(int id)
         {
             if (id <= 0) return BadRequest("Parameter invalid.");
@@ -121,7 +125,7 @@ namespace Blog.API.Controllers
                 succeed = true,
                 data = viewModel
             };
-            return CreatedAtRoute("Get", new { id = viewModel.Id }, result);
+            return CreatedAtRoute(ArticleRouteName, new { id = viewModel.Id }, result);
         }
 
         #region helper methods
@@ -139,7 +143,7 @@ namespace Blog.API.Controllers
                         fields = parameters.Fields,
                         title = parameters.Title
                     };
-                    return _urlHelper.Link("GetPosts", previousParameters);
+                    return _urlHelper.Link(ListRouteName, previousParameters);
                 case PaginationResourceUriType.NextPage:
                     var nextParameters = new
                     {
@@ -149,7 +153,7 @@ namespace Blog.API.Controllers
                         fields = parameters.Fields,
                         title = parameters.Title
                     };
-                    return _urlHelper.Link("GetPosts", nextParameters);
+                    return _urlHelper.Link(ListRouteName, nextParameters);
                 default:
                     var currentParameters = new
                     {
@@ -159,7 +163,7 @@ namespace Blog.API.Controllers
                         fields = parameters.Fields,
                         title = parameters.Title
                     };
-                    return _urlHelper.Link("GetPosts", currentParameters);
+                    return _urlHelper.Link(ListRouteName, currentParameters);
             }
         }
 
@@ -171,13 +175,13 @@ namespace Blog.API.Controllers
             {
                 links.Add(
                     new LinkResource(
-                        _urlHelper.Link("GetPost", new { id }), "self", "GET"));
+                        _urlHelper.Link(ArticleRouteName, new { id }), "self", "GET"));
             }
             else
             {
                 links.Add(
                     new LinkResource(
-                        _urlHelper.Link("GetPost", new { id, fields }), "self", "GET"));
+                        _urlHelper.Link(ArticleRouteName, new { id, fields }), "self", "GET"));
             }
 
             links.Add(

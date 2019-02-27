@@ -5,8 +5,19 @@
         <app-article-item [item]="item"></app-article-item>
       </ng-container>
       <!-- Pager -->
-      <div class="clearfix">
-        <a class="btn btn-primary float-right" mat-flat-button href="#"
+      <div class="clearfix" *ngIf="pagination">
+        <a
+          class="btn btn-primary float-left"
+          mat-flat-button
+          (click)="previous()"
+          *ngIf="pagination.previousPageLink"
+          >← Newer Posts</a
+        >
+        <a
+          class="btn btn-primary float-right"
+          mat-flat-button
+          (click)="next()"
+          *ngIf="pagination.nextPageLink"
           >Older Posts &rarr;</a
         >
       </div>

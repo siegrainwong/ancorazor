@@ -11,19 +11,15 @@ import { OpenIdConnectService } from "src/app/shared/oidc/open-id-connect.servic
   styleUrls: ["./article-list.component.scss"]
 })
 export class ArticleListComponent implements OnInit {
-  constructor(
-    private postService: ArticleService,
-    private userService: OpenIdConnectService
-  ) {
+  constructor(private postService: ArticleService) {
     console.log("article-list ctor.");
   }
   ngOnInit() {
     this.getPost();
-    console.log("article-list init.");
   }
 
   articles: ArticleModel[];
-  pagiation: Pagination;
+  pagination: Pagination;
   parameter = new ArticleParameters({
     orderBy: "id desc",
     pageSize: 10,
@@ -33,6 +29,17 @@ export class ArticleListComponent implements OnInit {
     let res = await this.postService.getPagedArticles(this.parameter);
     if (!res || !res.succeed) return;
     this.articles = res.data as ArticleModel[];
-    this.pagiation = res.pagination;
+    this.pagination = res.pagination;
+  }
+  previous() {
+    if (!this.pagination.previousPageLink) return;
+    this.parameter.pageIndex--;
+    this.getPost();
+  }
+
+  next() {
+    if (!this.pagination.nextPageLink) return;
+    this.parameter.pageIndex++;
+    this.getPost();
   }
 }

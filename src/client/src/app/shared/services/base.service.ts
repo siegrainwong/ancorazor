@@ -4,12 +4,16 @@ import { AxiosResponse, AxiosRequestConfig } from "axios";
 import ResponseResult from "../models/response-result";
 import { OpenIdConnectService } from "../oidc/open-id-connect.service";
 import axios from "axios";
+import { MatSnackBar } from "@angular/material";
 
 @Injectable({
   providedIn: "root"
 })
 export abstract class BaseService {
-  constructor(private userService: OpenIdConnectService) {
+  constructor(
+    private userService: OpenIdConnectService,
+    private snackBar: MatSnackBar
+  ) {
     this.setup();
   }
 
@@ -91,6 +95,9 @@ export abstract class BaseService {
         return this.handleResponse(error.response as AxiosResponse);
       } else {
         console.log(error);
+        this.snackBar.open(`❌ ${error}`, null, {
+          duration: 1000
+        });
         return null;
       }
     }

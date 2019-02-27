@@ -2,6 +2,8 @@
 
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
+
 // TODO: 不能在component页面引入，不知道为啥，只能先全局
 @import "~codemirror/lib/codemirror.css";
 @import "~tui-editor/dist/tui-editor.css";

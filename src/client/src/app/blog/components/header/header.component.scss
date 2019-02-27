@@ -12,8 +12,8 @@ header.masthead {
   background-attachment: scroll;
   position: relative;
   word-break: break-all;
-  transition: background-image 2s;
-  -webkit-transition: background-image 2s;
+  transition: background-image 3s;
+  -webkit-transition: background-image 3s;
   @include background-cover;
   .overlay {
     position: absolute;

@@ -3,6 +3,7 @@ import ArticleModel from "../../models/article-model";
 import { Variables } from "src/app/shared/variables";
 import { random } from "src/app/shared/utils/siegrain.utils";
 import * as $ from "jquery";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-header",
@@ -31,14 +32,13 @@ export class HeaderComponent implements OnInit {
           this.model.cover = "assets/img/write-bg.jpg";
           break;
         case "home":
-          // 同一session下保持同一张cover比较好
-          if (this.variables.homeCover) {
-            this.model.cover = this.variables.homeCover;
+          this.model.cover = environment.homeCoverUrl;
+          if (this.variables.homeCoverLoaded) {
             this.loadCover(false, this.model.cover);
             return;
           } else {
-            this.model.cover = `assets/img/bg${random(1, 7)}.jpg`;
-            this.variables.homeCover = this.model.cover;
+            this.variables.homeCoverLoaded = true;
+            this.model.cover = environment.homeCoverUrl;
           }
           break;
         default:

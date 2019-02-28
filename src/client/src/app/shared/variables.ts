@@ -20,7 +20,7 @@ export class Variables {
   /**
    * 首页封面
    */
-  homeCover?: string;
+  homeCoverLoaded: boolean = false;
 
   private routeData: RouteData = new RouteData("home");
   routeDataChanged$ = new BehaviorSubject<RouteData>(this.routeData);

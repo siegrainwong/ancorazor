@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import ArticleModel from "../../models/article-model";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-home",
@@ -13,7 +14,7 @@ export class HomeComponent implements OnInit {
 
   constructor() {
     console.log("home ctor.");
-    this.headerModel.title = "siegrain🌌wang";
+    this.headerModel.title = environment.title;
   }
 
   ngOnInit() {}

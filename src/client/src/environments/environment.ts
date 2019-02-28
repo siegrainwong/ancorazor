@@ -2,6 +2,8 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { random } from "src/app/shared/utils/siegrain.utils";
+
 // const clientHost = "http://localhost:4200";
 const clientHost = "https://localhost:5001";
 const apiHost = "https://localhost:5001";
@@ -9,6 +11,10 @@ const idServerHost = "https://localhost:7000";
 
 export const environment = {
   production: false,
+
+  title: "siegrain🌌wang",
+  homeCoverUrl: `assets/img/bg${random(1, 7)}.jpg`,
+
   apiUrlBase: `${apiHost}/api`,
   // oidc
   openIdConnectSettings: {

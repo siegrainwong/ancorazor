@@ -23,8 +23,6 @@ export const environment = {
     // 注销后跳转地址
     post_logout_redirect_uri: `${clientHost}`,
 
-    // userStore: new WebStorageStateStore({ store: CookieStorage }),
-
     // 静默更新用户的 Token
     automaticSilentRenew: true,
     silent_redirect_uri: `${clientHost}/redirect-silentrenew`

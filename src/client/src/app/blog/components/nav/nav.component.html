@@ -17,20 +17,32 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a mat-button class="nav-link" routerLink="/about">About</a>
+          <button mat-fab routerLink="/about">
+            <mat-icon aria-label="Example icon-button with a heart icon"
+              >portrait</mat-icon
+            >
+          </button>
+        </li>
+        <li class="nav-item" *ngIf="userService.userIsAvailable">
+          <button mat-fab routerLink="/add">
+            <mat-icon aria-label="Example icon-button with a heart icon"
+              >add_box</mat-icon
+            >
+          </button>
         </li>
         <li class="nav-item" *ngIf="!userService.userIsAvailable">
-          <a mat-button class="nav-link" (click)="userService.triggerSignIn()"
-            >Sign In</a
-          >
+          <button mat-fab (click)="userService.triggerSignIn()">
+            <mat-icon aria-label="Example icon-button with a heart icon"
+              >input</mat-icon
+            >
+          </button>
         </li>
         <li class="nav-item" *ngIf="userService.userIsAvailable">
-          <a mat-button class="nav-link" (click)="userService.triggerSignOut()"
-            >Sign Out</a
-          >
-        </li>
-        <li class="nav-item" *ngIf="userService.userIsAvailable">
-          <a mat-button class="nav-link" routerLink="/add">New Post</a>
+          <button mat-fab (click)="userService.triggerSignOut()">
+            <mat-icon aria-label="Example icon-button with a heart icon"
+              >subdirectory_arrow_right</mat-icon
+            >
+          </button>
         </li>
       </ul>
     </div>

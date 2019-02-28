@@ -43,11 +43,15 @@
       > li.nav-item {
         > a {
           padding: 0 20px;
+        }
+        > a,
+        .mat-icon-button {
           color: $white;
           &:focus,
           &:hover {
             color: fade-out($white, 0.2);
           }
+          transition: color 0.3s;
         }
       }
     }
@@ -81,7 +85,8 @@
       }
       .navbar-nav {
         > li.nav-item {
-          > a {
+          > a,
+          .mat-icon-button {
             color: $gray-900;
             &:focus,
             &:hover {

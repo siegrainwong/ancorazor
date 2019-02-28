@@ -1,21 +1,18 @@
 #region
 
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
+using Blog.Common.Helpers;
 using Blog.IRepository;
 using Blog.IService;
 using Blog.Model;
-using Blog.Model.ViewModel;
-using Blog.Service.Base;
-using System;
-using AutoMapper.Configuration;
-using Blog.Common.Helpers;
 using Blog.Model.Mapping;
 using Blog.Model.ParameterModel;
 using Blog.Model.Resources;
+using Blog.Model.ViewModel;
+using Blog.Service.Base;
 
 #endregion
 
@@ -36,6 +33,7 @@ namespace Blog.Service
             baseDal = dal;
             baseDal.SetMapperContainer(mappingContainer);
         }
+
         public async Task<List<Article>> GetArticles()
         {
             var list = await _dal.Query();
@@ -56,8 +54,11 @@ namespace Blog.Service
                 var title = parameters.Title.ToLowerInvariant();
                 predicate = predicate.And(x => x.Title.ToLowerInvariant() == title);
             }
-            
-            return await _dal.QueryPage<ArticleViewModel>(predicate, parameters);
+            predicate.And(x => !x.IsDeleted);
+
+            var select = $"{nameof(Article.Author)}, {nameof(Article.Id)}, {nameof(Article.Title)}, {nameof(Article.CreatedAt)}, {nameof(Article.Digest)}";
+
+            return await _dal.QueryPage<ArticleViewModel>(predicate, parameters, select);
         }
     }
 }

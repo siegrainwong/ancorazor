@@ -10,6 +10,6 @@ namespace Blog.Model.Base
         public DateTime? UpdatedAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public string Remark { get; set; } = "";
-        public bool? IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
     }
 }

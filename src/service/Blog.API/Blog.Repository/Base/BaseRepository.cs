@@ -253,13 +253,13 @@ namespace Blog.Repository.Base
             return await Task.FromResult(Db.Queryable<TEntity>().OrderByIF(!string.IsNullOrEmpty(strOrderByFileds), strOrderByFileds).WhereIF(!string.IsNullOrEmpty(strWhere), strWhere).Take(intTop).ToList());
         }
 
-        public async Task<PaginatedList<TEntity>> QueryPage<TMapping>(Expression<Func<TEntity, bool>> whereExpression, QueryParameters parameters) where TMapping : BaseViewModel {
+        public async Task<PaginatedList<TEntity>> QueryPage<TMapping>(Expression<Func<TEntity, bool>> whereExpression,
+            QueryParameters parameters, string select) where TMapping : BaseViewModel {
             var query = Db.Queryable<TEntity>();
             query = query.ApplySort(parameters.OrderBy, MappingContainer.Resolve<TMapping, TEntity>());
 
-            // TODO: SqlSugarException，IsShardSameThread = true 下不能调用async方法
             var count = query.Count();
-            var data = query.Skip(parameters.PageIndex * parameters.PageSize).Take(parameters.PageSize).ToList();
+            var data = query.Skip(parameters.PageIndex * parameters.PageSize).Take(parameters.PageSize).Select(select).ToList();
 
             return await Task.FromResult(new PaginatedList<TEntity>(parameters.PageIndex, parameters.PageSize, count, data));
         }

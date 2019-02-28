@@ -44,6 +44,6 @@ namespace Blog.IRepository.Base
         Task<List<TEntity>> Query(string strWhere, int intTop, string strOrderByFileds);
 
         Task<PaginatedList<TEntity>> QueryPage<TMapping>(Expression<Func<TEntity, bool>> whereExpression,
-            QueryParameters parameters) where TMapping : BaseViewModel;
+            QueryParameters parameters, string @select) where TMapping : BaseViewModel;
     }
 }

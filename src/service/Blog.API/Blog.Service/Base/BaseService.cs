@@ -215,7 +215,7 @@ namespace Blog.Service.Base
 
         public async Task<PaginatedList<TEntity>> QueryPage<TMapping>(Expression<Func<TEntity, bool>> whereExpression, QueryParameters parameters) where TMapping : BaseViewModel
         {
-            return await baseDal.QueryPage<TMapping>(whereExpression, parameters);
+            return await baseDal.QueryPage<TMapping>(whereExpression, parameters, null);
         }
     }
 }

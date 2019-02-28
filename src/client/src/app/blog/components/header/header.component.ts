@@ -22,7 +22,6 @@ export class HeaderComponent implements OnInit {
 
   registerRouteChanged() {
     this.variables.routeDataChanged$.subscribe(data => {
-      if (this.variables.renderFromServer) this.model.cover = "";
       if (this.model.cover || this.variables.renderFromServer) return;
       switch (data.kind) {
         case "article":
@@ -31,17 +30,40 @@ export class HeaderComponent implements OnInit {
         case "add":
           this.model.cover = "assets/img/write-bg.jpg";
           break;
+        case "home":
+          // 同一session下保持同一张cover比较好
+          if (this.variables.homeCover) {
+            this.model.cover = this.variables.homeCover;
+            this.loadCover(false, this.model.cover);
+            return;
+          } else {
+            this.model.cover = `assets/img/bg${random(1, 7)}.jpg`;
+            this.variables.homeCover = this.model.cover;
+          }
+          break;
         default:
-          this.model.cover = `assets/img/bg${random(1, 7)}.jpg`;
+          this.model.cover = "assets/img/article-bg.jpg";
           break;
       }
 
+      this.loadCover(true, this.model.cover);
+    });
+  }
+
+  loadCover(shouldTransition: boolean, src: string) {
+    if (shouldTransition) {
       let image = new Image();
       image.onload = function() {
-        $(".masthead").css("background-image", "url('" + image.src + "')");
+        $(".masthead")
+          .css("transition", "background-image 3s")
+          .css("background-image", "url('" + image.src + "')");
       };
-      image.src = this.model.cover;
-    });
+      image.src = src;
+    } else {
+      $(".masthead")
+        .css("transition", "none")
+        .css("background-image", "url('" + src + "')");
+    }
   }
 
   onTitleBlured(val: string) {

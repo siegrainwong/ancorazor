@@ -9,8 +9,18 @@ import RouteData from "./models/route-data.model";
   providedIn: "root"
 })
 export class Variables {
+  /**
+   * 当前是否是服务器渲染
+   */
   renderFromServer: Boolean = false;
+  /**
+   * 用户状态是否已加载
+   */
   userLoaded: Boolean = false;
+  /**
+   * 首页封面
+   */
+  homeCover?: string;
 
   private routeData: RouteData = new RouteData("home");
   routeDataChanged$ = new BehaviorSubject<RouteData>(this.routeData);

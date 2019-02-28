@@ -26,10 +26,10 @@ export class HeaderComponent implements OnInit {
       if (this.model.cover || this.variables.renderFromServer) return;
       switch (data.kind) {
         case "article":
-          this.model.cover = "assets/img/post-bg.jpg";
+          this.model.cover = "assets/img/article-bg.jpg";
           break;
         case "add":
-          this.model.cover = "assets/img/home-bg.jpg";
+          this.model.cover = "assets/img/write-bg.jpg";
           break;
         default:
           this.model.cover = `assets/img/bg${random(1, 7)}.jpg`;

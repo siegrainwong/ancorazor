@@ -1,6 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { OpenIdConnectService } from "src/app/shared/oidc/open-id-connect.service";
-import { ActivatedRoute, Router } from "@angular/router";
 import { Variables } from "src/app/shared/variables";
 
 @Component({

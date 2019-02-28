@@ -7,6 +7,7 @@
   background-color: white;
   @include sans-serif-font;
   .navbar-brand {
+    font-size: 18px;
     font-weight: 800;
     color: $gray-800;
   }

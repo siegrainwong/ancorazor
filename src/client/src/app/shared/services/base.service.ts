@@ -96,7 +96,7 @@ export abstract class BaseService {
       } else {
         console.log(error);
         this.snackBar.open(`❌ ${error}`, null, {
-          duration: 1000
+          duration: 5000
         });
         return null;
       }

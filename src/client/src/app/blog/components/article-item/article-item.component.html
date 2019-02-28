@@ -1,16 +1,18 @@
-<div class="post-preview">
-  <a [routerLink]="['/article', item.id]">
-    <h2 class="post-title">
-      {{ item.title }}
-    </h2>
-    <h3 class="post-subtitle">
-      {{ item.digest }}
-    </h3>
-  </a>
-  <p class="post-meta">
-    Posted by
-    <a>{{ item.author }}</a>
-    {{ item.createdAt | date: "medium" }}
-  </p>
+<div class="animated fadeIn fast">
+  <div class="post-preview">
+    <a [routerLink]="['/article', item.id]">
+      <h2 class="post-title">
+        {{ item.title }}
+      </h2>
+      <h3 class="post-subtitle">
+        {{ item.digest }}
+      </h3>
+    </a>
+    <p class="post-meta">
+      Posted by
+      <a>{{ item.author }}</a>
+      {{ item.createdAt | date: "medium" }}
+    </p>
+  </div>
+  <hr />
 </div>
-<hr />

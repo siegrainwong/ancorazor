@@ -16,7 +16,11 @@ import {
 import { filter } from "rxjs/operators";
 import { Variables } from "../shared/variables";
 import RouteData from "../shared/models/route-data.model";
-import { slideInAnimation, HeaderState } from "../shared/utils/animations";
+import {
+  slideInAnimation,
+  headerAnimation,
+  headerState
+} from "../shared/utils/animations";
 import ArticleModel from "./models/article-model";
 import { environment } from "src/environments/environment";
 
@@ -29,7 +33,7 @@ import { environment } from "src/environments/environment";
 export class BlogAppComponent implements OnInit {
   headerModel: ArticleModel = new ArticleModel();
   isHomePage: boolean = true;
-  state: HeaderState = HeaderState.Prev;
+  state: string = headerState.Prev;
 
   constructor(
     private route: ActivatedRoute,
@@ -62,10 +66,10 @@ export class BlogAppComponent implements OnInit {
   onRouteChanged() {
     this.variables.routeDataChanged$.subscribe(data => {
       if (data.kind == "home") {
-        this.state = HeaderState.Prev;
+        this.state = headerState.Prev;
         this.headerModel.title = environment.title;
       } else {
-        this.state = HeaderState.Next;
+        this.state = headerState.Next;
         if (this.variables.headerModel)
           this.headerModel = this.variables.headerModel;
       }

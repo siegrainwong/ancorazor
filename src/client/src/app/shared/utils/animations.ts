@@ -10,40 +10,40 @@ import {
   state
 } from "@angular/animations";
 
-export enum HeaderState {
-  Prev = "headerPrevState",
-  Next = "headerNextState"
+export enum headerState {
+  Prev = "prev",
+  Next = "next"
 }
 
-export const headerPrevAnimation = trigger(HeaderState.Prev, [
+export const headerPrevAnimation = trigger("headerPrevAnimation", [
   state(
-    "prev",
+    headerState.Prev,
     style({
       opacity: 1
     })
   ),
   state(
-    "next",
+    headerState.Next,
     style({
       opacity: 0
     })
   ),
-  transition("prev <=> next", animate(500))
+  transition(`${headerState.Prev} <=> ${headerState.Next}`, animate(500))
 ]);
-export const headerNextAnimation = trigger(HeaderState.Next, [
+export const headerNextAnimation = trigger("headerNextAnimation", [
   state(
-    "prev",
+    headerState.Prev,
     style({
       opacity: 0
     })
   ),
   state(
-    "next",
+    headerState.Next,
     style({
       opacity: 1
     })
   ),
-  transition("next <=> prev", animate(500))
+  transition(`${headerState.Prev} <=> ${headerState.Next}`, animate(500))
 ]);
 
 export const slideInAnimation = trigger("routeAnimations", [

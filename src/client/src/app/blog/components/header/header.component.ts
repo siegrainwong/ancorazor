@@ -13,7 +13,8 @@ import { environment } from "src/environments/environment";
 import {
   headerPrevAnimation,
   headerNextAnimation,
-  HeaderState
+  headerAnimation,
+  headerState
 } from "src/app/shared/utils/animations";
 @Component({
   selector: "app-header",
@@ -22,7 +23,7 @@ import {
   animations: [headerPrevAnimation, headerNextAnimation]
 })
 export class HeaderComponent implements OnInit {
-  @Input() state: string = HeaderState.Prev;
+  @Input() state: string = headerState.Prev;
   @Input() model: ArticleModel = new ArticleModel();
   @Input() isEditing: boolean = false;
   // 给 write-article 页面用的

@@ -1,11 +1,10 @@
 <!-- Page Header -->
-<header
-  class="masthead"
-  style="background-image: url('assets/img/placeholder.jpg')"
->
+<header class="masthead">
+  <div class="header-bg prev" [@headerPrevState]="state"></div>
+  <div class="header-bg next" [@headerNextState]="state"></div>
   <div class="overlay"></div>
   <div class="container">
-    <div class="row">
+    <div class="row align-items-center">
       <div class="col-lg-10 col-md-12 mx-auto">
         <div class="site-heading" *ngIf="!isEditing">
           <h1>{{ model.title }}</h1>

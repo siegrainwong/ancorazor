@@ -12,25 +12,35 @@ header.masthead {
   background-attachment: scroll;
   position: relative;
   word-break: break-all;
-  transition: background-image 3s;
-  -webkit-transition: background-image 3s;
+  height: 500px;
   @include background-cover;
-  .overlay {
+  .container,
+  .row {
+    height: 100%;
+  }
+  .overlay,
+  .header-bg {
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
     width: 100%;
+  }
+  .header-bg {
+    background: no-repeat center center;
+    background-attachment: scroll;
+    opacity: 0;
+    background-color: black;
+  }
+  .overlay {
     background-color: $gray-900;
     opacity: 0.5;
   }
   .page-heading,
   .post-heading,
   .site-heading {
-    padding: 200px 0 150px;
     color: white;
     @media only screen and (min-width: 768px) {
-      padding: 200px 0;
     }
   }
   .page-heading,

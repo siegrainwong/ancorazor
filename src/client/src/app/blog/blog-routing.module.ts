@@ -4,9 +4,9 @@ import { BlogAppComponent } from "./blog-app.component";
 import { RequireAuthenticatedUserRouteGuard } from "../shared/oidc/require-authenticated-user-route.guard";
 import { WriteArticleComponent } from "./components/write-article/write-article.component";
 import { AboutComponent } from "./components/about/about.component";
-import { HomeComponent } from "./components/home/home.component";
-import { ArticleComponent } from "./components/article/article.component";
 import RouteData from "../shared/models/route-data.model";
+import { ArticleListComponent } from "./components/article-list/article-list.component";
+import { ArticleComponent } from "./components/article/article.component";
 
 const routes: Routes = [
   {
@@ -15,7 +15,7 @@ const routes: Routes = [
     children: [
       {
         path: "",
-        component: HomeComponent,
+        component: ArticleListComponent,
         data: new RouteData("home")
       },
       /**

@@ -56,7 +56,7 @@ namespace Blog.Service
             }
             predicate.And(x => !x.IsDeleted);
 
-            var select = $"{nameof(Article.Author)}, {nameof(Article.Id)}, {nameof(Article.Title)}, {nameof(Article.CreatedAt)}, {nameof(Article.Digest)}";
+            var select = $"{nameof(Article.Author)}, {nameof(Article.Id)}, {nameof(Article.Title)}, {nameof(Article.CreatedAt)}, {nameof(Article.Digest)}, {nameof(Article.Cover)}";
 
             return await _dal.QueryPage<ArticleViewModel>(predicate, parameters, select);
         }

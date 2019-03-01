@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import RouteData from "./models/route-data.model";
+import ArticleModel from "../blog/models/article-model";
 
 /**
  * Injectable root 代表一个单例
@@ -21,6 +22,10 @@ export class Variables {
    * 首页封面
    */
   homeCoverLoaded: boolean = false;
+  /**
+   * 首页到文章跳转用
+   */
+  headerModel?: ArticleModel;
 
   private routeData: RouteData = new RouteData("home");
   routeDataChanged$ = new BehaviorSubject<RouteData>(this.routeData);

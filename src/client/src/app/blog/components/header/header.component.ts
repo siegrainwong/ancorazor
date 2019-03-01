@@ -1,24 +1,41 @@
-import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  EventEmitter,
+  Output,
+  SimpleChanges
+} from "@angular/core";
 import ArticleModel from "../../models/article-model";
 import { Variables } from "src/app/shared/variables";
-import { random } from "src/app/shared/utils/siegrain.utils";
 import * as $ from "jquery";
 import { environment } from "src/environments/environment";
-
+import {
+  headerPrevAnimation,
+  headerNextAnimation,
+  HeaderState
+} from "src/app/shared/utils/animations";
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",
-  styleUrls: ["./header.component.scss"]
+  styleUrls: ["./header.component.scss"],
+  animations: [headerPrevAnimation, headerNextAnimation]
 })
 export class HeaderComponent implements OnInit {
+  @Input() state: string = HeaderState.Prev;
   @Input() model: ArticleModel = new ArticleModel();
   @Input() isEditing: boolean = false;
-  @Output() modelChanged = new EventEmitter<ArticleModel>();
+  // 给 write-article 页面用的
+  @Output() headerUpdated = new EventEmitter<ArticleModel>();
 
   constructor(private variables: Variables) {}
 
   ngOnInit() {
     this.registerRouteChanged();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("header onChanges: ", changes);
   }
 
   registerRouteChanged() {
@@ -54,24 +71,23 @@ export class HeaderComponent implements OnInit {
     if (shouldTransition) {
       let image = new Image();
       image.onload = function() {
-        $(".masthead")
-          .css("transition", "background-image 3s")
-          .css("background-image", "url('" + image.src + "')");
+        $(".header-bg.prev").css(
+          "background-image",
+          "url('" + image.src + "')"
+        );
       };
       image.src = src;
     } else {
-      $(".masthead")
-        .css("transition", "none")
-        .css("background-image", "url('" + src + "')");
+      $(".header-bg.prev").css("background-image", "url('" + src + "')");
     }
   }
 
   onTitleBlured(val: string) {
     this.model.title = val;
-    this.modelChanged.emit(this.model);
+    this.headerUpdated.emit(this.model);
   }
   onDigestBlured(val: string) {
     this.model.digest = val;
-    this.modelChanged.emit(this.model);
+    this.headerUpdated.emit(this.model);
   }
 }

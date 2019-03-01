@@ -1,9 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { ArticleParameters } from "../../models/article-parameters";
 import { ArticleService } from "../../services/article.service";
 import ArticleModel from "../../models/article-model";
 import { Pagination } from "src/app/shared/models/response-result";
 import { Router, ActivatedRoute } from "@angular/router";
+import { Variables } from "src/app/shared/variables";
 
 @Component({
   selector: "app-article-list",
@@ -14,11 +15,13 @@ export class ArticleListComponent implements OnInit {
   articles: ArticleModel[];
   pagination: Pagination;
   parameter = new ArticleParameters();
+  @Output() articlePressed = new EventEmitter<ArticleModel>();
 
   constructor(
     private service: ArticleService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private variables: Variables
   ) {
     console.log("article-list ctor.");
   }
@@ -35,6 +38,11 @@ export class ArticleListComponent implements OnInit {
     if (!res || !res.succeed) return;
     this.articles = res.data as ArticleModel[];
     this.pagination = res.pagination;
+  }
+
+  readPost(model: ArticleModel) {
+    this.variables.headerModel = model;
+    this.router.navigate([`/article/${model.id}`]);
   }
 
   previous() {

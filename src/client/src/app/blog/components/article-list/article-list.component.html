@@ -2,7 +2,24 @@
   <div class="row">
     <div class="col-lg-12 col-md-12 mx-auto">
       <ng-container *ngFor="let item of articles">
-        <app-article-item [item]="item"></app-article-item>
+        <div class="animated fadeIn fast">
+          <div class="post-preview">
+            <a (click)="readPost(item)">
+              <h2 class="post-title">
+                {{ item.title }}
+              </h2>
+              <h3 class="post-subtitle">
+                {{ item.digest }}
+              </h3>
+            </a>
+            <p class="post-meta">
+              Posted by
+              <a>{{ item.author }}</a>
+              {{ item.createdAt | date: "medium" }}
+            </p>
+          </div>
+          <hr />
+        </div>
       </ng-container>
       <!-- Pager -->
       <div class="clearfix" *ngIf="pagination">
@@ -11,14 +28,14 @@
           mat-flat-button
           (click)="previous()"
           *ngIf="pagination.previousPageLink"
-          >← Newer Posts</a
+          >← Newer</a
         >
         <a
           class="btn btn-primary float-right"
           mat-flat-button
           (click)="next()"
           *ngIf="pagination.nextPageLink"
-          >Older Posts &rarr;</a
+          >Older →</a
         >
       </div>
     </div>

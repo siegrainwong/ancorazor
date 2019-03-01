@@ -32,9 +32,8 @@ export class ArticleComponent implements OnInit {
   setupEditor() {
     if (this.variables.renderFromServer) return;
     let Viewer = require("tui-editor/dist/tui-editor-Viewer");
-    let viewer = new Viewer({
+    new Viewer({
       el: document.querySelector("#viewer"),
-      // height: '500px',
       initialValue: this.model.content
     });
   }

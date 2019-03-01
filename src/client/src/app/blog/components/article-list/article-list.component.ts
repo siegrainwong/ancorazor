@@ -4,7 +4,7 @@ import { ArticleService } from "../../services/article.service";
 import ArticleModel from "../../models/article-model";
 import { Pagination } from "src/app/shared/models/response-result";
 import { Router, ActivatedRoute } from "@angular/router";
-import { Variables } from "src/app/shared/variables";
+import { Store } from "src/app/shared/store/store";
 
 @Component({
   selector: "app-article-list",
@@ -21,7 +21,7 @@ export class ArticleListComponent implements OnInit {
     private service: ArticleService,
     private router: Router,
     private route: ActivatedRoute,
-    private variables: Variables
+    private store: Store
   ) {
     console.log("article-list ctor.");
   }
@@ -41,7 +41,7 @@ export class ArticleListComponent implements OnInit {
   }
 
   readPost(model: ArticleModel) {
-    this.variables.headerModel = model;
+    this.store.headerModel = model;
     this.router.navigate([`/article/${model.id}`]);
   }
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import ArticleModel from "../../models/article-model";
 import { ArticleService } from "../../services/article.service";
 import { ActivatedRoute } from "@angular/router";
-import { Variables } from "src/app/shared/variables";
+import { Store } from "src/app/shared/store/store";
 
 @Component({
   selector: "app-article",
@@ -14,7 +14,7 @@ export class ArticleComponent implements OnInit {
   constructor(
     private articleService: ArticleService,
     private route: ActivatedRoute,
-    public variables: Variables
+    public store: Store
   ) {}
   ngOnInit() {
     this.getArticle();
@@ -30,7 +30,7 @@ export class ArticleComponent implements OnInit {
   }
 
   setupEditor() {
-    if (this.variables.renderFromServer) return;
+    if (this.store.renderFromServer) return;
     let Viewer = require("tui-editor/dist/tui-editor-Viewer");
     new Viewer({
       el: document.querySelector("#viewer"),

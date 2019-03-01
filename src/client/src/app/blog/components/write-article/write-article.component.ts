@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from "@angular/core";
 import { ArticleService } from "../../services/article.service";
 import { Router } from "@angular/router";
 import ArticleModel from "../../models/article-model";
-import { Variables } from "src/app/shared/variables";
+import { Store } from "src/app/shared/store/store";
 
 @Component({
   selector: "app-write-article",
@@ -16,7 +16,7 @@ export class WriteArticleComponent implements OnInit {
   constructor(
     private service: ArticleService,
     private router: Router,
-    private variables: Variables
+    private store: Store
   ) {}
 
   ngOnInit() {
@@ -24,7 +24,7 @@ export class WriteArticleComponent implements OnInit {
   }
 
   setupEditor() {
-    if (this.variables.renderFromServer) return;
+    if (this.store.renderFromServer) return;
     let Editor = require("tui-editor");
     this.editor = new Editor({
       el: document.querySelector("#editor"),

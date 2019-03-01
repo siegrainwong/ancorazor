@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { OpenIdConnectService } from "../open-id-connect.service";
-import { Variables } from "../../variables";
+import { Store } from "../../store/store";
 
 @Component({
   selector: "app-redirect-silent-renew",
@@ -10,7 +10,7 @@ import { Variables } from "../../variables";
 export class RedirectSilentRenewComponent implements OnInit {
   constructor(
     private openIdConnectService: OpenIdConnectService,
-    private variebles: Variables
+    private variebles: Store
   ) {}
 
   ngOnInit() {

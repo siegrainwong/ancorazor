@@ -1,15 +1,18 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import RouteData from "./models/route-data.model";
-import ArticleModel from "../blog/models/article-model";
+import RouteData from "../models/route-data.model";
+import ArticleModel from "../../blog/models/article-model";
 
 /**
- * Injectable root 代表一个单例
+ * 状态管理
  */
 @Injectable({
   providedIn: "root"
 })
-export class Variables {
+export class Store {
+  constructor() {}
+
+  /**##### Variables */
   /**
    * 当前是否是服务器渲染
    */
@@ -22,6 +25,8 @@ export class Variables {
    * 首页封面
    */
   homeCoverLoaded: boolean = false;
+
+  /**##### Observables */
   /**
    * 首页到文章跳转用
    */
@@ -29,8 +34,6 @@ export class Variables {
 
   private routeData: RouteData = new RouteData("home");
   routeDataChanged$ = new BehaviorSubject<RouteData>(this.routeData);
-
-  constructor() {}
 
   get currentRouteData() {
     return this.routeData;

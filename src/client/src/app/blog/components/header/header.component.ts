@@ -7,13 +7,12 @@ import {
   SimpleChanges
 } from "@angular/core";
 import ArticleModel from "../../models/article-model";
-import { Variables } from "src/app/shared/variables";
+import { Store } from "src/app/shared/store/store";
 import * as $ from "jquery";
 import { environment } from "src/environments/environment";
 import {
   headerPrevAnimation,
   headerNextAnimation,
-  headerAnimation,
   headerState
 } from "src/app/shared/utils/animations";
 @Component({
@@ -23,13 +22,13 @@ import {
   animations: [headerPrevAnimation, headerNextAnimation]
 })
 export class HeaderComponent implements OnInit {
-  @Input() state: string = headerState.Prev;
+  @Input() state: headerState = headerState.Prev;
   @Input() model: ArticleModel = new ArticleModel();
   @Input() isEditing: boolean = false;
   // 给 write-article 页面用的
   @Output() headerUpdated = new EventEmitter<ArticleModel>();
 
-  constructor(private variables: Variables) {}
+  constructor(private store: Store) {}
 
   ngOnInit() {
     this.registerRouteChanged();
@@ -40,8 +39,8 @@ export class HeaderComponent implements OnInit {
   }
 
   registerRouteChanged() {
-    this.variables.routeDataChanged$.subscribe(data => {
-      if (this.model.cover || this.variables.renderFromServer) return;
+    this.store.routeDataChanged$.subscribe(data => {
+      if (this.model.cover || this.store.renderFromServer) return;
       switch (data.kind) {
         case "article":
           this.model.cover = "assets/img/article-bg.jpg";
@@ -51,11 +50,11 @@ export class HeaderComponent implements OnInit {
           break;
         case "home":
           this.model.cover = environment.homeCoverUrl;
-          if (this.variables.homeCoverLoaded) {
+          if (this.store.homeCoverLoaded) {
             this.loadCover(false, this.model.cover);
             return;
           } else {
-            this.variables.homeCoverLoaded = true;
+            this.store.homeCoverLoaded = true;
             this.model.cover = environment.homeCoverUrl;
           }
           break;

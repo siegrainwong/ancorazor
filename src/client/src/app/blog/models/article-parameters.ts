@@ -1,4 +1,4 @@
-import { QueryParameters } from "../../shared/query-parameters";
+import { QueryParameters } from "../../shared/models/query-parameters";
 
 export class ArticleParameters extends QueryParameters {
   title?: string;

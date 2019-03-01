@@ -8,7 +8,7 @@ import { RequireAuthenticatedUserRouteGuard } from "./shared/oidc/require-authen
 import { SigninOidcComponent } from "./shared/oidc/signin-oidc/signin-oidc.component";
 import { RedirectSilentRenewComponent } from "./shared/oidc/redirect-silent-renew/redirect-silent-renew.component";
 import { OpenIdConnectService } from "./shared/oidc/open-id-connect.service";
-import { Variables } from "./shared/variables";
+import { Store } from "./shared/store/store";
 
 @NgModule({
   declarations: [
@@ -29,10 +29,10 @@ import { Variables } from "./shared/variables";
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(private variables: Variables) {
+  constructor(private store: Store) {
     console.log("app.module ctor.");
   }
   ngOnInit(): void {
-    if (this.variables.renderFromServer) return;
+    if (this.store.renderFromServer) return;
   }
 }

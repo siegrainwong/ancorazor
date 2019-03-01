@@ -3,7 +3,7 @@ import { UserManager, User } from "src/libraries/oidc-client-js-dev";
 // import { UserManager, User } from "oidc-client";
 import { environment } from "src/environments/environment";
 import { ReplaySubject } from "rxjs";
-import { Variables } from "../variables";
+import { Store } from "../store/store";
 
 /**
  * oidc连接模块，负责管理用户的登录注销状态
@@ -27,11 +27,11 @@ export class OpenIdConnectService {
     return this.currentUser;
   }
 
-  constructor(private variables: Variables) {
+  constructor(private store: Store) {
     console.log("oidc ctor.");
 
     // SSR 时不允许创建 userManager 实例
-    if (variables.renderFromServer) return;
+    if (store.renderFromServer) return;
 
     this.userManager = new UserManager(environment.openIdConnectSettings);
 
@@ -71,7 +71,7 @@ export class OpenIdConnectService {
         this.currentUser = user;
       })
       .finally(() => {
-        this.variables.userLoaded = true;
+        this.store.userLoaded = true;
       });
   }
 

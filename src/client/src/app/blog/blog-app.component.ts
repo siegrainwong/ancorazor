@@ -14,13 +14,9 @@ import {
   RouterOutlet
 } from "@angular/router";
 import { filter } from "rxjs/operators";
-import { Variables } from "../shared/variables";
+import { Store } from "../shared/store/store";
 import RouteData from "../shared/models/route-data.model";
-import {
-  slideInAnimation,
-  headerAnimation,
-  headerState
-} from "../shared/utils/animations";
+import { slideInAnimation, headerState } from "../shared/utils/animations";
 import ArticleModel from "./models/article-model";
 import { environment } from "src/environments/environment";
 
@@ -33,12 +29,12 @@ import { environment } from "src/environments/environment";
 export class BlogAppComponent implements OnInit {
   headerModel: ArticleModel = new ArticleModel();
   isHomePage: boolean = true;
-  state: string = headerState.Prev;
+  state: headerState = headerState.Prev;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private variables: Variables
+    private store: Store
   ) {}
 
   ngOnInit() {
@@ -53,25 +49,24 @@ export class BlogAppComponent implements OnInit {
   }
 
   observeRoute() {
-    this.variables.currentRouteData = this.route.firstChild.snapshot
+    this.store.currentRouteData = this.route.firstChild.snapshot
       .data as RouteData;
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.variables.currentRouteData = this.route.firstChild.snapshot
+        this.store.currentRouteData = this.route.firstChild.snapshot
           .data as RouteData;
       });
   }
 
   onRouteChanged() {
-    this.variables.routeDataChanged$.subscribe(data => {
+    this.store.routeDataChanged$.subscribe(data => {
       if (data.kind == "home") {
         this.state = headerState.Prev;
         this.headerModel.title = environment.title;
       } else {
         this.state = headerState.Next;
-        if (this.variables.headerModel)
-          this.headerModel = this.variables.headerModel;
+        if (this.store.headerModel) this.headerModel = this.store.headerModel;
       }
     });
   }

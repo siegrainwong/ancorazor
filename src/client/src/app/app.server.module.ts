@@ -7,7 +7,7 @@ import { ModuleMapLoaderModule } from "@nguniversal/module-map-ngfactory-loader"
 
 import { AppModule } from "./app.module";
 import { AppComponent } from "./app.component";
-import { Variables } from "./shared/variables";
+import { Store } from "./shared/store/store";
 
 @NgModule({
   imports: [
@@ -23,8 +23,8 @@ import { Variables } from "./shared/variables";
   bootstrap: [AppComponent]
 })
 export class AppServerModule {
-  constructor(variables: Variables) {
+  constructor(store: Store) {
     console.log("app.server ctor.");
-    variables.renderFromServer = true;
+    store.renderFromServer = true;
   }
 }

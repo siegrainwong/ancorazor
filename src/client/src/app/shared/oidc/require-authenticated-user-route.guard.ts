@@ -7,7 +7,7 @@ import {
 } from "@angular/router";
 import { Observable } from "rxjs";
 import { OpenIdConnectService } from "./open-id-connect.service";
-import { Variables } from "../variables";
+import { Store } from "../store/store";
 
 /**
  * 鉴权模块，相当于.NET中用来鉴权的Attribute
@@ -20,7 +20,7 @@ import { Variables } from "../variables";
 export class RequireAuthenticatedUserRouteGuard implements CanActivate {
   constructor(
     private openIdConnectService: OpenIdConnectService,
-    private variables: Variables,
+    private store: Store,
     private router: Router
   ) {}
 
@@ -28,7 +28,7 @@ export class RequireAuthenticatedUserRouteGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.variables.renderFromServer) {
+    if (this.store.renderFromServer) {
       /**
        * 这个地方不能 navigate，会直接跳到 server 渲染的内容，angular 都不会加载
        * resolve false，return false 都会导致 prerender timeout
@@ -39,8 +39,8 @@ export class RequireAuthenticatedUserRouteGuard implements CanActivate {
     }
 
     // 如果 guarded 的页面是首屏加载，这里第一时间就没有加载到用户
-    console.log("did user load in guard: ", this.variables.userLoaded);
-    if (this.variables.userLoaded) {
+    console.log("did user load in guard: ", this.store.userLoaded);
+    if (this.store.userLoaded) {
       if (this.openIdConnectService.userIsAvailable) {
         return true;
       } else {

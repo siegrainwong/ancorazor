@@ -11,7 +11,6 @@ export class ArticleService extends BaseService implements ISubService {
   serviceName = "articles";
   /**
    * 获取分页文章
-   * Mark: 多类型声明
    * @param postParameter any 或 ArticleParameters
    */
   async getPagedArticles(

@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { UserManager, User } from "src/libraries/oidc-client-js-dev";
-// import { UserManager, User } from "oidc-client";
 import { environment } from "src/environments/environment";
 import { ReplaySubject } from "rxjs";
 import { Store } from "../store/store";
@@ -46,18 +45,14 @@ export class OpenIdConnectService {
      * Mark: 实现用户的登录和注销事件
      */
     this.userManager.events.addUserLoaded(user => {
-      if (!environment.production) {
-        logger.info("User loaded.", user);
-      }
+      logger.info("User loaded.", user);
       this.currentUser = user;
       // 广播给订阅者 用户登录的状态
       this.userLoaded$.next(true);
     });
 
     this.userManager.events.addUserUnloaded(e => {
-      if (!environment.production) {
-        logger.info("User unloaded");
-      }
+      logger.info("User unloaded");
       this.currentUser = null;
       // 广播给订阅者 用户注销的状态
       this.userLoaded$.next(false);
@@ -84,15 +79,13 @@ export class OpenIdConnectService {
     let user = await this.userManager.getUser();
     if (!user) {
       await this.userManager.signinRedirect();
-      if (!environment.production)
-        this.logger.info("Redirect to signin triggered.");
+      this.logger.info("Redirect to signin triggered.");
     }
   }
 
   async triggerSignOut() {
     let resp = await this.userManager.signoutRedirect();
-    if (!environment.production)
-      this.logger.info("Redirect to sign out triggered.", resp);
+    this.logger.info("Redirect to sign out triggered.", resp);
   }
 
   /**
@@ -100,8 +93,7 @@ export class OpenIdConnectService {
    */
   async handleCallback() {
     let user = await this.userManager.signinRedirectCallback();
-    if (!environment.production)
-      this.logger.info("Callback after signin handled.", user);
+    this.logger.info("Callback after signin handled.", user);
   }
 
   /**
@@ -110,8 +102,7 @@ export class OpenIdConnectService {
   async handleSilentCallback() {
     let user = await this.userManager.signinSilentCallback();
     this.currentUser = user;
-    if (!environment.production)
-      // TODO: 很奇怪这个地方user为undefined。。。
-      this.logger.info("Silent renew handled.", user);
+    // TODO: 很奇怪这个地方user为undefined。。。
+    this.logger.info("Silent renew handled.", user);
   }
 }

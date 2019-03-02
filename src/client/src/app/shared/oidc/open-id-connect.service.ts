@@ -84,14 +84,15 @@ export class OpenIdConnectService {
     let user = await this.userManager.getUser();
     if (!user) {
       await this.userManager.signinRedirect();
-      if (!environment.production) logger.info("Redirect to signin triggered.");
+      if (!environment.production)
+        this.logger.info("Redirect to signin triggered.");
     }
   }
 
   async triggerSignOut() {
     let resp = await this.userManager.signoutRedirect();
     if (!environment.production)
-      logger.info("Redirect to sign out triggered.", resp);
+      this.logger.info("Redirect to sign out triggered.", resp);
   }
 
   /**
@@ -100,7 +101,7 @@ export class OpenIdConnectService {
   async handleCallback() {
     let user = await this.userManager.signinRedirectCallback();
     if (!environment.production)
-      logger.info("Callback after signin handled.", user);
+      this.logger.info("Callback after signin handled.", user);
   }
 
   /**
@@ -111,6 +112,6 @@ export class OpenIdConnectService {
     this.currentUser = user;
     if (!environment.production)
       // TODO: 很奇怪这个地方user为undefined。。。
-      logger.info("Silent renew handled.", user);
+      this.logger.info("Silent renew handled.", user);
   }
 }

@@ -7,12 +7,7 @@
  */
 
 import { Component, OnInit } from "@angular/core";
-import {
-  ActivatedRoute,
-  Router,
-  NavigationEnd,
-  RouterOutlet
-} from "@angular/router";
+import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { filter } from "rxjs/operators";
 import { Store } from "../shared/store/store";
 import RouteData from "../shared/models/route-data.model";
@@ -30,6 +25,7 @@ export class BlogAppComponent implements OnInit {
   headerModel: ArticleModel = new ArticleModel();
   isHomePage: boolean = true;
   state: headerState = headerState.Prev;
+  kind: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,12 +36,6 @@ export class BlogAppComponent implements OnInit {
   ngOnInit() {
     this.observeRoute();
     this.onRouteChanged();
-  }
-
-  prepareRoute(outlet: RouterOutlet) {
-    return (
-      outlet && outlet.activatedRouteData && outlet.activatedRouteData["kind"]
-    );
   }
 
   observeRoute() {
@@ -61,6 +51,7 @@ export class BlogAppComponent implements OnInit {
 
   onRouteChanged() {
     this.store.routeDataChanged$.subscribe(data => {
+      this.kind = data.kind;
       if (data.kind == "home") {
         this.state = headerState.Prev;
         this.headerModel.title = environment.title;

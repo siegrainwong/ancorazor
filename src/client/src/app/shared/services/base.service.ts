@@ -4,7 +4,8 @@ import { AxiosResponse, AxiosRequestConfig } from "axios";
 import ResponseResult from "../models/response-result";
 import { OpenIdConnectService } from "../oidc/open-id-connect.service";
 import axios from "axios";
-import { MatSnackBar } from "@angular/material";
+import { LoggingService } from "./logging.service";
+import { SGUtil } from "../utils/siegrain.utils";
 
 @Injectable({
   providedIn: "root"
@@ -12,7 +13,8 @@ import { MatSnackBar } from "@angular/material";
 export abstract class BaseService {
   constructor(
     private userService: OpenIdConnectService,
-    private snackBar: MatSnackBar
+    private logger: LoggingService,
+    private util: SGUtil
   ) {
     this.setup();
   }
@@ -94,10 +96,8 @@ export abstract class BaseService {
       if (error.response) {
         return this.handleResponse(error.response as AxiosResponse);
       } else {
-        console.log(error);
-        this.snackBar.open(`❌ ${error}`, null, {
-          duration: 5000
-        });
+        this.util.tip(error);
+        this.logger.error(error);
         return null;
       }
     }
@@ -122,11 +122,8 @@ export abstract class BaseService {
         )
       );
 
-    if (result.succeed) {
-      return result;
-    } else {
-      return this.handleError(new ResponseResult(result));
-    }
+    if (result.succeed) return result;
+    else return this.handleError(new ResponseResult(result));
   }
 
   /**
@@ -134,7 +131,8 @@ export abstract class BaseService {
    * @param result
    */
   handleError(result: ResponseResult): ResponseResult {
-    console.log(result.data);
+    this.util.tip(result.data);
+    this.logger.error(result);
     return new ResponseResult(result);
   }
 }

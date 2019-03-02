@@ -8,6 +8,7 @@ import {
 import { Observable } from "rxjs";
 import { OpenIdConnectService } from "./open-id-connect.service";
 import { Store } from "../store/store";
+import { LoggingService } from "../services/logging.service";
 
 /**
  * 鉴权模块，相当于.NET中用来鉴权的Attribute
@@ -21,7 +22,8 @@ export class RequireAuthenticatedUserRouteGuard implements CanActivate {
   constructor(
     private openIdConnectService: OpenIdConnectService,
     private store: Store,
-    private router: Router
+    private router: Router,
+    private logger: LoggingService
   ) {}
 
   canActivate(
@@ -34,12 +36,12 @@ export class RequireAuthenticatedUserRouteGuard implements CanActivate {
        * resolve false，return false 都会导致 prerender timeout
        * 所以只能 resolve true 或者 return true
        */
-      console.log("authentication not support for SSR.");
+      this.logger.info("authentication not support for SSR.");
       return true;
     }
 
     // 如果 guarded 的页面是首屏加载，这里第一时间就没有加载到用户
-    console.log("did user load in guard: ", this.store.userLoaded);
+    this.logger.info("did user load in guard: ", this.store.userLoaded);
     if (this.store.userLoaded) {
       if (this.openIdConnectService.userIsAvailable) {
         return true;
@@ -52,10 +54,10 @@ export class RequireAuthenticatedUserRouteGuard implements CanActivate {
         this.openIdConnectService.getUser().then(user => {
           if (!user) {
             this.openIdConnectService.triggerSignIn();
-            console.log("authn guard: rejected");
+            this.logger.info("authn guard: rejected");
             rjc(false);
           }
-          console.log("authn guard: resolved");
+          this.logger.info("authn guard: resolved");
           rsv(true);
         });
       });

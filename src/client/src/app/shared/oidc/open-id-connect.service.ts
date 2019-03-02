@@ -4,6 +4,7 @@ import { UserManager, User } from "src/libraries/oidc-client-js-dev";
 import { environment } from "src/environments/environment";
 import { ReplaySubject } from "rxjs";
 import { Store } from "../store/store";
+import { LoggingService } from "../services/logging.service";
 
 /**
  * oidc连接模块，负责管理用户的登录注销状态
@@ -27,8 +28,8 @@ export class OpenIdConnectService {
     return this.currentUser;
   }
 
-  constructor(private store: Store) {
-    console.log("oidc ctor.");
+  constructor(private store: Store, private logger: LoggingService) {
+    logger.info("oicd ctor.");
 
     // SSR 时不允许创建 userManager 实例
     if (store.renderFromServer) return;
@@ -46,7 +47,7 @@ export class OpenIdConnectService {
      */
     this.userManager.events.addUserLoaded(user => {
       if (!environment.production) {
-        console.log("User loaded.", user);
+        logger.info("User loaded.", user);
       }
       this.currentUser = user;
       // 广播给订阅者 用户登录的状态
@@ -55,7 +56,7 @@ export class OpenIdConnectService {
 
     this.userManager.events.addUserUnloaded(e => {
       if (!environment.production) {
-        console.log("User unloaded");
+        logger.info("User unloaded");
       }
       this.currentUser = null;
       // 广播给订阅者 用户注销的状态
@@ -83,14 +84,14 @@ export class OpenIdConnectService {
     let user = await this.userManager.getUser();
     if (!user) {
       await this.userManager.signinRedirect();
-      if (!environment.production) console.log("Redirect to signin triggered.");
+      if (!environment.production) logger.info("Redirect to signin triggered.");
     }
   }
 
   async triggerSignOut() {
     let resp = await this.userManager.signoutRedirect();
     if (!environment.production)
-      console.log("Redirect to sign out triggered.", resp);
+      logger.info("Redirect to sign out triggered.", resp);
   }
 
   /**
@@ -99,7 +100,7 @@ export class OpenIdConnectService {
   async handleCallback() {
     let user = await this.userManager.signinRedirectCallback();
     if (!environment.production)
-      console.log("Callback after signin handled.", user);
+      logger.info("Callback after signin handled.", user);
   }
 
   /**
@@ -110,6 +111,6 @@ export class OpenIdConnectService {
     this.currentUser = user;
     if (!environment.production)
       // TODO: 很奇怪这个地方user为undefined。。。
-      console.log("Silent renew handled.", user);
+      logger.info("Silent renew handled.", user);
   }
 }

@@ -34,10 +34,6 @@ export class HeaderComponent implements OnInit {
     this.registerRouteChanged();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log("header onChanges: ", changes);
-  }
-
   registerRouteChanged() {
     this.store.routeDataChanged$.subscribe(data => {
       if (this.model.cover || this.store.renderFromServer) return;

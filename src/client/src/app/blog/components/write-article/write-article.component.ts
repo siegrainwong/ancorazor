@@ -3,6 +3,7 @@ import { ArticleService } from "../../services/article.service";
 import { Router } from "@angular/router";
 import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
+import { LoggingService } from "src/app/shared/services/logging.service";
 
 @Component({
   selector: "app-write-article",
@@ -16,7 +17,8 @@ export class WriteArticleComponent implements OnInit {
   constructor(
     private service: ArticleService,
     private router: Router,
-    private store: Store
+    private store: Store,
+    private logger: LoggingService
   ) {}
 
   ngOnInit() {
@@ -47,7 +49,7 @@ export class WriteArticleComponent implements OnInit {
 
   async submit() {
     this.model.content = this.editor.getValue();
-    console.log("posting: ", this.model);
+    this.logger.info("posting: ", this.model);
     var res = await this.service.add(this.model);
     if (!res.succeed) return;
 

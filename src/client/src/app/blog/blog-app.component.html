@@ -1,6 +1,6 @@
 <app-nav></app-nav>
 <app-header [model]="headerModel" [state]="state"></app-header>
-<div [@routeAnimations]="prepareRoute(outlet)">
+<div [@routeAnimations]="kind">
   <router-outlet #outlet="outlet"></router-outlet>
 </div>
 

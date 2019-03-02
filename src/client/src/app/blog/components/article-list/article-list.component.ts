@@ -22,9 +22,7 @@ export class ArticleListComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private store: Store
-  ) {
-    console.log("article-list ctor.");
-  }
+  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(param => {

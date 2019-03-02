@@ -1,5 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
+import { NgModule, ErrorHandler } from "@angular/core";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -8,7 +8,8 @@ import { RequireAuthenticatedUserRouteGuard } from "./shared/oidc/require-authen
 import { SigninOidcComponent } from "./shared/oidc/signin-oidc/signin-oidc.component";
 import { RedirectSilentRenewComponent } from "./shared/oidc/redirect-silent-renew/redirect-silent-renew.component";
 import { OpenIdConnectService } from "./shared/oidc/open-id-connect.service";
-import { Store } from "./shared/store/store";
+import { LoggingService } from "./shared/services/logging.service";
+import { GlobalErrorHandler } from "./shared/services/global-error-handler";
 
 @NgModule({
   declarations: [
@@ -20,19 +21,25 @@ import { Store } from "./shared/store/store";
     // Add .withServerTransition() to support Universal rendering.
     // The application ID can be any identifier which is unique on
     // the page.
+    // TODO: configurable
     BrowserModule.withServerTransition({ appId: "siegrain.blog" }), // SSR: Modified
     // Add TransferHttpCacheModule to install a Http interceptor
     AppRoutingModule,
     BrowserAnimationsModule
   ],
-  providers: [OpenIdConnectService, RequireAuthenticatedUserRouteGuard],
+  providers: [
+    LoggingService,
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    },
+    OpenIdConnectService,
+    RequireAuthenticatedUserRouteGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(private store: Store) {
-    console.log("app.module ctor.");
-  }
-  ngOnInit(): void {
-    if (this.store.renderFromServer) return;
+  constructor(logger: LoggingService) {
+    logger.info("app.module ctor.");
   }
 }

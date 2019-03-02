@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import RouteData from "../models/route-data.model";
 import ArticleModel from "../../blog/models/article-model";
+import { LoggingService } from "../services/logging.service";
 
 /**
  * 状态管理
@@ -10,7 +11,7 @@ import ArticleModel from "../../blog/models/article-model";
   providedIn: "root"
 })
 export class Store {
-  constructor() {}
+  constructor(private logger: LoggingService) {}
 
   /**##### Variables */
   /**
@@ -42,6 +43,6 @@ export class Store {
   set currentRouteData(value) {
     this.routeData = value;
     this.routeDataChanged$.next(value);
-    console.log(value);
+    this.logger.info(value);
   }
 }

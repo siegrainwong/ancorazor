@@ -13,6 +13,15 @@
   }
 }
 
-app-header {
+// $component-list: "blog-app", "article", "article-list";
+// $prefix: "app";
+
+// @each $c in $component-list {
+//   #{$prefix}-#{$c} {
+//     display: block;
+//   }
+// }
+
+:host {
   display: block;
 }

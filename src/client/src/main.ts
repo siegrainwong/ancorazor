@@ -5,8 +5,6 @@ import { AppModule } from "./app/app.module";
 import { environment } from "./environments/environment";
 
 import "hammerjs";
-import "jquery";
-import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./app/shared/scripts/clean-blog.js";
 
 export function getBaseUrl() {
@@ -18,10 +16,6 @@ const providers = [{ provide: "BASE_URL", useFactory: getBaseUrl, deps: [] }];
 if (environment.production) {
   enableProdMode();
 }
-
-// platformBrowserDynamic(providers)
-//   .bootstrapModule(AppModule)
-//   .catch(err => console.error(err));
 
 document.addEventListener("DOMContentLoaded", () => {
   platformBrowserDynamic(providers)

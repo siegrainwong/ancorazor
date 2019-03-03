@@ -1,0 +1,17 @@
+<h1>Animations</h1>
+<!-- 测试动画的页面，平时不用 -->
+Toggle All Animations
+<input
+  type="checkbox"
+  [checked]="!animationsDisabled"
+  (click)="toggleAnimations()"
+/>
+
+<nav>
+  <a id="home" routerLink="/home" routerLinkActive="active">Home</a>
+  <a id="about" routerLink="/about" routerLinkActive="active">About</a>
+</nav>
+
+<div [@routeAnimations]="prepareRoute(outlet)">
+  <router-outlet #outlet="outlet"></router-outlet>
+</div>

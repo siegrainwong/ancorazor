@@ -1,7 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import ArticleModel from "../../models/article-model";
 import { ArticleService } from "../../services/article.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "src/app/shared/store/store";
 
 @Component({
@@ -14,9 +14,11 @@ export class ArticleComponent implements OnInit {
   constructor(
     private articleService: ArticleService,
     private route: ActivatedRoute,
-    public store: Store
+    public store: Store,
+    private router: Router
   ) {}
   ngOnInit() {
+    if (this.store.headerModel) this.model = this.store.headerModel;
     this.getArticle();
   }
 
@@ -25,7 +27,6 @@ export class ArticleComponent implements OnInit {
     let res = await this.articleService.getArticle(id);
     if (!res || !res.succeed) return;
     this.model = res.data as ArticleModel;
-    if (!this.model.cover) this.model.cover = "assets/img/post-bg.jpg";
     this.setupEditor();
   }
 

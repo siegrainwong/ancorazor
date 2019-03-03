@@ -14,35 +14,33 @@ export class Store {
   constructor(private logger: LoggingService) {}
 
   /**##### Variables */
-  /**
-   * 当前是否是服务器渲染
-   */
   renderFromServer: Boolean = false;
-  /**
-   * 用户状态是否已加载
-   */
   userLoaded: Boolean = false;
-  /**
-   * 首页封面
-   */
-  homeCoverLoaded: boolean = false;
 
   /**##### Observables */
-  /**
-   * 首页到文章跳转用
-   */
-  headerModel?: ArticleModel;
+  private _headerModel: ArticleModel = new ArticleModel();
+  headerModelChanged$ = new BehaviorSubject<ArticleModel>(this._headerModel);
 
-  private routeData: RouteData = new RouteData("home");
-  routeDataChanged$ = new BehaviorSubject<RouteData>(this.routeData);
-
-  get currentRouteData() {
-    return this.routeData;
+  get headerModel() {
+    return this._headerModel;
   }
 
-  set currentRouteData(value) {
-    this.routeData = value;
+  set headerModel(value) {
+    this._headerModel = value;
+    this.headerModelChanged$.next(value);
+    this.logger.info("header changed: ", value);
+  }
+
+  private _routeData: RouteData = new RouteData("home");
+  routeDataChanged$ = new BehaviorSubject<RouteData>(this._routeData);
+
+  get routeData() {
+    return this._routeData;
+  }
+
+  set routeData(value) {
+    this._routeData = value;
     this.routeDataChanged$.next(value);
-    this.logger.info(value);
+    this.logger.info("route data changed", value);
   }
 }

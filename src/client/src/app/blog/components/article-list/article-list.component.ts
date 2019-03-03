@@ -5,6 +5,7 @@ import ArticleModel from "../../models/article-model";
 import { Pagination } from "src/app/shared/models/response-result";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Store } from "src/app/shared/store/store";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-article-list",
@@ -12,6 +13,10 @@ import { Store } from "src/app/shared/store/store";
   styleUrls: ["./article-list.component.scss"]
 })
 export class ArticleListComponent implements OnInit {
+  headerModel: ArticleModel = new ArticleModel({
+    title: environment.title,
+    cover: environment.homeCoverUrl
+  });
   articles: ArticleModel[];
   pagination: Pagination;
   parameter = new ArticleParameters();

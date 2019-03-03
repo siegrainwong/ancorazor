@@ -6,59 +6,81 @@
  * --inline-style --inline-template：不分开生成scss和html文件，只生成一个ts
  */
 
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
+import { Component, OnInit, HostBinding } from "@angular/core";
+import {
+  ActivatedRoute,
+  Router,
+  NavigationEnd,
+  RouterOutlet
+} from "@angular/router";
 import { filter } from "rxjs/operators";
 import { Store } from "../shared/store/store";
 import RouteData from "../shared/models/route-data.model";
-import { slideInAnimation, headerState } from "../shared/utils/animations";
-import ArticleModel from "./models/article-model";
-import { environment } from "src/environments/environment";
+import { slideInAnimation } from "../shared/utils/animations";
+import {
+  query,
+  style,
+  animate,
+  trigger,
+  transition,
+  animateChild
+} from "@angular/animations";
+
+const fadeIn = [
+  query(
+    ":leave",
+    style({ position: "absolute", left: 0, right: 0, opacity: 1 })
+  ),
+  query(
+    ":enter",
+    style({ position: "absolute", left: 0, right: 0, opacity: 0 })
+  ),
+  query(":leave", animate("1s", style({ opacity: 0 }))),
+  query(":leave", animateChild()),
+  query(":enter", animate("1s", style({ opacity: 1 }))),
+  query(":enter", animateChild())
+];
 
 @Component({
   selector: "app-blog-app",
   templateUrl: "./blog-app.component.html",
-  styles: [],
-  animations: [slideInAnimation]
+  animations: [
+    slideInAnimation
+    // trigger("routeAnimations", [transition("* => *", fadeIn)])
+  ]
 })
 export class BlogAppComponent implements OnInit {
-  headerModel: ArticleModel = new ArticleModel();
+  @HostBinding("@.disabled")
   isHomePage: boolean = true;
-  state: headerState = headerState.Prev;
-  kind: string;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store
+    public store: Store
   ) {}
 
   ngOnInit() {
     this.observeRoute();
-    this.onRouteChanged();
+  }
+
+  get kind() {
+    return this.store.routeData.kind && "home";
+  }
+
+  @HostBinding("@.disabled")
+  public animationsDisabled = false;
+  prepareRoute(outlet: RouterOutlet) {
+    return (
+      outlet && outlet.activatedRouteData && outlet.activatedRouteData["kind"]
+    );
   }
 
   observeRoute() {
-    this.store.currentRouteData = this.route.firstChild.snapshot
-      .data as RouteData;
+    this.store.routeData = this.route.firstChild.snapshot.data as RouteData;
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.store.currentRouteData = this.route.firstChild.snapshot
-          .data as RouteData;
+        this.store.routeData = this.route.firstChild.snapshot.data as RouteData;
       });
-  }
-
-  onRouteChanged() {
-    this.store.routeDataChanged$.subscribe(data => {
-      this.kind = data.kind;
-      if (data.kind == "home") {
-        this.state = headerState.Prev;
-        this.headerModel.title = environment.title;
-      } else {
-        this.state = headerState.Next;
-        if (this.store.headerModel) this.headerModel = this.store.headerModel;
-      }
-    });
   }
 }

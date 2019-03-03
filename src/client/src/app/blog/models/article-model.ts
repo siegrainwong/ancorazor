@@ -8,5 +8,10 @@ export default class ArticleModel extends BaseModel {
   content: string = "";
   viewCount: number = 0;
   commentCount: number = 0;
-  cover: string;
+  cover: string = "assets/img/placeholder.jpg";
+
+  constructor(init?: Partial<ArticleModel>) {
+    super(init);
+    Object.assign(this, init);
+  }
 }

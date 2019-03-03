@@ -1,21 +1,19 @@
-<ng-container *ngIf="model">
-  <!-- <app-header [model]="model"></app-header> -->
+<app-header [model]="model"></app-header>
 
-  <!-- Post Content -->
-  <article>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-10 col-md-10 mx-auto" *ngIf="store.renderFromServer">
-          {{ model.content }}
-        </div>
-        <div
-          class="col-lg-10 col-md-10 mx-auto"
-          id="viewer"
-          *ngIf="!store.renderFromServer"
-        ></div>
+<!-- Post Content -->
+<article>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 col-md-10 mx-auto" *ngIf="store.renderFromServer">
+        {{ model.content }}
       </div>
+      <div
+        class="col-lg-10 col-md-10 mx-auto"
+        id="viewer"
+        *ngIf="!store.renderFromServer"
+      ></div>
     </div>
-  </article>
-</ng-container>
+  </div>
+</article>
 
 <hr />

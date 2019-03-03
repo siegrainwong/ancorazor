@@ -14,5 +14,8 @@
 
 @import "~animate.css/animate.min.css";
 
-@import "reset";
 @import "shared";
+@import "reset";
+// :host {
+//   display: block;
+// }

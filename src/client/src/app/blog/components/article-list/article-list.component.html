@@ -1,10 +1,11 @@
+<app-header [model]="headerModel"></app-header>
 <div class="container" *ngIf="articles">
   <div class="row">
     <div class="col-lg-12 col-md-12 mx-auto">
       <ng-container *ngFor="let item of articles">
         <div class="animated fadeIn fast">
           <div class="post-preview">
-            <a (click)="readPost(item)">
+            <a [routerLink]="['/article', item.id]">
               <h2 class="post-title">
                 {{ item.title }}
               </h2>
@@ -21,7 +22,7 @@
           <hr />
         </div>
       </ng-container>
-      <!-- Pager -->
+
       <div class="clearfix" *ngIf="pagination">
         <a
           class="btn btn-primary float-left"

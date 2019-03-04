@@ -16,43 +16,12 @@ import {
 import { filter } from "rxjs/operators";
 import { Store } from "../shared/store/store";
 import RouteData from "../shared/models/route-data.model";
-import { slideInAnimation } from "../shared/utils/animations";
-import {
-  query,
-  style,
-  animate,
-  trigger,
-  transition,
-  animateChild
-} from "@angular/animations";
-
-const fadeIn = [
-  query(
-    ":leave",
-    style({ position: "absolute", left: 0, right: 0, opacity: 1 })
-  ),
-  query(
-    ":enter",
-    style({ position: "absolute", left: 0, right: 0, opacity: 0 })
-  ),
-  query(":leave", animate("1s", style({ opacity: 0 }))),
-  query(":leave", animateChild()),
-  query(":enter", animate("1s", style({ opacity: 1 }))),
-  query(":enter", animateChild())
-];
 
 @Component({
   selector: "app-blog-app",
-  templateUrl: "./blog-app.component.html",
-  animations: [
-    slideInAnimation
-    // trigger("routeAnimations", [transition("* => *", fadeIn)])
-  ]
+  templateUrl: "./blog-app.component.html"
 })
 export class BlogAppComponent implements OnInit {
-  @HostBinding("@.disabled")
-  isHomePage: boolean = true;
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -63,10 +32,9 @@ export class BlogAppComponent implements OnInit {
     this.observeRoute();
   }
 
-  get kind() {
-    return this.store.routeData.kind && "home";
-  }
-
+  /**
+   * 是否禁用全局动画
+   */
   @HostBinding("@.disabled")
   public animationsDisabled = false;
   prepareRoute(outlet: RouterOutlet) {
@@ -74,7 +42,6 @@ export class BlogAppComponent implements OnInit {
       outlet && outlet.activatedRouteData && outlet.activatedRouteData["kind"]
     );
   }
-
   observeRoute() {
     this.store.routeData = this.route.firstChild.snapshot.data as RouteData;
     this.router.events

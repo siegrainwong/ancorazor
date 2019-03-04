@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit {
   // 给 write-article 页面用的
   @Output() headerUpdated = new EventEmitter<ArticleModel>();
 
-  constructor(private store: Store) {}
+  constructor(public store: Store) {}
 
   ngOnInit() {}
 

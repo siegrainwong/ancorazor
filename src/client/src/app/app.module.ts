@@ -10,14 +10,6 @@ import { RedirectSilentRenewComponent } from "./shared/oidc/redirect-silent-rene
 import { OpenIdConnectService } from "./shared/oidc/open-id-connect.service";
 import { LoggingService } from "./shared/services/logging.service";
 import { GlobalErrorHandler } from "./shared/services/global-error-handler";
-import { ArticleListComponent } from "./blog/components/article-list/article-list.component";
-import { AboutComponent } from "./blog/components/about/about.component";
-import { SGUtil } from "./shared/utils/siegrain.utils";
-import { MatSnackBar } from "@angular/material";
-import { CommonModule } from "@angular/common";
-import { MaterialModule } from "./shared/material/material.module";
-import { FormsModule } from "@angular/forms";
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +21,7 @@ import { FormsModule } from "@angular/forms";
     // The application ID can be any identifier which is unique on
     // the page.
     // TODO: configurable
-    // BrowserModule.withServerTransition({ appId: "siegrain.blog" }), // SSR: Modified
+    BrowserModule.withServerTransition({ appId: "siegrain.blog" }), // SSR: Modified
     // Add TransferHttpCacheModule to install a Http interceptor
     AppRoutingModule,
     BrowserAnimationsModule

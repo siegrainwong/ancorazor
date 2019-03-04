@@ -16,6 +16,7 @@ export class Store {
   /**##### Variables */
   renderFromServer: Boolean = false;
   userLoaded: Boolean = false;
+  isLeaving: Boolean = false;
 
   /**##### Observables */
   private _headerModel: ArticleModel = new ArticleModel();

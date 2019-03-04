@@ -1,7 +1,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
   <div class="container">
-    <a mat-button class="navbar-brand" routerLink="/">{{ title }} </a>
+    <a mat-button class="navbar-brand" (click)="routeTo('/')">{{ title }} </a>
     <button
       class="navbar-toggler navbar-toggler-right"
       type="button"
@@ -17,7 +17,7 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a mat-button class="nav-link" routerLink="/about">About</a>
+          <a mat-button class="nav-link" (click)="routeTo('/about')">About</a>
         </li>
         <li class="nav-item">
           <a
@@ -29,7 +29,7 @@
           >
         </li>
         <li class="nav-item" *ngIf="userService.userIsAvailable">
-          <a mat-button class="nav-link" routerLink="/add">New Post</a>
+          <a mat-button class="nav-link" (click)="routeTo('/add')">New Post</a>
         </li>
         <li class="nav-item" *ngIf="!userService.userIsAvailable">
           <a mat-button class="nav-link" (click)="userService.triggerSignIn()"

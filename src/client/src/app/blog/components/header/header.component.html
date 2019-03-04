@@ -5,11 +5,8 @@
   <div class="container">
     <div class="row align-items-center">
       <div
-        [ngClass]="{
-          'col-lg-10 col-md-12 mx-auto animated fast': true,
-          fadeInUp: !store.isLeaving,
-          fadeOutUp: store.isLeaving
-        }"
+        class="col-lg-10 col-md-12 mx-auto animated fast"
+        [ngClass]="util.animationClass('title')"
       >
         <div class="site-heading" *ngIf="!isEditing">
           <h1>{{ model.title }}</h1>

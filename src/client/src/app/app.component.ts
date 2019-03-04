@@ -1,6 +1,5 @@
 import { Component, HostBinding } from "@angular/core";
-import { slideInAnimation } from "./shared/utils/animations";
-import { RouterOutlet } from "@angular/router";
+import { slideInAnimation } from "./shared/utils/animations.ng";
 
 @Component({
   selector: "app-root",

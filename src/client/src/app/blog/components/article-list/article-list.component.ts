@@ -6,13 +6,11 @@ import { Pagination } from "src/app/shared/models/response-result";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Store } from "src/app/shared/store/store";
 import { environment } from "src/environments/environment";
-import { listAnimation } from "src/app/shared/utils/animations";
 
 @Component({
   selector: "app-article-list",
   templateUrl: "./article-list.component.html",
-  styleUrls: ["./article-list.component.scss"],
-  animations: [listAnimation]
+  styleUrls: ["./article-list.component.scss"]
 })
 export class ArticleListComponent implements OnInit {
   headerModel: ArticleModel = new ArticleModel({

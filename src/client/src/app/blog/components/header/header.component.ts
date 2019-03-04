@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
 import * as $ from "jquery";
+import { SGUtil } from "src/app/shared/utils/siegrain.utils";
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",
@@ -14,7 +15,7 @@ export class HeaderComponent implements OnInit {
   // 给 write-article 页面用的
   @Output() headerUpdated = new EventEmitter<ArticleModel>();
 
-  constructor(public store: Store) {}
+  constructor(public store: Store, public util: SGUtil) {}
 
   ngOnInit() {}
 

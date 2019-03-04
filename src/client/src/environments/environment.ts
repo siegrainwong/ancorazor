@@ -1,9 +1,7 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
+import { random } from "src/app/shared/utils/random";
+import { speed } from "src/app/shared/utils/animations";
 
-import { random } from "src/app/shared/utils/siegrain.utils";
-
+// host settings
 // const clientHost = "http://localhost:4200";
 const clientHost = "https://localhost:5001";
 const apiHost = "https://localhost:5001";
@@ -12,8 +10,10 @@ const idServerHost = "https://localhost:7000";
 export const environment = {
   production: false,
 
+  // customizations
   title: "siegrain🌌wang",
   homeCoverUrl: `assets/img/bg${random(1, 7)}.jpg`,
+  routeAnimationDuration: speed.fast,
 
   apiUrlBase: `${apiHost}/api`,
   // oidc

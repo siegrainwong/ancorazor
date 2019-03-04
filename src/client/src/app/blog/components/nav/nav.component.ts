@@ -9,7 +9,7 @@ import { OpenIdConnectService } from "src/app/shared/oidc/open-id-connect.servic
 import { Store } from "src/app/shared/store/store";
 import { environment } from "src/environments/environment";
 import { Router } from "@angular/router";
-import { timeout } from "src/app/shared/utils/siegrain.utils";
+import { timeout, SGUtil } from "src/app/shared/utils/siegrain.utils";
 
 @Component({
   selector: "app-nav",
@@ -23,7 +23,7 @@ export class NavComponent implements OnInit {
   constructor(
     public userService: OpenIdConnectService,
     public store: Store,
-    private router: Router
+    public util: SGUtil
   ) {}
 
   ngOnInit() {
@@ -35,12 +35,5 @@ export class NavComponent implements OnInit {
       if (data && data.kind == "home") this.title = "";
       else this.title = environment.title;
     });
-  }
-
-  async routeTo(url: string) {
-    this.store.isLeaving = true;
-    await timeout(800);
-    this.store.isLeaving = false;
-    this.router.navigate([url]);
   }
 }

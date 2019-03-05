@@ -1,15 +1,9 @@
-import {
-  Component,
-  OnInit,
-  Output,
-  EventEmitter,
-  HostBinding
-} from "@angular/core";
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { OpenIdConnectService } from "src/app/shared/oidc/open-id-connect.service";
 import { Store } from "src/app/shared/store/store";
 import { environment } from "src/environments/environment";
-import { Router } from "@angular/router";
-import { timeout, SGUtil } from "src/app/shared/utils/siegrain.utils";
+import { SGUtil } from "src/app/shared/utils/siegrain.utils";
+import { SGTransition } from "src/app/shared/utils/siegrain.animations";
 
 @Component({
   selector: "app-nav",
@@ -23,7 +17,8 @@ export class NavComponent implements OnInit {
   constructor(
     public userService: OpenIdConnectService,
     public store: Store,
-    public util: SGUtil
+    public util: SGUtil,
+    public transition: SGTransition
   ) {}
 
   ngOnInit() {

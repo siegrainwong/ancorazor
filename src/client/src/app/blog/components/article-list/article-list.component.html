@@ -3,10 +3,9 @@
   <div class="row">
     <div class="col-lg-12 col-md-12 mx-auto">
       <ng-container *ngFor="let item of articles">
-        <!-- <div class="animated fadeIn fast"> -->
-        <div>
+        <div [ngClass]="transitionClass">
           <div class="post-preview">
-            <a [routerLink]="['/article', item.id]">
+            <a (click)="util.routeTo(['/article', item.id])">
               <h2 class="post-title">
                 {{ item.title }}
               </h2>

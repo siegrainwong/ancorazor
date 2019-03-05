@@ -42,6 +42,7 @@ export class BlogAppComponent implements OnInit {
       outlet && outlet.activatedRouteData && outlet.activatedRouteData["kind"]
     );
   }
+
   observeRoute() {
     this.store.routeData = this.route.firstChild.snapshot.data as RouteData;
     this.router.events

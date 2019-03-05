@@ -1,12 +1,12 @@
 <!-- Page Header -->
 <header class="masthead">
-  <div class="header-bg"></div>
+  <div class="header-bg" [ngClass]="transition.apply('cover')"></div>
   <div class="overlay"></div>
   <div class="container">
     <div class="row align-items-center">
       <div
-        class="col-lg-10 col-md-12 mx-auto animated fast"
-        [ngClass]="util.animationClass('title')"
+        class="col-lg-10 col-md-12 mx-auto"
+        [ngClass]="transition.apply('title')"
       >
         <div class="site-heading" *ngIf="!isEditing">
           <h1>{{ model.title }}</h1>

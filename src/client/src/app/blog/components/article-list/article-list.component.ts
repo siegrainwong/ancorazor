@@ -4,8 +4,9 @@ import { ArticleService } from "../../services/article.service";
 import ArticleModel from "../../models/article-model";
 import { Pagination } from "src/app/shared/models/response-result";
 import { Router, ActivatedRoute } from "@angular/router";
-import { Store } from "src/app/shared/store/store";
 import { environment } from "src/environments/environment";
+import { SGUtil } from "src/app/shared/utils/siegrain.utils";
+import { SGTransition } from "src/app/shared/utils/siegrain.animations";
 
 @Component({
   selector: "app-article-list",
@@ -20,13 +21,15 @@ export class ArticleListComponent implements OnInit {
   articles: ArticleModel[];
   pagination: Pagination;
   parameter = new ArticleParameters();
+  private transitionName = "articles";
   @Output() articlePressed = new EventEmitter<ArticleModel>();
 
   constructor(
     private service: ArticleService,
     private router: Router,
     private route: ActivatedRoute,
-    private store: Store
+    public util: SGUtil,
+    private transition: SGTransition
   ) {}
 
   ngOnInit() {
@@ -43,25 +46,26 @@ export class ArticleListComponent implements OnInit {
     this.pagination = res.pagination;
   }
 
-  readPost(model: ArticleModel) {
-    this.store.headerModel = model;
-    this.router.navigate([`/article/${model.id}`]);
+  get transitionClass() {
+    return this.transition.apply(this.transitionName);
   }
 
   previous() {
     if (!this.pagination.previousPageLink) return;
+    this.transitionName = "page_turn_previous";
     this.parameter.pageIndex--;
     this.query();
   }
 
   next() {
     if (!this.pagination.nextPageLink) return;
+    this.transitionName = "page_turn_next";
     this.parameter.pageIndex++;
     this.query();
   }
 
   query() {
-    this.router.navigate(["/"], {
+    this.util.routeTo(["/"], {
       queryParams: { index: this.parameter.pageIndex }
     });
   }

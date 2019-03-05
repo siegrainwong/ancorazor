@@ -1,5 +1,5 @@
 import { random } from "src/app/shared/utils/random";
-import { speed } from "src/app/shared/utils/animations";
+import { speed } from "src/app/shared/utils/siegrain.animations";
 
 // host settings
 // const clientHost = "http://localhost:4200";
@@ -13,7 +13,6 @@ export const environment = {
   // customizations
   title: "siegrain🌌wang",
   homeCoverUrl: `assets/img/bg${random(1, 7)}.jpg`,
-  routeAnimationDuration: speed.fast,
 
   apiUrlBase: `${apiHost}/api`,
   // oidc

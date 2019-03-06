@@ -18,7 +18,7 @@ export class ArticleComponent implements OnInit {
     private router: Router
   ) {}
   ngOnInit() {
-    if (this.store.headerModel) this.model = this.store.headerModel;
+    // if (this.store.headerModel) this.model = this.store.headerModel;
     this.getArticle();
   }
 

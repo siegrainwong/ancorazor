@@ -21,15 +21,15 @@ export class ArticleListComponent implements OnInit {
   articles: ArticleModel[];
   pagination: Pagination;
   parameter = new ArticleParameters();
-  private transitionName = "articles";
+  private _transitionName = "articles";
+  private _isCustomTransition = false;
   @Output() articlePressed = new EventEmitter<ArticleModel>();
 
   constructor(
     private service: ArticleService,
-    private router: Router,
     private route: ActivatedRoute,
     public util: SGUtil,
-    private transition: SGTransition
+    public transition: SGTransition
   ) {}
 
   ngOnInit() {
@@ -47,26 +47,35 @@ export class ArticleListComponent implements OnInit {
   }
 
   get transitionClass() {
-    return this.transition.apply(this.transitionName);
+    return this.transition.apply(this._transitionName);
   }
 
   previous() {
     if (!this.pagination.previousPageLink) return;
-    this.transitionName = "page_turn_previous";
+    this._transitionName = "page_turn_previous";
+    this._isCustomTransition = true;
     this.parameter.pageIndex--;
     this.query();
   }
 
   next() {
     if (!this.pagination.nextPageLink) return;
-    this.transitionName = "page_turn_next";
+    this._transitionName = "page_turn_next";
+    this._isCustomTransition = true;
     this.parameter.pageIndex++;
     this.query();
   }
 
   query() {
-    this.util.routeTo(["/"], {
-      queryParams: { index: this.parameter.pageIndex }
-    });
+    this.util.routeTo(
+      ["/"],
+      {
+        queryParams: { index: this.parameter.pageIndex },
+        fragment: "nav"
+      },
+      this._isCustomTransition
+        ? [this._transitionName, "page_turn_button"]
+        : null
+    );
   }
 }

@@ -1,40 +1,81 @@
 import { Injectable } from "@angular/core";
 import { timeout } from "./promise-delay";
+import { Store } from "../store/store";
 
 @Injectable({
   providedIn: "root"
 })
 export class SGTransition {
-  constructor() {}
+  private _routeAnimationDisabledDuration = 0;
+
+  constructor(store: Store) {
+    store.routeDataChanged$.subscribe(() => {
+      this.enableRouteAnimations();
+    });
+  }
 
   /**
    * 返回一个 [ngClass] 对象
+   * @param name 动画名称
    */
   apply(name: string) {
-    return this._animations.find(x => x.name == name).class;
+    return this.getAnimations([name])[0].class;
   }
 
   /**
    * 触发转场动画
-   * @param type 动画类型
-   * @param name 自定义动画名称（如果是自定义动画才需要传入）
+   * @param names 自定义动画集合（不传则触发当前页面所有路由动画）
+   * 自定义动画时间内会禁用路由动画
    */
-  async triggerTransition(type: type, name?: string) {
+  async triggerTransition(names?: string[]) {
     let animations: SGAnimation[] = [];
-    if (!name) animations = this._animations.filter(x => x.type == type);
-    else animations = [this._animations.find(x => x.name == name)];
+    let duration = 0;
 
-    animations.map(x => (x.leaving = !x.leaving));
+    if (!names || names.length == 0) {
+      animations = this.routeAnimations;
+      duration = this.getDuration(animations);
+    } else {
+      animations = this.getAnimations(names);
+      duration = this.getDuration(animations);
+      this._routeAnimationDisabledDuration = duration;
+      this.routeAnimations.map(x => (x.animated = false));
+    }
 
+    animations.map(x => (x.leaving = true));
+    await timeout(duration);
+    // TODO: 避免路由前动画弹回，这里要处理一下
+    // 最好去查一下怎么让animate.css的动画滞留在destination，而不还原。
+    animations.map(x => (x.leaving = false));
+  }
+
+  async enableRouteAnimations() {
+    await timeout(this._routeAnimationDisabledDuration);
+    this._routeAnimationDisabledDuration = 0;
+    this.routeAnimations.map(x => (x.animated = true));
+  }
+
+  /**
+   * ######### Acessors
+   */
+  private get routeAnimations(): Array<SGAnimation> {
+    return this._animations.filter(x => x.type == type.route);
+  }
+
+  private getAnimations(names: string[]): Array<SGAnimation> {
+    return this._animations.filter(x => names.indexOf(x.name) > -1);
+  }
+
+  private getDuration(animations: Array<SGAnimation>): number {
     const duration = Math.min.apply(
       null,
       animations.map(x => x.speed.duration)
     );
-    await timeout(duration);
-
-    animations.map(x => (x.leaving = !x.leaving));
+    return duration;
   }
 
+  /**
+   * ######### Animation declarations
+   */
   // animation reference: https://daneden.github.io/animate.css/
   private _animations: SGAnimation[] = [
     // router animations
@@ -71,6 +112,12 @@ export class SGTransition {
       enterClass: "fadeInLeft",
       leaveClass: "fadeOutRight",
       type: type.custom
+    }),
+    new SGAnimation({
+      name: "page_turn_button",
+      enterClass: "fadeIn",
+      leaveClass: "fadeOut",
+      type: type.custom
     })
   ];
 }
@@ -82,10 +129,11 @@ const speed = {
   faster: { name: "faster", duration: 500 }
 };
 
+/** 动画类型 */
 export enum type {
   /**
-   * 转场动画：每次激活时会触发当前页面的所有转场动画
-   * duration 取当前所有转场动画的最小值
+   * 路由动画：每次激活时会触发当前页面的所有路由动画
+   * duration 取当前所有路由动画的最小值
    **/
   route = "route",
   /**
@@ -100,6 +148,8 @@ class SGAnimation {
   type: type = type.route;
   /** 是否触发离开动画 */
   leaving: boolean = false;
+  /** 是否执行动画 */
+  animated: boolean = true;
 
   enterClass: string;
   leaveClass: string;
@@ -112,7 +162,7 @@ class SGAnimation {
     animation[this.enterClass] = !this.leaving;
     animation[this.leaveClass] = this.leaving;
     animation[this.speed.name] = true;
-    animation["animated"] = true;
+    animation["animated"] = this.animated;
     return animation;
   }
 }

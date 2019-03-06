@@ -18,14 +18,27 @@ export class SGUtil {
   ) {}
 
   /**##### Utilities */
+
+  /**
+   * ref: `MatSnackBar`
+   * @param msg 消息内容
+   * @param type 消息类型（未实装）
+   */
   tip(msg: string, type: TipType = TipType.Error) {
     this.snackBar.open(`❌ ${msg}`, null, {
       duration: 5000
     });
   }
 
-  async routeTo(commands: any[], extras?: NavigationExtras) {
-    await this.transition.triggerTransition(type.route);
+  /**
+   * 路由
+   * 此方法会触发动画
+   * @param commands `router.navigate` parameter
+   * @param extras `router.navigate` parameter
+   * @param names 动画名称集合
+   */
+  async routeTo(commands: any[], extras?: NavigationExtras, names?: string[]) {
+    await this.transition.triggerTransition(names);
     this.router.navigate(commands, extras);
   }
 }

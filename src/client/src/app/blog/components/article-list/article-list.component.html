@@ -26,6 +26,7 @@
       <div class="clearfix" *ngIf="pagination">
         <a
           class="btn btn-primary float-left"
+          [ngClass]="transition.apply('page_turn_button')"
           mat-flat-button
           (click)="previous()"
           *ngIf="pagination.previousPageLink"
@@ -33,6 +34,7 @@
         >
         <a
           class="btn btn-primary float-right"
+          [ngClass]="transition.apply('page_turn_button')"
           mat-flat-button
           (click)="next()"
           *ngIf="pagination.nextPageLink"

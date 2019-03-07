@@ -43,3 +43,7 @@ button:focus,
 .btn:focus {
   outline: none;
 }
+
+.animated {
+  animation-fill-mode: forwards;
+}

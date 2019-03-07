@@ -115,8 +115,8 @@ export class SGTransition {
     }),
     new SGAnimation({
       name: "page_turn_button",
-      enterClass: "fadeIn",
-      leaveClass: "fadeOut",
+      enterClass: "fadeInUp",
+      leaveClass: "fadeOutDown",
       type: type.custom
     })
   ];

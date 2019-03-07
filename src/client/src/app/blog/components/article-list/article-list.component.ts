@@ -35,12 +35,15 @@ export class ArticleListComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(param => {
       this.parameter.pageIndex = param.index || 0;
+      this.articles = [];
+      this.pagination = null;
       this.getPosts();
     });
   }
 
   async getPosts() {
     let res = await this.service.getPagedArticles(this.parameter);
+
     if (!res || !res.succeed) return;
     this.articles = res.data as ArticleModel[];
     this.pagination = res.pagination;

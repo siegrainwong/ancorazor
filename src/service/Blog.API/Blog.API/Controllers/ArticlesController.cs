@@ -83,6 +83,7 @@ namespace Blog.API.Controllers
                 pagination = meta
             };
 
+            await Task.Delay(1000);
             return Ok(result);
         }
 

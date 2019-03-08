@@ -73,34 +73,46 @@ label {
   animation-fill-mode: forwards;
 }
 
+$code-normal: #636c71;
+$code-keyword: #3e99b5;
 /* === tui editor === */
 .tui-editor-contents {
   font-size: 16px;
+  // code block
   pre,
-  code {
+  pre > code {
     font-family: $code-font, $primary-font;
+    color: $code-normal;
+  }
+  // inline code block
+  code {
+    color: $code-keyword;
+    padding: 2px 4px;
+    margin: 0 4px;
+    background-color: #f5f7f8;
   }
 }
 
 /* === highlight.js === */
-$code-normal: #636c71;
-$code-keyword: #3e99b5;
 pre {
   color: $code-normal;
+
   .hljs-string,
   .hljs-symbol,
   .hljs-bullet {
     color: #fb443d;
   }
+
   .hljs-comment,
   .hljs-quote {
     color: #847fbb;
   }
-  // static public async return ...
+
   .hljs-keyword,
   .hljs-selector-tag {
     color: #096fe9;
   }
+
   .hljs-function {
     color: $code-keyword;
     .hljs-params {

@@ -3,7 +3,7 @@ import { ArticleParameters } from "../../models/article-parameters";
 import { ArticleService } from "../../services/article.service";
 import ArticleModel from "../../models/article-model";
 import { Pagination } from "src/app/shared/models/response-result";
-import { Router, ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { environment } from "src/environments/environment";
 import { SGUtil } from "src/app/shared/utils/siegrain.utils";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
@@ -14,16 +14,21 @@ import { SGTransition } from "src/app/shared/utils/siegrain.animations";
   styleUrls: ["./article-list.component.scss"]
 })
 export class ArticleListComponent implements OnInit {
+  // component
   headerModel: ArticleModel = new ArticleModel({
     title: environment.title,
     cover: environment.homeCoverUrl
   });
+  // request
   articles: ArticleModel[];
   pagination: Pagination;
-  parameter = new ArticleParameters();
-  private _transitionName = "articles";
-  private _isCustomTransition = false;
-  @Output() articlePressed = new EventEmitter<ArticleModel>();
+  private _preloads: {
+    articles: ArticleModel[];
+    pagination: Pagination;
+  };
+  private _parameter = new ArticleParameters();
+  // animate
+  private _itemTransition = "articles";
 
   constructor(
     private service: ArticleService,
@@ -34,7 +39,7 @@ export class ArticleListComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(param => {
-      this.parameter.pageIndex = param.index || 0;
+      this._parameter.pageIndex = param.index || 0;
       this.articles = [];
       this.pagination = null;
       this.getPosts();
@@ -42,43 +47,54 @@ export class ArticleListComponent implements OnInit {
   }
 
   async getPosts() {
-    let res = await this.service.getPagedArticles(this.parameter);
+    if (this._preloads) {
+      this.articles = this._preloads.articles;
+      this.pagination = this._preloads.pagination;
+      this._preloads = null;
+    } else {
+      let res = await this.service.getPagedArticles(this._parameter);
+      if (!res || !res.succeed) return;
+      this.articles = res.data as ArticleModel[];
+      this.pagination = res.pagination;
+    }
+  }
 
+  async preloadPosts() {
+    let res = await this.service.getPagedArticles(this._parameter);
     if (!res || !res.succeed) return;
-    this.articles = res.data as ArticleModel[];
-    this.pagination = res.pagination;
+    this._preloads = {
+      articles: res.data as ArticleModel[],
+      pagination: res.pagination
+    };
   }
 
-  get transitionClass() {
-    return this.transition.apply(this._transitionName);
+  get itemTransition() {
+    return this.transition.apply(this._itemTransition);
   }
 
-  previous() {
+  async previous() {
     if (!this.pagination.previousPageLink) return;
-    this._transitionName = "page_turn_previous";
-    this._isCustomTransition = true;
-    this.parameter.pageIndex--;
-    this.query();
+    this._parameter.pageIndex--;
+    await this.preloadPosts();
+    this.turnPage("previous");
   }
 
-  next() {
+  async next() {
     if (!this.pagination.nextPageLink) return;
-    this._transitionName = "page_turn_next";
-    this._isCustomTransition = true;
-    this.parameter.pageIndex++;
-    this.query();
+    this._parameter.pageIndex++;
+    await this.preloadPosts();
+    this.turnPage("next");
   }
 
-  query() {
+  turnPage(direction: string) {
+    this._itemTransition = `page_turn_${direction}`;
     this.util.routeTo(
       ["/"],
       {
-        queryParams: { index: this.parameter.pageIndex },
+        queryParams: { index: this._parameter.pageIndex },
         fragment: "nav"
       },
-      this._isCustomTransition
-        ? [this._transitionName, "page_turn_button"]
-        : null
+      this._preloads ? [this._itemTransition, "page_turn_button"] : null
     );
   }
 }

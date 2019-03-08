@@ -4,6 +4,8 @@ import { ArticleService } from "../../services/article.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "src/app/shared/store/store";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
+import { Title } from "@angular/platform-browser";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-article",
@@ -17,7 +19,8 @@ export class ArticleComponent implements OnInit {
     private articleService: ArticleService,
     private route: ActivatedRoute,
     public store: Store,
-    private transition: SGTransition
+    private transition: SGTransition,
+    private titleService: Title
   ) {}
   ngOnInit() {
     // if (this.store.headerModel) this.model = this.store.headerModel;
@@ -29,6 +32,9 @@ export class ArticleComponent implements OnInit {
     let res = await this.articleService.getArticle(id);
     if (!res || !res.succeed) return;
     this.model = res.data as ArticleModel;
+    this.titleService.setTitle(
+      `${this.model.title} - ${environment.titlePlainText}`
+    );
     this.setupEditor();
   }
 

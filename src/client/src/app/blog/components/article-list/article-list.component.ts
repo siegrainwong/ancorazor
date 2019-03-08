@@ -10,6 +10,7 @@ import {
   SGTransition,
   SGTransitionMode
 } from "src/app/shared/utils/siegrain.animations";
+import { Title } from "@angular/platform-browser";
 
 enum ItemTransition {
   route = "articles",
@@ -43,10 +44,12 @@ export class ArticleListComponent implements OnInit {
     private service: ArticleService,
     private route: ActivatedRoute,
     public util: SGUtil,
-    public transition: SGTransition
+    public transition: SGTransition,
+    private titleService: Title
   ) {}
 
   ngOnInit() {
+    this.titleService.setTitle(`${environment.titlePlainText}`);
     this.route.queryParams.subscribe(param => {
       this._parameter.pageIndex = param.index || 0;
       this.articles = [];

@@ -6,6 +6,7 @@
     <div class="row align-items-center">
       <div
         class="col-lg-10 col-md-12 mx-auto"
+        *ngIf="model"
         [ngClass]="transition.apply('title')"
       >
         <div class="site-heading" *ngIf="!isEditing">

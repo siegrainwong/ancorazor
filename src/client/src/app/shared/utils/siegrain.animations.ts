@@ -104,6 +104,11 @@ export class SGTransition {
       enterClass: "fadeInUp",
       leaveClass: "fadeOutDown"
     }),
+    new SGAnimation({
+      name: "article",
+      enterClass: "fadeInUp",
+      leaveClass: "fadeOutDown"
+    }),
 
     // custom animations
     new SGAnimation({

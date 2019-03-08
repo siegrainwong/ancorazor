@@ -103,6 +103,7 @@ namespace Blog.API.Controllers
 
             var viewModel = _mapper.Map<Article, ArticleViewModel>(model);
 
+            await Task.Delay(1000);
             return Ok(new { succeed = true, data = viewModel });
         }
         

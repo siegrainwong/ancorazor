@@ -3,6 +3,7 @@ import ArticleModel from "../../models/article-model";
 import { ArticleService } from "../../services/article.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "src/app/shared/store/store";
+import { SGTransition } from "src/app/shared/utils/siegrain.animations";
 
 @Component({
   selector: "app-article",
@@ -10,11 +11,13 @@ import { Store } from "src/app/shared/store/store";
   styleUrls: ["./article.component.scss"]
 })
 export class ArticleComponent implements OnInit {
-  model: ArticleModel = new ArticleModel();
+  model: ArticleModel;
+  // private _transitionClass: any;
   constructor(
     private articleService: ArticleService,
     private route: ActivatedRoute,
-    public store: Store
+    public store: Store,
+    private transition: SGTransition
   ) {}
   ngOnInit() {
     // if (this.store.headerModel) this.model = this.store.headerModel;
@@ -29,6 +32,10 @@ export class ArticleComponent implements OnInit {
     this.setupEditor();
   }
 
+  get transitionClass() {
+    return this.model && this.transition.apply("article");
+  }
+
   setupEditor() {
     if (this.store.renderFromServer) return;
     let Viewer = require("tui-editor/dist/tui-editor-Viewer");
@@ -36,5 +43,6 @@ export class ArticleComponent implements OnInit {
       el: document.querySelector("#viewer"),
       initialValue: this.model.content
     });
+    // this._transitionClass = this.transition.apply("article");
   }
 }

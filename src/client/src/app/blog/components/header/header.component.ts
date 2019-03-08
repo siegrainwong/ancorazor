@@ -9,7 +9,7 @@ import { SGTransition } from "src/app/shared/utils/siegrain.animations";
   styleUrls: ["./header.component.scss"]
 })
 export class HeaderComponent implements OnInit {
-  private _model: ArticleModel = new ArticleModel();
+  private _model: ArticleModel;
 
   @Input() isEditing: boolean = false;
   // 给 write-article 页面用的
@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit {
 
   loadCover() {
     if (this.store.renderFromServer) return;
-    let src = this.model.cover;
+    let src = (this.model && this.model.cover) || "assets/img/placeholder.jpg";
     let image = new Image();
     image.onload = function() {
       $(`.header-bg`).css("background-image", "url('" + image.src + "')");

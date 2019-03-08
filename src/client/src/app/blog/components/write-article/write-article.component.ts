@@ -11,7 +11,11 @@ import { LoggingService } from "src/app/shared/services/logging.service";
   styleUrls: ["./write-article.component.scss"]
 })
 export class WriteArticleComponent implements OnInit {
-  @Input() model = new ArticleModel();
+  @Input() model = new ArticleModel({
+    cover: "assets/img/write-bg.jpg",
+    title: "",
+    digest: ""
+  });
   private editor: any;
 
   constructor(
@@ -32,7 +36,7 @@ export class WriteArticleComponent implements OnInit {
       el: document.querySelector("#editor"),
       initialEditType: "markdown",
       previewStyle: "vertical",
-      height: "500px",
+      height: "800px",
       initialValue: this.model.content
     });
   }

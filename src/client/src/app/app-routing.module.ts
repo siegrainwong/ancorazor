@@ -6,13 +6,10 @@ import { ArticleListComponent } from "./blog/components/article-list/article-lis
 import { AboutComponent } from "./blog/components/about/about.component";
 
 const routes: Routes = [
-  { path: "", loadChildren: "./blog/blog.module#BlogModule" }
-  // { path: "signin-oidc", component: SigninOidcComponent },
-  // { path: "redirect-silentrenew", component: RedirectSilentRenewComponent },
-  // { path: "**", redirectTo: "home" }, // TODO:
-
-  // { path: "home", component: ArticleListComponent, data: { kind: "home" } },
-  // { path: "about", component: AboutComponent, data: { kind: "about" } }
+  { path: "", loadChildren: "./blog/blog.module#BlogModule" },
+  { path: "signin-oidc", component: SigninOidcComponent },
+  { path: "redirect-silentrenew", component: RedirectSilentRenewComponent },
+  { path: "**", redirectTo: "home" }
 ];
 @NgModule({
   // https://github.com/angular/angular/issues/15716

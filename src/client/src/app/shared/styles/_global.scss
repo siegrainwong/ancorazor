@@ -2,7 +2,6 @@
 body {
   font-size: 20px;
   color: $gray-900;
-  @include serif-font;
 }
 
 p {
@@ -20,7 +19,6 @@ h4,
 h5,
 h6 {
   font-weight: 800;
-  @include sans-serif-font;
 }
 
 a {

@@ -312,7 +312,8 @@ namespace Blog.API
             {
                 // 只在个别路由开启 SSR
                 spaApp.MapWhen(context =>
-                        !context.Request.Path.Equals("/add"),
+                        //!context.Request.Path.Equals("/add"),
+                        true,
                     client =>
                     {
                         client.UseSpa(spa =>
@@ -337,11 +338,11 @@ namespace Blog.API
                     });
                 // 剩下的路由直接代理到 Angular Server 上去
                 // TODO: 有点慢。
-                spaApp.MapWhen(context => context.Request.Path.Equals("/add"), client => {
-                    client.RunProxy(context => context
-                        .ForwardTo($"{AppSettings.Get("AppSettings", "ClientHost")}{context.Request.Path}")
-                        .Send());
-                });
+                //spaApp.MapWhen(context => context.Request.Path.Equals("/add"), client => {
+                //    client.RunProxy(context => context
+                //        .ForwardTo($"{AppSettings.Get("AppSettings", "ClientHost")}{context.Request.Path}")
+                //        .Send());
+                //});
             });
 
             #endregion

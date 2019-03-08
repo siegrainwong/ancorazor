@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ArticleParameters } from "../../models/article-parameters";
 import { ArticleService } from "../../services/article.service";
 import ArticleModel from "../../models/article-model";
@@ -6,8 +6,16 @@ import { Pagination } from "src/app/shared/models/response-result";
 import { ActivatedRoute } from "@angular/router";
 import { environment } from "src/environments/environment";
 import { SGUtil } from "src/app/shared/utils/siegrain.utils";
-import { SGTransition } from "src/app/shared/utils/siegrain.animations";
+import {
+  SGTransition,
+  SGTransitionMode
+} from "src/app/shared/utils/siegrain.animations";
 
+enum ItemTransition {
+  route = "articles",
+  next = "page_turn_next",
+  previous = "page_turn_previous"
+}
 @Component({
   selector: "app-article-list",
   templateUrl: "./article-list.component.html",
@@ -22,13 +30,14 @@ export class ArticleListComponent implements OnInit {
   // request
   articles: ArticleModel[];
   pagination: Pagination;
+  preloading: boolean = false;
   private _preloads: {
     articles: ArticleModel[];
     pagination: Pagination;
   };
   private _parameter = new ArticleParameters();
-  // animate
-  private _itemTransition = "articles";
+  // article item animation
+  private _itemTransition: ItemTransition = ItemTransition.route;
 
   constructor(
     private service: ArticleService,
@@ -42,11 +51,15 @@ export class ArticleListComponent implements OnInit {
       this._parameter.pageIndex = param.index || 0;
       this.articles = [];
       this.pagination = null;
-      this.getPosts();
+      this.getArticles();
+    });
+    this.transition.transitionWillBegin$.subscribe(mode => {
+      if (mode == SGTransitionMode.route)
+        this._itemTransition = ItemTransition.route;
     });
   }
 
-  async getPosts() {
+  async getArticles() {
     if (this._preloads) {
       this.articles = this._preloads.articles;
       this.pagination = this._preloads.pagination;
@@ -59,13 +72,15 @@ export class ArticleListComponent implements OnInit {
     }
   }
 
-  async preloadPosts() {
+  async preloadArticles() {
+    this.preloading = true;
     let res = await this.service.getPagedArticles(this._parameter);
     if (!res || !res.succeed) return;
     this._preloads = {
       articles: res.data as ArticleModel[],
       pagination: res.pagination
     };
+    this.preloading = false;
   }
 
   get itemTransition() {
@@ -75,24 +90,23 @@ export class ArticleListComponent implements OnInit {
   async previous() {
     if (!this.pagination.previousPageLink) return;
     this._parameter.pageIndex--;
-    await this.preloadPosts();
-    this.turnPage("previous");
+    await this.preloadArticles();
+    this.turnPage(ItemTransition.previous);
   }
 
   async next() {
     if (!this.pagination.nextPageLink) return;
     this._parameter.pageIndex++;
-    await this.preloadPosts();
-    this.turnPage("next");
+    await this.preloadArticles();
+    this.turnPage(ItemTransition.next);
   }
 
-  turnPage(direction: string) {
-    this._itemTransition = `page_turn_${direction}`;
+  turnPage(transition: ItemTransition) {
+    this._itemTransition = transition;
     this.util.routeTo(
       ["/"],
       {
-        queryParams: { index: this._parameter.pageIndex },
-        fragment: "nav"
+        queryParams: { index: this._parameter.pageIndex }
       },
       this._preloads ? [this._itemTransition, "page_turn_button"] : null
     );

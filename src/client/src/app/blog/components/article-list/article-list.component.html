@@ -23,21 +23,25 @@
         </div>
       </ng-container>
 
-      <div class="clearfix" *ngIf="pagination">
+      <div
+        class="clearfix"
+        *ngIf="pagination"
+        [ngClass]="transition.apply('page_turn_button')"
+      >
         <a
-          class="btn btn-primary float-left"
-          [ngClass]="transition.apply('page_turn_button')"
           mat-flat-button
+          class="btn btn-primary float-left"
           (click)="previous()"
           *ngIf="pagination.previousPageLink"
+          [disabled]="preloading"
           >← Newer</a
         >
         <a
-          class="btn btn-primary float-right"
-          [ngClass]="transition.apply('page_turn_button')"
           mat-flat-button
+          class="btn btn-primary float-right"
           (click)="next()"
           *ngIf="pagination.nextPageLink"
+          [disabled]="preloading"
           >Older →</a
         >
       </div>

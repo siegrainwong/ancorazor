@@ -1,12 +1,16 @@
 import { Injectable } from "@angular/core";
 import { timeout } from "./promise-delay";
 import { Store } from "../store/store";
+import { BehaviorSubject } from "rxjs";
 
 @Injectable({
   providedIn: "root"
 })
 export class SGTransition {
   private _routeAnimationDisabledDuration = 0;
+  transitionWillBegin$ = new BehaviorSubject<SGTransitionMode>(
+    SGTransitionMode.route
+  );
 
   constructor(store: Store) {
     store.routeDataChanged$.subscribe(() => {
@@ -28,6 +32,9 @@ export class SGTransition {
    * 自定义动画时间内会禁用路由动画
    */
   async triggerTransition(names?: string[]) {
+    this.transitionWillBegin$.next(
+      names ? SGTransitionMode.custom : SGTransitionMode.route
+    );
     let animations: SGAnimation[] = [];
     let duration = 0;
 
@@ -43,8 +50,6 @@ export class SGTransition {
 
     animations.map(x => (x.leaving = true));
     await timeout(duration);
-    // TODO: 避免路由前动画弹回，这里要处理一下
-    // 最好去查一下怎么让animate.css的动画滞留在destination，而不还原。
     animations.map(x => (x.leaving = false));
   }
 
@@ -58,7 +63,7 @@ export class SGTransition {
    * ######### Acessors
    */
   private get routeAnimations(): Array<SGAnimation> {
-    return this._animations.filter(x => x.type == type.route);
+    return this._animations.filter(x => x.type == SGTransitionMode.route);
   }
 
   private getAnimations(names: string[]): Array<SGAnimation> {
@@ -96,8 +101,8 @@ export class SGTransition {
     }),
     new SGAnimation({
       name: "articles",
-      enterClass: "fadeIn",
-      leaveClass: "fadeOut"
+      enterClass: "fadeInUp",
+      leaveClass: "fadeOutDown"
     }),
 
     // custom animations
@@ -105,19 +110,19 @@ export class SGTransition {
       name: "page_turn_next",
       enterClass: "fadeInRight",
       leaveClass: "fadeOutLeft",
-      type: type.custom
+      type: SGTransitionMode.custom
     }),
     new SGAnimation({
       name: "page_turn_previous",
       enterClass: "fadeInLeft",
       leaveClass: "fadeOutRight",
-      type: type.custom
+      type: SGTransitionMode.custom
     }),
     new SGAnimation({
       name: "page_turn_button",
       enterClass: "fadeInUp",
       leaveClass: "fadeOutDown",
-      type: type.custom
+      type: SGTransitionMode.custom
     })
   ];
 }
@@ -130,10 +135,9 @@ const speed = {
 };
 
 /** 动画类型 */
-export enum type {
+export enum SGTransitionMode {
   /**
    * 路由动画：每次激活时会触发当前页面的所有路由动画
-   * duration 取当前所有路由动画的最小值
    **/
   route = "route",
   /**
@@ -145,7 +149,7 @@ export enum type {
 class SGAnimation {
   name: string;
   speed: { name: string; duration: number } = speed.faster;
-  type: type = type.route;
+  type: SGTransitionMode = SGTransitionMode.route;
   /** 是否触发离开动画 */
   leaving: boolean = false;
   /** 是否执行动画 */

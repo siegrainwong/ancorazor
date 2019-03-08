@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import ArticleModel from "../../models/article-model";
 import { ArticleService } from "../../services/article.service";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -14,8 +14,7 @@ export class ArticleComponent implements OnInit {
   constructor(
     private articleService: ArticleService,
     private route: ActivatedRoute,
-    public store: Store,
-    private router: Router
+    public store: Store
   ) {}
   ngOnInit() {
     // if (this.store.headerModel) this.model = this.store.headerModel;

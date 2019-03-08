@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { MatSnackBar } from "@angular/material";
 import { Router, NavigationExtras } from "@angular/router";
-import { type, SGTransition } from "./siegrain.animations";
+import { SGTransitionMode, SGTransition } from "./siegrain.animations";
 
 export const enum TipType {
   Info,

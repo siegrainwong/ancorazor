@@ -30,18 +30,20 @@
       >
         <a
           mat-flat-button
-          class="btn btn-primary float-left"
-          (click)="previous()"
+          color="primary"
+          class="float-left"
+          (click)="preloading || previous()"
           *ngIf="pagination.previousPageLink"
-          [disabled]="preloading"
+          [attr.disabled]="preloading ? '' : null"
           >← Newer</a
         >
         <a
           mat-flat-button
-          class="btn btn-primary float-right"
-          (click)="next()"
+          color="primary"
+          class="float-right"
+          (click)="preloading || next()"
           *ngIf="pagination.nextPageLink"
-          [disabled]="preloading"
+          [attr.disabled]="preloading ? '' : null"
           >Older →</a
         >
       </div>

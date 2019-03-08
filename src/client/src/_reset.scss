@@ -39,11 +39,17 @@ body {
   font-family: inherit;
 }
 
-button:focus,
-.btn:focus {
-  outline: none;
-}
-
 .animated {
   animation-fill-mode: forwards;
+}
+
+* {
+  &:active,
+  :focus {
+    outline: none !important; // 1
+  }
+}
+
+label {
+  margin-bottom: 0; // 2
 }

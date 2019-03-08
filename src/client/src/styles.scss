@@ -3,10 +3,19 @@
 // 修改主题
 @import "theme";
 
+// // Imports functions, variables, and mixins that are needed by other Bootstrap files
+// @import "~bootstrap/scss/functions";
+// @import "~bootstrap/scss/variables";
+// @import "~bootstrap/scss/mixins";
+// // Import Reboot
+// @import "~bootstrap/scss/reboot";
+// @import "~bootstrap/scss/grid"; // add the grid
+// @import "~bootstrap/scss/utilities"; // add css utilities
+
 @import "~@fortawesome/fontawesome-free/css/all.min.css";
 
 // 编辑器样式
-// TODO: 不能在component页面引入，不知道为啥，只能先全局
+// TODO: component引入无效，不知道为啥，只能先全局
 @import "~codemirror/lib/codemirror.css";
 @import "~tui-editor/dist/tui-editor.css";
 @import "~tui-editor/dist/tui-editor-contents.css";
@@ -16,6 +25,3 @@
 
 @import "shared";
 @import "reset";
-// :host {
-//   display: block;
-// }

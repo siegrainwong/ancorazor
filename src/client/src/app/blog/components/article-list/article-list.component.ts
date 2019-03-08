@@ -64,6 +64,7 @@ export class ArticleListComponent implements OnInit {
       this.articles = this._preloads.articles;
       this.pagination = this._preloads.pagination;
       this._preloads = null;
+      this.preloading = false;
     } else {
       let res = await this.service.getPagedArticles(this._parameter);
       if (!res || !res.succeed) return;
@@ -80,7 +81,6 @@ export class ArticleListComponent implements OnInit {
       articles: res.data as ArticleModel[],
       pagination: res.pagination
     };
-    this.preloading = false;
   }
 
   get itemTransition() {

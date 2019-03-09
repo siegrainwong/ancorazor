@@ -1,8 +1,8 @@
 <app-header [model]="headerModel"></app-header>
 <div class="container">
   <div class="row">
-    <div class="col-lg-12 col-md-12 mx-auto list">
-      <ng-container *ngFor="let item of articles">
+    <div class="col-lg-12 col-md-12 mx-auto list" *ngIf="data">
+      <ng-container *ngFor="let item of data.list">
         <div [ngClass]="itemTransition">
           <div class="post-preview">
             <a (click)="readPost(item)">
@@ -24,7 +24,7 @@
 
       <div
         class="clearfix"
-        *ngIf="pagination"
+        *ngIf="data"
         [ngClass]="transition.apply('page_turn_button')"
       >
         <a
@@ -32,7 +32,7 @@
           color="primary"
           class="float-left"
           (click)="preloading || previous()"
-          *ngIf="pagination.previousPageLink"
+          *ngIf="data.hasPrevious"
           [attr.disabled]="preloading ? '' : null"
           >← Newer</a
         >
@@ -41,7 +41,7 @@
           color="primary"
           class="float-right"
           (click)="preloading || next()"
-          *ngIf="pagination.nextPageLink"
+          *ngIf="data.hasNext"
           [attr.disabled]="preloading ? '' : null"
           >Older →</a
         >

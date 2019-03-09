@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { AxiosResponse, AxiosRequestConfig } from "axios";
-import ResponseResult from "../models/response-result";
+import { ResponseResult } from "../models/response-result";
 import { OpenIdConnectService } from "../oidc/open-id-connect.service";
 import axios from "axios";
 import { LoggingService } from "./logging.service";
@@ -110,16 +110,17 @@ export abstract class BaseService {
   handleResponse(response: AxiosResponse): ResponseResult {
     let result: ResponseResult = null;
     if (response.status >= 200 && response.status < 300)
-      result = new ResponseResult(
-        response.data.data,
-        response.data.succeed,
-        response.data.pagination
-      );
+      result = new ResponseResult({
+        data: response.data.data,
+        succeed: response.data.succeed
+      });
     else
       return this.handleError(
-        new ResponseResult(
-          `Request failed : status ${response.status} ${response.statusText}`
-        )
+        new ResponseResult({
+          data: `Request failed : status ${response.status} ${
+            response.statusText
+          }`
+        })
       );
 
     if (result.succeed) return result;

@@ -3,7 +3,7 @@ import { random } from "src/app/shared/utils/random";
 // host settings
 // const clientHost = "http://localhost:4200";
 const clientHost = "https://localhost:5001";
-const apiHost = "https://localhost:5001";
+const apiHost = "http://localhost:8088";
 const idServerHost = "https://localhost:7000";
 
 export const environment = {

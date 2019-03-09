@@ -45,7 +45,6 @@ namespace Blog.API.Controllers
         private const string ListRouteName = "GetArticles";
         private const string ArticleRouteName = "GetArticle";
 
-
         [HttpGet(Name = ListRouteName)]
         public async Task<IActionResult> Get([FromQuery]ArticleParameters parameters)
         {

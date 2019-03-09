@@ -11,6 +11,7 @@ import {
   SGTransitionMode
 } from "src/app/shared/utils/siegrain.animations";
 import { Title } from "@angular/platform-browser";
+import { Store } from 'src/app/shared/store/store';
 
 enum ItemTransition {
   route = "articles",
@@ -45,7 +46,8 @@ export class ArticleListComponent implements OnInit {
     private route: ActivatedRoute,
     public util: SGUtil,
     public transition: SGTransition,
-    private titleService: Title
+    private titleService: Title,
+    private store: Store
   ) {}
 
   ngOnInit() {
@@ -60,6 +62,13 @@ export class ArticleListComponent implements OnInit {
       if (mode == SGTransitionMode.route)
         this._itemTransition = ItemTransition.route;
     });
+  }
+
+  async readPost(model: ArticleModel){
+    let res = await this.service.getArticle(model.id);
+    if(!res || !res.succeed) return;
+    this.store.preloadArticle = res.data as ArticleModel;
+    this.util.routeTo(['/article', model.id]);
   }
 
   async getArticles() {

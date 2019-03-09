@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import RouteData from "../models/route-data.model";
 import { LoggingService } from "../services/logging.service";
+import ArticleModel from "src/app/blog/models/article-model";
 
 /**
  * 状态管理
@@ -15,6 +16,7 @@ export class Store {
   /**##### Variables */
   renderFromServer: Boolean = false;
   userLoaded: Boolean = false;
+  preloadArticle: ArticleModel;
 
   /**##### Observables */
   private _routeData: RouteData = new RouteData("home");

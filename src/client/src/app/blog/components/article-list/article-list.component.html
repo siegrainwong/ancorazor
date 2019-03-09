@@ -5,7 +5,7 @@
       <ng-container *ngFor="let item of articles">
         <div [ngClass]="itemTransition">
           <div class="post-preview">
-            <a (click)="util.routeTo(['/article', item.id])">
+            <a (click)="readPost(item)">
               <h2 class="post-title">
                 {{ item.title }}
               </h2>

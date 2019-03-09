@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Blog.API.Helpers;
@@ -14,10 +13,7 @@ using Blog.Model.ParameterModel;
 using Blog.Model.ParameterModel.Base;
 using Blog.Model.Resources;
 using Blog.Model.ViewModel;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 #endregion
 
@@ -83,7 +79,7 @@ namespace Blog.API.Controllers
                 pagination = meta
             };
 
-            await Task.Delay(1000);
+            //await Task.Delay(1000);
             return Ok(result);
         }
 
@@ -103,7 +99,7 @@ namespace Blog.API.Controllers
 
             var viewModel = _mapper.Map<Article, ArticleViewModel>(model);
 
-            await Task.Delay(1000);
+            //await Task.Delay(1000);
             return Ok(new { succeed = true, data = viewModel });
         }
         

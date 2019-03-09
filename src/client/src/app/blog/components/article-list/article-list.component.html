@@ -14,9 +14,8 @@
               </h3>
             </a>
             <p class="post-meta">
-              Posted by
-              <a>{{ item.author }}</a>
-              {{ item.createdAt | date: "medium" }}
+              Posted on
+              {{ item.createdAt | date: "yy·M·d h:mma" }}
             </p>
           </div>
           <hr />

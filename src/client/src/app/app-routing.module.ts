@@ -1,14 +1,12 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { SigninOidcComponent } from "./shared/oidc/signin-oidc/signin-oidc.component";
-import { RedirectSilentRenewComponent } from "./shared/oidc/redirect-silent-renew/redirect-silent-renew.component";
-import { ArticleListComponent } from "./blog/components/article-list/article-list.component";
-import { AboutComponent } from "./blog/components/about/about.component";
+// import { SigninOidcComponent } from "./shared/oidc/signin-oidc/signin-oidc.component";
+// import { RedirectSilentRenewComponent } from "./shared/oidc/redirect-silent-renew/redirect-silent-renew.component";
 
 const routes: Routes = [
   { path: "", loadChildren: "./blog/blog.module#BlogModule" },
-  { path: "signin-oidc", component: SigninOidcComponent },
-  { path: "redirect-silentrenew", component: RedirectSilentRenewComponent },
+  // { path: "signin-oidc", component: SigninOidcComponent },
+  // { path: "redirect-silentrenew", component: RedirectSilentRenewComponent },
   { path: "**", redirectTo: "home" }
 ];
 @NgModule({

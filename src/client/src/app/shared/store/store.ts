@@ -19,7 +19,7 @@ export class Store {
   preloadArticle: ArticleModel;
 
   /**##### Observables */
-  private _routeData: RouteData = new RouteData("home");
+  private _routeData: RouteData = new RouteData({ kind: "home" });
   routeDataChanged$ = new BehaviorSubject<RouteData>(this._routeData);
 
   get routeData() {

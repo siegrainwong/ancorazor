@@ -14,6 +14,7 @@ import { MaterialModule } from "../shared/material/material.module";
 import { FormsModule } from "@angular/forms";
 import { SGUtil } from "../shared/utils/siegrain.utils";
 import { LoggingService } from "../shared/services/logging.service";
+import { SignInComponent } from './components/sign-in/sign-in.component';
 
 @NgModule({
   declarations: [
@@ -24,8 +25,10 @@ import { LoggingService } from "../shared/services/logging.service";
     HeaderComponent,
     FooterComponent,
     AboutComponent,
-    ArticleComponent
+    ArticleComponent,
+    SignInComponent
   ],
+  entryComponents: [SignInComponent],
   imports: [CommonModule, BlogRoutingModule, MaterialModule, FormsModule],
   providers: [SGUtil, ArticleService]
 })

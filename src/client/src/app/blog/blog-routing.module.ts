@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { BlogAppComponent } from "./blog-app.component";
-import { RequireAuthenticatedUserRouteGuard } from "../shared/oidc/require-authenticated-user-route.guard";
+// import { RequireAuthenticatedUserRouteGuard } from "../shared/oidc/require-authenticated-user-route.guard";
 import { WriteArticleComponent } from "./components/write-article/write-article.component";
 import { AboutComponent } from "./components/about/about.component";
 import RouteData from "../shared/models/route-data.model";
@@ -16,12 +16,12 @@ const routes: Routes = [
       {
         path: "",
         component: ArticleListComponent,
-        data: new RouteData("home")
+        data: new RouteData({ kind: "home" })
       },
       {
         path: "home",
         component: ArticleListComponent,
-        data: new RouteData("home")
+        data: new RouteData({ kind: "home" })
       },
       /**
        * Mark: canActivate，在进入这个路由之前需要做的操作
@@ -30,15 +30,19 @@ const routes: Routes = [
       {
         path: "add",
         component: WriteArticleComponent,
-        canActivate: [RequireAuthenticatedUserRouteGuard],
-        data: new RouteData("add")
+        // canActivate: [RequireAuthenticatedUserRouteGuard],
+        data: new RouteData({ kind: "add" })
       },
       {
         path: "article/:id",
         component: ArticleComponent,
-        data: new RouteData("article")
+        data: new RouteData({ kind: "article" })
       },
-      { path: "about", component: AboutComponent, data: new RouteData("about") }
+      {
+        path: "about",
+        component: AboutComponent,
+        data: new RouteData({ kind: "about" })
+      }
     ]
   }
 ];

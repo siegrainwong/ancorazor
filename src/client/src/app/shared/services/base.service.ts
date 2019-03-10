@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { AxiosResponse, AxiosRequestConfig } from "axios";
 import { ResponseResult } from "../models/response-result";
-import { OpenIdConnectService } from "../oidc/open-id-connect.service";
+// import { OpenIdConnectService } from "../oidc/open-id-connect.service";
 import axios from "axios";
 import { LoggingService } from "./logging.service";
 import { SGUtil } from "../utils/siegrain.utils";
@@ -12,7 +12,7 @@ import { SGUtil } from "../utils/siegrain.utils";
 })
 export abstract class BaseService {
   constructor(
-    private userService: OpenIdConnectService,
+    // private userService: OpenIdConnectService,
     private logger: LoggingService,
     private util: SGUtil
   ) {
@@ -23,18 +23,18 @@ export abstract class BaseService {
     axios.defaults.baseURL = environment.apiUrlBase;
     axios.defaults.timeout = 20000;
     axios.defaults.headers = { "Content-Type": "application/json" };
-    axios.interceptors.request.use(
-      config => {
-        if (this.userService.userIsAvailable)
-          config.headers.Authorization = `${this.userService.user.token_type} ${
-            this.userService.user.access_token
-          }`;
-        return config;
-      },
-      err => {
-        return Promise.reject(err);
-      }
-    );
+    // axios.interceptors.request.use(
+    //   config => {
+    //     if (this.userService.userIsAvailable)
+    //       config.headers.Authorization = `${this.userService.user.token_type} ${
+    //         this.userService.user.access_token
+    //       }`;
+    //     return config;
+    //   },
+    //   err => {
+    //     return Promise.reject(err);
+    //   }
+    // );
   }
 
   async get(

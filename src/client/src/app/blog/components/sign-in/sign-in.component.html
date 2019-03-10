@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Sign In</h1>
+<div class="container">
+  <div class="row">
+    <mat-form-field class="col-12">
+      <input placeholder="Username" matInput [(ngModel)]="model.loginName" />
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col-12">
+      <input placeholder="Password" matInput [(ngModel)]="model.password" />
+    </mat-form-field>
+  </div>
+</div>
+<div style="margin-top:20px;">
+  <button class="float-left" mat-button (click)="dialogRef.close()">
+    Cancel
+  </button>
+  <button mat-button color="primary" class="float-right" (click)="submit()">
+    Sign In
+  </button>
+</div>

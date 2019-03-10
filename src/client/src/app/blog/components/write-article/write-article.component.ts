@@ -55,10 +55,8 @@ export class WriteArticleComponent implements OnInit {
     this.model.content = this.editor.getValue();
     this.logger.info("posting: ", this.model);
     var res = await this.service.add(this.model);
-    if (!res.succeed) return;
-
-    var model = res.data as ArticleModel;
-    this.router.navigate([`article/${model.id}`]);
+    if (!res) return;
+    this.router.navigate([`article/${res.id}`]);
   }
 
   // TODO:

@@ -34,8 +34,8 @@ export class ArticleComponent implements OnInit {
     } else {
       let id = parseInt(this.route.snapshot.params.id);
       let res = await this.articleService.getArticle(id);
-      if (!res || !res.succeed) return;
-      this.model = res.data as ArticleModel;
+      if (!res) return;
+      this.model = res;
     }
 
     this.titleService.setTitle(

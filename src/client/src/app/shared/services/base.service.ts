@@ -6,15 +6,16 @@ import { ResponseResult } from "../models/response-result";
 import axios from "axios";
 import { LoggingService } from "./logging.service";
 import { SGUtil } from "../utils/siegrain.utils";
+import { Store } from "../store/store";
 
 @Injectable({
   providedIn: "root"
 })
 export abstract class BaseService {
   constructor(
-    // private userService: OpenIdConnectService,
     private logger: LoggingService,
-    private util: SGUtil
+    private util: SGUtil,
+    public store: Store
   ) {
     this.setup();
   }
@@ -23,18 +24,16 @@ export abstract class BaseService {
     axios.defaults.baseURL = environment.apiUrlBase;
     axios.defaults.timeout = 20000;
     axios.defaults.headers = { "Content-Type": "application/json" };
-    // axios.interceptors.request.use(
-    //   config => {
-    //     if (this.userService.userIsAvailable)
-    //       config.headers.Authorization = `${this.userService.user.token_type} ${
-    //         this.userService.user.access_token
-    //       }`;
-    //     return config;
-    //   },
-    //   err => {
-    //     return Promise.reject(err);
-    //   }
-    // );
+    axios.interceptors.request.use(
+      config => {
+        if (this.store.user)
+          config.headers.Authorization = `Bearer ${this.store.user.token}`;
+        return config;
+      },
+      err => {
+        return Promise.reject(err);
+      }
+    );
   }
 
   async get(

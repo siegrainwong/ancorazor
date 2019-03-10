@@ -11,10 +11,12 @@ import { FooterComponent } from "./components/footer/footer.component";
 import { AboutComponent } from "./components/about/about.component";
 import { ArticleComponent } from "./components/article/article.component";
 import { MaterialModule } from "../shared/material/material.module";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SGUtil } from "../shared/utils/siegrain.utils";
 import { LoggingService } from "../shared/services/logging.service";
-import { SignInComponent } from './components/sign-in/sign-in.component';
+import { SignInComponent } from "./components/sign-in/sign-in.component";
+import { Store } from "../shared/store/store";
+import { UserService } from "./services/user.service";
 
 @NgModule({
   declarations: [
@@ -29,8 +31,14 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
     SignInComponent
   ],
   entryComponents: [SignInComponent],
-  imports: [CommonModule, BlogRoutingModule, MaterialModule, FormsModule],
-  providers: [SGUtil, ArticleService]
+  imports: [
+    CommonModule,
+    BlogRoutingModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule
+  ],
+  providers: [SGUtil, ArticleService, UserService]
 })
 export class BlogModule {
   constructor(logger: LoggingService) {

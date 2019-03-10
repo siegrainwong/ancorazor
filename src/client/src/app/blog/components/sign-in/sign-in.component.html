@@ -2,17 +2,33 @@
 <div class="container">
   <div class="row">
     <mat-form-field class="col-12">
-      <input placeholder="Username" matInput [(ngModel)]="model.loginName" />
+      <input
+        placeholder="Username"
+        matInput
+        [formControl]="username"
+        required
+      />
+      <mat-error *ngIf="username.invalid">{{
+        getErrorMessage(username)
+      }}</mat-error>
     </mat-form-field>
   </div>
   <div class="row">
     <mat-form-field class="col-12">
-      <input placeholder="Password" matInput [(ngModel)]="model.password" />
+      <input
+        placeholder="Password"
+        matInput
+        [formControl]="password"
+        required
+      />
+      <mat-error *ngIf="password.invalid">{{
+        getErrorMessage(password)
+      }}</mat-error>
     </mat-form-field>
   </div>
 </div>
 <div style="margin-top:20px;">
-  <button class="float-left" mat-button (click)="dialogRef.close()">
+  <button class="float-left" mat-button (click)="close()">
     Cancel
   </button>
   <button mat-button color="primary" class="float-right" (click)="submit()">

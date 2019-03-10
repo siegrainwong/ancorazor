@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 // import { OpenIdConnectService } from "./shared/oidc/open-id-connect.service";
 import { LoggingService } from "./shared/services/logging.service";
 import { GlobalErrorHandler } from "./shared/services/global-error-handler";
+import { SGUtil } from "./shared/utils/siegrain.utils";
 @NgModule({
   declarations: [
     AppComponent

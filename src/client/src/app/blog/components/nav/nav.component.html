@@ -36,16 +36,16 @@
             >Github</a
           >
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="!store.user">
           <a mat-button class="nav-link" (click)="openDialog()">Sign In</a>
         </li>
-        <!-- <li class="nav-item" *ngIf="userService.userIsAvailable">
+        <li class="nav-item" *ngIf="store.user">
           <a mat-button class="nav-link" (click)="util.routeTo(['/add'])"
             >New Post</a
           >
         </li>
-        
-        <li class="nav-item" *ngIf="userService.userIsAvailable">
+
+        <!-- <li class="nav-item" *ngIf="store.user">
           <a mat-button class="nav-link" (click)="userService.triggerSignOut()"
             >Sign Out</a
           >

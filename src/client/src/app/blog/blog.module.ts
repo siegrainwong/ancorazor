@@ -17,6 +17,7 @@ import { LoggingService } from "../shared/services/logging.service";
 import { SignInComponent } from "./components/sign-in/sign-in.component";
 import { Store } from "../shared/store/store";
 import { UserService } from "./services/user.service";
+import { ConfirmDialog } from "../shared/components/confirm-dialog.component";
 
 @NgModule({
   declarations: [
@@ -28,9 +29,10 @@ import { UserService } from "./services/user.service";
     FooterComponent,
     AboutComponent,
     ArticleComponent,
-    SignInComponent
+    SignInComponent,
+    ConfirmDialog
   ],
-  entryComponents: [SignInComponent],
+  entryComponents: [SignInComponent, ConfirmDialog],
   imports: [
     CommonModule,
     BlogRoutingModule,

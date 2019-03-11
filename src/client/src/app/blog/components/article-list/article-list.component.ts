@@ -5,7 +5,7 @@ import ArticleModel from "../../models/article-model";
 import { PagedResult } from "src/app/shared/models/response-result";
 import { ActivatedRoute } from "@angular/router";
 import { environment } from "src/environments/environment";
-import { SGUtil } from "src/app/shared/utils/siegrain.utils";
+import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
 import {
   SGTransition,
   SGTransitionMode
@@ -43,7 +43,7 @@ export class ArticleListComponent implements OnInit {
     public util: SGUtil,
     public transition: SGTransition,
     private titleService: Title,
-    private store: Store
+    public store: Store
   ) {}
 
   ngOnInit() {
@@ -59,11 +59,18 @@ export class ArticleListComponent implements OnInit {
     });
   }
 
-  async readPost(model: ArticleModel) {
+  async read(model: ArticleModel) {
     let res = await this.service.getArticle(model.id);
     if (!res) return;
     this.store.preloadArticle = res;
     this.util.routeTo(["/article", model.id]);
+  }
+
+  async delete(model: ArticleModel) {
+    let confirmed = await this.util.confirm("Delete", TipType.Danger);
+    if (!confirmed) return;
+    let result = await this.service.remove(model.id);
+    result && this.util.tip("删除成功", TipType.Success);
   }
 
   async getArticles() {

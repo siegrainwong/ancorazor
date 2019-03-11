@@ -3,9 +3,9 @@
   <div class="row">
     <div class="col-lg-12 col-md-12 mx-auto list" *ngIf="data">
       <ng-container *ngFor="let item of data.list">
-        <div [ngClass]="itemTransition">
+        <div class="item" [ngClass]="itemTransition">
           <div class="post-preview">
-            <a (click)="readPost(item)">
+            <a (click)="read(item)">
               <h2 class="post-title">
                 {{ item.title }}
               </h2>
@@ -13,20 +13,24 @@
                 {{ item.digest }}
               </h3>
             </a>
-            <p class="post-meta">
-              Posted on
-              {{ item.createdAt | date: "yy·M·d h:mma" }}
-            </p>
+            <div class="row">
+              <span class="post-meta col-auto mr-auto">
+                Posted on
+                {{ item.createdAt | date: "yy·M·d h:mma" }}
+              </span>
+              <span class="operations col-auto" *ngIf="store.user">
+                <button mat-button color="danger" (click)="delete(item)">
+                  Delete
+                </button>
+                <button mat-button color="primary">Edit</button>
+              </span>
+            </div>
           </div>
           <hr />
         </div>
       </ng-container>
 
-      <div
-        class="clearfix"
-        *ngIf="data"
-        [ngClass]="transition.apply('page_turn_button')"
-      >
+      <div class="clearfix" [ngClass]="transition.apply('page_turn_button')">
         <a
           mat-flat-button
           color="primary"

@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+import { Component, OnInit } from "@angular/core";
+import { MatDialogRef } from "@angular/material";
 import { UserModel } from "../../models/user-model";
 import { LoggingService } from "src/app/shared/services/logging.service";
 import { FormControl, Validators } from "@angular/forms";

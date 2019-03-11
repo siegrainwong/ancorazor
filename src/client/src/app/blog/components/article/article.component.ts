@@ -16,7 +16,7 @@ import { timeout } from "src/app/shared/utils/promise-delay";
 export class ArticleComponent implements OnInit {
   model: ArticleModel;
   constructor(
-    private articleService: ArticleService,
+    private service: ArticleService,
     private route: ActivatedRoute,
     public store: Store,
     private transition: SGTransition,
@@ -33,7 +33,7 @@ export class ArticleComponent implements OnInit {
       this.store.preloadArticle = null;
     } else {
       let id = parseInt(this.route.snapshot.params.id);
-      let res = await this.articleService.getArticle(id);
+      let res = await this.service.getArticle(id);
       if (!res) return;
       this.model = res;
     }

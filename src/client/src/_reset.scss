@@ -53,8 +53,38 @@ label {
 .mat-icon-button,
 .mat-mini-fab,
 .mat-raised-button,
-.mat-stroked-button {
+.mat-stroked-button,
+.mat-simple-snackbar {
   font-family: inherit;
+}
+.mat-button,
+.mat-dialog-title {
+  text-transform: uppercase;
+}
+
+.mat-snack-bar-container {
+  background: $white;
+  color: rgba($color: $black, $alpha: 0.7);
+  .mat-simple-snackbar-action {
+    color: $primary;
+  }
+}
+
+$custom-mat-colors: "danger" $danger, "shit" #000;
+@each $i in $custom-mat-colors {
+  $name: nth($i, 1);
+  $mat-color: nth($i, 2);
+  .mat-#{$name} {
+    color: $mat-color;
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: rgba($color: $mat-color, $alpha: 0.01);
+    }
+    .mat-button-focus-overlay {
+      background: $mat-color;
+    }
+  }
 }
 
 /* === clean blog === */

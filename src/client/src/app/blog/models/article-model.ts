@@ -1,4 +1,5 @@
 import BaseModel from "src/app/shared/models/base-model";
+import { SGAnimation } from "src/app/shared/utils/siegrain.animations";
 
 export default class ArticleModel extends BaseModel {
   author: string;
@@ -9,6 +10,9 @@ export default class ArticleModel extends BaseModel {
   viewCount: number = 0;
   commentCount: number = 0;
   cover: string = "assets/img/placeholder.jpg";
+
+  // helper fields
+  animation?: SGAnimation;
 
   constructor(init?: Partial<ArticleModel>) {
     super(init);

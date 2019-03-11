@@ -10,7 +10,7 @@ export class ResponseResult {
 }
 
 export class PagedResult<T extends BaseModel> {
-  list: [T];
+  list: T[];
   total: number;
   pageSize: number;
   pageIndex: number;

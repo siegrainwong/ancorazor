@@ -7,6 +7,7 @@ import { BehaviorSubject } from "rxjs";
   providedIn: "root"
 })
 export class SGTransition {
+  private _currentTransitionMode: SGTransitionMode;
   private _routeAnimationDisabledDuration = 0;
   transitionWillBegin$ = new BehaviorSubject<SGTransitionMode>(
     SGTransitionMode.route
@@ -19,11 +20,11 @@ export class SGTransition {
   }
 
   /**
-   * 返回一个 [ngClass] 对象
+   * 返回一个 `[ngClass]` 对象
    * @param name 动画名称
    */
   apply(name: string) {
-    return this.getAnimations([name])[0].class;
+    return this.getAnimation(name).class;
   }
 
   /**
@@ -31,29 +32,42 @@ export class SGTransition {
    * @param names 自定义动画集合（不传则触发当前页面所有路由动画）
    * 自定义动画时间内会禁用路由动画
    */
-  async triggerTransition(names?: string[]) {
-    this.transitionWillBegin$.next(
-      names ? SGTransitionMode.custom : SGTransitionMode.route
-    );
+  async triggerTransition(names?: string[], extraDuration: number = 0) {
+    this._currentTransitionMode = names
+      ? SGTransitionMode.custom
+      : SGTransitionMode.route;
+    this.transitionWillBegin$.next(this._currentTransitionMode);
     let animations: SGAnimation[] = [];
-    let duration = 0;
 
     if (!names || names.length == 0) {
       animations = this.routeAnimations;
-      duration = this.getDuration(animations);
     } else {
       animations = this.getAnimations(names);
-      duration = this.getDuration(animations);
-      this._routeAnimationDisabledDuration = duration;
       this.routeAnimations.map(x => (x.animated = false));
     }
 
+    await this.triggerAnimations(animations, extraDuration);
+  }
+
+  /**
+   * 触发动画
+   * @param animations `SGAnimation` 对象集合
+   */
+  async triggerAnimations(
+    animations: SGAnimation[],
+    extraDuration: number = 0
+  ) {
+    let duration = this.getDuration(animations) + extraDuration;
     animations.map(x => (x.leaving = true));
     await timeout(duration);
     animations.map(x => (x.leaving = false));
+
+    // 自定义动画执行时禁用路由动画
+    if (this._currentTransitionMode == SGTransitionMode.custom)
+      this._routeAnimationDisabledDuration = duration;
   }
 
-  async enableRouteAnimations() {
+  private async enableRouteAnimations() {
     await timeout(this._routeAnimationDisabledDuration);
     this._routeAnimationDisabledDuration = 0;
     this.routeAnimations.map(x => (x.animated = true));
@@ -62,6 +76,15 @@ export class SGTransition {
   /**
    * ######### Acessors
    */
+
+  /**
+   * 根据名称获取定义中 `SGAnimation` 对象的一个**引用**
+   * @param name
+   */
+  public getAnimation(name: string): SGAnimation {
+    return this.getAnimations([name])[0];
+  }
+
   private get routeAnimations(): Array<SGAnimation> {
     return this._animations.filter(x => x.type == SGTransitionMode.route);
   }
@@ -151,7 +174,7 @@ export enum SGTransitionMode {
   custom = "custom"
 }
 
-class SGAnimation {
+export class SGAnimation {
   name: string;
   speed: { name: string; duration: number } = speed.faster;
   type: SGTransitionMode = SGTransitionMode.route;
@@ -166,10 +189,15 @@ class SGAnimation {
     Object.assign(this, init);
   }
 
+  /**
+   * 获取 `[ngClass]` 对象
+   */
   get class() {
     let animation = {};
     animation[this.enterClass] = !this.leaving;
+    animation["enter"] = !this.leaving;
     animation[this.leaveClass] = this.leaving;
+    animation["leave"] = this.leaving;
     animation[this.speed.name] = true;
     animation["animated"] = this.animated;
     return animation;

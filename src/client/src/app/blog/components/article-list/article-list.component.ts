@@ -8,16 +8,19 @@ import { environment } from "src/environments/environment";
 import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
 import {
   SGTransition,
-  SGTransitionMode
+  SGTransitionMode,
+  SGAnimation
 } from "src/app/shared/utils/siegrain.animations";
 import { Title } from "@angular/platform-browser";
 import { Store } from "src/app/shared/store/store";
 
-enum ItemTransition {
+enum ItemAnimationName {
   route = "articles",
   next = "page_turn_next",
   previous = "page_turn_previous"
 }
+const StaggerDuration = 500; // 列表总动画时长 = transition duration + stagger duration
+
 @Component({
   selector: "app-article-list",
   templateUrl: "./article-list.component.html",
@@ -35,7 +38,7 @@ export class ArticleListComponent implements OnInit {
   private _preloads: PagedResult<ArticleModel>;
   private _parameter = new ArticleParameters();
   // article item animation
-  private _itemTransition: ItemTransition = ItemTransition.route;
+  private _itemAnimationName: ItemAnimationName;
 
   constructor(
     private service: ArticleService,
@@ -54,26 +57,43 @@ export class ArticleListComponent implements OnInit {
       this.getArticles();
     });
     this.transition.transitionWillBegin$.subscribe(mode => {
-      if (mode == SGTransitionMode.route)
-        this._itemTransition = ItemTransition.route;
+      mode == SGTransitionMode.route &&
+        this.setupTransitions(ItemAnimationName.route);
     });
   }
 
-  async read(model: ArticleModel) {
+  public async read(model: ArticleModel) {
     let res = await this.service.getArticle(model.id);
     if (!res) return;
     this.store.preloadArticle = res;
     this.util.routeTo(["/article", model.id]);
   }
 
-  async delete(model: ArticleModel) {
-    let confirmed = await this.util.confirm("Delete", TipType.Danger);
-    if (!confirmed) return;
-    let result = await this.service.remove(model.id);
-    result && this.util.tip("删除成功", TipType.Success);
+  public async delete(item: ArticleModel, index: number) {
+    let result =
+      (await this.util.confirm("Delete", TipType.Danger)) &&
+      (await this.service.remove(item.id));
+    if (!result) return;
+
+    // 创建一个新动画对象单独执行动画
+    item.animation = new SGAnimation(item.animation);
+    await this.transition.triggerAnimations([item.animation]);
+    this.data.list.splice(index, 1);
   }
 
-  async getArticles() {
+  public async previous() {
+    if (!this.data.hasPrevious) return;
+    this._parameter.pageIndex--;
+    (await this.preloadArticles()) && this.turnPage(ItemAnimationName.previous);
+  }
+
+  public async next() {
+    if (!this.data.hasNext) return;
+    this._parameter.pageIndex++;
+    (await this.preloadArticles()) && this.turnPage(ItemAnimationName.next);
+  }
+
+  private async getArticles() {
     if (this._preloads) {
       this.data = this._preloads;
       this._preloads = null;
@@ -83,9 +103,10 @@ export class ArticleListComponent implements OnInit {
       if (!res) return;
       this.data = res;
     }
+    this.setupTransitions(this._itemAnimationName);
   }
 
-  async preloadArticles(): Promise<boolean> {
+  private async preloadArticles(): Promise<boolean> {
     this.preloading = true;
     let res = await this.service.getPagedArticles(this._parameter);
     if (!res) {
@@ -96,30 +117,24 @@ export class ArticleListComponent implements OnInit {
     return Promise.resolve(true);
   }
 
-  get itemTransition() {
-    return this.transition.apply(this._itemTransition);
+  private setupTransitions(name?: ItemAnimationName) {
+    this._itemAnimationName = name;
+    this.data &&
+      this.data.list.map(
+        x =>
+          (x.animation = this.transition.getAnimation(this._itemAnimationName))
+      );
   }
 
-  async previous() {
-    if (!this.data.hasPrevious) return;
-    this._parameter.pageIndex--;
-    (await this.preloadArticles()) && this.turnPage(ItemTransition.previous);
-  }
-
-  async next() {
-    if (!this.data.hasNext) return;
-    this._parameter.pageIndex++;
-    (await this.preloadArticles()) && this.turnPage(ItemTransition.next);
-  }
-
-  turnPage(transition: ItemTransition) {
-    this._itemTransition = transition;
+  private turnPage(animationName: ItemAnimationName) {
+    this.setupTransitions(animationName);
     this.util.routeTo(
       ["/"],
       {
         queryParams: { index: this._parameter.pageIndex }
       },
-      this._preloads ? [this._itemTransition, "page_turn_button"] : null
+      this._preloads ? [this._itemAnimationName, "page_turn_button"] : null,
+      StaggerDuration
     );
   }
 }

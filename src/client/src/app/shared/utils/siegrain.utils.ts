@@ -68,8 +68,13 @@ export class SGUtil {
    * @param extras `router.navigate` parameter
    * @param names 动画名称集合
    */
-  async routeTo(commands: any[], extras?: NavigationExtras, names?: string[]) {
-    await this.transition.triggerTransition(names);
+  async routeTo(
+    commands: any[],
+    extras?: NavigationExtras,
+    names?: string[],
+    extraDuration: number = 0
+  ) {
+    await this.transition.triggerTransition(names, extraDuration);
     this.router.navigate(commands, extras);
   }
 }

@@ -14,6 +14,21 @@
     text-transform: uppercase;
     margin-left: 8px;
   }
+
+  // 模拟 stagger 效果
+  // 总转场动画时间 = transition duration + stagger duration
+  // 入场时设置 opacity 为 0，动画开始前闪烁，当然这个效果只对 Fade 系列有效
+  &.enter {
+    opacity: 0;
+  }
+  $pageSize: 10;
+  $duartion: 0.5s;
+  @for $i from 1 through $pageSize {
+    $delay: $duartion / $pageSize * $i;
+    &.delay-#{$i} {
+      animation-delay: $delay;
+    }
+  }
 }
 
 .post-preview {

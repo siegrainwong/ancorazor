@@ -22,7 +22,7 @@
     opacity: 0;
   }
   $pageSize: 10;
-  $duartion: 0.5s;
+  $duartion: 200ms;
   @for $i from 1 through $pageSize {
     $delay: $duartion / $pageSize * $i;
     &.delay-#{$i} {

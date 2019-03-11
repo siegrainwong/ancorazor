@@ -19,7 +19,7 @@ enum ItemAnimationName {
   next = "page_turn_next",
   previous = "page_turn_previous"
 }
-const StaggerDuration = 500; // 列表总动画时长 = transition duration + stagger duration
+const StaggerDuration = 200; // 列表总动画时长 = transition duration + stagger duration
 
 @Component({
   selector: "app-article-list",

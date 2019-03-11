@@ -4,9 +4,9 @@ import { Router, NavigationExtras } from "@angular/router";
 import { SGTransitionMode, SGTransition } from "./siegrain.animations";
 
 export const enum TipType {
-  Info,
-  Warn,
-  Error
+  Success = "✔️",
+  Warn = "⚠️",
+  Error = "❌"
 }
 
 @Injectable()
@@ -25,7 +25,7 @@ export class SGUtil {
    * @param type 消息类型（未实装）
    */
   tip(msg: string, type: TipType = TipType.Error) {
-    this.snackBar.open(`❌ ${msg}`, null, {
+    this.snackBar.open(`${type} ${msg}`, "Got it.", {
       duration: 5000
     });
   }

@@ -78,11 +78,15 @@ export class ArticleListComponent implements OnInit {
     }
   }
 
-  async preloadArticles() {
+  async preloadArticles(): Promise<boolean> {
     this.preloading = true;
     let res = await this.service.getPagedArticles(this._parameter);
-    if (!res) return;
+    if (!res) {
+      this.preloading = false;
+      return Promise.reject(false);
+    }
     this._preloads = res;
+    return Promise.resolve(true);
   }
 
   get itemTransition() {
@@ -92,15 +96,13 @@ export class ArticleListComponent implements OnInit {
   async previous() {
     if (!this.data.hasPrevious) return;
     this._parameter.pageIndex--;
-    await this.preloadArticles();
-    this.turnPage(ItemTransition.previous);
+    (await this.preloadArticles()) && this.turnPage(ItemTransition.previous);
   }
 
   async next() {
     if (!this.data.hasNext) return;
     this._parameter.pageIndex++;
-    await this.preloadArticles();
-    this.turnPage(ItemTransition.next);
+    (await this.preloadArticles()) && this.turnPage(ItemTransition.next);
   }
 
   turnPage(transition: ItemTransition) {

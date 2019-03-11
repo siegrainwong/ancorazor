@@ -4,6 +4,7 @@ import { UserModel } from "../../models/user-model";
 import { LoggingService } from "src/app/shared/services/logging.service";
 import { FormControl, Validators } from "@angular/forms";
 import { UserService } from "../../services/user.service";
+import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
 
 @Component({
   selector: "app-sign-in",
@@ -14,7 +15,8 @@ export class SignInComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<SignInComponent>,
     private logger: LoggingService,
-    private service: UserService
+    private service: UserService,
+    private util: SGUtil
   ) {}
   username = new FormControl("", [
     Validators.required,
@@ -27,6 +29,7 @@ export class SignInComponent implements OnInit {
     Validators.maxLength(30)
   ]);
   model: UserModel = new UserModel();
+  loading: boolean = false;
 
   ngOnInit() {}
 
@@ -48,12 +51,15 @@ export class SignInComponent implements OnInit {
     this.model.loginName = this.username.value;
     this.model.password = this.password.value;
 
+    this.loading = true;
     let result = await this.service.signIn(
       this.model.loginName,
       this.model.password
     );
+    this.loading = false;
 
     if (!result) return;
+    this.util.tip("登录成功。", TipType.Success);
     this.close();
   }
 }

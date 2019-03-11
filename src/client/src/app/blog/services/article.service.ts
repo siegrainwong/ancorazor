@@ -17,7 +17,7 @@ export class ArticleService extends BaseService implements ISubService {
     params?: ArticleParameters
   ): Promise<PagedResult<ArticleModel>> {
     var res = await this.get(this.serviceName, params);
-    return res && (res.data as PagedResult<ArticleModel>);
+    return res.succeed && (res.data as PagedResult<ArticleModel>);
   }
 
   /**
@@ -25,7 +25,7 @@ export class ArticleService extends BaseService implements ISubService {
    */
   async getArticle(id: number): Promise<ArticleModel> {
     var res = await this.get(`${this.serviceName}/${id}`);
-    return res && (res.data as ArticleModel);
+    return res.succeed && (res.data as ArticleModel);
   }
 
   /**
@@ -34,6 +34,6 @@ export class ArticleService extends BaseService implements ISubService {
    */
   async add(params?: ArticleModel): Promise<ArticleModel> {
     var res = await this.post(this.serviceName, params);
-    return res && (res.data as ArticleModel);
+    return res.succeed && (res.data as ArticleModel);
   }
 }

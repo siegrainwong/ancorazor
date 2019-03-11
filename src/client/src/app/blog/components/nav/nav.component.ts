@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 // import { OpenIdConnectService } from "src/app/shared/oidc/open-id-connect.service";
 import { Store } from "src/app/shared/store/store";
 import { environment } from "src/environments/environment";
-import { SGUtil } from "src/app/shared/utils/siegrain.utils";
+import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
 import { MatDialog } from "@angular/material";
 import { SignInComponent } from "../sign-in/sign-in.component";
@@ -30,6 +30,11 @@ export class NavComponent implements OnInit {
 
   openDialog(): void {
     this.dialog.open(SignInComponent, { width: "250px" });
+  }
+
+  signOut() {
+    this.store.user = null;
+    this.util.tip("已注销", TipType.Success);
   }
 
   registerRouteChanged() {

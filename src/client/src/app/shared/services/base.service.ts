@@ -22,7 +22,7 @@ export abstract class BaseService {
 
   setup() {
     axios.defaults.baseURL = environment.apiUrlBase;
-    axios.defaults.timeout = 20000;
+    axios.defaults.timeout = 100000;
     axios.defaults.headers = { "Content-Type": "application/json" };
     axios.interceptors.request.use(
       config => {
@@ -119,7 +119,8 @@ export abstract class BaseService {
           data: `Request failed : status ${response.status} ${
             response.statusText
           }`
-        })
+        }),
+        response.status
       );
 
     if (result.succeed) return result;
@@ -130,9 +131,16 @@ export abstract class BaseService {
    * 错误处理
    * @param result
    */
-  handleError(result: ResponseResult): ResponseResult {
-    this.util.tip(result.data);
-    this.logger.error(result);
+  handleError(result: ResponseResult, code?: number): ResponseResult {
+    switch (code) {
+      case 403:
+        this.util.tip("认证过期，请重新登录！");
+        this.store.user = null;
+        break;
+      default:
+        this.util.tip(result.data);
+        this.logger.error(result);
+    }
     return new ResponseResult(result);
   }
 }

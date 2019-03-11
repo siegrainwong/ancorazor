@@ -20,6 +20,7 @@
         matInput
         [formControl]="password"
         required
+        (keydown.enter)="submit()"
       />
       <mat-error *ngIf="password.invalid">{{
         getErrorMessage(password)
@@ -31,7 +32,13 @@
   <button class="float-left" mat-button (click)="close()">
     Cancel
   </button>
-  <button mat-button color="primary" class="float-right" (click)="submit()">
+  <button
+    mat-button
+    color="primary"
+    class="float-right"
+    (click)="submit()"
+    [attr.disabled]="loading ? '' : null"
+  >
     Sign In
   </button>
 </div>

@@ -111,12 +111,13 @@ export abstract class BaseService {
     if (response.status >= 200 && response.status < 300)
       result = new ResponseResult({
         data: response.data.data,
-        succeed: response.data.succeed
+        succeed: response.data.succeed,
+        message: response.data.message
       });
     else
       return this.handleError(
         new ResponseResult({
-          data: `Request failed : status ${response.status} ${
+          message: `Request failed : status ${response.status} ${
             response.statusText
           }`
         }),
@@ -138,7 +139,7 @@ export abstract class BaseService {
         this.store.user = null;
         break;
       default:
-        this.util.tip(result.data);
+        this.util.tip(result.message);
         this.logger.error(result);
     }
     return new ResponseResult(result);

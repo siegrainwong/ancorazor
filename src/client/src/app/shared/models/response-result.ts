@@ -3,6 +3,7 @@ import BaseModel from "./base-model";
 export class ResponseResult {
   succeed: boolean = false;
   data?: any;
+  message?: string;
 
   constructor(obj?: Partial<ResponseResult>) {
     Object.assign(this, obj);

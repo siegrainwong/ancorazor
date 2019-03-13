@@ -1,12 +1,12 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { BlogAppComponent } from "./blog-app.component";
-// import { RequireAuthenticatedUserRouteGuard } from "../shared/oidc/require-authenticated-user-route.guard";
 import { WriteArticleComponent } from "./components/write-article/write-article.component";
 import { AboutComponent } from "./components/about/about.component";
 import RouteData from "../shared/models/route-data.model";
 import { ArticleListComponent } from "./components/article-list/article-list.component";
 import { ArticleComponent } from "./components/article/article.component";
+import { AuthGuard } from '../shared/guard/auth.guard';
 
 const routes: Routes = [
   {
@@ -30,13 +30,13 @@ const routes: Routes = [
       {
         path: "add",
         component: WriteArticleComponent,
-        // canActivate: [RequireAuthenticatedUserRouteGuard],
+        canActivate: [AuthGuard],
         data: new RouteData({ kind: "add" })
       },
       {
         path: "edit/:id",
         component: WriteArticleComponent,
-        // canActivate: [RequireAuthenticatedUserRouteGuard],
+        canActivate: [AuthGuard],
         data: new RouteData({ kind: "edit" })
       },
       {

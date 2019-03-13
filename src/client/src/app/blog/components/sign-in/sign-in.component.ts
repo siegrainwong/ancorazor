@@ -59,7 +59,7 @@ export class SignInComponent implements OnInit {
     this.loading = false;
 
     if (!result) return;
-    this.util.tip("登录成功。", TipType.Success);
+    this.util.tip(`Welcome, ${result.realName}`, TipType.Success);
     this.close();
   }
 }

@@ -15,9 +15,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SGUtil } from "../shared/utils/siegrain.utils";
 import { LoggingService } from "../shared/services/logging.service";
 import { SignInComponent } from "./components/sign-in/sign-in.component";
-import { Store } from "../shared/store/store";
 import { UserService } from "./services/user.service";
 import { ConfirmDialog } from "../shared/components/confirm-dialog.component";
+import { AuthGuard } from "../shared/guard/auth.guard";
 
 @NgModule({
   declarations: [
@@ -40,7 +40,7 @@ import { ConfirmDialog } from "../shared/components/confirm-dialog.component";
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [SGUtil, ArticleService, UserService]
+  providers: [SGUtil, ArticleService, UserService, AuthGuard]
 })
 export class BlogModule {
   constructor(logger: LoggingService) {

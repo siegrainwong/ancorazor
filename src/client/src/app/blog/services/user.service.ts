@@ -11,15 +11,15 @@ export class UserService extends BaseService implements ISubService {
   /**
    * 登录
    */
-  async signIn(loginname: string, password: string): Promise<boolean> {
+  async signIn(loginname: string, password: string): Promise<UserModel> {
     let res = await this.get(`${this.serviceName}/Token`, {
       loginname: loginname,
       password: password
     });
-    if (!res || !res.succeed) return false;
+    if (!res || !res.succeed) return null;
     let model = res.data.user as UserModel;
     model.token = res.data.token;
     this.store.user = model;
-    return true;
+    return model;
   }
 }

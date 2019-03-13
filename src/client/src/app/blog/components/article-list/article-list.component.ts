@@ -143,7 +143,7 @@ export class ArticleListComponent implements OnInit {
       {
         queryParams: { index: this._parameter.pageIndex }
       },
-      this._preloads ? [this._itemAnimationName, "page_turn_button"] : null,
+      this._preloads ? [this._itemAnimationName, "page-turn-button"] : null,
       StaggerDuration
     );
   }

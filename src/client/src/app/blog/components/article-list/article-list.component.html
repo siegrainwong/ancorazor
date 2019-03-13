@@ -31,7 +31,9 @@
           <hr />
         </div>
       </ng-container>
-      <div class="clearfix" [ngClass]="transition.apply('fade-opposite')">
+      <!-- button route animation -->
+      <div [ngClass]="transition.apply('fade-opposite')">
+        <!-- button page turn animation -->
         <div class="clearfix" [ngClass]="transition.apply('page-turn-button')">
           <a
             mat-flat-button

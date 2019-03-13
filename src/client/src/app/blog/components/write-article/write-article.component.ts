@@ -20,6 +20,7 @@ export class WriteArticleComponent implements OnInit {
   });
   private editor: any;
   public isEditing: boolean = false;
+  public preloading: boolean = false;
 
   constructor(
     private service: ArticleService,
@@ -79,10 +80,12 @@ export class WriteArticleComponent implements OnInit {
     if (!this.model.content || !this.model.content.length)
       return this.util.tip("Content is required");
 
+    this.preloading = true;
     this.logger.info("posting: ", this.model);
     var res = this.isEditing
       ? await this.service.update(this.model)
       : await this.service.add(this.model);
+    this.preloading = false;
     if (!res) return;
     this.util.routeTo([`article/${res}`]);
   }

@@ -13,11 +13,10 @@
       class="float-right"
       color="primary"
       mat-flat-button
+      [attr.disabled]="preloading ? '' : null"
       (click)="submit()"
     >
       {{ isEditing ? "Update" : "Post" }}
     </button>
   </div>
-
-  <hr />
 </div>

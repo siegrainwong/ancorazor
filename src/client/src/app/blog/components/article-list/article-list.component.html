@@ -31,26 +31,27 @@
           <hr />
         </div>
       </ng-container>
-
-      <div class="clearfix" [ngClass]="transition.apply('page-turn-button')">
-        <a
-          mat-flat-button
-          color="primary"
-          class="float-left"
-          (click)="preloading || previous()"
-          *ngIf="data.hasPrevious"
-          [attr.disabled]="preloading ? '' : null"
-          >← Newer</a
-        >
-        <a
-          mat-flat-button
-          color="primary"
-          class="float-right"
-          (click)="preloading || next()"
-          *ngIf="data.hasNext"
-          [attr.disabled]="preloading ? '' : null"
-          >Older →</a
-        >
+      <div class="clearfix" [ngClass]="transition.apply('fade-opposite')">
+        <div class="clearfix" [ngClass]="transition.apply('page-turn-button')">
+          <a
+            mat-flat-button
+            color="primary"
+            class="float-left"
+            (click)="preloading || previous()"
+            *ngIf="data.hasPrevious"
+            [attr.disabled]="preloading ? '' : null"
+            >← Newer</a
+          >
+          <a
+            mat-flat-button
+            color="primary"
+            class="float-right"
+            (click)="preloading || next()"
+            *ngIf="data.hasNext"
+            [attr.disabled]="preloading ? '' : null"
+            >Older →</a
+          >
+        </div>
       </div>
     </div>
   </div>

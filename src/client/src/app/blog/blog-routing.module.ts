@@ -34,6 +34,12 @@ const routes: Routes = [
         data: new RouteData({ kind: "add" })
       },
       {
+        path: "edit/:id",
+        component: WriteArticleComponent,
+        // canActivate: [RequireAuthenticatedUserRouteGuard],
+        data: new RouteData({ kind: "edit" })
+      },
+      {
         path: "article/:id",
         component: ArticleComponent,
         data: new RouteData({ kind: "article" })

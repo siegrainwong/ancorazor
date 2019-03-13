@@ -1,9 +1,11 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { ArticleService } from "../../services/article.service";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
 import { LoggingService } from "src/app/shared/services/logging.service";
+import { SGTransition } from "src/app/shared/utils/siegrain.animations";
+import { SGUtil } from "src/app/shared/utils/siegrain.utils";
 
 @Component({
   selector: "app-write-article",
@@ -17,19 +19,38 @@ export class WriteArticleComponent implements OnInit {
     digest: ""
   });
   private editor: any;
+  public isEditing: boolean = false;
 
   constructor(
     private service: ArticleService,
     private router: Router,
     private store: Store,
-    private logger: LoggingService
+    private logger: LoggingService,
+    private route: ActivatedRoute,
+    public transition: SGTransition,
+    private util: SGUtil
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.preloadArticle();
     this.setupEditor();
   }
 
-  setupEditor() {
+  private async preloadArticle() {
+    if (this.store.preloadArticle) {
+      this.model = this.store.preloadArticle;
+      this.store.preloadArticle = null;
+    } else {
+      let id = this.route.snapshot.params.id;
+      if (!id) return;
+      let res = await this.service.getArticle(id);
+      if (!res) return;
+      this.model = res;
+    }
+    this.isEditing = true;
+  }
+
+  private setupEditor() {
     if (this.store.renderFromServer) return;
     let Editor = require("tui-editor");
     this.editor = new Editor({
@@ -53,10 +74,17 @@ export class WriteArticleComponent implements OnInit {
 
   async submit() {
     this.model.content = this.editor.getValue();
+    if (!this.model.title || !this.model.title.length)
+      return this.util.tip("Title is required");
+    if (!this.model.content || !this.model.content.length)
+      return this.util.tip("Content is required");
+
     this.logger.info("posting: ", this.model);
-    var res = await this.service.add(this.model);
+    var res = this.isEditing
+      ? await this.service.update(this.model)
+      : await this.service.add(this.model);
     if (!res) return;
-    this.router.navigate([`article/${res.id}`]);
+    this.util.routeTo([`article/${res}`]);
   }
 
   // TODO:

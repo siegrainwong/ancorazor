@@ -63,10 +63,13 @@ export class ArticleListComponent implements OnInit {
   }
 
   public async read(model: ArticleModel) {
-    let res = await this.service.getArticle(model.id);
-    if (!res) return;
-    this.store.preloadArticle = res;
-    this.util.routeTo(["/article", model.id]);
+    (await this.preloadArticle(model)) &&
+      this.util.routeTo(["/article", model.id]);
+  }
+
+  public async edit(model: ArticleModel) {
+    (await this.preloadArticle(model)) &&
+      this.util.routeTo(["/edit", model.id]);
   }
 
   public async delete(item: ArticleModel, index: number) {
@@ -106,12 +109,19 @@ export class ArticleListComponent implements OnInit {
     this.setupTransitions(this._itemAnimationName);
   }
 
+  private async preloadArticle(model: ArticleModel): Promise<boolean> {
+    let res = await this.service.getArticle(model.id);
+    if (!res) return Promise.resolve(false);
+    this.store.preloadArticle = res;
+    return Promise.resolve(true);
+  }
+
   private async preloadArticles(): Promise<boolean> {
     this.preloading = true;
     let res = await this.service.getPagedArticles(this._parameter);
     if (!res) {
       this.preloading = false;
-      return Promise.reject(false);
+      return Promise.resolve(false);
     }
     this._preloads = res;
     return Promise.resolve(true);

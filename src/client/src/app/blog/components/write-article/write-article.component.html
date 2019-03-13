@@ -3,7 +3,7 @@
   isEditing="true"
   (headerUpdated)="onHeaderChanged($event)"
 ></app-header>
-<div id="editor"></div>
+<div id="editor" [ngClass]="transition.apply('article')"></div>
 <div class="padding-md clearfix">
   <!-- <button class="btn float-left" mat-flat-button (click)="preview()">
     Preview
@@ -14,7 +14,7 @@
     mat-flat-button
     (click)="submit()"
   >
-    Post
+    {{ isEditing ? "Update" : "Post" }}
   </button>
 </div>
 

@@ -87,6 +87,24 @@ $custom-mat-colors: "danger" $danger, "shit" #000;
   }
 }
 
+.masthead {
+  .mat-form-field-appearance-legacy .mat-form-field-label {
+    color: rgba($color: white, $alpha: 0.7);
+    line-height: normal;
+  }
+  input {
+    line-height: normal;
+  }
+}
+// ::ng-deep .mat-select-placeholder {
+//   color: white !important;
+//   background-color: red;
+// }
+
+// ::ng-deep .mat-focused .mat-form-field-placeholder {
+//   color: red;
+// }
+
 /* === clean blog === */
 .masthead {
   .mat-form-field-appearance-legacy .mat-form-field-underline {

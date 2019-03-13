@@ -3,6 +3,7 @@ import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
 import * as $ from "jquery";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
+import { FormControl, Validators } from "@angular/forms";
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",
@@ -12,7 +13,6 @@ export class HeaderComponent implements OnInit {
   private _model: ArticleModel;
 
   @Input() isEditing: boolean = false;
-  // 给 write-article 页面用的
   @Output() headerUpdated = new EventEmitter<ArticleModel>();
 
   constructor(private store: Store, public transition: SGTransition) {}

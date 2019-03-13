@@ -27,6 +27,11 @@ export class ArticleService extends BaseService implements ISubService {
     return res.succeed && (res.data as ArticleModel);
   }
 
+  async update(params?: ArticleModel): Promise<ArticleModel> {
+    var res = await this.put(this.serviceName, params);
+    return res.succeed && (res.data as ArticleModel);
+  }
+
   async remove(id: number): Promise<boolean> {
     var res = await this.delete(`${this.serviceName}/${id}`);
     return Promise.resolve(res.succeed);

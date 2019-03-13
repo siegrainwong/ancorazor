@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<SmartSqlMap Scope="Article" xmlns="http://SmartSql.net/schemas/SmartSqlMap.xsd">
+  <MultipleResultMaps>
+    <MultipleResultMap Id="QueryByPage">
+      <Result Index="0" Property="Total"/>
+      <Result Index="1" Property="List"/>
+    </MultipleResultMap>
+  </MultipleResultMaps>
+  <Statements>
+    <Statement Id="QueryParams">
+      <Where>
+        <IsNotEmpty Prepend="And" Property="Id">
+          T.Id = @Id
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="And" Property="Cover">
+          T.Cover = @Cover
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="And" Property="Author">
+          T.Author = @Author
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="And" Property="Title">
+          T.Title = @Title
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="And" Property="Category">
+          T.Category = @Category
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="And" Property="Content">
+          T.Content = @Content
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="And" Property="Digest">
+          T.Digest = @Digest
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="And" Property="ViewCount">
+          T.ViewCount = @ViewCount
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="And" Property="CommentCount">
+          T.CommentCount = @CommentCount
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="And" Property="UpdatedAt">
+          T.UpdatedAt = @UpdatedAt
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="And" Property="CreatedAt">
+          T.CreatedAt = @CreatedAt
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="And" Property="IsDeleted">
+          T.IsDeleted = @IsDeleted
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="And" Property="Remark">
+          T.Remark = @Remark
+        </IsNotEmpty>
+      </Where>
+    </Statement>
+
+    <!--新增-->
+    <Statement Id="Insert">
+      INSERT INTO Article
+      (
+      Cover,
+      Author,
+      Title,
+      Category,
+      Content,
+      Digest,
+      ViewCount,
+      CommentCount,
+      UpdatedAt,
+      CreatedAt,
+      IsDeleted,
+      Remark
+      )
+      VALUES
+      (
+      @Cover,
+      @Author,
+      @Title,
+      @Category,
+      @Content,
+      @Digest,
+      default,
+      default,
+      @UpdatedAt,
+      @CreatedAt,
+      default,
+      @Remark
+      )
+      ;Select Scope_Identity();
+    </Statement>
+
+    <!--删除-->
+    <Statement Id="Delete">
+      Update Article Set IsDeleted = 1
+      Where Id=@Id
+    </Statement>
+
+    <!--更新-->
+    <Statement Id="Update">
+      UPDATE Article
+      <Set>
+        <IsNotEmpty Prepend="," Property="Cover">
+          Cover = @Cover
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="," Property="Title">
+          Title = @Title
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="," Property="Category">
+          Category = @Category
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="," Property="Content">
+          Content = @Content
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="," Property="Digest">
+          Digest = @Digest
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="," Property="ViewCount">
+          ViewCount = @ViewCount
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="," Property="CommentCount">
+          CommentCount = @CommentCount
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="," Property="CreatedAt">
+          CreatedAt = @CreatedAt
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="," Property="UpdatedAt">
+          UpdatedAt = @UpdatedAt
+        </IsNotEmpty>
+        <IsEmpty Prepend="," Property="UpdatedAt">
+          UpdatedAt = getdate()
+        </IsEmpty>
+        <IsNotEmpty Prepend="," Property="IsDeleted">
+          IsDeleted = @IsDeleted
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="," Property="Remark">
+          Remark = @Remark
+        </IsNotEmpty>
+      </Set>
+      Where Id=@Id
+    </Statement>
+
+    <!--获取数据列-->
+    <Statement Id="Query">
+      SELECT
+      <IsNotEmpty Prepend="Top" Property="Taken">
+        (@Taken)
+      </IsNotEmpty>
+      T.* From Article T
+      <Include RefId="QueryParams" />
+      <Switch Prepend="Order By" Property="OrderBy">
+        <Default>
+          T.Id Desc
+        </Default>
+      </Switch>
+    </Statement>
+
+    <!--获取分页数据-->
+    <Statement Id="QueryByPage" MultipleResultMap="QueryByPage">
+      Select Count(1) From Article T With(NoLock)
+      <Include RefId="QueryParams"/>;
+      Select TT.* From (
+        Select 
+          ROW_NUMBER() Over(
+            <Switch Prepend="Order By" Property="OrderBy">
+              <Default>T.Id Desc</Default>
+            </Switch>
+          ) Row_Index, 
+          T.Author, T.Id, T.Title, T.CreatedAt, T.Digest, T.Cover 
+        From Article T With(NoLock)
+        <Include RefId="QueryParams"/>
+      ) TT
+      Where TT.Row_Index Between (@PageIndex*@PageSize+1) And ((@PageIndex+1)*@PageSize)
+    </Statement>
+
+    <!--获取记录数-->
+    <Statement Id="GetRecord">
+      Select Count(1) From Article T
+      <Include RefId="QueryParams" />
+    </Statement>
+
+    <!--获取表映射实体-->
+    <Statement Id="GetEntity">
+      Select Top 1 T.* From Article T With(NoLock)
+      <Include RefId="QueryParams" />
+    </Statement>
+
+    <!--是否存在该记录-->
+    <Statement Id="IsExist">
+      Select Count(1) From Article T
+      <Include RefId="QueryParams" />
+    </Statement>
+
+  </Statements>
+</SmartSqlMap>

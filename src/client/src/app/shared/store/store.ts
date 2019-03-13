@@ -14,20 +14,18 @@ const UserStoreKey = "sg:user";
   providedIn: "root"
 })
 export class Store {
-  constructor(private logger: LoggingService) {
-    this.setupUser();
-  }
+  constructor(private logger: LoggingService) {}
 
-  /**##### Initialize */
+  /**##### Methods */
   setupUser() {
-    if (this.renderFromServer) return;
+    if (!this.renderFromClient) return;
     let userJson = window.localStorage.getItem(UserStoreKey);
     if (!userJson) return;
     this.user = JSON.parse(userJson);
   }
 
   /**##### Variables */
-  renderFromServer: Boolean = false;
+  renderFromClient: Boolean = false;
   userLoaded: Boolean = false;
   preloadArticle: ArticleModel;
 

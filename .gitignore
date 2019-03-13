@@ -49,3 +49,4 @@ public/
 dist/
 identityserver4_log.txt
 /src/service/Blog.API/Common/Secrets/KeyVault.cs
+/src/service/Blog.API/SmartSqlMapConfig.xml

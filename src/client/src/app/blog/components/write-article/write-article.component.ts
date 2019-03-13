@@ -34,7 +34,7 @@ export class WriteArticleComponent implements OnInit {
 
   async ngOnInit() {
     await this.preloadArticle();
-    this.setupEditor();
+    if (this.store.renderFromClient) this.setupEditor();
   }
 
   private async preloadArticle() {
@@ -52,7 +52,6 @@ export class WriteArticleComponent implements OnInit {
   }
 
   private setupEditor() {
-    if (this.store.renderFromServer) return;
     let Editor = require("tui-editor");
     this.editor = new Editor({
       el: document.querySelector("#editor"),

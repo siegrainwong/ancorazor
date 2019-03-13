@@ -32,6 +32,7 @@ export class BlogAppComponent implements OnInit {
 
   ngOnInit() {
     this.observeRoute();
+    this.store.setupUser();
   }
 
   prepareRoute(outlet: RouterOutlet) {

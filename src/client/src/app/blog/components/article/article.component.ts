@@ -22,11 +22,12 @@ export class ArticleComponent implements OnInit {
     private transition: SGTransition,
     private titleService: Title
   ) {}
-  ngOnInit() {
-    this.getArticle();
+  async ngOnInit() {
+    await this.getArticle();
+    if (this.store.renderFromClient) this.setupEditor();
   }
 
-  async getArticle() {
+  private async getArticle() {
     if (this.store.preloadArticle) {
       await timeout(10); // 这里必须要 await 一下，不然下面内容加载不出来。
       this.model = this.store.preloadArticle;
@@ -41,7 +42,6 @@ export class ArticleComponent implements OnInit {
     this.titleService.setTitle(
       `${this.model.title} - ${environment.titlePlainText}`
     );
-    this.setupEditor();
   }
 
   get transitionClass() {
@@ -49,7 +49,6 @@ export class ArticleComponent implements OnInit {
   }
 
   setupEditor() {
-    if (this.store.renderFromServer) return;
     let Viewer = require("tui-editor/dist/tui-editor-Viewer");
     new Viewer({
       el: document.querySelector("#viewer"),

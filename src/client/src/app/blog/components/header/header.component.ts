@@ -25,11 +25,10 @@ export class HeaderComponent implements OnInit {
 
   @Input() set model(val) {
     this._model = val;
-    this.loadCover();
+    if (this.store.renderFromClient) this.loadCover();
   }
 
   loadCover() {
-    if (this.store.renderFromServer) return;
     let src = (this.model && this.model.cover) || "assets/img/placeholder.jpg";
     let image = new Image();
     image.onload = function() {

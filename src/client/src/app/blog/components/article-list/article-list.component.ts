@@ -15,9 +15,9 @@ import { Title } from "@angular/platform-browser";
 import { Store } from "src/app/shared/store/store";
 
 enum ItemAnimationName {
-  route = "articles",
-  next = "page_turn_next",
-  previous = "page_turn_previous"
+  route = "fade-opposite",
+  next = "page-turn-next",
+  previous = "page-turn-previous"
 }
 const StaggerDuration = 200; // 列表总动画时长 = transition duration + stagger duration
 

@@ -16,6 +16,7 @@ import {
 import { filter } from "rxjs/operators";
 import { Store } from "../shared/store/store";
 import RouteData from "../shared/models/route-data.model";
+import { SGTransition } from "../shared/utils/siegrain.animations";
 
 @Component({
   selector: "app-blog-app",
@@ -25,18 +26,14 @@ export class BlogAppComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    public store: Store
+    public store: Store,
+    public transition: SGTransition
   ) {}
 
   ngOnInit() {
     this.observeRoute();
   }
 
-  /**
-   * 是否禁用全局动画
-   */
-  @HostBinding("@.disabled")
-  public animationsDisabled = false;
   prepareRoute(outlet: RouterOutlet) {
     return (
       outlet && outlet.activatedRouteData && outlet.activatedRouteData["kind"]

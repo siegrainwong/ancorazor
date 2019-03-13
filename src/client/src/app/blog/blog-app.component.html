@@ -1,8 +1,7 @@
 <app-nav id="nav"></app-nav>
 
-<!-- <div [@routeAnimations]="prepareRoute(outlet)"> -->
 <div id="content">
   <router-outlet></router-outlet>
 </div>
 
-<app-footer></app-footer>
+<app-footer [ngClass]="transition.apply('fade-opposite')"></app-footer>

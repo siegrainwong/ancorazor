@@ -108,46 +108,36 @@ export class SGTransition {
   private _animations: SGAnimation[] = [
     // router animations
     new SGAnimation({
-      name: "nav_title",
+      name: "fade",
       enterClass: "fadeIn",
       leaveClass: "fadeOut"
     }),
     new SGAnimation({
-      name: "title",
+      name: "fade-up",
       enterClass: "fadeInUp",
       leaveClass: "fadeOutUp"
     }),
     new SGAnimation({
-      name: "cover",
-      enterClass: "fadeIn",
-      leaveClass: "fadeOut"
-    }),
-    new SGAnimation({
-      name: "articles",
-      enterClass: "fadeInUp",
-      leaveClass: "fadeOutDown"
-    }),
-    new SGAnimation({
-      name: "article",
+      name: "fade-opposite",
       enterClass: "fadeInUp",
       leaveClass: "fadeOutDown"
     }),
 
     // custom animations
     new SGAnimation({
-      name: "page_turn_next",
+      name: "page-turn-next",
       enterClass: "fadeInRight",
       leaveClass: "fadeOutLeft",
       type: SGTransitionMode.custom
     }),
     new SGAnimation({
-      name: "page_turn_previous",
+      name: "page-turn-previous",
       enterClass: "fadeInLeft",
       leaveClass: "fadeOutRight",
       type: SGTransitionMode.custom
     }),
     new SGAnimation({
-      name: "page_turn_button",
+      name: "page-turn-button",
       enterClass: "fadeInUp",
       leaveClass: "fadeOutDown",
       type: SGTransitionMode.custom

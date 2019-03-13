@@ -45,7 +45,7 @@ export class ArticleComponent implements OnInit {
   }
 
   get transitionClass() {
-    return this.model && this.transition.apply("article");
+    return this.model && this.transition.apply("fade-opposite");
   }
 
   setupEditor() {

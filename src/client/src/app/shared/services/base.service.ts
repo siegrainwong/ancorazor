@@ -114,15 +114,15 @@ export abstract class BaseService {
         succeed: response.data.succeed,
         message: response.data.message
       });
-    else
+    else {
       return this.handleError(
         new ResponseResult({
-          message: `Request failed : status ${response.status} ${
-            response.statusText
-          }`
+          message: `Request failed : ${response.status} ${response.statusText}`,
+          data: response.data
         }),
         response.status
       );
+    }
 
     if (result.succeed) return result;
     else return this.handleError(new ResponseResult(result));

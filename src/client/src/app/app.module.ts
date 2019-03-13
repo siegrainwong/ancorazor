@@ -1,5 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule, ErrorHandler } from "@angular/core";
+import { NgModule, ErrorHandler, Inject, PLATFORM_ID } from "@angular/core";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -7,6 +7,9 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { LoggingService } from "./shared/services/logging.service";
 import { GlobalErrorHandler } from "./shared/services/global-error-handler";
 import { Store } from "./shared/store/store";
+import { isPlatformBrowser } from "@angular/common";
+import { TaskProcessor } from "./shared/services/async-helper.service";
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -24,13 +27,18 @@ import { Store } from "./shared/store/store";
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
-    }
+    },
+    TaskProcessor
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(logger: LoggingService, store: Store) {
+  constructor(
+    logger: LoggingService,
+    store: Store,
+    @Inject(PLATFORM_ID) platformId: Object
+  ) {
     logger.info("app.module ctor.");
-    store.renderFromClient = true;
+    store.renderFromClient = isPlatformBrowser(platformId);
   }
 }

@@ -2,11 +2,11 @@ import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { AxiosResponse, AxiosRequestConfig } from "axios";
 import { ResponseResult } from "../models/response-result";
-// import { OpenIdConnectService } from "../oidc/open-id-connect.service";
 import axios from "axios";
 import { LoggingService } from "./logging.service";
 import { SGUtil } from "../utils/siegrain.utils";
 import { Store } from "../store/store";
+import { TaskProcessor } from "./async-helper.service";
 
 @Injectable({
   providedIn: "root"
@@ -15,12 +15,13 @@ export abstract class BaseService {
   constructor(
     private logger: LoggingService,
     private util: SGUtil,
-    public store: Store
+    public store: Store,
+    private processor: TaskProcessor
   ) {
     this.setup();
   }
 
-  setup() {
+  protected setup() {
     axios.defaults.baseURL = environment.apiUrlBase;
     axios.defaults.timeout = 100000;
     axios.defaults.headers = { "Content-Type": "application/json" };
@@ -41,7 +42,17 @@ export abstract class BaseService {
     query?: any,
     option?: AxiosRequestConfig
   ): Promise<ResponseResult> {
-    return await this.handleRequest(Methods.GET, url, null, query, option);
+    /**
+     * Mark: 让 universal 等待 API 请求并渲染完毕
+     * https://github.com/angular/angular/issues/20520#issuecomment-449597926
+     */
+    return new Promise<ResponseResult>(resolve => {
+      this.processor
+        .doTask(this.handleRequest(Methods.GET, url, null, query, option))
+        .subscribe(result => {
+          resolve(result);
+        });
+    });
   }
   async post(
     url: string,

@@ -31,8 +31,7 @@ import { LoggingService } from "./shared/services/logging.service";
   bootstrap: [AppComponent]
 })
 export class AppServerModule {
-  constructor(logger: LoggingService, store: Store) {
+  constructor(logger: LoggingService) {
     logger.info("app.server ctor.");
-    store.renderFromClient = false;
   }
 }

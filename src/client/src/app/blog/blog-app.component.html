@@ -1,6 +1,6 @@
 <app-nav id="nav"></app-nav>
 
-<div id="content">
+<div id="content" [ngClass]="{ 'render-by-server': !store.renderFromClient }">
   <router-outlet></router-outlet>
 </div>
 

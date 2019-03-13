@@ -29,7 +29,6 @@ export class ArticleComponent implements OnInit {
 
   private async getArticle() {
     if (this.store.preloadArticle) {
-      await timeout(10); // 这里必须要 await 一下，不然下面内容加载不出来。
       this.model = this.store.preloadArticle;
       this.store.preloadArticle = null;
     } else {
@@ -38,7 +37,7 @@ export class ArticleComponent implements OnInit {
       if (!res) return;
       this.model = res;
     }
-
+    await timeout(10); // 这里必须要 await 一下，给 angular render 的时间
     this.titleService.setTitle(
       `${this.model.title} - ${environment.titlePlainText}`
     );

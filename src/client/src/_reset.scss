@@ -96,14 +96,6 @@ $custom-mat-colors: "danger" $danger, "shit" #000;
     line-height: normal;
   }
 }
-// ::ng-deep .mat-select-placeholder {
-//   color: white !important;
-//   background-color: red;
-// }
-
-// ::ng-deep .mat-focused .mat-form-field-placeholder {
-//   color: red;
-// }
 
 /* === clean blog === */
 .masthead {
@@ -181,5 +173,13 @@ pre {
   .hljs-literal,
   .hljs-type {
     color: $code-keyword;
+  }
+}
+
+/* === server side rendering === */
+.render-by-server {
+  // SSR时禁止显示动画元素
+  .animated {
+    display: none;
   }
 }

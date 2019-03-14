@@ -1,0 +1,27 @@
+.padding {
+  &-sm {
+    padding: 10px;
+  }
+  &-md {
+    padding: 20px;
+  }
+  &-lg {
+    padding: 30px;
+  }
+  &-xl {
+    padding: 45px;
+  }
+}
+
+// $component-list: "blog-app", "article", "article-list";
+// $prefix: "app";
+
+// @each $c in $component-list {
+//   #{$prefix}-#{$c} {
+//     display: block;
+//   }
+// }
+
+:host {
+  display: block;
+}

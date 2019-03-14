@@ -2,11 +2,18 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <!-- Client 路径-->
-    <SpaRoot>../../client</SpaRoot>
+    <SpaRoot>ClientApp/</SpaRoot>
     <!-- 是否开启 SSR -->
     <BuildServerSideRenderer>true</BuildServerSideRenderer>
     <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
+    <UserSecretsId>24dec880-1d4c-4d3c-8102-9aef836b6ee3</UserSecretsId>
   </PropertyGroup>
+
+  <!-- 排除客户端项目 -->
+  <ItemGroup>
+    <Content Remove="$(SpaRoot)**" />
+    <None Remove="$(SpaRoot)**" />
+  </ItemGroup>
 
   <!-- 检查 Nodejs 环境，如果环境ok的话就执行 npm install -->
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
@@ -21,11 +28,15 @@
 
   <!-- webpack 发布打包命令 -->
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm i" />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod" />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
 
+    <!-- cache 里有个文件名超长的文件复制不了，删掉 -->
+    <Exec WorkingDirectory="$(SpaRoot)node_modules\" Command="rimraf .cache" />
+    
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)dist\client\**" />

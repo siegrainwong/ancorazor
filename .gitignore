@@ -33,10 +33,6 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 
-# Custom
-Logs/
-identityserver4_log.txt
-
 # nodejs
 .DS_Store
 Thumbs.db
@@ -47,6 +43,4 @@ public/
 .deploy*/
 .nuxt/
 dist/
-identityserver4_log.txt
-/src/service/Blog.API/Common/Secrets/KeyVault.cs
-/src/service/Blog.API/SmartSqlMapConfig.xml
+SmartSqlMapConfig.xml

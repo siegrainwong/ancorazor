@@ -1,0 +1,185 @@
+@import "variables";
+@import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.206/distr/fira_code.css);
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans+SC);
+
+$primary-font: "Noto Sans SC";
+$code-font: "Fira Code";
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  font-family: $primary-font;
+
+  &.scrollbar {
+    &::-webkit-scrollbar {
+      width: 6px;
+      background-color: $gray-200;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $primary;
+      background-image: -webkit-gradient(
+        linear,
+        0 0,
+        0 100%,
+        color-stop(0.5, rgba(255, 255, 255, 0.2)),
+        color-stop(0.5, transparent),
+        to(transparent)
+      );
+      opacity: 1;
+    }
+    &::-webkit-scrollbar-track {
+      border-radius: 10px;
+      background: transparent;
+    }
+  }
+}
+
+* {
+  &:active,
+  :focus {
+    outline: none !important; // 1
+  }
+}
+
+label {
+  margin-bottom: 0; // 2
+}
+
+/* === material === */
+.mat-button,
+.mat-fab,
+.mat-flat-button,
+.mat-icon-button,
+.mat-mini-fab,
+.mat-raised-button,
+.mat-stroked-button,
+.mat-simple-snackbar {
+  font-family: inherit;
+}
+.mat-button,
+.mat-dialog-title {
+  text-transform: uppercase;
+}
+
+.mat-snack-bar-container {
+  background: $white;
+  color: rgba($color: $black, $alpha: 0.7);
+  .mat-simple-snackbar-action {
+    color: $primary;
+  }
+}
+
+$custom-mat-colors: "danger" $danger, "shit" #000;
+@each $i in $custom-mat-colors {
+  $name: nth($i, 1);
+  $mat-color: nth($i, 2);
+  .mat-#{$name} {
+    color: $mat-color;
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: rgba($color: $mat-color, $alpha: 0.01);
+    }
+    .mat-button-focus-overlay {
+      background: $mat-color;
+    }
+  }
+}
+
+.masthead {
+  .mat-form-field-appearance-legacy .mat-form-field-label {
+    color: rgba($color: white, $alpha: 0.7);
+    line-height: normal;
+  }
+  input {
+    line-height: normal;
+  }
+}
+
+/* === clean blog === */
+.masthead {
+  .mat-form-field-appearance-legacy .mat-form-field-underline {
+    background-color: rgba($color: white, $alpha: 0.7);
+  }
+
+  .mat-form-field-ripple {
+    background-color: rgba($color: white, $alpha: 0.87);
+  }
+}
+
+/* === animate.css === */
+.animated {
+  animation-fill-mode: forwards;
+}
+
+$code-normal: #636c71;
+$code-keyword: #3e99b5;
+/* === tui editor === */
+.tui-editor-contents {
+  font-size: 16px;
+  // code block
+  pre,
+  pre > code {
+    font-family: $code-font, $primary-font;
+    color: $code-normal;
+  }
+  // inline code block
+  code {
+    color: $code-keyword;
+    padding: 2px 4px;
+    margin: 0 4px;
+    background-color: #f5f7f8;
+  }
+}
+
+/* === highlight.js === */
+pre {
+  color: $code-normal;
+
+  .hljs-string,
+  .hljs-symbol,
+  .hljs-bullet {
+    color: #fb443d;
+  }
+
+  .hljs-comment,
+  .hljs-quote {
+    color: #847fbb;
+  }
+
+  .hljs-keyword,
+  .hljs-selector-tag {
+    color: #096fe9;
+  }
+
+  .hljs-function {
+    color: $code-keyword;
+    .hljs-params {
+      color: $code-normal;
+      .hljs-keyword {
+        color: $code-keyword;
+      }
+    }
+    .hljs-title {
+      color: $code-normal;
+    }
+  }
+
+  .hljs-number,
+  .hljs-meta,
+  .hljs-built_in,
+  .hljs-builtin-name,
+  .hljs-literal,
+  .hljs-type {
+    color: $code-keyword;
+  }
+}
+
+/* === server side rendering === */
+.render-by-server {
+  // SSR时禁止显示动画元素
+  .animated {
+    display: none;
+  }
+}

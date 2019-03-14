@@ -132,7 +132,7 @@ namespace Blog.API
             var section = Configuration.GetSection("Client");
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = $"{section["Path"]}/dist";
+                configuration.RootPath = $"{section["ClientPath"]}/dist";
             });
         }
 
@@ -140,11 +140,11 @@ namespace Blog.API
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            //if (env.IsDevelopment())
+            //{
                 app.UseDeveloperExceptionPage();
                 ConfigureSwagger(app);
-            }
+            //}
 
             app.UseCors();
             app.UseAuthentication();

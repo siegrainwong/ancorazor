@@ -24,7 +24,6 @@ namespace Blog.API
     public class Startup
     {
         private const string _ServiceName = "Blog.API";
-        private const string _CorsPolicy = "LimitHosts";
 
         public Startup(IConfiguration configuration)
         {
@@ -119,10 +118,9 @@ namespace Blog.API
         {
             services.AddCors(c =>
             {
-                c.AddPolicy(_CorsPolicy, policy =>
-                {
+                c.AddDefaultPolicy(policy => {
                     policy
-                        .WithOrigins("http://localhost:4200", "http://localhost:5000", "https://localhost:5001")
+                        .WithOrigins("http://localhost:4200")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
@@ -148,7 +146,7 @@ namespace Blog.API
                 ConfigureSwagger(app);
             }
 
-            app.UseCors(_CorsPolicy);
+            app.UseCors();
             app.UseAuthentication();
             app.UseHttpsRedirection();
             ConfigureMvc(app);
@@ -197,7 +195,7 @@ namespace Blog.API
             {
                 client.UseSpa(spa =>
                 {
-                    spa.Options.SourcePath = section["Path"];
+                    spa.Options.SourcePath = section["ClientPath"];
                     spa.UseSpaPrerendering(options =>
                     {
                         options.BootModulePath = $"{spa.Options.SourcePath}/dist/server/main.js";

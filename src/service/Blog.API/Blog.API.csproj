@@ -5,6 +5,7 @@
     <SpaRoot>../../client</SpaRoot>
     <!-- 是否开启 SSR -->
     <BuildServerSideRenderer>true</BuildServerSideRenderer>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <!-- 检查 Nodejs 环境，如果环境ok的话就执行 npm install -->

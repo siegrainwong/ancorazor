@@ -9,6 +9,7 @@ using Blog.Entity;
 using Blog.Repository;
 using Blog.Service;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 #endregion

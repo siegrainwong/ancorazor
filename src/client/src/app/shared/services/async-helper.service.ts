@@ -89,7 +89,11 @@ abstract class ZoneMacroTaskWrapper<S, R> {
   protected abstract delegate(request: S): Observable<R>;
 }
 
-export class TaskProcessor extends ZoneMacroTaskWrapper<Promise<any>, any> {
+/**
+ * Mark: 让 universal 等待 API 请求并渲染完毕
+ * https://github.com/angular/angular/issues/20520#issuecomment-449597926
+ */
+export class TaskWrapper extends ZoneMacroTaskWrapper<Promise<any>, any> {
   constructor() {
     super();
   }

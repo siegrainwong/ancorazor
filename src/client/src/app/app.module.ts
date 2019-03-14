@@ -8,7 +8,7 @@ import { LoggingService } from "./shared/services/logging.service";
 import { GlobalErrorHandler } from "./shared/services/global-error-handler";
 import { Store } from "./shared/store/store";
 import { isPlatformBrowser } from "@angular/common";
-import { TaskProcessor } from "./shared/services/async-helper.service";
+import { TaskWrapper } from "./shared/services/async-helper.service";
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,7 +28,7 @@ import { TaskProcessor } from "./shared/services/async-helper.service";
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
     },
-    TaskProcessor
+    TaskWrapper
   ],
   bootstrap: [AppComponent]
 })

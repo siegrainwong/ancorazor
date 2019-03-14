@@ -6,7 +6,7 @@ import axios from "axios";
 import { LoggingService } from "./logging.service";
 import { SGUtil } from "../utils/siegrain.utils";
 import { Store } from "../store/store";
-import { TaskProcessor } from "./async-helper.service";
+import { TaskWrapper } from "./async-helper.service";
 
 @Injectable({
   providedIn: "root"
@@ -16,7 +16,7 @@ export abstract class BaseService {
     private logger: LoggingService,
     private util: SGUtil,
     public store: Store,
-    private processor: TaskProcessor
+    private wrapper: TaskWrapper
   ) {
     this.setup();
   }
@@ -42,12 +42,8 @@ export abstract class BaseService {
     query?: any,
     option?: AxiosRequestConfig
   ): Promise<ResponseResult> {
-    /**
-     * Mark: 让 universal 等待 API 请求并渲染完毕
-     * https://github.com/angular/angular/issues/20520#issuecomment-449597926
-     */
     return new Promise<ResponseResult>(resolve => {
-      this.processor
+      this.wrapper
         .doTask(this.handleRequest(Methods.GET, url, null, query, option))
         .subscribe(result => {
           resolve(result);
@@ -108,7 +104,7 @@ export abstract class BaseService {
       } else {
         this.util.tip(error);
         this.logger.error(error);
-        return null;
+        return new ResponseResult({ message: error.message });
       }
     }
   }

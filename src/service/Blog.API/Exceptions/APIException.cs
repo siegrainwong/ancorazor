@@ -34,6 +34,6 @@ namespace Blog.API.Exceptions
             ErrorCode = errorCode;
         }
 
-        public String ErrorCode { get; set; }
+        public string ErrorCode { get; set; }
     }
 }

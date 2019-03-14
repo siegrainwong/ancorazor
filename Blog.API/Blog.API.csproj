@@ -2,14 +2,14 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <!-- Client 路径-->
-    <SpaRoot>ClientApp/</SpaRoot>
+    <SpaRoot>ClientApp\</SpaRoot>
     <!-- 是否开启 SSR -->
     <BuildServerSideRenderer>true</BuildServerSideRenderer>
     <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
     <UserSecretsId>24dec880-1d4c-4d3c-8102-9aef836b6ee3</UserSecretsId>
   </PropertyGroup>
 
-  <!-- 排除客户端项目 -->
+  <!-- 排除客户端项目，因为我不用VS写前端 -->
   <ItemGroup>
     <Content Remove="$(SpaRoot)**" />
     <None Remove="$(SpaRoot)**" />
@@ -39,7 +39,7 @@
     
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
-      <DistFiles Include="$(SpaRoot)dist\client\**" />
+      <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**; " />
       <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
       <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(DistFiles.Identity)</RelativePath>

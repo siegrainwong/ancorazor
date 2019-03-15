@@ -2,6 +2,9 @@ import { Injectable } from "@angular/core";
 import { timeout } from "./promise-delay";
 import { Store } from "../store/store";
 import { BehaviorSubject } from "rxjs";
+import { constants } from "../constants/siegrain.constants";
+
+// TODO: 要不要做首屏禁用动画快速展示数据？
 
 @Injectable({
   providedIn: "root"
@@ -171,7 +174,7 @@ export class SGAnimation {
   /** 是否触发离开动画 */
   leaving: boolean = false;
   /** 是否执行动画 */
-  animated: boolean = true;
+  animated: boolean = constants.enableAnimation;
 
   enterClass: string;
   leaveClass: string;

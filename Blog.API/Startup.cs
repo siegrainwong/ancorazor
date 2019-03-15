@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using SmartSql;
 using Swashbuckle.AspNetCore.Swagger;
 
 #endregion
@@ -77,8 +78,10 @@ namespace Blog.API
         }
 
         private void RegisterRepository(IServiceCollection services)
-        {
-            services.AddSmartSqlRepositoryFromAssembly(options => { options.AssemblyString = "Blog.Repository"; });
+        {   
+            services.AddSmartSqlRepositoryFromAssembly(options => {
+                options.AssemblyString = "Blog.Repository";
+            });
         }
 
         private void RegisterService(IServiceCollection services)

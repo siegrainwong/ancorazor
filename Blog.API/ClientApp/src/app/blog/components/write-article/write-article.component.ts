@@ -89,6 +89,6 @@ export class WriteArticleComponent implements OnInit {
     this.util.routeTo([`article/${res}`]);
   }
 
-  // TODO:
+  // TODO: 预览
   preview() {}
 }

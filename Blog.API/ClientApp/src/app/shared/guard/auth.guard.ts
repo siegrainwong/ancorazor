@@ -18,7 +18,8 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): boolean {
     const canActivate = this.store.user != null;
-    if (!canActivate) this.util.routeTo(["/"], { fragment: "sign-in" });
+    if (!canActivate)
+      this.util.routeTo(["/"], { extras: { fragment: "sign-in" } });
     return canActivate;
   }
 }

@@ -1,16 +1,8 @@
-import { random } from "src/app/shared/utils/random";
-
 const apiHost = "http://localhost:8088";
 
 export const environment = {
   production: false,
-
-  // customizations
-  title: "siegrain🌌wang",
-  titlePlainText: "siegrain.wang",
-  homeCoverUrl: `assets/img/bg${random(1, 7)}.jpg`,
-
-  apiUrlBase: `${apiHost}/api`,
+  apiUrlBase: `${apiHost}/api`
 };
 
 /*

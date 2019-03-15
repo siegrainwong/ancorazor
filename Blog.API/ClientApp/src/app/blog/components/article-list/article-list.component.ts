@@ -4,7 +4,6 @@ import { ArticleService } from "../../services/article.service";
 import ArticleModel from "../../models/article-model";
 import { PagedResult } from "src/app/shared/models/response-result";
 import { ActivatedRoute } from "@angular/router";
-import { environment } from "src/environments/environment";
 import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
 import {
   SGTransition,
@@ -13,6 +12,7 @@ import {
 } from "src/app/shared/utils/siegrain.animations";
 import { Title } from "@angular/platform-browser";
 import { Store } from "src/app/shared/store/store";
+import { constants } from "src/app/shared/constants/siegrain.constants";
 
 enum ItemAnimationName {
   route = "fade-opposite",
@@ -29,8 +29,8 @@ const StaggerDuration = 200; // 列表总动画时长 = transition duration + st
 export class ArticleListComponent implements OnInit {
   // component
   headerModel: ArticleModel = new ArticleModel({
-    title: environment.title,
-    cover: environment.homeCoverUrl
+    title: constants.title,
+    cover: constants.homeCoverUrl
   });
   // request
   data: PagedResult<ArticleModel>;
@@ -50,7 +50,7 @@ export class ArticleListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.titleService.setTitle(`${environment.titlePlainText}`);
+    this.titleService.setTitle(`${constants.titlePlainText}`);
     this.route.queryParams.subscribe(param => {
       this._parameter.pageIndex = param.index || 0;
       this.data = null;

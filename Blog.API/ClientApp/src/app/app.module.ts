@@ -9,6 +9,7 @@ import { GlobalErrorHandler } from "./shared/services/global-error-handler";
 import { Store } from "./shared/store/store";
 import { isPlatformBrowser } from "@angular/common";
 import { TaskWrapper } from "./shared/services/async-helper.service";
+import { constants } from "./shared/constants/siegrain.constants";
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,8 +17,7 @@ import { TaskWrapper } from "./shared/services/async-helper.service";
     // Add .withServerTransition() to support Universal rendering.
     // The application ID can be any identifier which is unique on
     // the page.
-    // TODO: configurable
-    BrowserModule.withServerTransition({ appId: "siegrain.blog" }), // SSR: Modified
+    BrowserModule.withServerTransition({ appId: constants.titlePlainText }),
     // Add TransferHttpCacheModule to install a Http interceptor
     AppRoutingModule,
     BrowserAnimationsModule

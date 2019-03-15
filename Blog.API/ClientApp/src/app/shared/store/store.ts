@@ -30,9 +30,6 @@ export class Store {
   preloadArticle: ArticleModel;
 
   /**##### Observables */
-  private _routeData: RouteData = new RouteData({ kind: "home" });
-  routeDataChanged$ = new BehaviorSubject<RouteData>(this._routeData);
-
   private _user: UserModel;
   userChanged$ = new BehaviorSubject<UserModel>(this._user);
 
@@ -51,6 +48,9 @@ export class Store {
     this.userChanged$.next(value);
     this.logger.info("user data changed", value);
   }
+
+  private _routeData: RouteData = new RouteData({ kind: "home" });
+  routeDataChanged$ = new BehaviorSubject<RouteData>(this._routeData);
 
   get routeData() {
     return this._routeData;

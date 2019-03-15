@@ -6,7 +6,6 @@ import {
   ConfirmDialog,
   ConfirmDialogData
 } from "../components/confirm-dialog.component";
-import { timeout } from "./promise-delay";
 
 export const enum TipType {
   Confirm = "❔",

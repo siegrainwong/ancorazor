@@ -1,11 +1,9 @@
-import { Component, HostBinding } from "@angular/core";
-import { slideInAnimation } from "./shared/utils/animations.ng";
+import { Component } from "@angular/core";
 
 @Component({
   selector: "app-root",
   template: `
     <router-outlet></router-outlet>
   `
-  // templateUrl: "./app.component.html"
 })
 export class AppComponent {}

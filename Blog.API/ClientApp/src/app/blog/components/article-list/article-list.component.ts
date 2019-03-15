@@ -64,12 +64,16 @@ export class ArticleListComponent implements OnInit {
 
   public async read(model: ArticleModel) {
     (await this.preloadArticle(model)) &&
-      this.util.routeTo(["/article", model.id]);
+      this.util.routeTo(["/article", model.id], {
+        scrollToElementId: "#content"
+      });
   }
 
   public async edit(model: ArticleModel) {
     (await this.preloadArticle(model)) &&
-      this.util.routeTo(["/edit", model.id]);
+      this.util.routeTo(["/edit", model.id], {
+        scrollToElementId: "#content"
+      });
   }
 
   public async delete(item: ArticleModel, index: number) {
@@ -138,13 +142,15 @@ export class ArticleListComponent implements OnInit {
 
   private turnPage(animationName: ItemAnimationName) {
     this.setupTransitions(animationName);
-    this.util.routeTo(
-      ["/"],
-      {
+    this.util.routeTo(["/"], {
+      extras: {
         queryParams: { index: this._parameter.pageIndex }
       },
-      this._preloads ? [this._itemAnimationName, "page-turn-button"] : null,
-      StaggerDuration
-    );
+      names: this._preloads
+        ? [this._itemAnimationName, "page-turn-button"]
+        : null,
+      extraDuration: StaggerDuration,
+      scrollToElementId: "#articleList"
+    });
   }
 }

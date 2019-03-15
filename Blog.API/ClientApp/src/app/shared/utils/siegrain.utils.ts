@@ -6,6 +6,7 @@ import {
   ConfirmDialog,
   ConfirmDialogData
 } from "../components/confirm-dialog.component";
+import { timeout } from "./promise-delay";
 
 export const enum TipType {
   Confirm = "❔",
@@ -30,7 +31,7 @@ export class SGUtil {
    * @param msg 消息内容
    * @param type 消息类型
    */
-  tip(msg: string, type: TipType = TipType.Danger) {
+  public tip(msg: string, type: TipType = TipType.Danger) {
     this.snackBar.open(`${type} ${msg}`, "Got it", {
       duration: 5000
     });
@@ -42,7 +43,7 @@ export class SGUtil {
    * @param type 类型
    * @param content 内容
    */
-  confirm(
+  public confirm(
     title: string = "Confirm",
     type: TipType = TipType.Confirm,
     content: string = "Are you sure?"
@@ -61,21 +62,39 @@ export class SGUtil {
     });
   }
 
+  public scrollTo(elementId: string) {
+    document.querySelector(elementId).scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest"
+    });
+  }
+
   /**
    * 路由
    * 此方法会触发动画
    * @param commands `router.navigate` parameter
    * @param extras `router.navigate` parameter
    * @param names 动画名称集合
+   * @param extraDuration 延长动画过渡时间
+   * @param scrollToElementId 滚动到元素
    */
-  async routeTo(
+  public async routeTo(
     commands: any[],
-    extras?: NavigationExtras,
-    names?: string[],
-    extraDuration: number = 0
+    argument?: {
+      extras?: NavigationExtras;
+      names?: string[];
+      extraDuration?: number;
+      scrollToElementId?: string;
+    }
   ) {
-    await this.transition.triggerTransition(names, extraDuration);
-    this.router.navigate(commands, extras);
+    if (!argument) argument = {};
+    argument.scrollToElementId && this.scrollTo(argument.scrollToElementId);
+    await this.transition.triggerTransition(
+      argument.names,
+      argument.extraDuration || 0
+    );
+    this.router.navigate(commands, argument.extras);
   }
 }
 

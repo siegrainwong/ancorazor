@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { environment } from "src/environments/environment";
+import { constants } from "src/app/shared/constants/siegrain.constants";
 
 @Component({
   selector: "app-footer",
@@ -7,7 +7,7 @@ import { environment } from "src/environments/environment";
   styleUrls: ["./footer.component.scss"]
 })
 export class FooterComponent implements OnInit {
-  copyright = environment.titlePlainText;
+  copyright = constants.titlePlainText;
   constructor() {}
 
   ngOnInit() {}

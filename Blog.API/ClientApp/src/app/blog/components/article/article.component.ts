@@ -5,8 +5,8 @@ import { ActivatedRoute } from "@angular/router";
 import { Store } from "src/app/shared/store/store";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
 import { Title } from "@angular/platform-browser";
-import { environment } from "src/environments/environment";
 import { timeout } from "src/app/shared/utils/promise-delay";
+import { constants } from "src/app/shared/constants/siegrain.constants";
 
 @Component({
   selector: "app-article",
@@ -39,7 +39,7 @@ export class ArticleComponent implements OnInit {
     }
     await timeout(10); // 这里必须要 await 一下，给 angular render 的时间
     this.titleService.setTitle(
-      `${this.model.title} - ${environment.titlePlainText}`
+      `${this.model.title} - ${constants.titlePlainText}`
     );
   }
 

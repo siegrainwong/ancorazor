@@ -1,11 +1,11 @@
 import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { Store } from "src/app/shared/store/store";
-import { environment } from "src/environments/environment";
 import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
 import { MatDialog } from "@angular/material";
 import { SignInComponent } from "../sign-in/sign-in.component";
 import { ActivatedRoute } from "@angular/router";
+import { constants } from "src/app/shared/constants/siegrain.constants";
 
 @Component({
   selector: "app-nav",
@@ -43,7 +43,7 @@ export class NavComponent implements OnInit {
   registerRouteChanged() {
     this.store.routeDataChanged$.subscribe(data => {
       if (data && data.kind == "home") this.title = "";
-      else this.title = environment.title;
+      else this.title = constants.title;
     });
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import ArticleModel from "../../models/article-model";
-import { environment } from "src/environments/environment";
+import { constants } from "src/app/shared/constants/siegrain.constants";
 
 @Component({
   selector: "app-about",
@@ -10,7 +10,7 @@ import { environment } from "src/environments/environment";
 export class AboutComponent implements OnInit {
   headerModel: ArticleModel = new ArticleModel({
     title: "About me",
-    cover: environment.homeCoverUrl
+    cover: constants.homeCoverUrl
   });
   constructor() {}
 

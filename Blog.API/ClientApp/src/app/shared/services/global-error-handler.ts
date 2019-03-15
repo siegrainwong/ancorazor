@@ -9,10 +9,10 @@ import { LoggingService } from "./logging.service";
  */
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
-  constructor(private injector: Injector) {}
+  constructor(private _injector: Injector) {}
   handleError(error: Error) {
-    const loggingService = this.injector.get(LoggingService);
-    const location = this.injector.get(LocationStrategy);
+    const loggingService = this._injector.get(LoggingService);
+    const location = this._injector.get(LocationStrategy);
     const message = error.message ? error.message : error.toString();
     const url = location instanceof PathLocationStrategy ? location.path() : "";
     // get the stack trace, lets grab the last 10 stacks only

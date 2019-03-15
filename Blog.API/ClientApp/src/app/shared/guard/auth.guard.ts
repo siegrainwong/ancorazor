@@ -11,15 +11,15 @@ import { SGUtil } from "../utils/siegrain.utils";
   providedIn: "root"
 })
 export class AuthGuard implements CanActivate {
-  constructor(private store: Store, private util: SGUtil) {}
+  constructor(private _store: Store, private _util: SGUtil) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    const canActivate = this.store.user != null;
+    const canActivate = this._store.userIsAvailable;
     if (!canActivate)
-      this.util.routeTo(["/"], { extras: { fragment: "sign-in" } });
+      this._util.routeTo(["/"], { extras: { fragment: "sign-in" } });
     return canActivate;
   }
 }

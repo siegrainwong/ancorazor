@@ -173,7 +173,7 @@ namespace Blog.API
                 });
         }
 
-        // https://github.com/joshberry/dotnetcore-angular-ssr
+        // Mark: https://github.com/joshberry/dotnetcore-angular-ssr
         private void ConfigureSpa(IApplicationBuilder app, IHostingEnvironment env)
         {
             // now the static files will be served by new request URL
@@ -188,7 +188,7 @@ namespace Blog.API
                 return next.Invoke();
             });
 
-            // 多 SPA 场景：https://stackoverflow.com/questions/48216929/how-to-configure-asp-net-core-server-routing-for-multiple-spas-hosted-with-spase
+            // Mark: 多 SPA 场景：https://stackoverflow.com/questions/48216929/how-to-configure-asp-net-core-server-routing-for-multiple-spas-hosted-with-spase
             var section = Configuration.GetSection("Client");
             // map spa to /client and remove the prefix
             app.Map("/client", client =>

@@ -14,7 +14,13 @@ const UserStoreKey = "sg:user";
   providedIn: "root"
 })
 export class Store {
-  constructor(private logger: LoggingService) {}
+  constructor(private _logger: LoggingService) {}
+
+  /**##### Variables */
+  /** 是否是客户端渲染 */
+  renderFromClient: Boolean = false;
+  /** 文章预加载用 */
+  preloadArticle: ArticleModel;
 
   /**##### Methods */
   setupUser() {
@@ -24,16 +30,15 @@ export class Store {
     this.user = JSON.parse(userJson);
   }
 
-  /**##### Variables */
-  renderFromClient: Boolean = false;
-  userLoaded: Boolean = false;
-  preloadArticle: ArticleModel;
-
   /**##### Observables */
   private _user: UserModel;
   userChanged$ = new BehaviorSubject<UserModel>(this._user);
 
-  get user() {
+  get userIsAvailable(): boolean {
+    return this._user != null;
+  }
+
+  get user(): UserModel {
     return this._user;
   }
 
@@ -46,19 +51,19 @@ export class Store {
     }
 
     this.userChanged$.next(value);
-    this.logger.info("user data changed", value);
+    this._logger.info("user data changed", value);
   }
 
   private _routeData: RouteData = new RouteData({ kind: "home" });
   routeDataChanged$ = new BehaviorSubject<RouteData>(this._routeData);
 
-  get routeData() {
+  get routeData(): RouteData {
     return this._routeData;
   }
 
   set routeData(value) {
     this._routeData = value;
     this.routeDataChanged$.next(value);
-    this.logger.info("route data changed", value);
+    this._logger.info("route data changed", value);
   }
 }

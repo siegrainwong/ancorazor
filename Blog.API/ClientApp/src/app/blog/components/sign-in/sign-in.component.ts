@@ -14,9 +14,9 @@ import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
 export class SignInComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<SignInComponent>,
-    private logger: LoggingService,
-    private service: UserService,
-    private util: SGUtil
+    private _logger: LoggingService,
+    private _service: UserService,
+    private _util: SGUtil
   ) {}
   username = new FormControl("", [
     Validators.required,
@@ -52,14 +52,14 @@ export class SignInComponent implements OnInit {
     this.model.password = this.password.value;
 
     this.loading = true;
-    let result = await this.service.signIn(
+    let result = await this._service.signIn(
       this.model.loginName,
       this.model.password
     );
     this.loading = false;
 
     if (!result) return;
-    this.util.tip(`Welcome, ${result.realName}`, TipType.Success);
+    this._util.tip(`Welcome, ${result.realName}`, TipType.Success);
     this.close();
   }
 }

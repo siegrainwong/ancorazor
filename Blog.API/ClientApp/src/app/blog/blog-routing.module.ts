@@ -6,7 +6,7 @@ import { AboutComponent } from "./components/about/about.component";
 import RouteData from "../shared/models/route-data.model";
 import { ArticleListComponent } from "./components/article-list/article-list.component";
 import { ArticleComponent } from "./components/article/article.component";
-import { AuthGuard } from '../shared/guard/auth.guard';
+import { AuthGuard } from "../shared/guard/auth.guard";
 
 const routes: Routes = [
   {
@@ -23,10 +23,6 @@ const routes: Routes = [
         component: ArticleListComponent,
         data: new RouteData({ kind: "home" })
       },
-      /**
-       * Mark: canActivate，在进入这个路由之前需要做的操作
-       * 在这里就是鉴权，其实这一坨就是类似Attribute的东西，也可以有多个
-       */
       {
         path: "add",
         component: WriteArticleComponent,

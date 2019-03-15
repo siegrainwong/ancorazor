@@ -21,11 +21,11 @@ export class NavComponent implements OnInit {
     public util: SGUtil,
     public transition: SGTransition,
     public dialog: MatDialog,
-    private route: ActivatedRoute
+    private _route: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.route.fragment.subscribe(fragment => {
+    this._route.fragment.subscribe(fragment => {
       if (fragment == "sign-in") this.openDialog();
     });
     this.registerRouteChanged();

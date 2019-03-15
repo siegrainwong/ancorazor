@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit {
   @Input() isEditing: boolean = false;
   @Output() headerUpdated = new EventEmitter<ArticleModel>();
 
-  constructor(private store: Store, public transition: SGTransition) {}
+  constructor(private _store: Store, public transition: SGTransition) {}
 
   ngOnInit() {}
 
@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit {
 
   @Input() set model(val) {
     this._model = val;
-    if (this.store.renderFromClient) this.loadCover();
+    if (this._store.renderFromClient) this.loadCover();
   }
 
   loadCover() {

@@ -16,11 +16,11 @@ import { constants } from "src/app/shared/constants/siegrain.constants";
 export class ArticleComponent implements OnInit {
   model: ArticleModel;
   constructor(
-    private service: ArticleService,
-    private route: ActivatedRoute,
+    private _service: ArticleService,
+    private _route: ActivatedRoute,
     public store: Store,
-    private transition: SGTransition,
-    private titleService: Title
+    private _transition: SGTransition,
+    private _titleService: Title
   ) {}
   async ngOnInit() {
     await this.getArticle();
@@ -32,19 +32,19 @@ export class ArticleComponent implements OnInit {
       this.model = this.store.preloadArticle;
       this.store.preloadArticle = null;
     } else {
-      let id = parseInt(this.route.snapshot.params.id);
-      let res = await this.service.getArticle(id);
+      let id = parseInt(this._route.snapshot.params.id);
+      let res = await this._service.getArticle(id);
       if (!res) return;
       this.model = res;
     }
     await timeout(10); // 这里必须要 await 一下，给 angular render 的时间
-    this.titleService.setTitle(
+    this._titleService.setTitle(
       `${this.model.title} - ${constants.titlePlainText}`
     );
   }
 
   get transitionClass() {
-    return this.model && this.transition.apply("fade-opposite");
+    return this.model && this._transition.apply("fade-opposite");
   }
 
   setupEditor() {

@@ -1,12 +1,4 @@
-/**
- * Mark: ng-cli 创建单ts页面
- * ng g c blog/blog-app --flat --module blog --inline-style --inline-template
- * --flat：前缀式生成
- * --module blog：指定声明模块
- * --inline-style --inline-template：不分开生成scss和html文件，只生成一个ts
- */
-
-import { Component, OnInit, HostBinding } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import {
   ActivatedRoute,
   Router,
@@ -24,8 +16,8 @@ import { SGTransition } from "../shared/utils/siegrain.animations";
 })
 export class BlogAppComponent implements OnInit {
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    private _route: ActivatedRoute,
+    private _router: Router,
     public store: Store,
     public transition: SGTransition
   ) {}
@@ -42,11 +34,12 @@ export class BlogAppComponent implements OnInit {
   }
 
   observeRoute() {
-    this.store.routeData = this.route.firstChild.snapshot.data as RouteData;
-    this.router.events
+    this.store.routeData = this._route.firstChild.snapshot.data as RouteData;
+    this._router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.store.routeData = this.route.firstChild.snapshot.data as RouteData;
+        this.store.routeData = this._route.firstChild.snapshot
+          .data as RouteData;
       });
   }
 }

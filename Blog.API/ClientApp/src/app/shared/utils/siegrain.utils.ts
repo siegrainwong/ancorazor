@@ -17,10 +17,10 @@ export const enum TipType {
 @Injectable()
 export class SGUtil {
   constructor(
-    private snackBar: MatSnackBar,
-    private router: Router,
-    private transition: SGTransition,
-    private dialog: MatDialog
+    private _snackBar: MatSnackBar,
+    private _router: Router,
+    private _transition: SGTransition,
+    private _dialog: MatDialog
   ) {}
 
   /**##### Utilities */
@@ -31,7 +31,7 @@ export class SGUtil {
    * @param type 消息类型
    */
   public tip(msg: string, type: TipType = TipType.Danger) {
-    this.snackBar.open(`${type} ${msg}`, "Got it", {
+    this._snackBar.open(`${type} ${msg}`, "Got it", {
       duration: 5000
     });
   }
@@ -47,7 +47,7 @@ export class SGUtil {
     type: TipType = TipType.Confirm,
     content: string = "Are you sure?"
   ): Promise<boolean> {
-    const dialogRef = this.dialog.open(ConfirmDialog, {
+    const dialogRef = this._dialog.open(ConfirmDialog, {
       data: new ConfirmDialogData({
         title: title,
         content: content,
@@ -89,11 +89,11 @@ export class SGUtil {
   ) {
     if (!argument) argument = {};
     argument.scrollToElementId && this.scrollTo(argument.scrollToElementId);
-    await this.transition.triggerTransition(
+    await this._transition.triggerTransition(
       argument.names,
       argument.extraDuration || 0
     );
-    this.router.navigate(commands, argument.extras);
+    this._router.navigate(commands, argument.extras);
   }
 }
 

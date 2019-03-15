@@ -41,17 +41,17 @@ export class ArticleListComponent implements OnInit {
   private _itemAnimationName: ItemAnimationName;
 
   constructor(
-    private service: ArticleService,
-    private route: ActivatedRoute,
+    private _service: ArticleService,
+    private _route: ActivatedRoute,
     public util: SGUtil,
     public transition: SGTransition,
-    private titleService: Title,
+    private _titleService: Title,
     public store: Store
   ) {}
 
   ngOnInit() {
-    this.titleService.setTitle(`${constants.titlePlainText}`);
-    this.route.queryParams.subscribe(param => {
+    this._titleService.setTitle(`${constants.titlePlainText}`);
+    this._route.queryParams.subscribe(param => {
       this._parameter.pageIndex = param.index || 0;
       this.data = null;
       this.getArticles();
@@ -79,7 +79,7 @@ export class ArticleListComponent implements OnInit {
   public async delete(item: ArticleModel, index: number) {
     let result =
       (await this.util.confirm("Delete", TipType.Danger)) &&
-      (await this.service.remove(item.id));
+      (await this._service.remove(item.id));
     if (!result) return;
 
     // 创建一个新动画对象单独执行动画
@@ -106,7 +106,7 @@ export class ArticleListComponent implements OnInit {
       this._preloads = null;
       this.preloading = false;
     } else {
-      let res = await this.service.getPagedArticles(this._parameter);
+      let res = await this._service.getPagedArticles(this._parameter);
       if (!res) return;
       this.data = res;
     }
@@ -114,7 +114,7 @@ export class ArticleListComponent implements OnInit {
   }
 
   private async preloadArticle(model: ArticleModel): Promise<boolean> {
-    let res = await this.service.getArticle(model.id);
+    let res = await this._service.getArticle(model.id);
     if (!res) return Promise.resolve(false);
     this.store.preloadArticle = res;
     return Promise.resolve(true);
@@ -122,7 +122,7 @@ export class ArticleListComponent implements OnInit {
 
   private async preloadArticles(): Promise<boolean> {
     this.preloading = true;
-    let res = await this.service.getPagedArticles(this._parameter);
+    let res = await this._service.getPagedArticles(this._parameter);
     if (!res) {
       this.preloading = false;
       return Promise.resolve(false);

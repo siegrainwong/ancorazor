@@ -18,33 +18,32 @@ export class WriteArticleComponent implements OnInit {
     title: "",
     digest: ""
   });
-  private editor: any;
+  private _editor: any;
   public isEditing: boolean = false;
   public preloading: boolean = false;
 
   constructor(
-    private service: ArticleService,
-    private router: Router,
-    private store: Store,
-    private logger: LoggingService,
-    private route: ActivatedRoute,
+    private _service: ArticleService,
+    private _store: Store,
+    private _logger: LoggingService,
+    private _route: ActivatedRoute,
     public transition: SGTransition,
-    private util: SGUtil
+    private _util: SGUtil
   ) {}
 
   async ngOnInit() {
     await this.preloadArticle();
-    if (this.store.renderFromClient) this.setupEditor();
+    if (this._store.renderFromClient) this.setupEditor();
   }
 
   private async preloadArticle() {
-    if (this.store.preloadArticle) {
-      this.model = this.store.preloadArticle;
-      this.store.preloadArticle = null;
+    if (this._store.preloadArticle) {
+      this.model = this._store.preloadArticle;
+      this._store.preloadArticle = null;
     } else {
-      let id = this.route.snapshot.params.id;
+      let id = this._route.snapshot.params.id;
       if (!id) return;
-      let res = await this.service.getArticle(id);
+      let res = await this._service.getArticle(id);
       if (!res) return;
       this.model = res;
     }
@@ -53,7 +52,7 @@ export class WriteArticleComponent implements OnInit {
 
   private setupEditor() {
     let Editor = require("tui-editor");
-    this.editor = new Editor({
+    this._editor = new Editor({
       el: document.querySelector("#editor"),
       initialEditType: "markdown",
       previewStyle: "vertical",
@@ -73,20 +72,20 @@ export class WriteArticleComponent implements OnInit {
   }
 
   async submit() {
-    this.model.content = this.editor.getValue();
+    this.model.content = this._editor.getValue();
     if (!this.model.title || !this.model.title.length)
-      return this.util.tip("Title is required");
+      return this._util.tip("Title is required");
     if (!this.model.content || !this.model.content.length)
-      return this.util.tip("Content is required");
+      return this._util.tip("Content is required");
 
     this.preloading = true;
-    this.logger.info("posting: ", this.model);
+    this._logger.info("posting: ", this.model);
     var res = this.isEditing
-      ? await this.service.update(this.model)
-      : await this.service.add(this.model);
+      ? await this._service.update(this.model)
+      : await this._service.add(this.model);
     this.preloading = false;
     if (!res) return;
-    this.util.routeTo([`article/${res}`]);
+    this._util.routeTo([`article/${res}`]);
   }
 
   // TODO: 预览

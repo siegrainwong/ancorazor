@@ -14,11 +14,11 @@ import { TransferState, makeStateKey } from "@angular/platform-browser";
 })
 export abstract class BaseService {
   constructor(
-    private logger: LoggingService,
-    private util: SGUtil,
+    private _logger: LoggingService,
+    private _util: SGUtil,
     public store: Store,
-    private wrapper: TaskWrapper,
-    private state: TransferState
+    private _wrapper: TaskWrapper,
+    private _state: TransferState
   ) {
     this.setup();
   }
@@ -29,7 +29,7 @@ export abstract class BaseService {
     axios.defaults.headers = { "Content-Type": "application/json" };
     axios.interceptors.request.use(
       config => {
-        if (this.store.user)
+        if (this.store.userIsAvailable)
           config.headers.Authorization = `Bearer ${this.store.user.token}`;
         return config;
       },
@@ -49,10 +49,10 @@ export abstract class BaseService {
      * https://medium.com/@evertonrobertoauler/angular-5-universal-with-transfer-state-using-angular-cli-19fe1e1d352c
      */
     const stateKey = makeStateKey(url);
-    let storedData = this.state.get(stateKey, null);
+    let storedData = this._state.get(stateKey, null);
     if (storedData) {
-      this.logger.info("server side state detected: ", storedData);
-      this.state.remove(stateKey);
+      this._logger.info("server side state detected: ", storedData);
+      this._state.remove(stateKey);
       return Promise.resolve(storedData as ResponseResult);
     }
 
@@ -61,17 +61,18 @@ export abstract class BaseService {
      * https://github.com/angular/angular/issues/20520#issuecomment-449597926
      */
     return new Promise<ResponseResult>(resolve => {
-      this.wrapper
+      this._wrapper
         .doTask(this.handleRequest(Methods.GET, url, null, query, option))
         .subscribe(result => {
           if (!this.store.renderFromClient) {
-            this.state.set(stateKey, result);
-            this.logger.info("transfer state stored: ", result);
+            this._state.set(stateKey, result);
+            this._logger.info("transfer state stored: ", result);
           }
           resolve(result);
         });
     });
   }
+
   async post(
     url: string,
     body: any,
@@ -80,6 +81,7 @@ export abstract class BaseService {
   ): Promise<ResponseResult> {
     return await this.handleRequest(Methods.POST, url, body, query, option);
   }
+
   async put(
     url: string,
     body?: any,
@@ -88,6 +90,7 @@ export abstract class BaseService {
   ): Promise<ResponseResult> {
     return await this.handleRequest(Methods.PUT, url, body, query, option);
   }
+
   async delete(
     url: string,
     query?: any,
@@ -124,8 +127,8 @@ export abstract class BaseService {
       if (error.response) {
         return this.handleResponse(error.response as AxiosResponse);
       } else {
-        this.util.tip(error);
-        this.logger.error(error);
+        this._util.tip(error);
+        this._logger.error(error);
         return new ResponseResult({ message: error.message });
       }
     }
@@ -164,12 +167,12 @@ export abstract class BaseService {
   handleError(result: ResponseResult, code?: number): ResponseResult {
     switch (code) {
       case 403:
-        this.util.tip("认证过期，请重新登录！");
+        this._util.tip("认证过期，请重新登录！");
         this.store.user = null;
         break;
       default:
-        this.util.tip(result.message);
-        this.logger.error(result);
+        this._util.tip(result.message);
+        this._logger.error(result);
     }
     return new ResponseResult(result);
   }

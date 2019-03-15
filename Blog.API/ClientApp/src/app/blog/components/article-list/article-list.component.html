@@ -18,7 +18,7 @@
                 Posted on
                 {{ item.createdAt | date: "yy·M·d h:mma" }}
               </span>
-              <span class="operations col-auto" *ngIf="store.user">
+              <span class="operations col-auto" *ngIf="store.userIsAvailable">
                 <button mat-button color="danger" (click)="delete(item, i)">
                   Delete
                 </button>

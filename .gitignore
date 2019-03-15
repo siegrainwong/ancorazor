@@ -43,4 +43,6 @@ public/
 .deploy*/
 .nuxt/
 dist/
+*.pubxml
 SmartSqlMapConfig.xml
+/Blog.API/Properties/PublishProfiles

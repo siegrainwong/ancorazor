@@ -1,4 +1,8 @@
-import { BrowserModule } from "@angular/platform-browser";
+import {
+  BrowserModule,
+  TransferState,
+  BrowserTransferStateModule
+} from "@angular/platform-browser";
 import { NgModule, ErrorHandler, Inject, PLATFORM_ID } from "@angular/core";
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -17,8 +21,10 @@ import { constants } from "./shared/constants/siegrain.constants";
     // Add .withServerTransition() to support Universal rendering.
     // The application ID can be any identifier which is unique on
     // the page.
-    BrowserModule.withServerTransition({ appId: constants.titlePlainText }),
-    // Add TransferHttpCacheModule to install a Http interceptor
+    BrowserModule.withServerTransition({
+      appId: `app-${constants.titlePlainText}`
+    }),
+    BrowserTransferStateModule,
     AppRoutingModule,
     BrowserAnimationsModule
   ],

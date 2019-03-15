@@ -7,6 +7,7 @@ import { LoggingService } from "./logging.service";
 import { SGUtil } from "../utils/siegrain.utils";
 import { Store } from "../store/store";
 import { TaskWrapper } from "./async-helper.service";
+import { TransferState, makeStateKey } from "@angular/platform-browser";
 
 @Injectable({
   providedIn: "root"
@@ -16,7 +17,8 @@ export abstract class BaseService {
     private logger: LoggingService,
     private util: SGUtil,
     public store: Store,
-    private wrapper: TaskWrapper
+    private wrapper: TaskWrapper,
+    private state: TransferState
   ) {
     this.setup();
   }
@@ -42,10 +44,30 @@ export abstract class BaseService {
     query?: any,
     option?: AxiosRequestConfig
   ): Promise<ResponseResult> {
+    /**
+     * Mark: 让 Server side 的请求结果传递到 Client side 避免重复请求
+     * https://medium.com/@evertonrobertoauler/angular-5-universal-with-transfer-state-using-angular-cli-19fe1e1d352c
+     */
+    const stateKey = makeStateKey(url);
+    let storedData = this.state.get(stateKey, null);
+    if (storedData) {
+      this.logger.info("server side state detected: ", storedData);
+      this.state.remove(stateKey);
+      return Promise.resolve(storedData as ResponseResult);
+    }
+
+    /**
+     * Mark: 让 universal 等待 API 请求并渲染完毕
+     * https://github.com/angular/angular/issues/20520#issuecomment-449597926
+     */
     return new Promise<ResponseResult>(resolve => {
       this.wrapper
         .doTask(this.handleRequest(Methods.GET, url, null, query, option))
         .subscribe(result => {
+          if (!this.store.renderFromClient) {
+            this.state.set(stateKey, result);
+            this.logger.info("transfer state stored: ", result);
+          }
           resolve(result);
         });
     });

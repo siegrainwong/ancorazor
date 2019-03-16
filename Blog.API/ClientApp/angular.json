@@ -33,8 +33,7 @@
             "styles": ["src/styles.scss"],
             "stylePreprocessorOptions": {
               "includePaths": ["./src", "./src/app/shared/styles"]
-            },
-            "scripts": ["node_modules/systemjs/dist/system.min.js"]
+            }
           },
           "configurations": {
             "production": {

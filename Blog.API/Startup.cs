@@ -143,11 +143,11 @@ namespace Blog.API
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            //if (env.IsDevelopment())
+            //{
                 app.UseDeveloperExceptionPage();
                 ConfigureSwagger(app);
-            }
+            //}
 
             app.UseCors();
             app.UseAuthentication();

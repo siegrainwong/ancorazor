@@ -1,9 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
-import * as $ from "jquery";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
-import { FormControl, Validators } from "@angular/forms";
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",
@@ -32,7 +30,9 @@ export class HeaderComponent implements OnInit {
     let src = (this.model && this.model.cover) || "assets/img/placeholder.jpg";
     let image = new Image();
     image.onload = function() {
-      $(`.header-bg`).css("background-image", "url('" + image.src + "')");
+      (document.querySelector(
+        ".header-bg"
+      ) as HTMLElement).style.backgroundImage = "url('" + image.src + "')";
     };
     image.src = src;
   }

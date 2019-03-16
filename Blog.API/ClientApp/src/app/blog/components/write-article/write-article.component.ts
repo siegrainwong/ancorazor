@@ -6,6 +6,7 @@ import { Store } from "src/app/shared/store/store";
 import { LoggingService } from "src/app/shared/services/logging.service";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
 import { SGUtil } from "src/app/shared/utils/siegrain.utils";
+import { externalScripts } from "src/app/shared/constants/siegrain.constants";
 
 @Component({
   selector: "app-write-article",
@@ -50,9 +51,9 @@ export class WriteArticleComponent implements OnInit {
     this.isEditing = true;
   }
 
-  private setupEditor() {
-    let Editor = require("tui-editor");
-    this._editor = new Editor({
+  private async setupEditor() {
+    await this._util.loadExternalScripts(externalScripts.tuiEditor);
+    new tui.Editor({
       el: document.querySelector("#editor"),
       initialEditType: "markdown",
       previewStyle: "vertical",

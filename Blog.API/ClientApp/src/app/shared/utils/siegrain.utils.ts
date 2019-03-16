@@ -23,7 +23,7 @@ export class SGUtil {
     private _dialog: MatDialog
   ) {}
 
-  /**##### Utilities */
+  /** === Utilities ===*/
 
   /**
    * ref: `MatSnackBar`
@@ -94,6 +94,29 @@ export class SGUtil {
       argument.extraDuration || 0
     );
     this._router.navigate(commands, argument.extras);
+  }
+
+  /** === Lazy loading ===*/
+  /**
+   * 懒加载 JS
+   * Mark: https://codinglatte.com/posts/angular/lazy-loading-scripts-and-styles-angular/
+   */
+  public loadExternalScripts(url: string) {
+    return new Promise(resolve => {
+      const scriptElement = document.createElement("script");
+      scriptElement.src = url;
+      scriptElement.onload = resolve;
+      document.body.appendChild(scriptElement);
+    });
+  }
+
+  public loadExternalStyles(url: string) {
+    return new Promise(resolve => {
+      const styleElement = document.createElement("link");
+      styleElement.href = url;
+      styleElement.onload = resolve;
+      document.head.appendChild(styleElement);
+    });
   }
 }
 

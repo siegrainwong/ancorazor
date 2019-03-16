@@ -19,7 +19,12 @@ export class AuthGuard implements CanActivate {
   ): boolean {
     const canActivate = this._store.userIsAvailable;
     if (!canActivate)
-      this._util.routeTo(["/"], { extras: { fragment: "sign-in" } });
+      this._util.routeTo(
+        ["/"],
+        this._store.renderFromClient
+          ? { extras: { fragment: "sign-in" } }
+          : null
+      );
     return canActivate;
   }
 }

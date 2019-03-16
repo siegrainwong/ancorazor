@@ -46,3 +46,5 @@ dist/
 *.pubxml
 /Blog.API/Properties/PublishProfiles
 SmartSqlMapConfig.Development.xml
+/Blog.API/SmartSqlMapConfig.Production.xml
+/Blog.API/SmartSqlMapConfig.Release.xml

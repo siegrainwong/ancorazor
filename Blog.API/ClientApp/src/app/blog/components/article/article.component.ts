@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import ArticleModel from "../../models/article-model";
 import { ArticleService } from "../../services/article.service";
 import { ActivatedRoute } from "@angular/router";
@@ -6,12 +6,18 @@ import { Store } from "src/app/shared/store/store";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
 import { Title } from "@angular/platform-browser";
 import { timeout } from "src/app/shared/utils/promise-delay";
-import { constants } from "src/app/shared/constants/siegrain.constants";
+import {
+  constants,
+  externalScripts,
+  externalStyles
+} from "src/app/shared/constants/siegrain.constants";
+import { SGUtil } from "src/app/shared/utils/siegrain.utils";
 
 @Component({
   selector: "app-article",
   templateUrl: "./article.component.html",
-  styleUrls: ["./article.component.scss"]
+  styleUrls: ["./article.component.scss"],
+  encapsulation: ViewEncapsulation.None
 })
 export class ArticleComponent implements OnInit {
   model: ArticleModel;
@@ -20,7 +26,8 @@ export class ArticleComponent implements OnInit {
     private _route: ActivatedRoute,
     public store: Store,
     private _transition: SGTransition,
-    private _titleService: Title
+    private _titleService: Title,
+    private _util: SGUtil
   ) {}
   async ngOnInit() {
     await this.getArticle();
@@ -47,10 +54,11 @@ export class ArticleComponent implements OnInit {
     return this.model && this._transition.apply("fade-opposite");
   }
 
-  setupEditor() {
-    let Viewer = require("tui-editor/dist/tui-editor-Viewer");
-    new Viewer({
+  async setupEditor() {
+    await this._util.loadExternalScripts(externalScripts.tuiEditor);
+    new tui.Editor.factory({
       el: document.querySelector("#viewer"),
+      viewer: true,
       initialValue: this.model.content
     });
   }

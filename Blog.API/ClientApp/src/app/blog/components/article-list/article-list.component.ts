@@ -43,9 +43,9 @@ export class ArticleListComponent implements OnInit {
   constructor(
     private _service: ArticleService,
     private _route: ActivatedRoute,
+    private _titleService: Title,
     public util: SGUtil,
     public transition: SGTransition,
-    private _titleService: Title,
     public store: Store
   ) {}
 
@@ -56,8 +56,9 @@ export class ArticleListComponent implements OnInit {
       this.data = null;
       this.getArticles();
     });
-    this.transition.transitionWillBegin$.subscribe(mode => {
-      mode == SGTransitionMode.route &&
+    this.transition.transitionWillBegin$.subscribe(data => {
+      data &&
+        data.mode == SGTransitionMode.route &&
         this.setupTransitions(ItemAnimationName.route);
     });
   }
@@ -131,6 +132,7 @@ export class ArticleListComponent implements OnInit {
     return Promise.resolve(true);
   }
 
+  /** 设置 article item 的动画 */
   private setupTransitions(name?: ItemAnimationName) {
     this._itemAnimationName = name;
     this.data &&

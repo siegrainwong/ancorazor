@@ -18,7 +18,9 @@ export class Store {
 
   /**##### Variables */
   /** 是否是客户端渲染 */
-  renderFromClient: Boolean = false;
+  renderFromClient: boolean = false;
+  /** 是否是首屏加载（禁用首屏动画） */
+  isFirstScreen: boolean = true;
   /** 文章预加载用 */
   preloadArticle: ArticleModel;
 

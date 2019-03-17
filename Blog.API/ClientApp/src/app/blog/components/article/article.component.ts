@@ -16,8 +16,7 @@ import { SGUtil } from "src/app/shared/utils/siegrain.utils";
 @Component({
   selector: "app-article",
   templateUrl: "./article.component.html",
-  styleUrls: ["./article.component.scss"],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ["./article.component.scss"]
 })
 export class ArticleComponent implements OnInit {
   model: ArticleModel;

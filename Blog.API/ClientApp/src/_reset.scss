@@ -1,7 +1,6 @@
 @import "variables";
 @import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.206/distr/fira_code.css);
 @import url(https://fonts.googleapis.com/css?family=Noto+Sans+SC);
-// @import url(https://cdnjs.cloudflare.com/ajax/libs/tui-editor/1.3.2/tui-editor.min.css);
 
 $primary-font: "Noto Sans SC";
 $code-font: "Fira Code";
@@ -112,6 +111,18 @@ $custom-mat-colors: "danger" $danger, "shit" #000;
 /* === animate.css === */
 .animated {
   animation-fill-mode: forwards;
+  &.faster {
+    animation-duration: 500ms;
+  }
+  &.fast {
+    animation-duration: 800ms;
+  }
+  &.slower {
+    animation-duration: 3000ms;
+  }
+  &.slow {
+    animation-duration: 2000ms;
+  }
 }
 
 $code-normal: #636c71;
@@ -178,9 +189,11 @@ pre {
 }
 
 /* === server side rendering === */
-.render-by-server {
-  // SSR时禁止显示动画元素
-  .animated {
-    display: none;
-  }
-}
+
+// 这样会导致视觉上dom元素显示过慢
+// .render-by-server {
+//   // SSR时禁止显示动画元素
+//   .animated {
+//     display: none;
+//   }
+// }

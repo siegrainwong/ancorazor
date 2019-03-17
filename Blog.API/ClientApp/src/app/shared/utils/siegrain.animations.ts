@@ -1,32 +1,38 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnInit } from "@angular/core";
 import { timeout } from "./promise-delay";
 import { Store } from "../store/store";
 import { BehaviorSubject } from "rxjs";
 import { constants } from "../constants/siegrain.constants";
 
-// TODO: 要不要做首屏禁用动画快速展示数据？
-
 @Injectable({
   providedIn: "root"
 })
 export class SGTransition {
-  private _currentTransitionMode: SGTransitionMode;
-  private _routeAnimationDisabledDuration = 0;
-  transitionWillBegin$ = new BehaviorSubject<SGTransitionMode>(
-    SGTransitionMode.route
-  );
+  private _currentTransitionMode: SGTransitionMode = SGTransitionMode.route;
+  private _routeAnimationEnableDelay = 0;
+  public transitionWillBegin$ = new BehaviorSubject<{
+    mode: SGTransitionMode;
+    animations: SGAnimation[];
+  }>({ mode: SGTransitionMode.route, animations: [] });
 
-  constructor(store: Store) {
-    store.routeDataChanged$.subscribe(() => {
-      this.enableRouteAnimations();
+  constructor(private _store: Store) {
+    this._store.routeDataChanged$.subscribe(async () => {
+      if (this._store.isFirstScreen && this._store.renderFromClient)
+        this.disableRouteAnimation();
+
+      if (this._routeAnimationEnableDelay != 0)
+        await this.enableRouteAnimationAfterDelay();
+
+      if (this._store.isFirstScreen && this._store.renderFromClient)
+        this._store.isFirstScreen = false;
     });
   }
 
   /**
-   * 返回一个 `[ngClass]` 对象
+   * 从已有动画定义中返回一个`SGAnimation`的`[ngClass]` 对象
    * @param name 动画名称
    */
-  apply(name: string) {
+  public apply(name: string) {
     return this.getAnimation(name).class;
   }
 
@@ -35,19 +41,23 @@ export class SGTransition {
    * @param names 自定义动画集合（不传则触发当前页面所有路由动画）
    * 自定义动画时间内会禁用路由动画
    */
-  async triggerTransition(names?: string[], extraDuration: number = 0) {
+  public async triggerTransition(names?: string[], extraDuration: number = 0) {
     this._currentTransitionMode = names
       ? SGTransitionMode.custom
       : SGTransitionMode.route;
-    this.transitionWillBegin$.next(this._currentTransitionMode);
     let animations: SGAnimation[] = [];
 
     if (!names || names.length == 0) {
       animations = this.routeAnimations;
     } else {
       animations = this.getAnimations(names);
-      this.routeAnimations.map(x => (x.animated = false));
+      this.disableRouteAnimation();
     }
+
+    this.transitionWillBegin$.next({
+      mode: this._currentTransitionMode,
+      animations
+    });
 
     await this.triggerAnimations(animations, extraDuration);
   }
@@ -56,7 +66,7 @@ export class SGTransition {
    * 触发动画
    * @param animations `SGAnimation` 对象集合
    */
-  async triggerAnimations(
+  public async triggerAnimations(
     animations: SGAnimation[],
     extraDuration: number = 0
   ) {
@@ -64,16 +74,25 @@ export class SGTransition {
     animations.map(x => (x.leaving = true));
     await timeout(duration);
     animations.map(x => (x.leaving = false));
-
-    // 自定义动画执行时禁用路由动画
-    if (this._currentTransitionMode == SGTransitionMode.custom)
-      this._routeAnimationDisabledDuration = duration;
   }
 
-  private async enableRouteAnimations() {
-    await timeout(this._routeAnimationDisabledDuration);
-    this._routeAnimationDisabledDuration = 0;
+  /**
+   * 在`_routeAnimationEnableDelay`后启用路由动画
+   */
+  private async enableRouteAnimationAfterDelay() {
+    await timeout(this._routeAnimationEnableDelay);
+    this._routeAnimationEnableDelay = 0;
     this.routeAnimations.map(x => (x.animated = true));
+  }
+
+  /**
+   * 禁用路由动画
+   */
+  private disableRouteAnimation() {
+    const animations = this.routeAnimations;
+    animations.map(x => (x.animated = false));
+    const duration = this.getDuration(animations);
+    this._routeAnimationEnableDelay = duration;
   }
 
   /**
@@ -81,7 +100,7 @@ export class SGTransition {
    */
 
   /**
-   * 根据名称获取定义中 `SGAnimation` 对象的一个**引用**
+   * 从已有动画定义中返回一个 `SGAnimation` 对象的一个**引用**
    * @param name
    */
   public getAnimation(name: string): SGAnimation {
@@ -96,8 +115,9 @@ export class SGTransition {
     return this._animations.filter(x => names.indexOf(x.name) > -1);
   }
 
+  /** 获取一个动画集合的 duration，按最长来取 */
   private getDuration(animations: Array<SGAnimation>): number {
-    const duration = Math.min.apply(
+    const duration = Math.max.apply(
       null,
       animations.map(x => x.speed.duration)
     );
@@ -148,6 +168,10 @@ export class SGTransition {
   ];
 }
 
+/**
+ * animation-duration
+ * 定义在`_reset.css`的`animate.css`节内
+ */
 const speed = {
   slow: { name: "slow", duration: 2000 },
   slower: { name: "slower", duration: 3000 },
@@ -183,7 +207,7 @@ export class SGAnimation {
   }
 
   /**
-   * 获取 `[ngClass]` 对象
+   * 获取 `[ngClass]` 对象，通过这个对象操控`dom`元素的动画效果
    */
   get class() {
     let animation = {};

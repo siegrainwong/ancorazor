@@ -15,7 +15,7 @@
     <None Remove="$(SpaRoot)**" />
   </ItemGroup>
 
-  <!-- 检查 Nodejs 环境，如果环境ok的话就执行 npm install -->
+  <!-- 检查 Nodejs 环境 -->
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">
@@ -26,7 +26,7 @@
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
   </Target>
 
-  <!-- webpack 发布打包命令 -->
+  <!-- webpack 打包 -->
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
 
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
@@ -35,6 +35,7 @@
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
 
     <!-- cache 里有个文件名超长的文件复制不了，删掉 -->
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm i rimraf -g" />
     <Exec WorkingDirectory="$(SpaRoot)node_modules\" Command="rimraf .cache" />
     
     <!-- Include the newly-built files in the publish output -->

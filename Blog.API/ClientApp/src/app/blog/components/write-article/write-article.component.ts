@@ -53,7 +53,7 @@ export class WriteArticleComponent implements OnInit {
 
   private async setupEditor() {
     await this._util.loadExternalScripts(externalScripts.tuiEditor);
-    new tui.Editor({
+    this._editor = new tui.Editor({
       el: document.querySelector("#editor"),
       initialEditType: "markdown",
       previewStyle: "vertical",

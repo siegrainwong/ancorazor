@@ -43,6 +43,7 @@ export class SignInComponent implements OnInit {
 
   close() {
     this.dialogRef.close();
+    this._util.routeTo(["/"]);
   }
 
   async submit() {

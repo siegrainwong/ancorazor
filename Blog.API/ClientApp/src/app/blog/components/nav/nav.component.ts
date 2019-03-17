@@ -26,7 +26,8 @@ export class NavComponent implements OnInit {
 
   ngOnInit() {
     this._route.fragment.subscribe(fragment => {
-      if (fragment == "sign-in") this.openDialog();
+      // 因为生命周期的原因，这个地方还不能弹出dialog
+      if (fragment == "sign-in" && !this.store.isFirstScreen) this.openDialog();
     });
     this.registerRouteChanged();
   }

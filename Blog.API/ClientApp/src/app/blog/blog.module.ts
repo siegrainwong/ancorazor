@@ -18,6 +18,7 @@ import { SignInComponent } from "./components/sign-in/sign-in.component";
 import { UserService } from "./services/user.service";
 import { ConfirmDialog } from "../shared/components/confirm-dialog.component";
 import { AuthGuard } from "../shared/guard/auth.guard";
+import { Store } from "../shared/store/store";
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { AuthGuard } from "../shared/guard/auth.guard";
   providers: [SGUtil, ArticleService, UserService, AuthGuard]
 })
 export class BlogModule {
-  constructor(logger: LoggingService) {
+  constructor(logger: LoggingService, store: Store) {
     logger.info("blog ctor.");
+    store.setupUser();
   }
 }

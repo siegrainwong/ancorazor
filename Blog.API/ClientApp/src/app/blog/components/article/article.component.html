@@ -4,7 +4,7 @@
 <div class="container">
   <div class="row" [ngClass]="transitionClass">
     <div class="col-lg-12 col-md-12 mx-auto" *ngIf="model">
-      <div style="display:none" *ngIf="!store.renderFromClient">
+      <div style="opacity: 0;" *ngIf="!store.renderFromClient">
         {{ model.content }}
       </div>
       <div id="viewer" *ngIf="store.renderFromClient"></div>

@@ -20,7 +20,13 @@ export class Store {
   /** 是否是客户端渲染 */
   renderFromClient: boolean = false;
   /** 是否是首屏加载（禁用首屏动画） */
-  isFirstScreen: boolean = true;
+  _isFirstScreen: boolean = true;
+  get isFirstScreen(): boolean {
+    return this._isFirstScreen && this.renderFromClient;
+  }
+  set isFirstScreen(val: boolean) {
+    this._isFirstScreen = val;
+  }
   /** 文章预加载用 */
   preloadArticle: ArticleModel;
 

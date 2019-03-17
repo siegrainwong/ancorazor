@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { timeout } from "./promise-delay";
 import { Store } from "../store/store";
 import { BehaviorSubject } from "rxjs";
@@ -17,14 +17,12 @@ export class SGTransition {
 
   constructor(private _store: Store) {
     this._store.routeDataChanged$.subscribe(async () => {
-      if (this._store.isFirstScreen && this._store.renderFromClient)
-        this.disableRouteAnimation();
+      if (this._store.isFirstScreen) this.disableRouteAnimation(500);
 
       if (this._routeAnimationEnableDelay != 0)
         await this.enableRouteAnimationAfterDelay();
 
-      if (this._store.isFirstScreen && this._store.renderFromClient)
-        this._store.isFirstScreen = false;
+      if (this._store.isFirstScreen) this._store.isFirstScreen = false;
     });
   }
 
@@ -87,12 +85,13 @@ export class SGTransition {
 
   /**
    * 禁用路由动画
+   * @param extraDelay 额外延时
    */
-  private disableRouteAnimation() {
+  private disableRouteAnimation(extraDelay: number = 0) {
     const animations = this.routeAnimations;
     animations.map(x => (x.animated = false));
     const duration = this.getDuration(animations);
-    this._routeAnimationEnableDelay = duration;
+    this._routeAnimationEnableDelay = duration + extraDelay;
   }
 
   /**

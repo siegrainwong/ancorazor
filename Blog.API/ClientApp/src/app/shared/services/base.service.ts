@@ -8,6 +8,7 @@ import { SGUtil } from "../utils/siegrain.utils";
 import { Store } from "../store/store";
 import { TaskWrapper } from "./async-helper.service";
 import { TransferState, makeStateKey } from "@angular/platform-browser";
+import { Router } from "@angular/router";
 
 @Injectable({
   providedIn: "root"
@@ -16,9 +17,10 @@ export abstract class BaseService {
   constructor(
     private _logger: LoggingService,
     private _util: SGUtil,
-    public store: Store,
     private _wrapper: TaskWrapper,
-    private _state: TransferState
+    private _state: TransferState,
+    private _route: Router,
+    protected store: Store
   ) {
     this.setup();
   }
@@ -167,8 +169,10 @@ export abstract class BaseService {
   handleError(result: ResponseResult, code?: number): ResponseResult {
     switch (code) {
       case 403:
+      case 401:
         this._util.tip("认证过期，请重新登录！");
         this.store.user = null;
+        this._route.navigate([], { fragment: "sign-in" });
         break;
       default:
         this._util.tip(result.message);

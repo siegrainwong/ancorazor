@@ -23,7 +23,6 @@ export class BlogAppComponent implements OnInit {
   ngOnInit() {
     this.loadExternalResources();
     this.observeRoute();
-    this.store.setupUser();
   }
 
   private loadExternalResources() {

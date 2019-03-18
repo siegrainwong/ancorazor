@@ -14,6 +14,8 @@ export const enum TipType {
   Danger = "❌"
 }
 
+export const topElementId = "#content";
+
 @Injectable()
 export class SGUtil {
   constructor(

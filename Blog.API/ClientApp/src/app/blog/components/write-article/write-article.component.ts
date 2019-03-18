@@ -5,7 +5,7 @@ import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
 import { LoggingService } from "src/app/shared/services/logging.service";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
-import { SGUtil } from "src/app/shared/utils/siegrain.utils";
+import { SGUtil, topElementId } from "src/app/shared/utils/siegrain.utils";
 import { externalScripts } from "src/app/shared/constants/siegrain.constants";
 
 @Component({
@@ -86,7 +86,7 @@ export class WriteArticleComponent implements OnInit {
       : await this._service.add(this.model);
     this.preloading = false;
     if (!res) return;
-    this._util.routeTo([`article/${res}`]);
+    this._util.routeTo([`article/${res}`], { scrollToElementId: topElementId });
   }
 
   // TODO: 预览

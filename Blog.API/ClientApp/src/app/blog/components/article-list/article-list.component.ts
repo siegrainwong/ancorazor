@@ -4,7 +4,11 @@ import { ArticleService } from "../../services/article.service";
 import ArticleModel from "../../models/article-model";
 import { PagedResult } from "src/app/shared/models/response-result";
 import { ActivatedRoute } from "@angular/router";
-import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
+import {
+  SGUtil,
+  TipType,
+  topElementId
+} from "src/app/shared/utils/siegrain.utils";
 import {
   SGTransition,
   SGTransitionMode,
@@ -66,14 +70,14 @@ export class ArticleListComponent implements OnInit {
   public async read(model: ArticleModel) {
     (await this.preloadArticle(model)) &&
       this.util.routeTo(["/article", model.id], {
-        scrollToElementId: "#content"
+        scrollToElementId: topElementId
       });
   }
 
   public async edit(model: ArticleModel) {
     (await this.preloadArticle(model)) &&
       this.util.routeTo(["/edit", model.id], {
-        scrollToElementId: "#content"
+        scrollToElementId: topElementId
       });
   }
 

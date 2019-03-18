@@ -19,6 +19,7 @@ import { UserService } from "./services/user.service";
 import { ConfirmDialog } from "../shared/components/confirm-dialog.component";
 import { AuthGuard } from "../shared/guard/auth.guard";
 import { Store } from "../shared/store/store";
+import { ScrollDispatchModule } from "@angular/cdk/scrolling";
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { Store } from "../shared/store/store";
     BlogRoutingModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ScrollDispatchModule
   ],
   providers: [SGUtil, ArticleService, UserService, AuthGuard]
 })

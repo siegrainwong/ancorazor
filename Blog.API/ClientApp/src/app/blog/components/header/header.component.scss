@@ -5,16 +5,16 @@
 }
 
 header.masthead {
-  // TIP: Background images are set within the HTML using inline CSS!
-  margin-bottom: 50px;
+  margin-bottom: 10px;
   background: no-repeat center center;
   background-color: $black;
   background-attachment: scroll;
   position: relative;
   word-break: break-all;
   height: 300px;
-  @media only screen and (min-width: 768px) {
+  @media only screen and (min-width: 992px) {
     height: 500px;
+    margin-bottom: 50px;
   }
   @include background-cover;
   .container,
@@ -46,14 +46,12 @@ header.masthead {
   .post-heading,
   .site-heading {
     color: white;
-    @media only screen and (min-width: 768px) {
-    }
   }
   .page-heading,
   .site-heading {
     text-align: center;
     h1 {
-      font-size: 50px;
+      font-size: 40px;
       margin-top: 0;
     }
     .subheading {
@@ -64,7 +62,7 @@ header.masthead {
       margin: 10px 0 0;
       @include sans-serif-font;
     }
-    @media only screen and (min-width: 768px) {
+    @media only screen and (min-width: 992px) {
       h1 {
         font-size: 80px;
       }
@@ -94,7 +92,7 @@ header.masthead {
         color: $white;
       }
     }
-    @media only screen and (min-width: 768px) {
+    @media only screen and (min-width: 992px) {
       h1 {
         font-size: 55px;
       }

@@ -13,8 +13,8 @@ import { constants } from "src/app/shared/constants/siegrain.constants";
   styleUrls: ["./nav.component.scss"]
 })
 export class NavComponent implements OnInit {
-  @Output() toggleSidenav = new EventEmitter<void>();
   title: String;
+  navbarOpen: boolean = false;
 
   constructor(
     public store: Store,
@@ -26,14 +26,19 @@ export class NavComponent implements OnInit {
 
   ngOnInit() {
     this._route.fragment.subscribe(fragment => {
-      // 因为生命周期的原因，这个地方还不能弹出dialog
+      // 因为生命周期的原因，首屏加载时不能显示dialog
       if (fragment == "sign-in" && !this.store.isFirstScreen) this.openDialog();
     });
     this.registerRouteChanged();
+    if (!this.store.renderFromClient) return;
   }
 
   openDialog(): void {
     this.dialog.open(SignInComponent, { width: "250px" });
+  }
+
+  toggleNavBar() {
+    this.navbarOpen = !this.navbarOpen;
   }
 
   signOut() {

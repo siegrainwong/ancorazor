@@ -1,3 +1,4 @@
+import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { filter } from "rxjs/operators";
@@ -6,6 +7,7 @@ import RouteData from "../shared/models/route-data.model";
 import { SGTransition } from "../shared/utils/siegrain.animations";
 import { SGUtil } from "../shared/utils/siegrain.utils";
 import { externalScripts } from "../shared/constants/siegrain.constants";
+import { onScroll } from "../shared/utils/scroll-listener";
 
 @Component({
   selector: "app-blog-app",
@@ -16,17 +18,19 @@ export class BlogAppComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
     private _util: SGUtil,
+    private _scrollDispatcher: ScrollDispatcher,
     public store: Store,
     public transition: SGTransition
   ) {}
 
   ngOnInit() {
-    this.loadExternalResources();
     this.observeRoute();
+    if (!this.store.renderFromClient) return;
+    this._scrollDispatcher.scrolled().subscribe(onScroll);
+    this.loadExternalResources();
   }
 
   private loadExternalResources() {
-    if (!this.store.renderFromClient) return;
     this._util.loadExternalScripts(externalScripts.tuiEditor);
   }
 

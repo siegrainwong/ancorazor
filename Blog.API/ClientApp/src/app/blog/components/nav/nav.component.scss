@@ -1,22 +1,28 @@
 @import "shared";
 
-// Styling for the navbar
 #mainNav {
   position: absolute;
-  border-bottom: 1px solid $gray-200;
-  background-color: white;
+  transition: background-color 0.2s;
   @include sans-serif-font;
   .navbar-brand {
     font-size: 18px;
     font-weight: 800;
-    color: $gray-800;
+    color: $white;
+    padding: 0 20px;
+    color: $white;
+    text-transform: initial;
+    &:focus,
+    &:hover {
+      color: fade-out($white, 0.2);
+    }
   }
   .navbar-toggler {
     font-size: 12px;
     font-weight: 800;
-    padding: 13px;
+    padding: 0 15px;
     text-transform: uppercase;
-    color: $gray-800;
+    color: $white;
+    border: 1px rgba($color: #fff, $alpha: 0.3) solid;
   }
   .navbar-nav {
     > li.nav-item {
@@ -25,26 +31,38 @@
         font-weight: 800;
         letter-spacing: 1px;
         text-transform: uppercase;
+        padding: 0 20px;
       }
     }
   }
+
+  /* mobile menu styles */
+  @media only screen and (max-width: 992px) {
+    &.show {
+      background: rgba($color: #fff, $alpha: 0.8);
+      border-bottom: 1px $gray-900 solid;
+      .navbar-brand {
+        color: $gray-900;
+      }
+      li.nav-item {
+        > a {
+          color: $gray-900;
+          text-align: left;
+          width: 100%;
+        }
+      }
+      .navbar-toggler {
+        color: $gray-900;
+        border: 1px solid transparent;
+      }
+    }
+  }
+
   @media only screen and (min-width: 992px) {
     border-bottom: 1px solid transparent;
     background: transparent;
-    .navbar-brand {
-      padding: 0 20px;
-      color: $white;
-      text-transform: initial;
-      &:focus,
-      &:hover {
-        color: fade-out($white, 0.2);
-      }
-    }
     .navbar-nav {
       > li.nav-item {
-        > a {
-          padding: 0 20px;
-        }
         > a,
         .mat-icon-button {
           color: $white;
@@ -56,24 +74,15 @@
         }
       }
     }
-  }
-  @media only screen and (min-width: 992px) {
-    -webkit-transition: background-color 0.2s;
-    -moz-transition: background-color 0.2s;
-    transition: background-color 0.2s;
+
+    /* fixed styles */
     /* Force Hardware Acceleration in WebKit */
-    -webkit-transform: translate3d(0, 0, 0);
-    -moz-transform: translate3d(0, 0, 0);
-    -ms-transform: translate3d(0, 0, 0);
-    -o-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
     -webkit-backface-visibility: hidden;
     &.is-fixed {
       /* when the user scrolls down, we hide the header right above the viewport */
       position: fixed;
       top: -67px;
-      -webkit-transition: -webkit-transform 0.2s;
-      -moz-transition: -moz-transform 0.2s;
       transition: transform 0.2s;
       border-bottom: 1px solid darken($white, 0.05);
       background-color: fade-out($white, 0.1);

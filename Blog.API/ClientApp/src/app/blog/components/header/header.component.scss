@@ -4,6 +4,28 @@
   font-size: 35px;
 }
 
+/*
+  Mark: Scale fonts according to window size
+  https://stackoverflow.com/a/13358713 
+*/
+@mixin fontResize($iterations) {
+  $i: 1;
+  @while $i <= $iterations {
+    @media all and (min-width: 100px * $i) {
+      $font-size: 1vh * $i;
+      // max size limitation
+      @if $font-size >= 11vh {
+        $font-size: 11vh;
+      }
+      .site-heading h1 {
+        font-size: $font-size;
+      }
+    }
+    $i: $i + 1;
+  }
+}
+@include fontResize(19);
+
 header.masthead {
   margin-bottom: 10px;
   background: no-repeat center center;
@@ -51,7 +73,7 @@ header.masthead {
   .site-heading {
     text-align: center;
     h1 {
-      font-size: 40px;
+      // font-size: 40px;
       margin-top: 0;
     }
     .subheading {
@@ -64,7 +86,7 @@ header.masthead {
     }
     @media only screen and (min-width: 992px) {
       h1 {
-        font-size: 80px;
+        // font-size: 80px;
       }
     }
   }

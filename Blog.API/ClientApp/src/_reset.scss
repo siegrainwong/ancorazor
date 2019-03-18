@@ -139,13 +139,25 @@ $code-keyword: #3e99b5;
   pre > code {
     font-family: $code-font, $primary-font;
     color: $code-normal;
+    border-radius: 0.2rem;
+  }
+  pre {
+    background: linear-gradient(to bottom, #3e99b50a, #096ee909);
   }
   // inline code block
   code {
     color: $code-keyword;
     padding: 2px 4px;
     margin: 0 4px;
-    background-color: #f5f7f8;
+    border-radius: 0.2rem;
+    &[data-backticks] {
+      color: $black;
+      background: linear-gradient(
+        to right,
+        rgba(180, 160, 255, 0.281),
+        #096ee934
+      );
+    }
   }
 }
 

@@ -8,7 +8,8 @@ export const constants = {
 };
 
 export const externalScripts = {
-  tuiEditor: "assets/libraries/tui.editor/tui-editor-Editor-full.min.js"
+  tuiEditor: "assets/libraries/tui.editor/tui-editor-Editor-full.min.js",
+  flowtype: "assets/libraries/flowtype/flowtype.js"
 };
 
 export const externalStyles = {

@@ -32,7 +32,6 @@ export class BlogAppComponent implements OnInit {
 
   private loadExternalResources() {
     this._util.loadExternalScripts(externalScripts.tuiEditor);
-    this._util.loadExternalScripts(externalScripts.flowtype);
   }
 
   private observeRoute() {

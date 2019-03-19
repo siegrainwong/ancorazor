@@ -8,9 +8,7 @@ import { Title } from "@angular/platform-browser";
 import { timeout } from "src/app/shared/utils/promise-delay";
 import {
   constants,
-  externalScripts,
-  externalStyles
-} from "src/app/shared/constants/siegrain.constants";
+  externalScripts} from "src/app/shared/constants/siegrain.constants";
 import { SGUtil } from "src/app/shared/utils/siegrain.utils";
 
 @Component({

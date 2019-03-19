@@ -53,12 +53,14 @@ export class WriteArticleComponent implements OnInit {
 
   private async setupEditor() {
     await this._util.loadExternalScripts(externalScripts.tuiEditor);
+    // await this._util.loadExternalScripts(externalScripts.tuiEditorScrollSync);
     this._editor = new tui.Editor({
       el: document.querySelector("#editor"),
       initialEditType: "markdown",
       previewStyle: "vertical",
       height: "800px",
-      initialValue: this.model.content
+      initialValue: this.model.content,
+      exts: ["scrollSync"]
     });
   }
 

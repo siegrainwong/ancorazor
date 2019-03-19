@@ -14,6 +14,9 @@
     text-transform: uppercase;
     margin-left: 8px;
   }
+  hr {
+    margin: 1.5vh 0 1.5vh;
+  }
 
   // 模拟 stagger 效果
   // 总转场动画时间 = transition duration + stagger duration
@@ -41,21 +44,21 @@
       cursor: pointer;
     }
     > .post-title {
-      font-size: 25px;
-      margin-top: 30px;
-      margin-bottom: 10px;
+      font-size: 20px;
+      margin-top: 2vh;
+      margin-bottom: 1vh;
     }
     > .post-subtitle {
       font-weight: 300;
       font-size: 20px;
-      margin: 0 0 10px;
+      margin: 1vh 0 1vh;
     }
   }
   .post-meta {
-    font-size: 18px;
+    font-size: 14px;
     font-style: italic;
     margin-top: 0;
-    line-height: 40px;
+    line-height: 25px;
     color: $gray-600;
     > a {
       text-decoration: none;
@@ -72,6 +75,10 @@
       > .post-title {
         font-size: 36px;
       }
+    }
+    .post-meta {
+      font-size: 18px;
+      line-height: 40px;
     }
   }
 }

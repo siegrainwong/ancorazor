@@ -8,14 +8,15 @@
   Mark: Scale fonts according to window size
   https://stackoverflow.com/a/13358713 
 */
+$step-size: 0.6vh;
+$max-size: 7.5vh;
 @mixin fontResize($iterations) {
   $i: 1;
   @while $i <= $iterations {
-    @media all and (min-width: 100px * $i) {
-      $font-size: 0.8vh * $i;
-      // max size limitation
-      @if $font-size >= 7.5vh {
-        $font-size: 7.5vh;
+    @media all and (min-width: 50px * $i) {
+      $font-size: $step-size * $i;
+      @if $font-size >= $max-size {
+        $font-size: $max-size;
       }
       .site-heading h1 {
         font-size: $font-size;
@@ -24,19 +25,18 @@
     $i: $i + 1;
   }
 }
-@include fontResize(19);
+@include fontResize(30);
 
 header.masthead {
-  margin-bottom: 10px;
+  margin-bottom: 2vh;
   background: no-repeat center center;
   background-color: $black;
   background-attachment: scroll;
   position: relative;
   word-break: break-all;
-  height: 300px;
+  height: 30vh;
   @media only screen and (min-width: 992px) {
-    height: 500px;
-    margin-bottom: 50px;
+    height: 50vh;
   }
   @include background-cover;
   .container,

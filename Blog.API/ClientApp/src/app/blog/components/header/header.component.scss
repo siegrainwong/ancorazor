@@ -12,10 +12,10 @@
   $i: 1;
   @while $i <= $iterations {
     @media all and (min-width: 100px * $i) {
-      $font-size: 1vh * $i;
+      $font-size: 0.8vh * $i;
       // max size limitation
-      @if $font-size >= 11vh {
-        $font-size: 11vh;
+      @if $font-size >= 7.5vh {
+        $font-size: 7.5vh;
       }
       .site-heading h1 {
         font-size: $font-size;

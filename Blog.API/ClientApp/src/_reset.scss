@@ -10,7 +10,10 @@ body {
   overflow-x: hidden;
   scroll-behavior: smooth;
   font-family: $primary-font;
+}
 
+/* === scrollbar === */
+body {
   &.scrollbar {
     &::-webkit-scrollbar {
       width: 6px;

@@ -3,13 +3,16 @@
 .mat-flat-button {
   font-size: 14px;
   font-weight: 800;
-  padding: 10px 25px;
+  padding: 7px 20px;
   letter-spacing: 1px;
   text-transform: uppercase;
   border-radius: 0;
   text-decoration: none;
   transition: background-color 0.2s;
   @include sans-serif-font;
+  @media only screen and (min-width: 992px) {
+    padding: 10px 25px;
+  }
 }
 
 .btn-primary,

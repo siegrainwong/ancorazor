@@ -84,11 +84,6 @@ header.masthead {
       margin: 10px 0 0;
       @include sans-serif-font;
     }
-    @media only screen and (min-width: 992px) {
-      h1 {
-        // font-size: 80px;
-      }
-    }
   }
   .post-heading {
     h1 {

@@ -1,19 +1,29 @@
 @import "shared";
 // Styling for the post page
 .item {
-  .operations {
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  :hover {
+  @media only screen and (min-width: 992px) {
     .operations {
-      opacity: 1;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    :hover {
+      .operations {
+        opacity: 1;
+      }
     }
   }
-  button {
-    text-transform: uppercase;
-    margin-left: 8px;
+  .operations {
+    button {
+      text-transform: uppercase;
+      margin-left: 8px;
+      @media only screen and (max-width: 992px) {
+        line-height: 26px;
+        padding: 0 5px;
+        min-width: initial;
+      }
+    }
   }
+
   hr {
     margin: 1.5vh 0 1.5vh;
   }

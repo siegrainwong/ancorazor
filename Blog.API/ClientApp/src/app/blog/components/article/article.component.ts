@@ -52,10 +52,14 @@ export class ArticleComponent implements OnInit {
   }
 
   async setupEditor() {
-    await this._util.loadExternalScripts(externalScripts.tuiEditor);
-    new tui.Editor.factory({
-      el: document.querySelector("#viewer"),
-      viewer: true,
+    await this._util.loadExternalScripts(externalScripts.simpleMde);
+    // new tui.Editor.factory({
+    //   el: document.querySelector("#viewer"),
+    //   viewer: true,
+    //   initialValue: this.model.content
+    // });
+    let editor = new SimpleMDE({ 
+      element: document.querySelector("#viewer"),
       initialValue: this.model.content
     });
   }

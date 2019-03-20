@@ -1,1 +1,1 @@
-declare const tui: any;
+declare const SimpleMDE: any;

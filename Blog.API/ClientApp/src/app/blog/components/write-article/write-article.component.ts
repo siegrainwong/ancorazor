@@ -52,15 +52,18 @@ export class WriteArticleComponent implements OnInit {
   }
 
   private async setupEditor() {
-    await this._util.loadExternalScripts(externalScripts.tuiEditor);
-    // await this._util.loadExternalScripts(externalScripts.tuiEditorScrollSync);
-    this._editor = new tui.Editor({
-      el: document.querySelector("#editor"),
-      initialEditType: "markdown",
-      previewStyle: "vertical",
-      height: "800px",
-      initialValue: this.model.content,
-      exts: ["scrollSync"]
+    await this._util.loadExternalScripts(externalScripts.simpleMde);
+    // this._editor = new tui.Editor({
+    //   el: document.querySelector("#editor"),
+    //   initialEditType: "markdown",
+    //   previewStyle: "vertical",
+    //   height: "800px",
+    //   initialValue: this.model.content,
+    //   exts: ["scrollSync"]
+    // });
+    this._editor = new SimpleMDE({ 
+      element: document.querySelector("#viewer"),
+      initialValue: this.model.content
     });
   }
 
@@ -75,7 +78,7 @@ export class WriteArticleComponent implements OnInit {
   }
 
   async submit() {
-    this.model.content = this._editor.getValue();
+    this.model.content = this._editor.value();
     if (!this.model.title || !this.model.title.length)
       return this._util.tip("Title is required");
     if (!this.model.content || !this.model.content.length)

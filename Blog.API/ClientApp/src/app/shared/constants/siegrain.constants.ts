@@ -8,10 +8,8 @@ export const constants = {
 };
 
 export const externalScripts = {
-  // tuiEditor: "assets/libraries/tui.editor/tui-editor-Editor-full.min.js"
-  tuiEditor:
-    "assets/libraries/tui.editor/tui-editor-Editor-full.js",
-  // tuiEditorScrollSync: "assets/libraries/tui.editor/tui-editor-extScrollSync.js"
+  simpleMde:
+    "assets/libraries/simplemde.min.js",
 };
 
 // export const externalStyles = {

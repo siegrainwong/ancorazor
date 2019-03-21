@@ -52,17 +52,7 @@ export class ArticleComponent implements OnInit {
     return this.model && this._transition.apply("fade-opposite");
   }
 
-  async setupEditor() {
-    // await this._util.loadExternalScripts(externalScripts.simpleMde);
-    // new tui.Editor.factory({
-    //   el: document.querySelector("#viewer"),
-    //   viewer: true,
-    //   initialValue: this.model.content
-    // });
-    // let editor = new SimpleMDE({ 
-    //   element: document.querySelector("#viewer"),
-    //   initialValue: this.model.content
-    // });
+  setupEditor() {
     const hljs = require('highlight.js');
     const md = require('markdown-it')({
       highlight: function (str, lang) {

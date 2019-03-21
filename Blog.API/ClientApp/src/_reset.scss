@@ -1,9 +1,4 @@
 @import "variables";
-@import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.206/distr/fira_code.css);
-@import url(https://fonts.googleapis.com/css?family=Noto+Sans+SC);
-
-$primary-font: "Noto Sans SC";
-$code-font: "Fira Code";
 
 body {
   margin: 0;
@@ -132,10 +127,9 @@ $custom-mat-colors: "danger" $danger, "shit" #000;
   }
 }
 
-$code-normal: #636c71;
-$code-keyword: #3e99b5;
-/* === tui editor === */
-.tui-editor-contents {
+/* === highlight.js === */
+#viewer {
+  margin-top: 50px;
   font-size: 16px;
   // code block
   pre,
@@ -144,75 +138,60 @@ $code-keyword: #3e99b5;
     color: $code-normal;
     border-radius: 0.2rem;
   }
-  pre {
-    background: linear-gradient(to bottom, #C4D8E0, #AFC8E9);
+  > pre {
+    background: linear-gradient(to bottom, rgba(196, 216, 224, 0.15), rgba(175, 200, 233, 0.15));
+    color: $code-normal;
+    padding: 20px;
+  
+    .hljs-string,
+    .hljs-symbol,
+    .hljs-bullet {
+      color: #fb443d;
+    }
+  
+    .hljs-comment,
+    .hljs-quote {
+      color: #847fbb;
+    }
+  
+    .hljs-keyword,
+    .hljs-selector-tag {
+      color: #096fe9;
+    }
+  
+    .hljs-function {
+      color: $code-keyword;
+      .hljs-params {
+        color: $code-normal;
+        .hljs-keyword {
+          color: $code-keyword;
+        }
+      }
+      .hljs-title {
+        color: $code-normal;
+      }
+    }
+  
+    .hljs-number,
+    .hljs-meta,
+    .hljs-built_in,
+    .hljs-builtin-name,
+    .hljs-literal,
+    .hljs-type {
+      color: $code-keyword;
+    }
   }
   // inline code block
-  code {
+  code:not(.hljs-code) {
     color: $code-keyword;
     padding: 2px 4px;
     margin: 0 4px;
     border-radius: 0.2rem;
-    &[data-backticks] {
-      color: $black;
-      background: linear-gradient(
-        to right,
-        rgba(180, 160, 255, 0.281),
-        #AFC8E9
-      );
-    }
+    color: $black;
+    background: linear-gradient(
+      to right,
+      rgba(180, 160, 255, 0.3),
+      rgba(63, 130, 218, 0.3)
+    );
   }
 }
-
-/* === highlight.js === */
-pre {
-  color: $code-normal;
-
-  .hljs-string,
-  .hljs-symbol,
-  .hljs-bullet {
-    color: #fb443d;
-  }
-
-  .hljs-comment,
-  .hljs-quote {
-    color: #847fbb;
-  }
-
-  .hljs-keyword,
-  .hljs-selector-tag {
-    color: #096fe9;
-  }
-
-  .hljs-function {
-    color: $code-keyword;
-    .hljs-params {
-      color: $code-normal;
-      .hljs-keyword {
-        color: $code-keyword;
-      }
-    }
-    .hljs-title {
-      color: $code-normal;
-    }
-  }
-
-  .hljs-number,
-  .hljs-meta,
-  .hljs-built_in,
-  .hljs-builtin-name,
-  .hljs-literal,
-  .hljs-type {
-    color: $code-keyword;
-  }
-}
-
-/* === server side rendering === */
-
-// 这样会导致视觉上dom元素显示过慢
-// .render-by-server {
-//   // SSR时禁止显示动画元素
-//   .animated {
-//     display: none;
-//   }
-// }

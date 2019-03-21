@@ -18,6 +18,7 @@ import { SGUtil } from "src/app/shared/utils/siegrain.utils";
 })
 export class ArticleComponent implements OnInit {
   model: ArticleModel;
+  content: string;
   constructor(
     private _service: ArticleService,
     private _route: ActivatedRoute,
@@ -28,7 +29,7 @@ export class ArticleComponent implements OnInit {
   ) {}
   async ngOnInit() {
     await this.getArticle();
-    if (this.store.renderFromClient) this.setupEditor();
+    this.setupEditor();
   }
 
   private async getArticle() {
@@ -52,15 +53,30 @@ export class ArticleComponent implements OnInit {
   }
 
   async setupEditor() {
-    await this._util.loadExternalScripts(externalScripts.simpleMde);
+    // await this._util.loadExternalScripts(externalScripts.simpleMde);
     // new tui.Editor.factory({
     //   el: document.querySelector("#viewer"),
     //   viewer: true,
     //   initialValue: this.model.content
     // });
-    let editor = new SimpleMDE({ 
-      element: document.querySelector("#viewer"),
-      initialValue: this.model.content
+    // let editor = new SimpleMDE({ 
+    //   element: document.querySelector("#viewer"),
+    //   initialValue: this.model.content
+    // });
+    const hljs = require('highlight.js');
+    const md = require('markdown-it')({
+      highlight: function (str, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+          try {
+            return '<pre class="hljs"><code class="hljs-code">' +
+                   hljs.highlight(lang, str, true).value +
+                   '</code></pre>';
+          } catch (__) {}
+        }
+        return '<pre class="hljs"><code class="hljs-code">' + md.utils.escapeHtml(str) + '</code></pre>';
+      }
     });
+    var result = md.render(this.model.content);
+    this.content = result;
   }
 }

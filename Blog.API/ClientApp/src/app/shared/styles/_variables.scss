@@ -1,3 +1,6 @@
+@import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.206/distr/fira_code.css);
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans+SC);
+
 $link-color: #3f51b5;
 $link-hover-color: currentColor;
 $link-hover-decoration: none;
@@ -54,3 +57,8 @@ $warning: $yellow !default;
 $danger: $red !default;
 $light: $gray-100 !default;
 $dark: $gray-800 !default;
+
+$code-normal: #636c71;
+$code-keyword: #3e99b5;
+$primary-font: "Noto Sans SC";
+$code-font: "Fira Code";

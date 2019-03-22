@@ -28,29 +28,31 @@
     >
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a mat-button class="nav-link" (click)="util.routeTo(['/about'])"
-            >About</a
-          >
-        </li>
-        <li class="nav-item">
           <a
             mat-button
             class="nav-link"
             href="https://github.com/Seanwong933"
             target="_blank"
+            (click)="onItemTapped(items.about)"
             >Github</a
           >
         </li>
+        <li class="nav-item">
+          <a mat-button class="nav-link" (click)="onItemTapped(items.about)"
+            >{{ items.about }}</a
+          >
+        </li>
+        
         <li class="nav-item" *ngIf="!store.userIsAvailable">
-          <a mat-button class="nav-link" (click)="openDialog()">Sign In</a>
+          <a mat-button class="nav-link" (click)="onItemTapped(items.signIn)">{{ items.signIn }}</a>
         </li>
         <li class="nav-item" *ngIf="store.userIsAvailable">
-          <a mat-button class="nav-link" (click)="util.routeTo(['/add'])"
-            >New Post</a
+          <a mat-button class="nav-link" (click)="onItemTapped(items.newPost)"
+            >{{ items.newPost }}</a
           >
         </li>
         <li class="nav-item" *ngIf="store.userIsAvailable">
-          <a mat-button class="nav-link" (click)="signOut()">Sign Out</a>
+          <a mat-button class="nav-link" (click)="onItemTapped(items.signOut)">{{ items.signOut }}</a>
         </li>
       </ul>
     </div>

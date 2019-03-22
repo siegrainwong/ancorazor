@@ -183,6 +183,7 @@ $custom-mat-colors: "danger" $danger, "shit" #000;
   }
   // inline code block
   code:not(.hljs-code) {
+    font-family: $code-font, $primary-font;
     color: $code-keyword;
     padding: 2px 4px;
     margin: 0 4px;
@@ -190,8 +191,8 @@ $custom-mat-colors: "danger" $danger, "shit" #000;
     color: $black;
     background: linear-gradient(
       to right,
-      rgba(180, 160, 255, 0.3),
-      rgba(63, 130, 218, 0.3)
+      rgba(123, 88, 255, 0.25),
+      rgba(49, 138, 255, 0.25)
     );
   }
 }

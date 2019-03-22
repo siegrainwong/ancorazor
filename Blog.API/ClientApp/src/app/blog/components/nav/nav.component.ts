@@ -15,6 +15,12 @@ import { constants } from "src/app/shared/constants/siegrain.constants";
 export class NavComponent implements OnInit {
   title: String;
   navbarOpen: boolean = false;
+  items = {
+    about: "About",
+    newPost: "New Post",
+    signIn: "Sign In",
+    signOut: "Sign Out"
+  }
 
   constructor(
     public store: Store,
@@ -33,8 +39,29 @@ export class NavComponent implements OnInit {
     if (!this.store.renderFromClient) return;
   }
 
+  onItemTapped(item?: string) {
+    switch (item) {
+      case this.items.about:
+        this.util.routeTo(['/about'])
+        break;
+      case this.items.newPost:
+        this.util.routeTo(['/add']);
+        break;
+      case this.items.signIn:
+        this.openDialog();
+        break;
+      case this.items.signOut:
+        this.signOut();
+        break;
+      default:
+        break;
+    }
+    this.navbarOpen = false;
+  }
+
   openDialog(): void {
     this.dialog.open(SignInComponent, { width: "250px" });
+    
   }
 
   toggleNavBar() {

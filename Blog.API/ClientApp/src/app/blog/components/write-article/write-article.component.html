@@ -3,8 +3,8 @@
   isEditing="true"
   (headerUpdated)="onHeaderChanged($event)"
 ></app-header>
-<div [ngClass]="transition.apply('fade-opposite')">
-  <div id="editor"></div>
+<div [ngClass]="transition.apply('fade-opposite')" style="margin-top: -2vh;">
+  <textarea id="editor"></textarea>
   <div class="padding-md clearfix">
     <!-- <button class="btn float-left" mat-flat-button (click)="preview()">
         Preview

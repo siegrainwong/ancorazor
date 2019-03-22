@@ -5,7 +5,11 @@ import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
 import { LoggingService } from "src/app/shared/services/logging.service";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
-import { SGUtil, topElementId } from "src/app/shared/utils/siegrain.utils";
+import {
+  SGUtil,
+  topElementId,
+  timeout
+} from "src/app/shared/utils/siegrain.utils";
 import { externalScripts } from "src/app/shared/constants/siegrain.constants";
 
 @Component({
@@ -52,19 +56,22 @@ export class WriteArticleComponent implements OnInit {
   }
 
   private async setupEditor() {
+    const hljs = require("highlight.js");
     await this._util.loadExternalScripts(externalScripts.simpleMde);
-    // this._editor = new tui.Editor({
-    //   el: document.querySelector("#editor"),
-    //   initialEditType: "markdown",
-    //   previewStyle: "vertical",
-    //   height: "800px",
-    //   initialValue: this.model.content,
-    //   exts: ["scrollSync"]
-    // });
-    this._editor = new SimpleMDE({ 
-      element: document.querySelector("#viewer"),
-      initialValue: this.model.content
+    // PS：改了很多样式在 _reset.css 里
+    this._editor = new SimpleMDE({
+      element: document.querySelector("#editor"),
+      initialValue: this.model.content,
+      spellChecker: false
     });
+    this._editor.toggleSideBySide();
+    // TODO: 这样渲染CPU要炸
+    const preview = document.querySelector(".editor-preview-side");
+    setInterval(function() {
+      preview.querySelectorAll("pre code").forEach(block => {
+        hljs.highlightBlock(block);
+      });
+    }, 1000);
   }
 
   /**

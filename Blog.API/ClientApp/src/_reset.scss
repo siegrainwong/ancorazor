@@ -1,5 +1,10 @@
 @import "variables";
 
+html,
+body {
+  overflow-y: initial !important;
+}
+
 body {
   margin: 0;
   overflow-x: hidden;
@@ -131,56 +136,7 @@ $custom-mat-colors: "danger" $danger, "shit" #000;
 #viewer {
   margin-top: 50px;
   font-size: 16px;
-  // code block
-  pre,
-  pre > code {
-    font-family: $code-font, $primary-font;
-    color: $code-normal;
-    border-radius: 0.2rem;
-  }
-  > pre {
-    background: linear-gradient(to bottom, rgba(196, 216, 224, 0.15), rgba(175, 200, 233, 0.15));
-    color: $code-normal;
-    padding: 20px;
-  
-    .hljs-string,
-    .hljs-symbol,
-    .hljs-bullet {
-      color: #fb443d;
-    }
-  
-    .hljs-comment,
-    .hljs-quote {
-      color: #847fbb;
-    }
-  
-    .hljs-keyword,
-    .hljs-selector-tag {
-      color: #096fe9;
-    }
-  
-    .hljs-function {
-      color: $code-keyword;
-      .hljs-params {
-        color: $code-normal;
-        .hljs-keyword {
-          color: $code-keyword;
-        }
-      }
-      .hljs-title {
-        color: $code-normal;
-      }
-    }
-  
-    .hljs-number,
-    .hljs-meta,
-    .hljs-built_in,
-    .hljs-builtin-name,
-    .hljs-literal,
-    .hljs-type {
-      color: $code-keyword;
-    }
-  }
+
   // inline code block
   code:not(.hljs-code) {
     font-family: $code-font, $primary-font;
@@ -195,4 +151,88 @@ $custom-mat-colors: "danger" $danger, "shit" #000;
       rgba(49, 138, 255, 0.25)
     );
   }
+}
+
+#viewer, .editor-preview-side{
+  // code block
+  pre,
+  pre > code {
+    font-family: $code-font, $primary-font;
+    color: $code-normal;
+    border-radius: 0.2rem;
+  }
+  > pre {
+    background: linear-gradient(
+      to bottom,
+      rgba(196, 216, 224, 0.15),
+      rgba(175, 200, 233, 0.15)
+    );
+    color: $code-normal;
+    padding: 20px;
+
+    .hljs-string,
+    .hljs-symbol,
+    .hljs-bullet {
+      color: #fb443d;
+    }
+
+    .hljs-comment,
+    .hljs-quote {
+      color: #847fbb;
+    }
+
+    .hljs-keyword,
+    .hljs-selector-tag {
+      color: #096fe9;
+    }
+
+    .hljs-function {
+      color: $code-keyword;
+      .hljs-params {
+        color: $code-normal;
+        .hljs-keyword {
+          color: $code-keyword;
+        }
+      }
+      .hljs-title {
+        color: $code-normal;
+      }
+    }
+
+    .hljs-number,
+    .hljs-meta,
+    .hljs-built_in,
+    .hljs-builtin-name,
+    .hljs-literal,
+    .hljs-type {
+      color: $code-keyword;
+    }
+  }
+}
+
+/* === simple mde === */
+$editor-height: 700px;
+.editor-toolbar {
+  a[title="Toggle Fullscreen (F11)"],
+  a[title="Toggle Preview (Ctrl-P)"],
+  a[title="Toggle Side by Side (F9)"],
+  i.separator:last-of-type {
+    display: none;
+  }
+  &.fullscreen {
+    position: relative;
+  }
+}
+.CodeMirror {
+  height: $editor-height !important;
+}
+.CodeMirror-fullscreen {
+  position: relative !important;
+  top: 0;
+  float: left;
+}
+.editor-preview-side {
+  top: 0;
+  position: relative;
+  height: $editor-height;
 }

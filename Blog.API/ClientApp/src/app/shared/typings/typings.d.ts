@@ -1,1 +1,2 @@
-declare const SimpleMDE: any;
+declare const EasyMDE: any;
+declare const hljs: any;

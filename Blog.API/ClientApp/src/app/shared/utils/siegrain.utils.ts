@@ -103,13 +103,19 @@ export class SGUtil {
    * 懒加载 JS
    * Mark: https://codinglatte.com/posts/angular/lazy-loading-scripts-and-styles-angular/
    */
-  public loadExternalScripts(url: string) {
-    return new Promise(resolve => {
-      const scriptElement = document.createElement("script");
-      scriptElement.src = url;
-      scriptElement.onload = resolve;
-      document.body.appendChild(scriptElement);
+  public loadExternalScripts(urls: string[]) {
+    let promises: Promise<any>[] = [];
+    urls.forEach(url => {
+      promises.push(
+        new Promise(resolve => {
+          const scriptElement = document.createElement("script");
+          scriptElement.src = url;
+          scriptElement.onload = resolve;
+          document.body.appendChild(scriptElement);
+        })
+      );
     });
+    return Promise.all(promises);
   }
 
   public loadExternalStyles(url: string) {

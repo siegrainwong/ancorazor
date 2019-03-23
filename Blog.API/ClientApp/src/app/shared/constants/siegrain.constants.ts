@@ -8,10 +8,11 @@ export const constants = {
 };
 
 export const externalScripts = {
-  simpleMde:
-    "assets/libraries/simplemde.min.js",
+  // https://github.com/Ionaru/easy-markdown-editor
+  editor: "assets/libraries/editor.min.js",
+  /**
+   * 我定制的 highlight.js，部分语言不支持
+   * 定制地址：https://highlightjs.org/download/
+   */
+  hightlight: "assets/libraries/highlight.pack.js"
 };
-
-// export const externalStyles = {
-//   tuiEditor: "assets/libraries/tui.editor/tui-editor.min.css"
-// };

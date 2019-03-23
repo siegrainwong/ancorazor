@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { Injectable, OnDestroy, OnInit } from "@angular/core";
+import { BehaviorSubject, ReplaySubject, Subscription } from "rxjs";
 import RouteData from "../models/route-data.model";
 import { LoggingService } from "../services/logging.service";
 import ArticleModel from "src/app/blog/models/article-model";
@@ -62,7 +62,11 @@ export class Store {
     this._logger.info("user data changed", value);
   }
 
+  /** An observer for `NavigationStart` */
+  routeWillBegin$ = new ReplaySubject(1);
+
   private _routeData: RouteData = new RouteData({ kind: "home" });
+  /** An observer for `NavigationEnd` with a `RouteData` */
   routeDataChanged$ = new BehaviorSubject<RouteData>(this._routeData);
 
   get routeData(): RouteData {

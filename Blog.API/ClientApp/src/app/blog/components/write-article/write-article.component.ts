@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, OnDestroy } from "@angular/core";
 import { ArticleService } from "../../services/article.service";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router, ActivatedRoute, NavigationStart } from "@angular/router";
 import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
 import { LoggingService } from "src/app/shared/services/logging.service";
@@ -11,13 +11,15 @@ import {
   timeout
 } from "src/app/shared/utils/siegrain.utils";
 import { externalScripts } from "src/app/shared/constants/siegrain.constants";
+import { transition } from "@angular/animations";
+import { filter } from "rxjs/operators";
 
 @Component({
   selector: "app-write-article",
   templateUrl: "./write-article.component.html",
   styleUrls: ["./write-article.component.scss"]
 })
-export class WriteArticleComponent implements OnInit {
+export class WriteArticleComponent implements OnInit, OnDestroy {
   @Input() model = new ArticleModel({
     cover: "assets/img/write-bg.jpg",
     title: "",
@@ -32,13 +34,24 @@ export class WriteArticleComponent implements OnInit {
     private _store: Store,
     private _logger: LoggingService,
     private _route: ActivatedRoute,
-    public transition: SGTransition,
-    private _util: SGUtil
+    private _router: Router,
+    private _util: SGUtil,
+    public transition: SGTransition
   ) {}
 
   async ngOnInit() {
     await this.preloadArticle();
-    if (this._store.renderFromClient) this.setupEditor();
+    if (!this._store.renderFromClient) return;
+    this.setupNav();
+    this.setupEditor();
+    this._store.routeDataChanged$.subscribe(() => {
+      this.restoreNav();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this._store.routeDataChanged$.unsubscribe();
+    this._logger.info(WriteArticleComponent.name + " released");
   }
 
   private async preloadArticle() {
@@ -55,23 +68,30 @@ export class WriteArticleComponent implements OnInit {
     this.isEditing = true;
   }
 
+  private setupNav() {
+    let nav = document.querySelector("#mainNav");
+    nav.classList.add("is-visible", "is-fixed");
+  }
+
+  private restoreNav() {
+    console.log("移除nav样式");
+
+    let nav = document.querySelector("#mainNav");
+    nav.classList.remove("is-visible", "is-fixed");
+  }
+
   private async setupEditor() {
-    const hljs = require("highlight.js");
-    await this._util.loadExternalScripts(externalScripts.simpleMde);
+    await this._util.loadExternalScripts(Object.values(externalScripts));
     // PS：改了很多样式在 _reset.css 里
-    this._editor = new SimpleMDE({
+    this._editor = new EasyMDE({
       element: document.querySelector("#editor"),
       initialValue: this.model.content,
-      spellChecker: false
+      spellChecker: false,
+      renderingConfig: {
+        codeSyntaxHighlighting: true
+      }
     });
     this._editor.toggleSideBySide();
-    // TODO: 这样渲染CPU要炸
-    const preview = document.querySelector(".editor-preview-side");
-    setInterval(function() {
-      preview.querySelectorAll("pre code").forEach(block => {
-        hljs.highlightBlock(block);
-      });
-    }, 1000);
   }
 
   /**

@@ -8,7 +8,8 @@ import { Title } from "@angular/platform-browser";
 import { timeout } from "src/app/shared/utils/promise-delay";
 import {
   constants,
-  externalScripts} from "src/app/shared/constants/siegrain.constants";
+  externalScripts
+} from "src/app/shared/constants/siegrain.constants";
 import { SGUtil } from "src/app/shared/utils/siegrain.utils";
 
 @Component({
@@ -52,18 +53,24 @@ export class ArticleComponent implements OnInit {
     return this.model && this._transition.apply("fade-opposite");
   }
 
-  setupEditor() {
-    const hljs = require('highlight.js');
-    const md = require('markdown-it')({
-      highlight: function (str, lang) {
+  async setupEditor() {
+    await this._util.loadExternalScripts([externalScripts.hightlight]);
+    const md = require("markdown-it")({
+      highlight: function(str, lang) {
         if (lang && hljs.getLanguage(lang)) {
           try {
-            return '<pre class="hljs"><code class="hljs-code">' +
-                   hljs.highlight(lang, str, true).value +
-                   '</code></pre>';
+            return (
+              '<pre class="hljs"><code class="hljs-code">' +
+              hljs.highlight(lang, str, true).value +
+              "</code></pre>"
+            );
           } catch (__) {}
         }
-        return '<pre class="hljs"><code class="hljs-code">' + md.utils.escapeHtml(str) + '</code></pre>';
+        return (
+          '<pre class="hljs"><code class="hljs-code">' +
+          md.utils.escapeHtml(str) +
+          "</code></pre>"
+        );
       }
     });
     var result = md.render(this.model.content);

@@ -1,6 +1,7 @@
 let previousTop = 0;
 function getHeaderHeight(): number {
-  return document.querySelector("#header").clientHeight;
+  const header = document.querySelector("#header");
+  return (header && header.clientHeight) || 0;
 }
 function getNav(): HTMLElement {
   return document.querySelector("#mainNav");
@@ -15,8 +16,14 @@ function getScrollTop(): number {
 }
 /** 监听滚动 隐藏/显示 nav */
 export function onScroll() {
-  let currentTop = getScrollTop();
   let nav = getNav();
+  const headerHeight = getHeaderHeight();
+  if (!headerHeight) {
+    nav.classList.add("is-visible", "is-fixed");
+    return;
+  }
+
+  let currentTop = getScrollTop();
   //check if user is scrolling up
   if (currentTop < previousTop) {
     //if scrolling up...

@@ -3,7 +3,7 @@ body {
   overflow-x: hidden;
   scroll-behavior: smooth;
   font-family: $primary-font;
-  font-size: 20px;
+  font-size: 14px;
   color: $gray-900;
 }
 
@@ -35,14 +35,6 @@ body {
       border-radius: 10px;
       background: transparent;
     }
-  }
-}
-
-p {
-  line-height: 1.5;
-  margin: 30px 0;
-  a {
-    text-decoration: underline;
   }
 }
 
@@ -121,4 +113,8 @@ img::-moz-selection {
   &-xl {
     padding: 45px;
   }
+}
+
+#content {
+  min-height: 1000px;
 }

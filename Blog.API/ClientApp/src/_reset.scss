@@ -8,6 +8,9 @@
 .mat-stroked-button,
 .mat-simple-snackbar {
   font-family: inherit;
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 .mat-button,
@@ -76,16 +79,6 @@ $custom-mat-colors: "danger" $danger, "shit" #000;
   }
 }
 
-.masthead {
-  .mat-form-field-appearance-legacy .mat-form-field-label {
-    color: rgba($color: white, $alpha: 0.7);
-    line-height: normal;
-  }
-  input {
-    line-height: normal;
-  }
-}
-
 /* === bootstrap === */
 
 * {
@@ -140,6 +133,7 @@ label {
   pre,
   code {
     @include code-block();
+    font-size: 14px;
   }
   > pre {
     background: linear-gradient(
@@ -227,6 +221,7 @@ label {
 /* === simple mde === */
 $editor-height: 700px;
 .editor-toolbar {
+  font-size: 16px;
   button[title="Toggle Fullscreen (F11)"],
   button[title="Toggle Preview (Ctrl-P)"],
   button[title="Toggle Side by Side (F9)"],

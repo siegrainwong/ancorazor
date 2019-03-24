@@ -11,14 +11,15 @@ footer {
       display: inline-block;
       list-style: none;
       margin-right: 0.5rem;
+
+      .fa-lg {
+        font-size: 1.5em;
+      }
     }
   }
   .copyright {
     font-size: 14px;
     margin-bottom: 0;
     text-align: center;
-  }
-  .fa-lg {
-    font-size: 1.2em;
   }
 }

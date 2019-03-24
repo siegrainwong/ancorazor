@@ -156,7 +156,7 @@ export class ArticleListComponent implements OnInit {
         ? [this._itemAnimationName, "page-turn-button"]
         : null,
       extraDuration: StaggerDuration,
-      scrollToElementId: "#articleList"
+      scrollToElementId: topElementId
     });
   }
 }

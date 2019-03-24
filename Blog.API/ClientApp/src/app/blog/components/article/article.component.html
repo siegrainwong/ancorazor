@@ -1,7 +1,11 @@
 <app-header [model]="model"></app-header>
 
 <!-- Post Content -->
-<div class="container" *ngIf="content" [ngClass]="transitionClass">
+<div
+  class="container"
+  *ngIf="content"
+  [ngClass]="this.transition.apply('fade')"
+>
   <div class="row">
     <div
       id="viewer"

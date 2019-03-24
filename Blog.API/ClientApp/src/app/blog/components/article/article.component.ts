@@ -23,10 +23,10 @@ export class ArticleComponent implements OnInit {
   constructor(
     private _service: ArticleService,
     private _route: ActivatedRoute,
-    public store: Store,
-    private _transition: SGTransition,
     private _titleService: Title,
-    private _util: SGUtil
+    private _util: SGUtil,
+    public store: Store,
+    public transition: SGTransition
   ) {}
   async ngOnInit() {
     await this.getArticle();
@@ -50,7 +50,7 @@ export class ArticleComponent implements OnInit {
   }
 
   get transitionClass() {
-    return this._transition.apply("fade-opposite");
+    return this.transition.apply("fade-opposite");
   }
 
   async setupEditor() {

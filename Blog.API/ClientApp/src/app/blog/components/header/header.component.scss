@@ -4,13 +4,18 @@
   font-size: 35px;
 }
 
-.masthead {
-  .mat-form-field-appearance-legacy .mat-form-field-underline {
-    background-color: rgba($color: white, $alpha: 0.7);
-  }
-
-  .mat-form-field-ripple {
-    background-color: rgba($color: white, $alpha: 0.87);
+/* For cover effects */
+// TODO: 不怎么好看。。。
+// header.masthead {
+//   position: fixed;
+//   width: 100%;
+//   z-index: -1;
+// }
+header.masthead {
+  position: relative;
+  height: 30vh;
+  @media only screen and (min-width: 992px) {
+    height: 50vh;
   }
 }
 
@@ -42,12 +47,7 @@ header.masthead {
   background: no-repeat center center;
   background-color: $black;
   background-attachment: scroll;
-  position: relative;
   word-break: break-all;
-  height: 30vh;
-  @media only screen and (min-width: 992px) {
-    height: 50vh;
-  }
   @include background-cover;
   .container,
   .row {

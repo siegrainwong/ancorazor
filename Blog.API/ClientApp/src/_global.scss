@@ -1,7 +1,41 @@
-// Global styling for this template
 body {
+  margin: 0;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  font-family: $primary-font;
   font-size: 20px;
   color: $gray-900;
+}
+
+html,
+body {
+  overflow-y: initial !important;
+}
+
+/* === scrollbar === */
+body {
+  &.scrollbar {
+    &::-webkit-scrollbar {
+      width: 6px;
+      background-color: $gray-200;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $primary;
+      background-image: -webkit-gradient(
+        linear,
+        0 0,
+        0 100%,
+        color-stop(0.5, rgba(255, 255, 255, 0.2)),
+        color-stop(0.5, transparent),
+        to(transparent)
+      );
+      opacity: 1;
+    }
+    &::-webkit-scrollbar-track {
+      border-radius: 10px;
+      background: transparent;
+    }
+  }
 }
 
 p {
@@ -72,4 +106,19 @@ img::selection {
 img::-moz-selection {
   color: $white;
   background: transparent;
+}
+
+.padding {
+  &-sm {
+    padding: 10px;
+  }
+  &-md {
+    padding: 20px;
+  }
+  &-lg {
+    padding: 30px;
+  }
+  &-xl {
+    padding: 45px;
+  }
 }

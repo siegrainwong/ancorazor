@@ -1,56 +1,3 @@
-@import "variables";
-
-html,
-body {
-  overflow-y: initial !important;
-}
-
-body {
-  margin: 0;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-  font-family: $primary-font;
-}
-
-/* === scrollbar === */
-body {
-  &.scrollbar {
-    &::-webkit-scrollbar {
-      width: 6px;
-      background-color: $gray-200;
-    }
-    &::-webkit-scrollbar-thumb {
-      background-color: $primary;
-      background-image: -webkit-gradient(
-        linear,
-        0 0,
-        0 100%,
-        color-stop(0.5, rgba(255, 255, 255, 0.2)),
-        color-stop(0.5, transparent),
-        to(transparent)
-      );
-      opacity: 1;
-    }
-    &::-webkit-scrollbar-track {
-      border-radius: 10px;
-      background: transparent;
-    }
-  }
-}
-
-/* === bootstrap === */
-
-* {
-  &:active,
-  :focus {
-    outline: none !important; // 1
-  }
-}
-
-label {
-  margin-bottom: 0; // 2
-}
-
 /* === material === */
 .mat-button,
 .mat-fab,
@@ -62,6 +9,7 @@ label {
 .mat-simple-snackbar {
   font-family: inherit;
 }
+
 .mat-button,
 .mat-dialog-title {
   text-transform: uppercase;
@@ -69,6 +17,38 @@ label {
 
 .mat-button .mat-button-wrapper > .fas {
   vertical-align: initial;
+}
+
+.mat-flat-button {
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 25px !important;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 0 !important;
+  text-decoration: none !important;
+  transition: background-color 0.2s;
+  @include sans-serif-font;
+  @media only screen and (max-width: 992px) {
+    padding: 7px 20px;
+  }
+}
+
+.mat-flat-button.mat-primary {
+  color: $white;
+  background-color: $primary;
+  border-color: $primary;
+  &:hover,
+  &:focus,
+  &:active {
+    color: $white;
+    background-color: darken($primary, 7.5);
+    border-color: darken($primary, 7.5);
+  }
+  &[disabled],
+  &:disabled {
+    background-color: rgba(0, 0, 0, 0.12);
+  }
 }
 
 .mat-snack-bar-container {
@@ -106,15 +86,27 @@ $custom-mat-colors: "danger" $danger, "shit" #000;
   }
 }
 
-/* === clean blog === */
-.masthead {
-  .mat-form-field-appearance-legacy .mat-form-field-underline {
-    background-color: rgba($color: white, $alpha: 0.7);
-  }
+/* === bootstrap === */
 
-  .mat-form-field-ripple {
-    background-color: rgba($color: white, $alpha: 0.87);
+* {
+  &:active,
+  :focus {
+    outline: none !important;
   }
+}
+
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+label {
+  margin-bottom: 0;
 }
 
 /* === animate.css === */

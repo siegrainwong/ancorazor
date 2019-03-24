@@ -61,8 +61,27 @@
   background-size: cover;
 }
 @mixin serif-font() {
-  font-family: 'Lora', 'Times New Roman', serif;
+  font-family: "Lora", "Times New Roman", serif;
 }
 @mixin sans-serif-font() {
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* === highlight.js ===*/
+
+@mixin code-block() {
+  font-family: $code-font, $primary-font;
+  color: $code-normal;
+  border-radius: 0.2rem;
+}
+
+@mixin inline-code-block() {
+  color: $black;
+  padding: 2px 4px;
+  margin: 0 4px;
+  background: linear-gradient(
+    to right,
+    rgba(123, 88, 255, 0.25),
+    rgba(49, 138, 255, 0.25)
+  );
 }

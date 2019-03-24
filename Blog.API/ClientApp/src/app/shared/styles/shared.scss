@@ -1,5 +1,4 @@
-@import "variables";
-@import "mixins";
-@import "global";
-@import "bootstrap-overrides";
-@import "siegrain";
+// Shared styling for components
+
+@import "../../../mixins";
+@import "../../../variables";

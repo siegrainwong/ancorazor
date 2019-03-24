@@ -1,20 +1,18 @@
-@import "~bootstrap/scss/bootstrap";
+// Add bootstrap grid system
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/grid"; // add the grid
+@import "~bootstrap/scss/utilities"; // add css utilities
+@import "~bootstrap/scss/navbar";
 
 // 修改主题
 @import "theme";
 
-// TODO: 去 bootstrap
-// Imports functions, variables, and mixins that are needed by other Bootstrap files
-// @import "~bootstrap/scss/functions";
-// @import "~bootstrap/scss/variables";
-// @import "~bootstrap/scss/mixins";
-// // Import Reboot
-// @import "~bootstrap/scss/reboot";
-// @import "~bootstrap/scss/grid"; // add the grid
-// @import "~bootstrap/scss/utilities"; // add css utilities
-
-@import "~@fortawesome/fontawesome-free/css/all.min.css";
-
 @import "~animate.css/animate.min.css";
 
+@import "variables";
+@import "mixins";
+@import "global";
 @import "reset";

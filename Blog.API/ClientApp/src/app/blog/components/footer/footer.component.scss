@@ -6,10 +6,19 @@ footer {
   .list-inline {
     margin: 0;
     padding: 0;
+
+    .list-inline-item {
+      display: inline-block;
+      list-style: none;
+      margin-right: 0.5rem;
+    }
   }
   .copyright {
     font-size: 14px;
     margin-bottom: 0;
     text-align: center;
+  }
+  .fa-lg {
+    font-size: 1.2em;
   }
 }

@@ -21,6 +21,7 @@
         [formControl]="password"
         required
         (keydown.enter)="submit()"
+        type="password"
       />
       <mat-error *ngIf="password.invalid">{{
         getErrorMessage(password)

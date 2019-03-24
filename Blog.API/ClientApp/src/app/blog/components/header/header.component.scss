@@ -4,6 +4,16 @@
   font-size: 35px;
 }
 
+.masthead {
+  .mat-form-field-appearance-legacy .mat-form-field-underline {
+    background-color: rgba($color: white, $alpha: 0.7);
+  }
+
+  .mat-form-field-ripple {
+    background-color: rgba($color: white, $alpha: 0.87);
+  }
+}
+
 /*
   Mark: Scale fonts according to window size
   https://stackoverflow.com/a/13358713 

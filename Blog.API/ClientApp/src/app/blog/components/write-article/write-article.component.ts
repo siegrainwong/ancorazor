@@ -13,6 +13,7 @@ import {
 import { externalScripts } from "src/app/shared/constants/siegrain.constants";
 import { transition } from "@angular/animations";
 import { filter } from "rxjs/operators";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: "app-write-article",
@@ -20,6 +21,7 @@ import { filter } from "rxjs/operators";
   styleUrls: ["./write-article.component.scss"]
 })
 export class WriteArticleComponent implements OnInit, OnDestroy {
+  private _subscription = new Subscription();
   @Input() model = new ArticleModel({
     cover: "assets/img/write-bg.jpg",
     title: "",
@@ -44,13 +46,13 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
     if (!this._store.renderFromClient) return;
     this.setupNav();
     this.setupEditor();
-    this._store.routeDataChanged$.subscribe(() => {
+    this._subscription.add(this._store.routeWillBegin$.subscribe(() => {
       this.restoreNav();
-    });
+    }));
   }
 
   ngOnDestroy(): void {
-    this._store.routeDataChanged$.unsubscribe();
+    this._subscription.unsubscribe();
     this._logger.info(WriteArticleComponent.name + " released");
   }
 

@@ -1,5 +1,5 @@
-import { Injectable, OnDestroy, OnInit } from "@angular/core";
-import { BehaviorSubject, ReplaySubject, Subscription } from "rxjs";
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, ReplaySubject } from "rxjs";
 import RouteData from "../models/route-data.model";
 import { LoggingService } from "../services/logging.service";
 import ArticleModel from "src/app/blog/models/article-model";

@@ -1,13 +1,14 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 import { timeout } from "./promise-delay";
 import { Store } from "../store/store";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Subscription } from "rxjs";
 import { constants } from "../constants/siegrain.constants";
 
 @Injectable({
   providedIn: "root"
 })
-export class SGTransition {
+export class SGTransition implements OnDestroy {
+  private _subscription = new Subscription();
   private _currentTransitionMode: SGTransitionMode = SGTransitionMode.route;
   private _routeAnimationEnableDelay = 0;
   public transitionWillBegin$ = new BehaviorSubject<{
@@ -16,14 +17,20 @@ export class SGTransition {
   }>({ mode: SGTransitionMode.route, animations: [] });
 
   constructor(private _store: Store) {
-    this._store.routeDataChanged$.subscribe(async () => {
-      if (this._store.isFirstScreen) this.disableRouteAnimation(500);
+    this._subscription.add(
+      this._store.routeDataChanged$.subscribe(async () => {
+        if (this._store.isFirstScreen) this.disableRouteAnimation(500);
 
-      if (this._routeAnimationEnableDelay != 0)
-        await this.enableRouteAnimationAfterDelay();
+        if (this._routeAnimationEnableDelay != 0)
+          await this.enableRouteAnimationAfterDelay();
 
-      if (this._store.isFirstScreen) this._store.isFirstScreen = false;
-    });
+        if (this._store.isFirstScreen) this._store.isFirstScreen = false;
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this._subscription.unsubscribe();
   }
 
   /**

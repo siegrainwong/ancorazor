@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from "@angular/core";
 import { Store } from "src/app/shared/store/store";
 import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
@@ -6,13 +6,16 @@ import { MatDialog } from "@angular/material";
 import { SignInComponent } from "../sign-in/sign-in.component";
 import { ActivatedRoute } from "@angular/router";
 import { constants } from "src/app/shared/constants/siegrain.constants";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: "app-nav",
   templateUrl: "./nav.component.html",
   styleUrls: ["./nav.component.scss"]
 })
-export class NavComponent implements OnInit {
+export class NavComponent implements OnInit, OnDestroy {
+  private _subscription = new Subscription();
+
   title: String;
   navbarOpen: boolean = false;
   items = {
@@ -37,6 +40,10 @@ export class NavComponent implements OnInit {
     });
     this.registerRouteChanged();
     if (!this.store.renderFromClient) return;
+  }
+
+  ngOnDestroy() {
+    this._subscription.unsubscribe();
   }
 
   onItemTapped(item?: string) {
@@ -74,9 +81,9 @@ export class NavComponent implements OnInit {
   }
 
   registerRouteChanged() {
-    this.store.routeDataChanged$.subscribe(data => {
+    this._subscription.add(this.store.routeDataChanged$.subscribe(data => {
       if (data && data.kind == "home") this.title = "";
       else this.title = constants.title;
-    });
+    }));
   }
 }

@@ -50,11 +50,11 @@ export class ArticleComponent implements OnInit {
   }
 
   get transitionClass() {
-    return this.model && this._transition.apply("fade-opposite");
+    return this._transition.apply("fade-opposite");
   }
 
   async setupEditor() {
-    await this._util.loadExternalScripts([externalScripts.hightlight]);
+    await this._util.loadExternalScripts([externalScripts.highlight]);
     const md = require("markdown-it")({
       highlight: function(str, lang) {
         if (lang && hljs.getLanguage(lang)) {

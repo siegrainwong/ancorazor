@@ -135,34 +135,19 @@ $custom-mat-colors: "danger" $danger, "shit" #000;
 }
 
 /* === highlight.js === */
-#viewer {
-  margin-top: 50px;
-  font-size: 16px;
 
-  // inline code block
-  code:not(.hljs-code) {
-    font-family: $code-font, $primary-font;
-    color: $code-keyword;
-    padding: 2px 4px;
-    margin: 0 4px;
-    border-radius: 0.2rem;
-    color: $black;
-    background: linear-gradient(
-      to right,
-      rgba(123, 88, 255, 0.25),
-      rgba(49, 138, 255, 0.25)
-    );
-  }
+@mixin code-block() {
+  font-family: $code-font, $primary-font;
+  color: $code-normal;
+  border-radius: 0.2rem;
 }
 
 #viewer,
 .editor-preview-side {
   // code block
   pre,
-  pre > code {
-    font-family: $code-font, $primary-font;
-    color: $code-normal;
-    border-radius: 0.2rem;
+  code {
+    @include code-block();
   }
   > pre {
     background: linear-gradient(
@@ -213,12 +198,46 @@ $custom-mat-colors: "danger" $danger, "shit" #000;
   }
 }
 
+@mixin inline-code-block() {
+  color: $black;
+  padding: 2px 4px;
+  margin: 0 4px;
+  background: linear-gradient(
+    to right,
+    rgba(123, 88, 255, 0.25),
+    rgba(49, 138, 255, 0.25)
+  );
+}
+
+#viewer {
+  margin-top: 50px;
+  font-size: 16px;
+
+  // inline code block
+  code:not(.hljs-code) {
+    @include inline-code-block();
+  }
+}
+
+.editor-preview-side {
+  code:not([class^="language-"]) {
+    @include inline-code-block();
+  }
+  pre > code {
+    @include code-block();
+    color: $code-normal !important;
+    padding: initial !important;
+    margin: inherit !important;
+    background: initial !important;
+  }
+}
+
 /* === simple mde === */
 $editor-height: 700px;
 .editor-toolbar {
-  a[title="Toggle Fullscreen (F11)"],
-  a[title="Toggle Preview (Ctrl-P)"],
-  a[title="Toggle Side by Side (F9)"],
+  button[title="Toggle Fullscreen (F11)"],
+  button[title="Toggle Preview (Ctrl-P)"],
+  button[title="Toggle Side by Side (F9)"],
   i.separator:last-of-type {
     display: none;
   }

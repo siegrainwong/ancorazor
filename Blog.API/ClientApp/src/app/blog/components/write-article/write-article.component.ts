@@ -1,19 +1,12 @@
 import { Component, OnInit, Input, OnDestroy } from "@angular/core";
 import { ArticleService } from "../../services/article.service";
-import { Router, ActivatedRoute, NavigationStart } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
 import { LoggingService } from "src/app/shared/services/logging.service";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
-import {
-  SGUtil,
-  topElementId,
-  timeout
-} from "src/app/shared/utils/siegrain.utils";
+import { SGUtil, topElementId } from "src/app/shared/utils/siegrain.utils";
 import { externalScripts } from "src/app/shared/constants/siegrain.constants";
-import { transition } from "@angular/animations";
-import { filter } from "rxjs/operators";
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: "app-write-article",
@@ -21,7 +14,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ["./write-article.component.scss"]
 })
 export class WriteArticleComponent implements OnInit, OnDestroy {
-  private _subscription = new Subscription();
   @Input() model = new ArticleModel({
     cover: "assets/img/write-bg.jpg",
     title: "",
@@ -36,7 +28,6 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
     private _store: Store,
     private _logger: LoggingService,
     private _route: ActivatedRoute,
-    private _router: Router,
     private _util: SGUtil,
     public transition: SGTransition
   ) {}
@@ -46,14 +37,10 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
     if (!this._store.renderFromClient) return;
     this.setupNav();
     this.setupEditor();
-    this._subscription.add(this._store.routeWillBegin$.subscribe(() => {
-      this.restoreNav();
-    }));
   }
 
-  ngOnDestroy(): void {
-    this._subscription.unsubscribe();
-    this._logger.info(WriteArticleComponent.name + " released");
+  ngOnDestroy() {
+    this.restoreNav();
   }
 
   private async preloadArticle() {
@@ -62,8 +49,7 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
       this._store.preloadArticle = null;
     } else {
       let id = this._route.snapshot.params.id;
-      if (!id) return;
-      let res = await this._service.getArticle(id);
+      let res = id && (await this._service.getArticle(id));
       if (!res) return;
       this.model = res;
     }
@@ -76,8 +62,6 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
   }
 
   private restoreNav() {
-    console.log("移除nav样式");
-
     let nav = document.querySelector("#mainNav");
     nav.classList.remove("is-visible", "is-fixed");
   }

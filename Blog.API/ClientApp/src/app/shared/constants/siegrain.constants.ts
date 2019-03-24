@@ -14,5 +14,5 @@ export const externalScripts = {
    * 我定制的 highlight.js，部分语言不支持
    * 定制地址：https://highlightjs.org/download/
    */
-  hightlight: "assets/libraries/highlight.pack.js"
+  highlight: "assets/libraries/highlight.pack.js"
 };

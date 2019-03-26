@@ -9,7 +9,7 @@ export const constants = {
 
 export const externalScripts = {
   // https://github.com/Ionaru/easy-markdown-editor
-  editor: "assets/libraries/editor.min.js",
+  editor: "assets/libraries/easymde.min.js",
   /**
    * 我定制的 highlight.js，部分语言不支持
    * 定制地址：https://highlightjs.org/download/

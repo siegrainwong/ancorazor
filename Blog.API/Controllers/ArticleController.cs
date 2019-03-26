@@ -33,6 +33,7 @@ namespace Blog.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Insert([FromBody] [Required] ArticleParameter parameters)
         {
+            // TODO: add tags\categories supporting
             parameters.Author = 1;
             parameters.CreatedAt = DateTime.Now;
             parameters.UpdatedAt = DateTime.Now;

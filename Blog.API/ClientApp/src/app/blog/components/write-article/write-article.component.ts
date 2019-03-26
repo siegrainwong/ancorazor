@@ -7,7 +7,7 @@ import { LoggingService } from "src/app/shared/services/logging.service";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
 import { SGUtil, topElementId } from "src/app/shared/utils/siegrain.utils";
 import { externalScripts } from "src/app/shared/constants/siegrain.constants";
-// import * as matter from "gray-matter";
+const yamlFront = require("yaml-front-matter");
 
 @Component({
   selector: "app-write-article",
@@ -20,11 +20,11 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
     title: "",
     digest: ""
   });
-  private _editor: any;
   public isEditing: boolean = false;
   public preloading: boolean = false;
+  private _editor: any;
+  private _lexer: any;
   private _frontMatter: any;
-  private _hrCount: number = 0;
 
   constructor(
     private _service: ArticleService,
@@ -72,7 +72,6 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
   private async setupEditor() {
     await this._util.loadExternalScripts(Object.values(externalScripts));
 
-    // this.setupRenderer();
     // PS：改了很多样式在 _reset.css 里
     this._editor = new EasyMDE({
       element: document.querySelector("#editor"),
@@ -81,53 +80,38 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
       spellChecker: false,
       renderingConfig: {
         codeSyntaxHighlighting: true,
-        markedOptions: {
-          renderer: this.getRenderer()
-        }
+        markedLexer: this.lexer
       }
     });
     this._editor.toggleSideBySide();
-    const self = this;
-    const yamlFront = require("yaml-front-matter");
-    this._editor.codemirror.on("change", function() {
-      let value = self._editor.value() as string;
-      self._frontMatter = yamlFront.loadFront(value);
-      self._hrCount = value.split("---").length;
-    });
   }
 
   /**
-   * Mark: 修改`Marked`的词法分析器让其支持`yaml front matter`.
+   * 修改`markedjs`的词法分析器使其支持`yaml front matter`
    */
-  private getRenderer() {
-    let renderer = new marked.Renderer();
+  private get lexer() {
+    if (this._lexer) return this._lexer;
 
     const self = this;
-    let count = 0;
-    // Bug: 一直加字有惊喜
-    renderer.hr = function() {
-      count++;
-      if (count > self._hrCount) count = 1;
-
-      if (!self.hasFrontMatter) {
-        let $matter = document.querySelector(".sg-front-matter");
-        $matter && $matter.remove();
-        return "<hr>";
+    const cKey = '__content'
+    let lex = marked.Lexer.lex;
+    this._lexer = function(text, options) {
+      let parsed = self._frontMatter = yamlFront.loadFront(text);
+      let title = "";
+      if (parsed.title) {
+        title = `# ${parsed.title}\n`;
       }
-      if (count > 2) return "<hr>";
-
-      if (count == 1) {
-        return "<div class='sg-front-matter'>";
-      } else if (count == 2) {
-        return "</div>";
+      let date = "";
+      if (parsed.date) {
+        date = `> Posted on ${parsed.date}\n`;
       }
-    };
-
-    return renderer;
+      return lex(title + date + '\n\n' + parsed[cKey], options)
+    }
+    return this._lexer;
   }
 
   private get hasFrontMatter(): boolean {
-    return Object.keys(this._frontMatter).length > 2;
+    return this._frontMatter && Object.keys(this._frontMatter).length > 2;
   }
 
   /**
@@ -141,17 +125,22 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
   }
 
   async submit() {
-    this.model.content = this._editor.value();
-    if (!this.hasFrontMatter)
-      // TODO: 添加帮助链接
-      return this._util.tip("Yaml front matter not found!");
-    if (!this._frontMatter.title || !this._frontMatter.title.length)
-      return this._util.tip("Title is required");
+    // validations
     if (!this.model.content || !this.model.content.length)
-      return this._util.tip("Content is required");
-
+      return this._util.tip("The content is empty.");
+    if (!this.hasFrontMatter)
+      return this._util.tip("Yaml front matter (What is this?) not found.");  // TODO: 添加帮助链接
+    if (!this._frontMatter.title || !this._frontMatter.title.length)
+      return this._util.tip("Title is required.");
+    
+    // assemble
+    this.model.content = this._editor.value();
     this.model.title = this._frontMatter.title;
+    this.model.createdAt = this._frontMatter.date;
+    this.model.tags = (this._frontMatter.tags as string).split(" ");
+    this.model.categories = (this._frontMatter.categories as string).split(" ");
 
+    // submit
     this.preloading = true;
     this._logger.info("posting: ", this.model);
     var res = this.isEditing
@@ -161,7 +150,4 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
     if (!res) return;
     this._util.routeTo([`article/${res}`], { scrollToElementId: topElementId });
   }
-
-  // TODO: 预览
-  preview() {}
 }

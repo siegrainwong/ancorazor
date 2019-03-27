@@ -16,19 +16,5 @@ namespace Blog.Service
 
         public IArticleCategoriesRepository ArticleCategoriesRepository { get; }
 
-        public int Insert(ArticleCategories articleCategories)
-        {
-            return ArticleCategoriesRepository.Insert(articleCategories);
-        }
-
-        public int DeleteById(int id)
-        {
-            return ArticleCategoriesRepository.DeleteById(id);
-        }
-
-        public int Update(ArticleCategories articleCategories)
-        {
-            return ArticleCategoriesRepository.Update(articleCategories);
-        }
     }
 }

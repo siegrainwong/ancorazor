@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Blog.API.Messages;
+using Blog.API.Messages.Article;
 using Blog.API.Messages.Users;
 using Blog.Entity;
 using Blog.Repository;
@@ -23,31 +24,28 @@ namespace Blog.API.Controllers
     {
         private IArticleRepository _repository;
         private ArticleService _service;
+        private CategoryService _categoryService;
 
-        public ArticleController(ArticleService service, IArticleRepository repository)
+        public ArticleController(ArticleService service, IArticleRepository repository, CategoryService categoryService)
         {
             _service = service;
             _repository = repository;
+            _categoryService = categoryService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Insert([FromBody] [Required] ArticleParameter parameters)
+        public async Task<IActionResult> Insert([FromBody] [Required] ArticleUpdateParameter parameter)
         {
             // TODO: add tags\categories supporting
-            parameters.Author = 1;
-            parameters.CreatedAt = DateTime.Now;
-            parameters.UpdatedAt = DateTime.Now;
-            return CreatedAtAction(nameof(Get), new {id = parameters.Id},
-                new ResponseMessage<int> {Data = await _repository.InsertAsync(parameters)});
+            return CreatedAtAction(nameof(Get), new {id = parameter.Id},
+                new ResponseMessage<int> {Data = await _repository.InsertAsync(parameter)});
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] [Required] ArticleParameter parameters)
+        public async Task<IActionResult> Update([FromBody] [Required] ArticleUpdateParameter parameter)
         {
-            parameters.Author = 1;
-            parameters.UpdatedAt = DateTime.Now;
-            var result = await _repository.UpdateAsync(parameters);
-            return Ok(new ResponseMessage<int> {Succeed = result > 0, Data = parameters.Id});
+            var result = await _service.UpdateAsync(parameter);
+            return Ok(new ResponseMessage<int> {Succeed = result, Data = parameter.Id});
         }
 
         [HttpDelete("{id}")]

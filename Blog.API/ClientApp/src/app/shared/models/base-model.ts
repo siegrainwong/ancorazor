@@ -3,8 +3,6 @@ export default class BaseModel {
   updatedAt?: Date;
   createdAt: Date;
   remark?: string;
-  tags?: string[];
-  categories?: string[];
   isDeleted?: boolean;
 
   constructor(init?: Partial<BaseModel>) {

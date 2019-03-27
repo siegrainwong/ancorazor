@@ -1,5 +1,8 @@
 #region
 
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Blog.Entity;
 using SmartSql.DyRepository;
 
@@ -7,7 +10,9 @@ using SmartSql.DyRepository;
 
 namespace Blog.Repository
 {
-    public interface IArticleCategoriesRepository : IRepository<ArticleCategories, int>
+    public interface IArticleCategoriesRepository : IRepositoryAsync<ArticleCategories, int>
     {
+        //Task<int> DeleteByArticleAsync(int articleId);
+        //Task<int> InsertBatchAsync(IEnumerable<ArticleCategories> articleCategories);
     }
 }

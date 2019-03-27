@@ -5,7 +5,8 @@ export default class ArticleModel extends BaseModel {
   author: string;
   title: string;
   digest: string;
-  category: string;
+  tags?: string[];
+  categories?: string[];
   content: string;
   viewCount: number = 0;
   commentCount: number = 0;

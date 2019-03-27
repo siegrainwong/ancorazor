@@ -7,6 +7,7 @@ import { LoggingService } from "src/app/shared/services/logging.service";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
 import { SGUtil, topElementId } from "src/app/shared/utils/siegrain.utils";
 import { externalScripts } from "src/app/shared/constants/siegrain.constants";
+import { timeFormat } from "src/app/shared/utils/time-format";
 const yamlFront = require("yaml-front-matter");
 
 @Component({
@@ -93,10 +94,10 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
     if (this._lexer) return this._lexer;
 
     const self = this;
-    const cKey = '__content'
+    const cKey = "__content";
     let lex = marked.Lexer.lex;
     this._lexer = function(text, options) {
-      let parsed = self._frontMatter = yamlFront.loadFront(text);
+      let parsed = (self._frontMatter = yamlFront.loadFront(text));
       let title = "";
       if (parsed.title) {
         title = `# ${parsed.title}\n`;
@@ -105,8 +106,8 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
       if (parsed.date) {
         date = `> Posted on ${parsed.date}\n`;
       }
-      return lex(title + date + '\n\n' + parsed[cKey], options)
-    }
+      return lex(title + date + "\n\n" + parsed[cKey], options);
+    };
     return this._lexer;
   }
 
@@ -129,20 +130,21 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
     if (!this.model.content || !this.model.content.length)
       return this._util.tip("The content is empty.");
     if (!this.hasFrontMatter)
-      return this._util.tip("Yaml front matter (What is this?) not found.");  // TODO: 添加帮助链接
+      return this._util.tip("Yaml front matter (What is this?) not found."); // TODO: 添加帮助链接
     if (!this._frontMatter.title || !this._frontMatter.title.length)
       return this._util.tip("Title is required.");
-    
+
     // assemble
     this.model.content = this._editor.value();
     this.model.title = this._frontMatter.title;
-    this.model.createdAt = this._frontMatter.date;
+    this.model.createdAt = this._frontMatter.date || timeFormat(new Date());
     this.model.tags = (this._frontMatter.tags as string).split(" ");
     this.model.categories = (this._frontMatter.categories as string).split(" ");
+    this.model.digest = this._frontMatter.description;
 
     // submit
     this.preloading = true;
-    this._logger.info("posting: ", this.model);
+    this._logger.info("submiting: ", this.model);
     var res = this.isEditing
       ? await this._service.update(this.model)
       : await this._service.add(this.model);

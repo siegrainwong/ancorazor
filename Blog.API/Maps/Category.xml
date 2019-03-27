@@ -56,6 +56,35 @@
       ;Select Scope_Identity();
     </Statement>
 
+    <!--更新文章分类-->
+    <Statement Id="SetArticleCategories">
+      begin transaction [tran1]
+      begin try
+        declare @names table ([name] nvarchar(30))
+        <For Open="insert into @names values" Close="" Key="@name" Separator="," Property="names">
+          (@name)
+        </For>
+
+        -- insert only not exists in Category table
+        insert INTO Category
+        select name, getdate(), getdate(), null, 0 from
+        (select name from @names where name not in (select name from Category)) T
+
+        -- rebuild middle-table related data
+        declare @articleId int
+        <IsProperty Prepend="set @articleId = " Property="articleId">
+          @articleId
+        </IsProperty>
+        delete from ArticleCategories where Article = @articleId
+        insert into ArticleCategories select @articleId, Id, getdate(), getdate() from (select id from Category where Name in (select name from @names)) T
+
+        commit transaction [tran1]
+      end try
+      begin catch
+        rollback transaction [tran1]
+      end catch
+    </Statement>
+
     <!--删除-->
     <Statement Id="Delete">
       Delete From Category
@@ -98,6 +127,15 @@
           T.Id Desc
         </Default>
       </Switch>
+    </Statement>
+
+    <!--获取数据列-->
+    <Statement Id="QueryByNames">
+      SELECT T.* From Category T
+      Where 
+      <For Open="T.Name in (" Close=")" Key="@name" Separator="," Property="names">
+        @name
+      </For>
     </Statement>
 
 

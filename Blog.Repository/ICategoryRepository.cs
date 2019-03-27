@@ -1,5 +1,9 @@
 #region
 
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Threading.Tasks;
 using Blog.Entity;
 using SmartSql.DyRepository;
 
@@ -7,7 +11,8 @@ using SmartSql.DyRepository;
 
 namespace Blog.Repository
 {
-    public interface ICategoryRepository : IRepository<Category, int>
+    public interface ICategoryRepository : IRepositoryAsync<Category, int>
     {
+        Task<int> SetArticleCategoriesAsync(int articleId, string[] categories);
     }
 }

@@ -128,6 +128,9 @@ export class SGUtil {
   }
 }
 
-export { timeFormat, dateFormat, getKeyByValue } from "./time-format";
+export {
+  pastStringForTime as timeFormat,
+  pastStringForDate as dateFormat
+} from "./time-format";
 export { timeout } from "./promise-delay";
 export { random } from "./random";

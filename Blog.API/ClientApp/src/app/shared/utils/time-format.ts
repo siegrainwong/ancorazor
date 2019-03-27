@@ -1,8 +1,9 @@
-export function getKeyByValue(object, value) {
-  return Object.keys(object).find(key => object[key] === value);
+export function timeFormat(time: Date) {
+  return `${time.getFullYear()}-${time.getMonth() +
+    1}-${time.getDate()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}}`;
 }
 
-export function timeFormat(time: Date) {
+export function pastStringForTime(time: Date) {
   function zeroize(num: number) {
     return (String(num).length == 1 ? "0" : "") + num;
   }
@@ -50,7 +51,7 @@ export function timeFormat(time: Date) {
   }
 }
 
-export function dateFormat(date: Date) {
+export function pastStringForDate(date: Date) {
   function zeroize(num: number) {
     return (String(num).length == 1 ? "0" : "") + num;
   }

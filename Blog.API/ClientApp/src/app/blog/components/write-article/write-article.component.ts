@@ -138,8 +138,8 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
     this.model.content = this._editor.value();
     this.model.title = this._frontMatter.title;
     this.model.createdAt = this._frontMatter.date || timeFormat(new Date());
-    this.model.tags = (this._frontMatter.tags as string).split(" ");
-    this.model.categories = (this._frontMatter.categories as string).split(" ");
+    this.model.tags = this._frontMatter.tags;
+    this.model.categories = this._frontMatter.categories;
     this.model.digest = this._frontMatter.description;
 
     // submit

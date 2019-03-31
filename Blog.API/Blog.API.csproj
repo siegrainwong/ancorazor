@@ -50,7 +50,6 @@
   </Target>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="SmartSql.TypeHandler" Version="3.7.15" />
     <PackageReference Include="SmartSql.DIExtension" Version="3.7.16" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
@@ -68,6 +67,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Update="Maps\*.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SmartSqlMapConfig.Development.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SmartSqlMapConfig.Release.xml">

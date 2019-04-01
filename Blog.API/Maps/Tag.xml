@@ -8,7 +8,7 @@
 // Code Generate Github : https://github.com/Ahoo-Wang/SmartCode
 //*******************************-->
 
-<SmartSqlMap Scope="Category" xmlns="http://SmartSql.net/schemas/SmartSqlMap.xsd">
+<SmartSqlMap Scope="Tag" xmlns="http://SmartSql.net/schemas/SmartSqlMap.xsd">
 
   <Statements>
     <Statement Id="QueryParams">
@@ -37,7 +37,7 @@
 
     <!--新增-->
     <Statement Id="Insert">
-      INSERT INTO Category
+      INSERT INTO Tag
       (
       Name,
       CreatedAt,
@@ -57,32 +57,32 @@
     </Statement>
 
     <!--更新文章分类-->
-    <Statement Id="SetArticleCategories">
+    <Statement Id="SetArticleTags">
       declare @names table ([name] nvarchar(30))
-      <For Open="insert into @names values" Close="" Key="T" Separator="," Property="categories">
+      <For Open="insert into @names values" Close="" Key="T" Separator="," Property="Tags">
         (@T)
       </For>
 
-      -- insert only not exists in Category table
-      insert INTO Category
+      -- insert only not exists in Tag table
+      insert INTO Tag
       select name, getdate(), getdate(), null, 0 from
-      (select name from @names where name not in (select name from Category)) T
+      (select name from @names where name not in (select name from Tag)) T
 
       -- rebuild middle-table related data
-      delete from ArticleCategories where Article = @articleId
-      insert into ArticleCategories select @articleId, Id, getdate(), getdate() from 
-        (select id from Category where Name in (select name from @names)) T
+      delete from ArticleTags where Article = @articleId
+      insert into ArticleTags select @articleId, Id, getdate(), getdate() from 
+        (select id from Tag where Name in (select name from @names)) T
     </Statement>
 
     <!--删除-->
     <Statement Id="Delete">
-      Delete From Category
+      Delete From Tag
       Where Id=@Id
     </Statement>
 
     <!--更新-->
     <Statement Id="Update">
-      UPDATE Category
+      UPDATE Tag
       <Set>
         <IsProperty Prepend="," Property="Name">
           Name = @Name
@@ -109,7 +109,7 @@
       <IsNotEmpty Prepend="Top" Property="Taken">
         (@Taken)
       </IsNotEmpty>
-      T.* From Category T
+      T.* From Tag T
       <Include RefId="QueryParams" />
       <Switch Prepend="Order By" Property="OrderBy">
         <Default>
@@ -120,7 +120,7 @@
 
     <!--获取数据列-->
     <Statement Id="QueryByNames">
-      SELECT T.* From Category T
+      SELECT T.* From Tag T
       Where 
       <For Open="T.Name in (" Close=")" Key="@name" Separator="," Property="names">
         @name
@@ -132,7 +132,7 @@
     <Statement Id="QueryByPage">
 
       Select TT.* From
-      (Select ROW_NUMBER() Over(Order By T.Id Desc) Row_Index,T.* From Category T With(NoLock)
+      (Select ROW_NUMBER() Over(Order By T.Id Desc) Row_Index,T.* From Tag T With(NoLock)
       <Include RefId="QueryParams" />) TT
       Where TT.Row_Index Between ((@PageIndex-1)*@PageSize+1) And (@PageIndex*@PageSize);
     </Statement>
@@ -140,13 +140,13 @@
 
     <!--获取记录数-->
     <Statement Id="GetRecord">
-      Select Count(1) From Category T
+      Select Count(1) From Tag T
       <Include RefId="QueryParams" />
     </Statement>
 
     <!--获取表映射实体-->
     <Statement Id="GetEntity">
-      Select Top 1 T.* From Category T With(NoLock)
+      Select Top 1 T.* From Tag T With(NoLock)
       <Where>
         <IsNotEmpty Prepend="And" Property="Id">
           T.Id=@Id
@@ -157,7 +157,7 @@
 
     <!--是否存在该记录-->
     <Statement Id="IsExist">
-      Select Count(1) From Category T
+      Select Count(1) From Tag T
       <Include RefId="QueryParams" />
     </Statement>
 

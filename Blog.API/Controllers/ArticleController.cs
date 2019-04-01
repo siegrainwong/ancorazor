@@ -1,16 +1,13 @@
 #region
 
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Blog.API.Messages;
 using Blog.API.Messages.Article;
-using Blog.API.Messages.Users;
 using Blog.Entity;
 using Blog.Repository;
 using Blog.Service;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 #endregion
@@ -36,9 +33,8 @@ namespace Blog.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Insert([FromBody] [Required] ArticleUpdateParameter parameter)
         {
-            // TODO: add tags\categories supporting
-            return CreatedAtAction(nameof(Get), new {id = parameter.Id},
-                new ResponseMessage<int> {Data = await _repository.InsertAsync(parameter)});
+            var result = await _service.InsertAsync(parameter);
+            return CreatedAtAction(nameof(Get), new {id = result}, new ResponseMessage<int> {Data = result });
         }
 
         [HttpPut]

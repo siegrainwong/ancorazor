@@ -22,9 +22,6 @@
         <IsNotEmpty Prepend="And" Property="Title">
           T.Title = @Title
         </IsNotEmpty>
-        <IsNotEmpty Prepend="And" Property="Category">
-          T.Category = @Category
-        </IsNotEmpty>
         <IsNotEmpty Prepend="And" Property="Content">
           T.Content = @Content
         </IsNotEmpty>
@@ -59,7 +56,6 @@
       Cover,
       Author,
       Title,
-      Category,
       Content,
       Digest,
       ViewCount,
@@ -74,7 +70,6 @@
       @Cover,
       @Author,
       @Title,
-      @Category,
       @Content,
       @Digest,
       default,
@@ -102,9 +97,6 @@
         </IsNotEmpty>
         <IsNotEmpty Prepend="," Property="Title">
           Title = @Title
-        </IsNotEmpty>
-        <IsNotEmpty Prepend="," Property="Category">
-          Category = @Category
         </IsNotEmpty>
         <IsNotEmpty Prepend="," Property="Content">
           Content = @Content

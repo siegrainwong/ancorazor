@@ -68,7 +68,7 @@ namespace Blog.Service
             }
         }
 
-        private Task<int[]> SetArticleTagsAndCategories(int articleId, string[] tags, string[] categories)
+        private Task SetArticleTagsAndCategories(int articleId, string[] tags, string[] categories)
         {
             var categoryTask = CategoryRepository.SetArticleCategoriesAsync(articleId, categories);
             var tagTask = TagRepository.SetArticleTagsAsync(articleId, tags);

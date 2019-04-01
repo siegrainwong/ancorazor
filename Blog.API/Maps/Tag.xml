@@ -56,17 +56,17 @@
       ;Select Scope_Identity();
     </Statement>
 
-    <!--更新文章分类-->
+    <!--更新文章标签-->
     <Statement Id="SetArticleTags">
       declare @names table ([name] nvarchar(30))
-      <For Open="insert into @names values" Close="" Key="T" Separator="," Property="Tags">
+      <For Open="insert into @names values" Close="" Key="T" Separator="," Property="tags">
         (@T)
       </For>
 
       -- insert only not exists in Tag table
       insert INTO Tag
-      select name, getdate(), getdate(), null, 0 from
-      (select name from @names where name not in (select name from Tag)) T
+        select name, getdate(), getdate(), null, 0 from
+          (select name from @names where name not in (select name from Tag)) T
 
       -- rebuild middle-table related data
       delete from ArticleTags where Article = @articleId

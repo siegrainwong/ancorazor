@@ -65,12 +65,12 @@
 
       -- insert only not exists in Category table
       insert INTO Category
-      select name, getdate(), getdate(), null, 0 from
-      (select name from @names where name not in (select name from Category)) T
+        select name, getdate(), getdate(), null, 0 from
+          (select name from @names where name not in (select name from Category)) T
 
       -- rebuild middle-table related data
       delete from ArticleCategories where Article = @articleId
-      insert into ArticleCategories select @articleId, Id, getdate(), getdate() from 
+      insert into ArticleCategories select @articleId, Id, getdate(), getdate() from
         (select id from Category where Name in (select name from @names)) T
     </Statement>
 

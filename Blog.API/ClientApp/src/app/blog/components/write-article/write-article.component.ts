@@ -94,19 +94,17 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
     if (this._lexer) return this._lexer;
 
     const self = this;
-    const cKey = "__content";
     let lex = marked.Lexer.lex;
     this._lexer = function(text, options) {
       let parsed = (self._frontMatter = yamlFront.loadFront(text));
-      let title = "";
-      if (parsed.title) {
-        title = `# ${parsed.title}\n`;
-      }
-      let date = "";
-      if (parsed.date) {
-        date = `> Posted on ${parsed.date}\n`;
-      }
-      return lex(title + date + "\n\n" + parsed[cKey], options);
+      if (!self.hasFrontMatter) return lex(text, options);
+
+      return lex(
+        `# ${parsed.title} \n *Posted on ${parsed.date}* \n\n\n ${
+          parsed.__content
+        }`,
+        options
+      );
     };
     return this._lexer;
   }
@@ -127,7 +125,7 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
 
   async submit() {
     // validations
-    if (!this.model.content || !this.model.content.length)
+    if (!this._frontMatter.__content || !this._frontMatter.__content.length)
       return this._util.tip("The content is empty.");
     if (!this.hasFrontMatter)
       return this._util.tip("Yaml front matter (What is this?) not found."); // TODO: 添加帮助链接

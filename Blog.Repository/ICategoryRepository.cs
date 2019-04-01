@@ -13,6 +13,6 @@ namespace Blog.Repository
 {
     public interface ICategoryRepository : IRepositoryAsync<Category, int>
     {
-        Task<int> SetArticleCategoriesAsync(int articleId, string[] categories);
+        Task SetArticleCategoriesAsync(int articleId, string[] categories);
     }
 }

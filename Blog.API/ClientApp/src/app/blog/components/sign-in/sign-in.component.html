@@ -1,45 +1,109 @@
-<h1 mat-dialog-title>Sign In</h1>
-<div class="container">
-  <div class="row">
-    <mat-form-field class="col-12">
-      <input
-        placeholder="Username"
-        matInput
-        [formControl]="username"
-        required
-      />
-      <mat-error *ngIf="username.invalid">{{
-        getErrorMessage(username)
-      }}</mat-error>
-    </mat-form-field>
+<h1 mat-dialog-title>{{ isReseting ? "Reset" : "Sign In" }}</h1>
+<form class="container" style="padding:0;">
+  <div class="container">
+    <div class="row" *ngIf="!isReseting">
+      <mat-form-field class="col-12">
+        <input
+          placeholder="Username"
+          matInput
+          required
+          [formControl]="username"
+        />
+        <!-- TODO: this looks like a shit -->
+        <mat-error
+          *ngIf="
+            username.errors &&
+            (username.errors.minlength || username.errors.maxlength)
+          "
+          >Username must be 4-30 characters</mat-error
+        >
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field class="col-12">
+        <input
+          placeholder="Password"
+          matInput
+          [formControl]="password"
+          required
+          (keydown.enter)="submit()"
+          type="password"
+        />
+        <mat-error
+          *ngIf="
+            password.errors &&
+            (password.errors.minlength || password.errors.maxlength)
+          "
+          >Password must be 6-30 characters</mat-error
+        >
+      </mat-form-field>
+    </div>
+    <ng-container *ngIf="isReseting">
+      <div class="row">
+        <mat-form-field class="col-12">
+          <input
+            placeholder="New password"
+            matInput
+            [formControl]="newPassword"
+            required
+            type="password"
+          />
+          <mat-error
+            *ngIf="
+              newPassword.errors &&
+              (newPassword.errors.minlength || newPassword.errors.maxlength)
+            "
+            >Password must be 6-30 characters</mat-error
+          >
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field class="col-12">
+          <input
+            placeholder="Confirm new password"
+            matInput
+            [formControl]="rePassword"
+            required
+            (keydown.enter)="reset()"
+            type="password"
+          />
+          <mat-error
+            *ngIf="
+              rePassword.errors &&
+              (rePassword.errors.minlength || rePassword.errors.maxlength)
+            "
+            >Password must be 6-30 characters</mat-error
+          >
+          <mat-error *ngIf="rePassword.errors && rePassword.errors.match"
+            >Not match to new password</mat-error
+          >
+        </mat-form-field>
+      </div>
+    </ng-container>
   </div>
-  <div class="row">
-    <mat-form-field class="col-12">
-      <input
-        placeholder="Password"
-        matInput
-        [formControl]="password"
-        required
-        (keydown.enter)="submit()"
-        type="password"
-      />
-      <mat-error *ngIf="password.invalid">{{
-        getErrorMessage(password)
-      }}</mat-error>
-    </mat-form-field>
+  <div style="margin-top:20px;">
+    <button class="float-left" mat-button (click)="cancel()">
+      Cancel
+    </button>
+    <button
+      *ngIf="!isReseting"
+      mat-button
+      color="primary"
+      class="float-right"
+      (ngxFormSubmit)="submit()"
+      [attr.disabled]="loading ? '' : null"
+    >
+      Sign In
+    </button>
+    <button
+      *ngIf="isReseting"
+      mat-button
+      color="warn"
+      class="float-right"
+      (ngxFormSubmit)="reset()"
+      [attr.disabled]="loading ? '' : null"
+    >
+      Reset
+    </button>
   </div>
-</div>
-<div style="margin-top:20px;">
-  <button class="float-left" mat-button (click)="close()">
-    Cancel
-  </button>
-  <button
-    mat-button
-    color="primary"
-    class="float-right"
-    (click)="submit()"
-    [attr.disabled]="loading ? '' : null"
-  >
-    Sign In
-  </button>
-</div>
+</form>

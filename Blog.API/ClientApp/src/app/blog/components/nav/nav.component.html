@@ -38,21 +38,36 @@
           >
         </li>
         <li class="nav-item">
-          <a mat-button class="nav-link" (click)="onItemTapped(items.about)"
-            >{{ items.about }}</a
-          >
+          <a mat-button class="nav-link" (click)="onItemTapped(items.about)">{{
+            items.about
+          }}</a>
         </li>
-        
+
         <li class="nav-item" *ngIf="!store.userIsAvailable">
-          <a mat-button class="nav-link" (click)="onItemTapped(items.signIn)">{{ items.signIn }}</a>
+          <a mat-button class="nav-link" (click)="onItemTapped(items.signIn)">{{
+            items.signIn
+          }}</a>
         </li>
         <li class="nav-item" *ngIf="store.userIsAvailable">
-          <a mat-button class="nav-link" (click)="onItemTapped(items.newPost)"
+          <a
+            mat-button
+            class="nav-link"
+            (click)="onItemTapped(items.newPost)"
             >{{ items.newPost }}</a
           >
         </li>
         <li class="nav-item" *ngIf="store.userIsAvailable">
-          <a mat-button class="nav-link" (click)="onItemTapped(items.signOut)">{{ items.signOut }}</a>
+          <a
+            mat-button
+            class="nav-link"
+            (click)="onItemTapped(items.signOut)"
+            >{{ items.signOut }}</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="store.userIsAvailable">
+          <a mat-button class="nav-link" (click)="onItemTapped(items.reset)">{{
+            items.reset
+          }}</a>
         </li>
       </ul>
     </div>

@@ -31,14 +31,14 @@ namespace Blog.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Insert([FromBody] [Required] ArticleUpdateParameter parameter)
+        public async Task<IActionResult> Insert([FromBody] ArticleUpdateParameter parameter)
         {
             var result = await _service.InsertAsync(parameter);
             return CreatedAtAction(nameof(Get), new {id = result}, new ResponseMessage<int> {Data = result });
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] [Required] ArticleUpdateParameter parameter)
+        public async Task<IActionResult> Update([FromBody] ArticleUpdateParameter parameter)
         {
             var result = await _service.UpdateAsync(parameter);
             return Ok(new ResponseMessage<int> {Succeed = result, Data = parameter.Id});

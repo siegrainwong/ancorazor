@@ -58,20 +58,20 @@
 
     <!--更新文章分类-->
     <Statement Id="SetArticleCategories">
-      declare @names table ([name] nvarchar(30))
-      <For Open="insert into @names values" Close="" Key="T" Separator="," Property="categories">
+      declare @categoryNames table ([name] nvarchar(30));
+      <For Open="insert into @categoryNames values" Close="" Key="T" Separator="," Property="categories">
         (@T)
-      </For>
+      </For>;
 
       -- insert only not exists in Category table
       insert INTO Category
         select name, getdate(), getdate(), null, 0 from
-          (select name from @names where name not in (select name from Category)) T
+          (select name from @categoryNames where name not in (select name from Category)) T;
 
       -- rebuild middle-table related data
-      delete from ArticleCategories where Article = @articleId
+      delete from ArticleCategories where Article = @articleId;
       insert into ArticleCategories select @articleId, Id, getdate(), getdate() from
-        (select id from Category where Name in (select name from @names)) T
+        (select id from Category where Name in (select name from @categoryNames)) T;
     </Statement>
 
     <!--删除-->

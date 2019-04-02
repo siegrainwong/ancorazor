@@ -58,20 +58,20 @@
 
     <!--更新文章标签-->
     <Statement Id="SetArticleTags">
-      declare @names table ([name] nvarchar(30))
-      <For Open="insert into @names values" Close="" Key="T" Separator="," Property="tags">
+      declare @tagNames table ([name] nvarchar(30));
+      <For Open="insert into @tagNames values" Close="" Key="T" Separator="," Property="tags">
         (@T)
-      </For>
+      </For>;
 
       -- insert only not exists in Tag table
       insert INTO Tag
         select name, getdate(), getdate(), null, 0 from
-          (select name from @names where name not in (select name from Tag)) T
+          (select name from @tagNames where name not in (select name from Tag)) T;
 
       -- rebuild middle-table related data
-      delete from ArticleTags where Article = @articleId
+      delete from ArticleTags where Article = @articleId;
       insert into ArticleTags select @articleId, Id, getdate(), getdate() from 
-        (select id from Tag where Name in (select name from @names)) T
+        (select id from Tag where Name in (select name from @tagNames)) T;
     </Statement>
 
     <!--删除-->

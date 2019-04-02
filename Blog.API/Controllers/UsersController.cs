@@ -40,22 +40,28 @@ namespace Blog.API.Controllers
         public async Task<IActionResult> GetToken([FromQuery] AuthUserParameter parameter)
         {
             var user = await _repository.GetEntityAsync(parameter);
-            if (user != null)
+            if (user == null) return Forbid();
+
+            var tokenInfo = await GenerateJwtTokenAsync(user);
+            return Ok(new ResponseMessage<object>
             {
-                user.Password = "";
-                return Ok(new ResponseMessage<object>
+                Data = new
                 {
-                    Data = new
-                    {
-                        token = await GenerateJwtTokenAsync(user), user
-                    }
-                });
-            }
-            else
-                return Forbid();
+                    token = tokenInfo.Item1,
+                    expires = tokenInfo.Item2,
+                    user
+                }
+            });
         }
 
-        private async Task<string> GenerateJwtTokenAsync(Users user)
+        //[HttpGet]
+        //[Route("RefreshToken")]
+        //public async Task<IActionResult> RefreshToken([FromQuery] string token)
+        //{
+        //    if (token == null) return Forbid();
+        //}
+
+        private async Task<Tuple<string, DateTime>> GenerateJwtTokenAsync(Users user)
         {
             var claims = new List<Claim>
             {
@@ -80,72 +86,7 @@ namespace Blog.API.Controllers
                 expires: expires,
                 signingCredentials: creds
             );
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return new Tuple<string, DateTime>(new JwtSecurityTokenHandler().WriteToken(token), expires);
         }
-
-        //[HttpPost]
-        //public ResponseMessage<int> Insert([FromBody] Users users)
-        //{
-        //    return new ResponseMessage<int>
-        //    {
-        //        Data = UsersService.Insert(users)
-        //    };
-        //}
-
-        //[HttpPost]
-        //public ResponseMessage<int> DeleteById([FromBody] int id)
-        //{
-        //    return new ResponseMessage<int>
-        //    {
-        //        Data = UsersService.DeleteById(id)
-        //    };
-        //}
-
-        //[HttpPost]
-        //public ResponseMessage<int> Update([FromBody] Users users)
-        //{
-        //    return new ResponseMessage<int>
-        //    {
-        //        Data = UsersService.Update(users)
-        //    };
-        //}
-
-        //[HttpPost]
-        //public task ResponseMessage<Users> GetById([FromBody] int id)
-        //{
-        //    var users = UsersRepository.GetByIdAsync(id);
-        //    return new ResponseMessage<Users>
-        //    {
-        //        Data = users
-        //    };
-        //}
-
-        //[HttpPost]
-        //public ResponseMessage<QueryResponse<Users>> Query([FromBody] QueryRequest reqMsg)
-        //{
-        //    var list = UsersRepository.Query(reqMsg);
-        //    return new ResponseMessage<QueryResponse<Users>>
-        //    {
-        //        Data = new QueryResponse<Users>
-        //        {
-        //            List = list
-        //        }
-        //    };
-        //}
-
-        //[HttpPost]
-        //public ResponseMessage<QueryByPageResponse<Users>> QueryByPage([FromBody] QueryByPageParameter reqMsg)
-        //{
-        //    var total = UsersRepository.GetRecord(reqMsg);
-        //    var list = UsersRepository.QueryByPage(reqMsg);
-        //    return new ResponseMessage<QueryByPageResponse<Users>>
-        //    {
-        //        Data = new QueryByPageResponse<Users>
-        //        {
-        //            Total = total,
-        //            List = list
-        //        }
-        //    };
-        //}
     }
 }

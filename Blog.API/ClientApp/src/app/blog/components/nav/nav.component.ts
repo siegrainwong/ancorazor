@@ -1,4 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  OnDestroy
+} from "@angular/core";
 import { Store } from "src/app/shared/store/store";
 import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
@@ -6,7 +12,7 @@ import { MatDialog } from "@angular/material";
 import { SignInComponent } from "../sign-in/sign-in.component";
 import { ActivatedRoute } from "@angular/router";
 import { constants } from "src/app/shared/constants/siegrain.constants";
-import { Subscription } from 'rxjs';
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-nav",
@@ -22,8 +28,9 @@ export class NavComponent implements OnInit, OnDestroy {
     about: "About",
     newPost: "New Post",
     signIn: "Sign In",
-    signOut: "Sign Out"
-  }
+    signOut: "Sign Out",
+    reset: "Reset"
+  };
 
   constructor(
     public store: Store,
@@ -49,12 +56,15 @@ export class NavComponent implements OnInit, OnDestroy {
   onItemTapped(item?: string) {
     switch (item) {
       case this.items.about:
-        this.util.routeTo(['/about'])
+        this.util.routeTo(["/about"]);
         break;
       case this.items.newPost:
-        this.util.routeTo(['/add']);
+        this.util.routeTo(["/add"]);
         break;
       case this.items.signIn:
+        this.openDialog();
+        break;
+      case this.items.reset:
         this.openDialog();
         break;
       case this.items.signOut:
@@ -67,8 +77,10 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   openDialog(): void {
-    this.dialog.open(SignInComponent, { width: "250px" });
-    
+    this.dialog.open(SignInComponent, {
+      width: "300px",
+      data: { isReseting: true }
+    });
   }
 
   toggleNavBar() {
@@ -81,9 +93,11 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   registerRouteChanged() {
-    this._subscription.add(this.store.routeDataChanged$.subscribe(data => {
-      if (data && data.kind == "home") this.title = "";
-      else this.title = constants.title;
-    }));
+    this._subscription.add(
+      this.store.routeDataChanged$.subscribe(data => {
+        if (data && data.kind == "home") this.title = "";
+        else this.title = constants.title;
+      })
+    );
   }
 }

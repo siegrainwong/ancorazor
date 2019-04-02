@@ -1,7 +1,6 @@
-import { Component, OnInit } from "@angular/core";
-import { MatDialogRef } from "@angular/material";
+import { Component, OnInit, Input, Inject } from "@angular/core";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { UserModel } from "../../models/user-model";
-import { LoggingService } from "src/app/shared/services/logging.service";
 import { FormControl, Validators } from "@angular/forms";
 import { UserService } from "../../services/user.service";
 import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
@@ -13,42 +12,44 @@ import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
 })
 export class SignInComponent implements OnInit {
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<SignInComponent>,
-    private _logger: LoggingService,
     private _service: UserService,
     private _util: SGUtil
-  ) {}
+  ) {
+    this.isReseting = data.isReseting;
+  }
+  private _passwordValidators = [
+    Validators.required,
+    Validators.minLength(6),
+    Validators.maxLength(30)
+  ];
+
   username = new FormControl("", [
     Validators.required,
     Validators.minLength(4),
     Validators.maxLength(30)
   ]);
-  password = new FormControl("", [
-    Validators.required,
-    Validators.minLength(6),
-    Validators.maxLength(30)
-  ]);
+  password = new FormControl("", this._passwordValidators);
+  newPassword = new FormControl("", this._passwordValidators);
+  rePassword = new FormControl(
+    "",
+    this._passwordValidators.concat(
+      MatchValidator.matchControl(this.newPassword)
+    )
+  );
+  @Input() isReseting: boolean = false;
   model: UserModel = new UserModel();
   loading: boolean = false;
 
   ngOnInit() {}
 
-  getErrorMessage() {
-    if (this.username.errors && !this.username.errors.required)
-      return "Username must be 4-30 characters";
-    if (this.password.errors && !this.password.errors.required)
-      return "Password must be 6-30 characters";
-    return "required";
-  }
-
-  close() {
+  cancel() {
     this.dialogRef.close();
     this._util.routeTo(["/"]);
   }
 
   async submit() {
-    if (this.username.invalid || this.password.invalid) return;
-
     this.model.loginName = this.username.value;
     this.model.password = this.password.value;
 
@@ -61,6 +62,26 @@ export class SignInComponent implements OnInit {
 
     if (!result) return;
     this._util.tip(`Welcome, ${result.realName}`, TipType.Success);
-    this.close();
+    this.dialogRef.close();
   }
+
+  async reset() {}
+}
+
+import { AbstractControl, ValidatorFn } from "@angular/forms";
+
+/**
+ * Mark: Custom validator
+ * https://angular-templates.io/tutorials/about/angular-forms-and-validations
+ */
+export class MatchValidator {
+  static matchControl = (control: AbstractControl): ValidatorFn => {
+    return (matchTo: AbstractControl): { [key: string]: string } => {
+      if (control.value == matchTo.value) return null;
+
+      return {
+        match: `value not match to ${matchTo.value}`
+      };
+    };
+  };
 }

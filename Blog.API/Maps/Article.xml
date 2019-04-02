@@ -95,6 +95,9 @@
         <IsNotEmpty Prepend="," Property="Cover">
           Cover = @Cover
         </IsNotEmpty>
+        <IsNotEmpty Prepend="," Property="Author">
+          Author = @Author
+        </IsNotEmpty>
         <IsNotEmpty Prepend="," Property="Title">
           Title = @Title
         </IsNotEmpty>
@@ -126,7 +129,7 @@
           Remark = @Remark
         </IsNotEmpty>
       </Set>
-      Where Id=@Id
+      Where Id=@Id;
     </Statement>
 
     <!--获取数据列-->

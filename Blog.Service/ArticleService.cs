@@ -70,9 +70,12 @@ namespace Blog.Service
 
         private Task SetArticleTagsAndCategories(int articleId, string[] tags, string[] categories)
         {
-            var categoryTask = CategoryRepository.SetArticleCategoriesAsync(articleId, categories);
             var tagTask = TagRepository.SetArticleTagsAsync(articleId, tags);
-            return Task.WhenAll(categoryTask, tagTask);
+            var categoryTask = CategoryRepository.SetArticleCategoriesAsync(articleId, categories);
+            return Task.WhenAll(
+             tagTask,
+             categoryTask
+            );
         }
 
         public async Task<QueryByPageResponse<Article>> QueryByPageAsync(QueryByPageParameter request)

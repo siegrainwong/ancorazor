@@ -1,5 +1,7 @@
 #region
 
+using AspectCore.Extensions.DependencyInjection;
+using AspectCore.Injector;
 using Blog.API.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +18,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using SmartSql;
 
 #endregion
 
@@ -48,7 +51,7 @@ namespace Blog.API
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc(options =>
             {
@@ -61,9 +64,110 @@ namespace Blog.API
             RegisterCors(services);
             RegisterJwt(services);
             RegisterSpa(services);
+
+            IServiceContainer container = services.ToServiceContainer();
+            return container.Build();
         }
 
         #region Services
+
+        private void RegisterCors(IServiceCollection services)
+        {
+            services.AddCors(c =>
+            {
+                c.AddDefaultPolicy(policy =>
+                {
+                    policy
+                        .WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+        }
+
+        private void RegisterJwt(IServiceCollection services)
+        {
+            // Mark: JWT Token https://stackoverflow.com/a/50523668
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            IConfigurationSection jwtOptions = Configuration.GetSection("Jwt");
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(cfg =>
+                {
+                    cfg.RequireHttpsMetadata = false;
+                    cfg.SaveToken = true;
+                    cfg.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = jwtOptions["JwtIssuer"],
+                        ValidAudience = jwtOptions["JwtIssuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions["JwtKey"])),
+                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
+                    };
+                });
+        }
+
+        private void RegisterRepository(IServiceCollection services)
+        {
+            services.AddSmartSql()
+                .AddRepositoryFromAssembly(o =>
+                {
+                    o.AssemblyString = "Blog.Repository";
+                });
+        }
+
+        private void RegisterService(IServiceCollection services)
+        {
+            Assembly assembly = Assembly.Load("Blog.Service");
+            Type[] allTypes = assembly.GetTypes();
+            foreach (Type type in allTypes) services.AddSingleton(type);
+        }
+
+        private void RegisterSpa(IServiceCollection services)
+        {
+            IConfigurationSection section = Configuration.GetSection("Client");
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = $"{section["ClientPath"]}/dist";
+            });
+        }
+
+        private void RegisterSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = _ServiceName,
+                    Version = "v1",
+                    Description = "https://github.com/Seanwong933/siegrain.blog"
+                });
+                c.CustomSchemaIds(type => type.FullName);
+                string filePath = Path.Combine(AppContext.BaseDirectory, $"{_ServiceName}.xml");
+                if (File.Exists(filePath))
+                {
+                    c.IncludeXmlComments(filePath);
+                }
+
+                Dictionary<string, IEnumerable<string>> security = new Dictionary<string, IEnumerable<string>> { { _ServiceName, new string[] { } } };
+                c.AddSecurityRequirement(security);
+                c.AddSecurityDefinition(_ServiceName, new ApiKeyScheme
+                {
+                    Description = "输入 Bearer {token}",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
+            });
+        }
+
+        #endregion
+
+        #region Configurations
 
         private void ConfigureMvc(IApplicationBuilder app)
         {
@@ -93,7 +197,7 @@ namespace Blog.API
             });
 
             // Mark: 多 SPA 场景：https://stackoverflow.com/questions/48216929/how-to-configure-asp-net-core-server-routing-for-multiple-spas-hosted-with-spase
-            var section = Configuration.GetSection("Client");
+            IConfigurationSection section = Configuration.GetSection("Client");
             // map spa to /client and remove the prefix
             app.Map("/client", client =>
             {
@@ -109,7 +213,10 @@ namespace Blog.API
                         options.ExcludeUrls = new[] { "/sockjs-node" };
                     });
 
-                    if (env.IsDevelopment()) spa.UseAngularCliServer("start");
+                    if (env.IsDevelopment())
+                    {
+                        spa.UseAngularCliServer("start");
+                    }
                 });
             });
         }
@@ -120,98 +227,6 @@ namespace Blog.API
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", _ServiceName); });
         }
 
-        private void RegisterCors(IServiceCollection services)
-        {
-            services.AddCors(c =>
-            {
-                c.AddDefaultPolicy(policy =>
-                {
-                    policy
-                        .WithOrigins("http://localhost:4200")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
-            });
-        }
-
-        private void RegisterJwt(IServiceCollection services)
-        {
-            // Mark: JWT Token https://stackoverflow.com/a/50523668
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            var jwtOptions = Configuration.GetSection("Jwt");
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(cfg =>
-                {
-                    cfg.RequireHttpsMetadata = false;
-                    cfg.SaveToken = true;
-                    cfg.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidIssuer = jwtOptions["JwtIssuer"],
-                        ValidAudience = jwtOptions["JwtIssuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions["JwtKey"])),
-                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
-                    };
-                });
-        }
-
-        private void RegisterRepository(IServiceCollection services)
-        {
-            services.AddSmartSqlRepositoryFromAssembly(options =>
-            {
-                options.AssemblyString = "Blog.Repository";
-            });
-        }
-
-        private void RegisterService(IServiceCollection services)
-        {
-            var assembly = Assembly.Load("Blog.Service");
-            var allTypes = assembly.GetTypes();
-            foreach (var type in allTypes) services.AddSingleton(type);
-        }
-
-        private void RegisterSpa(IServiceCollection services)
-        {
-            var section = Configuration.GetSection("Client");
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = $"{section["ClientPath"]}/dist";
-            });
-        }
-
-        private void RegisterSwagger(IServiceCollection services)
-        {
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info
-                {
-                    Title = _ServiceName,
-                    Version = "v1",
-                    Description = "https://github.com/Seanwong933/siegrain.blog"
-                });
-                c.CustomSchemaIds(type => type.FullName);
-                var filePath = Path.Combine(AppContext.BaseDirectory, $"{_ServiceName}.xml");
-                if (File.Exists(filePath)) c.IncludeXmlComments(filePath);
-
-                var security = new Dictionary<string, IEnumerable<string>> { { _ServiceName, new string[] { } } };
-                c.AddSecurityRequirement(security);
-                c.AddSecurityDefinition(_ServiceName, new ApiKeyScheme
-                {
-                    Description = "输入 Bearer {token}",
-                    Name = "Authorization",
-                    In = "header",
-                    Type = "apiKey"
-                });
-            });
-        }
-
-        #endregion
-        #region Configurations
         #endregion
     }
 }

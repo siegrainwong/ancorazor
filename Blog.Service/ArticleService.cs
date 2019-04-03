@@ -4,9 +4,9 @@ using Blog.API.Messages;
 using Blog.API.Messages.Article;
 using Blog.Entity;
 using Blog.Repository;
-using SmartSql.Abstractions;
 using System;
 using System.Threading.Tasks;
+//using SmartSql.AOP;
 
 #endregion
 
@@ -14,37 +14,35 @@ namespace Blog.Service
 {
     public class ArticleService
     {
-        private readonly ISmartSqlMapper _mapper;
-
         public IArticleRepository ArticleRepository { get; }
 
         public ICategoryRepository CategoryRepository { get; }
 
         public ITagRepository TagRepository { get; }
 
-        public ArticleService(IArticleRepository articleRepository, ICategoryRepository categoryRepository, ISmartSqlMapper mapper, ITagRepository tagRepository)
+        public ArticleService(IArticleRepository articleRepository, ICategoryRepository categoryRepository, ITagRepository tagRepository)
         {
             ArticleRepository = articleRepository;
             CategoryRepository = categoryRepository;
-            _mapper = mapper;
             TagRepository = tagRepository;
         }
 
+        //[Transaction]
         public async Task<int> InsertAsync(ArticleUpdateParameter parameter)
         {
             try
             {
-                _mapper.BeginTransaction();
+                ArticleRepository.SqlMapper.BeginTransaction();
 
                 int id = await ArticleRepository.InsertAsync(parameter);
                 await SetArticleTagsAndCategories(id, parameter.Tags, parameter.Categories);
 
-                _mapper.CommitTransaction();
+                ArticleRepository.SqlMapper.CommitTransaction();
                 return id;
             }
             catch (Exception)
             {
-                _mapper.RollbackTransaction();
+                ArticleRepository.SqlMapper.RollbackTransaction();
                 throw;
             }
         }
@@ -61,18 +59,18 @@ namespace Blog.Service
         {
             try
             {
-                _mapper.BeginTransaction();
+                ArticleRepository.SqlMapper.BeginTransaction();
 
                 Task externalTask = SetArticleTagsAndCategories(parameter.Id, parameter.Tags, parameter.Categories);
                 Task<int> updateTask = ArticleRepository.UpdateAsync(parameter);
                 await Task.WhenAll(externalTask, updateTask);
 
-                _mapper.CommitTransaction();
+                ArticleRepository.SqlMapper.CommitTransaction();
                 return true;
             }
             catch (Exception)
             {
-                _mapper.RollbackTransaction();
+                ArticleRepository.SqlMapper.RollbackTransaction();
                 throw;
             }
         }

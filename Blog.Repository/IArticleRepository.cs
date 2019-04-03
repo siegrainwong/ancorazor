@@ -2,7 +2,9 @@
 
 using Blog.Entity;
 using SmartSql.DyRepository;
+using SmartSql;
 using System.Threading.Tasks;
+using SmartSql.DyRepository.Annotations;
 
 #endregion
 

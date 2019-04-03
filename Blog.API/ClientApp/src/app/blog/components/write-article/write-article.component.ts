@@ -96,15 +96,20 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
     const self = this;
     let lex = marked.Lexer.lex;
     this._lexer = function(text, options) {
-      let parsed = (self._frontMatter = yamlFront.loadFront(text));
-      if (!self.hasFrontMatter) return lex(text, options);
+      // 这里是不能抛异常的，抛了会崩掉整个编辑器
+      try {
+        let parsed = (self._frontMatter = yamlFront.loadFront(text));
+        if (!self.hasFrontMatter) return lex(text, options);
 
-      return lex(
-        `# ${parsed.title} \n *Posted on ${parsed.date}* \n\n\n ${
-          parsed.__content
-        }`,
-        options
-      );
+        return lex(
+          `# ${parsed.title} \n *Posted on ${parsed.date}* \n\n\n ${
+            parsed.__content
+          }`,
+          options
+        );
+      } catch {
+        return lex(text, options);
+      }
     };
     return this._lexer;
   }

@@ -43,7 +43,8 @@ export class NavComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._route.fragment.subscribe(fragment => {
       // 因为生命周期的原因，首屏加载时不能显示dialog
-      if (fragment == "sign-in" && !this.store.isFirstScreen) this.openDialog();
+      if (fragment == "sign-in" && !this.store.isFirstScreen)
+        this.openDialog(false);
     });
     this.registerRouteChanged();
     if (!this.store.renderFromClient) return;
@@ -62,10 +63,10 @@ export class NavComponent implements OnInit, OnDestroy {
         this.util.routeTo(["/add"]);
         break;
       case this.items.signIn:
-        this.openDialog();
+        this.openDialog(false);
         break;
       case this.items.reset:
-        this.openDialog();
+        this.openDialog(true);
         break;
       case this.items.signOut:
         this.signOut();
@@ -76,10 +77,10 @@ export class NavComponent implements OnInit, OnDestroy {
     this.navbarOpen = false;
   }
 
-  openDialog(): void {
+  openDialog(isReseting: boolean): void {
     this.dialog.open(SignInComponent, {
       width: "300px",
-      data: { isReseting: true }
+      data: { isReseting: isReseting }
     });
   }
 

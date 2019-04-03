@@ -4,9 +4,8 @@ using Blog.API.Messages;
 using Blog.API.Messages.Article;
 using Blog.Entity;
 using Blog.Repository;
-using System;
+using SmartSql.AOP;
 using System.Threading.Tasks;
-//using SmartSql.AOP;
 
 #endregion
 
@@ -27,59 +26,37 @@ namespace Blog.Service
             TagRepository = tagRepository;
         }
 
-        //[Transaction]
-        public async Task<int> InsertAsync(ArticleUpdateParameter parameter)
+        [Transaction]
+        public virtual async Task<int> InsertAsync(ArticleUpdateParameter parameter)
         {
-            try
-            {
-                ArticleRepository.SqlMapper.BeginTransaction();
-
-                int id = await ArticleRepository.InsertAsync(parameter);
-                await SetArticleTagsAndCategories(id, parameter.Tags, parameter.Categories);
-
-                ArticleRepository.SqlMapper.CommitTransaction();
-                return id;
-            }
-            catch (Exception)
-            {
-                ArticleRepository.SqlMapper.RollbackTransaction();
-                throw;
-            }
+            var id = await ArticleRepository.InsertAsync(parameter);
+            await SetArticleTagsAndCategories(id, parameter.Tags, parameter.Categories);
+            return id;
         }
 
         public async Task<QueryByPageResponse<Article>> QueryByPageAsync(QueryByPageParameter request)
         {
-            QueryByPageResponse<Article> result = await ArticleRepository.QueryByPageAsync<QueryByPageResponse<Article>>(request);
+            var result = await ArticleRepository.QueryByPageAsync<QueryByPageResponse<Article>>(request);
             result.PageIndex = request.PageIndex;
             result.PageSize = request.PageSize;
             return result;
         }
 
+        [Transaction]
         public async Task<bool> UpdateAsync(ArticleUpdateParameter parameter)
         {
-            try
-            {
-                ArticleRepository.SqlMapper.BeginTransaction();
-
-                Task externalTask = SetArticleTagsAndCategories(parameter.Id, parameter.Tags, parameter.Categories);
-                Task<int> updateTask = ArticleRepository.UpdateAsync(parameter);
-                await Task.WhenAll(externalTask, updateTask);
-
-                ArticleRepository.SqlMapper.CommitTransaction();
-                return true;
-            }
-            catch (Exception)
-            {
-                ArticleRepository.SqlMapper.RollbackTransaction();
-                throw;
-            }
+            var externalTask = SetArticleTagsAndCategories(parameter.Id, parameter.Tags, parameter.Categories);
+            var updateTask = ArticleRepository.UpdateAsync(parameter);
+            await Task.WhenAll(externalTask, updateTask);
+            return true;
         }
 
         private Task SetArticleTagsAndCategories(int articleId, string[] tags, string[] categories)
         {
-            Task tagTask = TagRepository.SetArticleTagsAsync(articleId, tags);
-            Task categoryTask = CategoryRepository.SetArticleCategoriesAsync(articleId, categories);
-            return Task.WhenAll(tagTask, categoryTask);
+            // 这里要在 ConnectionString 中打开 MultipleActiveResultSets，原因不明。
+            var t1 = TagRepository.SetArticleTagsAsync(articleId, tags);
+            var t2 = CategoryRepository.SetArticleCategoriesAsync(articleId, categories);
+            return Task.WhenAll(t1, t2);
         }
     }
 }

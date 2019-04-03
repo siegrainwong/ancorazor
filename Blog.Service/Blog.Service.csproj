@@ -6,6 +6,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="SmartSql.AOP" Version="4.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\Blog.Entity\Blog.Entity.csproj" />
         <ProjectReference Include="..\Blog.Messages\Blog.API.Messages.csproj" />
         <ProjectReference Include="..\Blog.Repository\Blog.Repository.csproj" />

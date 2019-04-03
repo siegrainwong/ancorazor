@@ -22,8 +22,7 @@ namespace Blog.Service
 
         public ITagRepository TagRepository { get; }
 
-        public ArticleService(IArticleRepository articleRepository, ICategoryRepository categoryRepository,
-                                    ISmartSqlMapper mapper, ITagRepository tagRepository)
+        public ArticleService(IArticleRepository articleRepository, ICategoryRepository categoryRepository, ISmartSqlMapper mapper, ITagRepository tagRepository)
         {
             ArticleRepository = articleRepository;
             CategoryRepository = categoryRepository;
@@ -82,10 +81,7 @@ namespace Blog.Service
         {
             Task tagTask = TagRepository.SetArticleTagsAsync(articleId, tags);
             Task categoryTask = CategoryRepository.SetArticleCategoriesAsync(articleId, categories);
-            return Task.WhenAll(
-             tagTask,
-             categoryTask
-            );
+            return Task.WhenAll(tagTask, categoryTask);
         }
     }
 }

@@ -1,6 +1,5 @@
 #region
 
-using System.Threading.Tasks;
 using Blog.Entity;
 using SmartSql.DyRepository;
 
@@ -10,6 +9,5 @@ namespace Blog.Repository
 {
     public interface IUsersRepository : IRepositoryAsync<Users, int>
     {
-
     }
 }

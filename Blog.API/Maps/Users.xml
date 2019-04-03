@@ -43,7 +43,6 @@
       </Where>
     </Statement>
 
-
     <!--新增-->
     <Statement Id="Insert">
       INSERT INTO Users
@@ -124,7 +123,6 @@
       </Switch>
     </Statement>
 
-
     <!--获取分页数据-->
     <Statement Id="QueryByPage">
 
@@ -134,7 +132,6 @@
       Where TT.Row_Index Between ((@PageIndex-1)*@PageSize+1) And (@PageIndex*@PageSize);
     </Statement>
 
-
     <!--获取记录数-->
     <Statement Id="GetRecord">
       Select Count(1) From Users T
@@ -143,19 +140,16 @@
 
     <!--获取表映射实体-->
     <Statement Id="GetEntity">
-      Select Top 1 
-        T.Id, T.LoginName, T.RealName, T.Status, T.CreatedAt, T.UpdatedAt, T.IsDeleted, T.Remark From Users T 
+      Select Top 1
+      T.Id, T.LoginName, T.RealName, T.Status, T.CreatedAt, T.UpdatedAt, T.IsDeleted, T.Remark From Users T
       With(NoLock)
       <Include RefId="QueryParams" />
     </Statement>
-
 
     <!--是否存在该记录-->
     <Statement Id="IsExist">
       Select Count(1) From Users T
       <Include RefId="QueryParams" />
     </Statement>
-
-
   </Statements>
 </SmartSqlMap>

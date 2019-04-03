@@ -7,32 +7,32 @@ using System;
 namespace Blog.Entity
 {
     /// <summary>
-    ///     ArticleCategories
+    /// ArticleCategories
     /// </summary>
     public class ArticleCategories
     {
         /// <summary>
-        ///     Id
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        ///     Article
+        /// Article
         /// </summary>
         public int Article { get; set; }
 
         /// <summary>
-        ///     Category
+        /// Category
         /// </summary>
         public int Category { get; set; }
 
         /// <summary>
-        ///     CreatedAt
+        /// CreatedAt
         /// </summary>
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
-        ///     UpdatedAt
+        /// Id
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// UpdatedAt
         /// </summary>
         public DateTime? UpdatedAt { get; set; }
     }

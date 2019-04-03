@@ -7,58 +7,58 @@ using System;
 namespace Blog.Entity
 {
     /// <summary>
-    ///     OperationLog
+    /// OperationLog
     /// </summary>
     public class OperationLog
     {
         /// <summary>
-        ///     Guid
-        /// </summary>
-        public Guid Guid { get; set; }
-
-        /// <summary>
-        ///     UserId
-        /// </summary>
-        public int UserId { get; set; }
-
-        /// <summary>
-        ///     LoginName
-        /// </summary>
-        public string LoginName { get; set; }
-
-        /// <summary>
-        ///     Area
-        /// </summary>
-        public string Area { get; set; }
-
-        /// <summary>
-        ///     Controller
-        /// </summary>
-        public string Controller { get; set; }
-
-        /// <summary>
-        ///     Action
+        /// Action
         /// </summary>
         public string Action { get; set; }
 
         /// <summary>
-        ///     IPAddress
+        /// Area
         /// </summary>
-        public string IPAddress { get; set; }
+        public string Area { get; set; }
 
         /// <summary>
-        ///     LogTime
+        /// Controller
         /// </summary>
-        public DateTime LogTime { get; set; }
+        public string Controller { get; set; }
 
         /// <summary>
-        ///     CreatedAt
+        /// CreatedAt
         /// </summary>
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
-        ///     Remark
+        /// Guid
+        /// </summary>
+        public Guid Guid { get; set; }
+
+        /// <summary>
+        /// IPAddress
+        /// </summary>
+        public string IPAddress { get; set; }
+
+        /// <summary>
+        /// LoginName
+        /// </summary>
+        public string LoginName { get; set; }
+
+        /// <summary>
+        /// LogTime
+        /// </summary>
+        public DateTime LogTime { get; set; }
+
+        /// <summary>
+        /// Remark
         /// </summary>
         public string Remark { get; set; }
+
+        /// <summary>
+        /// UserId
+        /// </summary>
+        public int UserId { get; set; }
     }
 }

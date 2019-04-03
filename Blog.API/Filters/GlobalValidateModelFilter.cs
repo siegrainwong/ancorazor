@@ -1,13 +1,13 @@
 #region
 
-using System.Linq;
-using System.Text;
 using Blog.API.Messages;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Linq;
+using System.Text;
 
 #endregion
 

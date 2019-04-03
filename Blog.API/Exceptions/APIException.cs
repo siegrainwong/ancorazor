@@ -9,6 +9,8 @@ namespace Blog.API.Exceptions
 {
     public class APIException : Exception
     {
+        public string ErrorCode { get; set; }
+
         public APIException()
         {
             ErrorCode = "0001";
@@ -33,7 +35,5 @@ namespace Blog.API.Exceptions
         {
             ErrorCode = errorCode;
         }
-
-        public string ErrorCode { get; set; }
     }
 }

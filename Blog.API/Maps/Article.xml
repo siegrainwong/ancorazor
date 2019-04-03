@@ -3,8 +3,8 @@
 <SmartSqlMap Scope="Article" xmlns="http://SmartSql.net/schemas/SmartSqlMap.xsd">
   <MultipleResultMaps>
     <MultipleResultMap Id="QueryByPage">
-      <Result Index="0" Property="Total"/>
-      <Result Index="1" Property="List"/>
+      <Result Index="0" Property="Total" />
+      <Result Index="1" Property="List" />
     </MultipleResultMap>
   </MultipleResultMaps>
   <Statements>
@@ -150,17 +150,17 @@
     <!--获取分页数据-->
     <Statement Id="QueryByPage" MultipleResultMap="QueryByPage">
       Select Count(1) From Article T With(NoLock)
-      <Include RefId="QueryParams"/>;
+      <Include RefId="QueryParams" />;
       Select TT.* From (
-        Select 
-          ROW_NUMBER() Over(
-            <Switch Prepend="Order By" Property="OrderBy">
-              <Default>T.Id Desc</Default>
-            </Switch>
-          ) Row_Index, 
-          T.Author, T.Id, T.Title, T.CreatedAt, T.Digest, T.Cover 
-        From Article T With(NoLock)
-        <Include RefId="QueryParams"/>
+      Select
+      ROW_NUMBER() Over(
+      <Switch Prepend="Order By" Property="OrderBy">
+        <Default>T.Id Desc</Default>
+      </Switch>
+      ) Row_Index,
+      T.Author, T.Id, T.Title, T.CreatedAt, T.Digest, T.Cover
+      From Article T With(NoLock)
+      <Include RefId="QueryParams" />
       ) TT
       Where TT.Row_Index Between (@PageIndex*@PageSize+1) And ((@PageIndex+1)*@PageSize)
     </Statement>
@@ -182,6 +182,5 @@
       Select Count(1) From Article T
       <Include RefId="QueryParams" />
     </Statement>
-
   </Statements>
 </SmartSqlMap>

@@ -34,7 +34,6 @@
       </Where>
     </Statement>
 
-
     <!--新增-->
     <Statement Id="Insert">
       INSERT INTO Category
@@ -121,12 +120,11 @@
     <!--获取数据列-->
     <Statement Id="QueryByNames">
       SELECT T.* From Category T
-      Where 
+      Where
       <For Open="T.Name in (" Close=")" Key="@name" Separator="," Property="names">
         @name
       </For>
     </Statement>
-
 
     <!--获取分页数据-->
     <Statement Id="QueryByPage">
@@ -136,7 +134,6 @@
       <Include RefId="QueryParams" />) TT
       Where TT.Row_Index Between ((@PageIndex-1)*@PageSize+1) And (@PageIndex*@PageSize);
     </Statement>
-
 
     <!--获取记录数-->
     <Statement Id="GetRecord">
@@ -154,13 +151,10 @@
       </Where>
     </Statement>
 
-
     <!--是否存在该记录-->
     <Statement Id="IsExist">
       Select Count(1) From Category T
       <Include RefId="QueryParams" />
     </Statement>
-
-
   </Statements>
 </SmartSqlMap>

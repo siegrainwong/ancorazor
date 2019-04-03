@@ -1,10 +1,10 @@
 #region
 
-using System;
-using System.Diagnostics;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Diagnostics;
 
 #endregion
 
@@ -12,11 +12,6 @@ namespace Blog.API
 {
     public class Program
     {
-        public static void Main(string[] args)
-        {
-            BuildWebHost(args).Run();
-        }
-
         public static IWebHost BuildWebHost(string[] args)
         {
             var config = new ConfigurationBuilder()
@@ -26,6 +21,11 @@ namespace Blog.API
             return WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(config)
                 .UseStartup<Startup>().Build();
+        }
+
+        public static void Main(string[] args)
+        {
+            BuildWebHost(args).Run();
         }
     }
 }

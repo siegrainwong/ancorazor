@@ -1,12 +1,12 @@
 #region
 
-using System.Net;
 using Blog.API.Exceptions;
 using Blog.API.Messages;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
+using System.Net;
 
 #endregion
 
@@ -41,7 +41,7 @@ namespace Blog.API.Filters
             };
             var result = new JsonResult(errorResp)
             {
-                StatusCode = (int) HttpStatusCode.OK
+                StatusCode = (int)HttpStatusCode.OK
             };
             context.Result = result;
         }

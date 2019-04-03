@@ -1,8 +1,8 @@
 #region
 
-using System;
 using Blog.Entity;
 using SmartSql.DyRepository;
+using System;
 
 #endregion
 

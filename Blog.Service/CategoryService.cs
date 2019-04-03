@@ -1,14 +1,6 @@
 #region
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Blog.Entity;
 using Blog.Repository;
-using SmartSql;
 
 #endregion
 
@@ -16,14 +8,15 @@ namespace Blog.Service
 {
     public class CategoryService
     {
+        public IArticleCategoriesRepository ArticleCategoriesRepository { get; }
+
+        public ICategoryRepository Repository { get; }
+
         public CategoryService(ICategoryRepository repository, IArticleCategoriesRepository articleCategoriesRepository)
         {
             Repository = repository;
             ArticleCategoriesRepository = articleCategoriesRepository;
         }
-
-        public ICategoryRepository Repository { get; }
-        public IArticleCategoriesRepository ArticleCategoriesRepository { get; }
 
         //private async Task<bool> ResetArticleCategoriesAsync(int articleId, IEnumerable<ArticleCategories> resetWith)
         //{
@@ -31,8 +24,7 @@ namespace Blog.Service
         //    {
         //        _mapper.BeginTransaction();
 
-        //        await ArticleCategoriesRepository.DeleteByArticleAsync(articleId);
-        //        await ArticleCategoriesRepository.InsertBatchAsync(resetWith);
+        // await ArticleCategoriesRepository.DeleteByArticleAsync(articleId); await ArticleCategoriesRepository.InsertBatchAsync(resetWith);
 
         //        _mapper.CommitTransaction();
         //        return true;
@@ -59,8 +51,7 @@ namespace Blog.Service
         //    {
         //        _mapper.BeginTransaction();
 
-        //        await InsertCategoriesNotExistsByName(categories);
-        //        await ResetArticleCategoriesAsync()
+        // await InsertCategoriesNotExistsByName(categories); await ResetArticleCategoriesAsync()
 
         //        _mapper.CommitTransaction();
         //        return true;

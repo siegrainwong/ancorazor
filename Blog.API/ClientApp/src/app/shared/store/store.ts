@@ -35,7 +35,7 @@ export class Store {
     if (!this.renderFromClient) return;
     let userJson = window.localStorage.getItem(UserStoreKey);
     if (!userJson) return;
-    this.user = JSON.parse(userJson);
+    this.signIn(JSON.parse(userJson));
   }
 
   /**##### Observables */
@@ -50,16 +50,24 @@ export class Store {
     return this._user;
   }
 
-  set user(value: UserModel) {
-    this._user = value;
-    if (value && value.token) {
-      window.localStorage.setItem(UserStoreKey, JSON.stringify(value));
+  signIn(user: UserModel) {
+    this._user = user;
+    if (user && user.token) {
+      window.localStorage.setItem(UserStoreKey, JSON.stringify(user));
     } else {
       window.localStorage.setItem(UserStoreKey, null);
     }
 
-    this.userChanged$.next(value);
-    this._logger.info("user data changed", value);
+    this.userChanged$.next(user);
+    this._logger.info("user signed in", user);
+  }
+
+  signOut() {
+    this._user = null;
+    window.localStorage.setItem(UserStoreKey, null);
+
+    this.userChanged$.next(null);
+    this._logger.info("user signed out");
   }
 
   /** An observer for `NavigationStart` */

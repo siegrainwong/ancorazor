@@ -146,6 +146,22 @@
       <Include RefId="QueryParams" />
     </Statement>
 
+    <!--获取表映射实体-->
+    <Statement Id="GetById">
+      Select Top 1
+      T.Id, T.LoginName, T.Password, T.RealName, T.Status, T.CreatedAt, T.UpdatedAt, T.IsDeleted, T.Remark From Users T
+      With(NoLock)
+      Where T.Id = @id
+    </Statement>
+
+    <!--获取表映射实体-->
+    <Statement Id="GetByLoginName">
+      Select Top 1
+      T.Id, T.LoginName, T.Password, T.RealName, T.Status, T.CreatedAt, T.UpdatedAt, T.IsDeleted, T.Remark From Users T
+      With(NoLock)
+      Where T.LoginName = @loginName
+    </Statement>
+
     <!--是否存在该记录-->
     <Statement Id="IsExist">
       Select Count(1) From Users T

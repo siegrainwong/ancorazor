@@ -19,7 +19,23 @@ export class UserService extends BaseService implements ISubService {
     if (!res || !res.succeed) return null;
     let model = res.data.user as UserModel;
     model.token = res.data.token;
-    this.store.user = model;
+    this.store.signIn(model);
     return model;
+  }
+
+  /**
+   * 重置密码
+   */
+  async reset(
+    id: number,
+    password: string,
+    newPassword: string
+  ): Promise<boolean> {
+    let res = await this.put(`${this.serviceName}/Reset`, {
+      id: id,
+      password: password,
+      newPassword: newPassword
+    });
+    return res && res.succeed;
   }
 }

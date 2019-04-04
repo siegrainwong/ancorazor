@@ -1,9 +1,11 @@
 import { Component, OnInit, Input, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { UserModel } from "../../models/user-model";
 import { FormControl, Validators } from "@angular/forms";
 import { UserService } from "../../services/user.service";
 import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
+import { AbstractControl, ValidatorFn } from "@angular/forms";
+import { Store } from "src/app/shared/store/store";
+import { deriveAKey } from "src/app/shared/utils/cryptography";
 
 @Component({
   selector: "app-sign-in",
@@ -15,48 +17,45 @@ export class SignInComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<SignInComponent>,
     private _service: UserService,
-    private _util: SGUtil
+    private _util: SGUtil,
+    private _store: Store
   ) {
     this.isReseting = data.isReseting;
   }
-  private _passwordValidators = [
-    Validators.required,
-    Validators.minLength(6),
-    Validators.maxLength(30)
-  ];
 
-  username = new FormControl("", [
-    Validators.required,
-    Validators.minLength(4),
-    Validators.maxLength(30)
-  ]);
-  password = new FormControl("", this._passwordValidators);
-  newPassword = new FormControl("", this._passwordValidators);
+  username = new FormControl("", this.getValidator(4));
+  password = new FormControl("", this.getValidator(6));
+  newPassword = new FormControl("", this.getValidator(6));
   rePassword = new FormControl(
     "",
-    this._passwordValidators.concat(
-      MatchValidator.matchControl(this.newPassword)
-    )
+    this.getValidator(6).concat(MatchValidator.matchTo(this.newPassword))
   );
   @Input() isReseting: boolean = false;
-  model: UserModel = new UserModel();
   loading: boolean = false;
+
+  private getValidator(minLength: number): ValidatorFn[] {
+    return [
+      Validators.required,
+      Validators.minLength(minLength),
+      Validators.maxLength(30)
+    ];
+  }
 
   ngOnInit() {}
 
   cancel() {
     this.dialogRef.close();
-    this._util.routeTo(["/"]);
+    if (!this.isReseting) this._util.routeTo(["/"]);
   }
 
   async submit() {
-    this.model.loginName = this.username.value;
-    this.model.password = this.password.value;
+    if (this.username.invalid || this.password.invalid || this.isReseting)
+      return;
 
     this.loading = true;
     let result = await this._service.signIn(
-      this.model.loginName,
-      this.model.password
+      this.username.value,
+      await this.passwordHash(this.password.value)
     );
     this.loading = false;
 
@@ -65,22 +64,52 @@ export class SignInComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  async reset() {}
-}
+  async reset() {
+    if (
+      this.username.invalid ||
+      this.password.invalid ||
+      this.newPassword.invalid ||
+      this.rePassword.invalid
+    )
+      return;
 
-import { AbstractControl, ValidatorFn } from "@angular/forms";
+    this.loading = true;
+    let result = await this._service.reset(
+      this._store.user.id,
+      await this.passwordHash(this.password.value),
+      await this.passwordHash(this.newPassword.value)
+    );
+    this.loading = false;
+
+    if (!result) return;
+    this.dialogRef.close();
+    this._util.tip(`Reset succeed, sign in again, please.`, TipType.Success);
+    this._store.signOut();
+    this._util.routeTo(["/"], { extras: { fragment: "sign-in" } });
+  }
+
+  private async passwordHash(password: string): Promise<string> {
+    if (!this._store.renderFromClient) return;
+    return await deriveAKey(
+      password,
+      this.username.value, // salt
+      3000, // iterations
+      "SHA-512"
+    );
+  }
+}
 
 /**
  * Mark: Custom validator
  * https://angular-templates.io/tutorials/about/angular-forms-and-validations
  */
 export class MatchValidator {
-  static matchControl = (control: AbstractControl): ValidatorFn => {
-    return (matchTo: AbstractControl): { [key: string]: string } => {
-      if (control.value == matchTo.value) return null;
+  static matchTo = (source: AbstractControl): ValidatorFn => {
+    return (target: AbstractControl): { [key: string]: string } => {
+      if (source.value == target.value) return null;
 
       return {
-        match: `value not match to ${matchTo.value}`
+        match: `value not match to ${target.value}`
       };
     };
   };

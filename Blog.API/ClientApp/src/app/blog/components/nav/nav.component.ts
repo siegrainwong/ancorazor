@@ -89,7 +89,7 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   signOut() {
-    this.store.user = null;
+    this.store.signOut();
     this.util.tip("Signed out", TipType.Success);
   }
 

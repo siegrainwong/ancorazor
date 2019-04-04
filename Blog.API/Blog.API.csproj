@@ -65,6 +65,7 @@
     <ProjectReference Include="..\Blog.Messages\Blog.API.Messages.csproj" />
     <ProjectReference Include="..\Blog.Repository\Blog.Repository.csproj" />
     <ProjectReference Include="..\Blog.Service\Blog.Service.csproj" />
+    <ProjectReference Include="..\Siegrain.Common\Siegrain.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Maps\*.xml">

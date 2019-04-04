@@ -170,9 +170,13 @@ export abstract class BaseService {
     switch (code) {
       case 403:
       case 401:
-        this._util.tip("认证过期，请重新登录！");
-        this.store.user = null;
-        this._route.navigate([], { fragment: "sign-in" });
+        if (this.store.userIsAvailable) {
+          this._util.tip("Session expired, please sign-in again.");
+          this.store.signOut();
+          this._route.navigate([], { fragment: "sign-in" });
+        } else {
+          this._util.tip("Invalid username or password");
+        }
         break;
       default:
         this._util.tip(result.message);

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Blog.API.Controllers
 {
-    [Authorize]
+    [ValidateAntiForgeryToken]
     [ApiController]
     [Route("api/[controller]")]
     public class ArticleController : ControllerBase
@@ -29,7 +29,7 @@ namespace Blog.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([Range(1, int.MaxValue)] int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var result = await _repository.DeleteByIdAsync(id);
             return Ok(new ResponseMessage<int> { Succeed = result > 0, Data = id });
@@ -37,20 +37,16 @@ namespace Blog.API.Controllers
 
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get([Range(1, int.MaxValue)] int id)
+        public async Task<IActionResult> Get(int id)
         {
             var article = await _repository.GetByIdAsync(id);
-            if (article == null)
-            {
-                return NotFound();
-            }
-
+            if (article == null) return NotFound();
             return Ok(new ResponseMessage<Article> { Data = article });
         }
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetPaged([FromQuery] [Required] QueryByPageParameter parameters)
+        public async Task<IActionResult> GetPaged([FromQuery] QueryByPageParameter parameters)
         {
             var result = await _service.QueryByPageAsync(parameters);
             return Ok(new ResponseMessage<QueryByPageResponse<Article>> { Data = result });

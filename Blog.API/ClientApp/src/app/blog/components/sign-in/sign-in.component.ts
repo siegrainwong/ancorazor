@@ -5,7 +5,7 @@ import { UserService } from "../../services/user.service";
 import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
 import { AbstractControl, ValidatorFn } from "@angular/forms";
 import { Store } from "src/app/shared/store/store";
-import { deriveAKey } from "src/app/shared/utils/cryptography";
+import { deriveAKey } from "src/app/shared/utils/pbkdf2.cryptography";
 
 @Component({
   selector: "app-sign-in",

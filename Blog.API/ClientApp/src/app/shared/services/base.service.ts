@@ -33,6 +33,10 @@ export abstract class BaseService {
       config => {
         if (this.store.userIsAvailable)
           config.headers.Authorization = `Bearer ${this.store.user.token}`;
+
+        var xsrfToken =
+          this.store.renderFromClient && this._util.getCookie("X-XSRF-TOKEN");
+        if (xsrfToken) config.headers["X-XSRF-TOKEN"] = xsrfToken;
         return config;
       },
       err => {

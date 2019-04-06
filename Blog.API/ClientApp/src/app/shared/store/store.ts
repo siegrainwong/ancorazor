@@ -59,7 +59,7 @@ export class Store {
     }
 
     this.userChanged$.next(user);
-    this._logger.info("user signed in", user);
+    user && this._logger.info("user restored", user);
   }
 
   signOut() {

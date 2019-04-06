@@ -17,6 +17,7 @@ namespace Blog.API
             var config = new ConfigurationBuilder()
                 .AddCommandLine(args)
                 .Build();
+            Console.Clear();
             Console.WriteLine($"ProcessId: {Process.GetCurrentProcess().Id}");
             return WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(config)

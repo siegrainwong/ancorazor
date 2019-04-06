@@ -98,6 +98,17 @@ export class SGUtil {
     this._router.navigate(commands, argument.extras);
   }
 
+  public getCookie(name: string) {
+    const splitCookie = document.cookie.split(";");
+    for (const key in splitCookie) {
+      const splitValue = splitCookie[key].split("=");
+      if (splitValue[0] === name) {
+        return splitValue[1];
+      }
+    }
+    return null;
+  }
+
   /** === Lazy loading ===*/
   /**
    * 懒加载 JS

@@ -4,6 +4,7 @@ using Blog.API.Messages;
 using Blog.API.Messages.Users;
 using Blog.Entity;
 using Blog.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -36,6 +37,7 @@ namespace Blog.API.Controllers
             _roleRepository = roleRepository;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("Token")]
         public async Task<IActionResult> GetToken([FromQuery] AuthUserParameter parameter)
@@ -60,6 +62,14 @@ namespace Blog.API.Controllers
                     user
                 }
             });
+        }
+
+        [HttpGet]
+        [Route("SignOut")]
+        public IActionResult SignOut()
+        {
+            // Do nothing but refresh xsrf token;
+            return Ok();
         }
 
         /// <summary>
@@ -111,7 +121,7 @@ namespace Blog.API.Controllers
 
             var jwtSettings = _configuration.GetSection("Jwt");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["JwtKey"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature, SecurityAlgorithms.Sha512Digest);
             var expires = DateTime.Now.AddDays(Convert.ToDouble(jwtSettings["JwtExpireDays"]));
 
             var token = new JwtSecurityToken(
@@ -121,6 +131,11 @@ namespace Blog.API.Controllers
                 expires: expires,
                 signingCredentials: creds
             );
+
+            //var descriptor = new SecurityTokenDescriptor { Issuer = jwtSettings["JwtIssuer"], Audience = jwtSettings["JwtIssuer"], Subject = new ClaimsIdentity(claims), SigningCredentials = creds, Expires = expires };
+            //var tokenhandler = new JwtSecurityTokenHandler();
+            //var token = tokenhandler.CreateToken(descriptor);
+
             return new Tuple<string, DateTime>(new JwtSecurityTokenHandler().WriteToken(token), expires);
         }
     }

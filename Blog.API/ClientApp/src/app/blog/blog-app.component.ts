@@ -14,6 +14,7 @@ import { SGUtil } from "../shared/utils/siegrain.utils";
 import { externalScripts } from "../shared/constants/siegrain.constants";
 import { onScroll } from "../shared/utils/scroll-listener";
 import { Subscription } from "rxjs";
+import { UserService } from "./services/user.service";
 
 @Component({
   selector: "app-blog-app",
@@ -31,6 +32,7 @@ export class BlogAppComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _util: SGUtil,
     private _scrollDispatcher: ScrollDispatcher,
+    private _userService: UserService,
     public store: Store,
     public transition: SGTransition
   ) {}
@@ -38,12 +40,22 @@ export class BlogAppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscribeRoute();
     if (!this.store.renderFromClient) return;
+    this.setupUser();
     this._scrollDispatcher.scrolled().subscribe(onScroll);
     this.loadExternalResources();
   }
 
   ngOnDestroy() {
     this._subscription.unsubscribe();
+  }
+
+  private setupUser() {
+    this.store.setupUser();
+    this._subscription.add(
+      this.store.userChanged$.subscribe(() => {
+        this._userService.getXSRFToken();
+      })
+    );
   }
 
   private loadExternalResources() {

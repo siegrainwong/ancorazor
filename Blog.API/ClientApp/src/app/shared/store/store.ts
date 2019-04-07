@@ -35,7 +35,8 @@ export class Store {
     if (!this.renderFromClient) return;
     let userJson = window.localStorage.getItem(UserStoreKey);
     if (!userJson) return;
-    this.signIn(JSON.parse(userJson));
+    this.user = JSON.parse(userJson);
+    this._logger.info("user restored: ", this.user);
   }
 
   /**##### Observables */
@@ -50,7 +51,7 @@ export class Store {
     return this._user;
   }
 
-  signIn(user: UserModel) {
+  set user(user: UserModel) {
     this._user = user;
     if (user && user.token) {
       window.localStorage.setItem(UserStoreKey, JSON.stringify(user));
@@ -59,14 +60,15 @@ export class Store {
     }
 
     this.userChanged$.next(user);
-    user && this._logger.info("user restored", user);
+  }
+
+  signIn(user: UserModel) {
+    this.user = user;
+    this._logger.info("user signed in", user);
   }
 
   signOut() {
-    this._user = null;
-    window.localStorage.setItem(UserStoreKey, null);
-
-    this.userChanged$.next(null);
+    this.user = null;
     this._logger.info("user signed out");
   }
 

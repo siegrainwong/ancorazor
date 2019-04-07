@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnInit } from "@angular/core";
 import { BaseService, ISubService } from "src/app/shared/services/base.service";
 import { UserModel } from "../models/user-model";
 
@@ -6,6 +6,7 @@ import { UserModel } from "../models/user-model";
   providedIn: "root"
 })
 export class UserService extends BaseService implements ISubService {
+  protected initialize() {}
   serviceName = "Users";
 
   /**
@@ -36,6 +37,16 @@ export class UserService extends BaseService implements ISubService {
       password: password,
       newPassword: newPassword
     });
+    this.store.signOut();
     return res && res.succeed;
+  }
+
+  /**
+   * 在切换凭证时重置`XSRFToken`
+   */
+  async getXSRFToken() {
+    let res = await this.get(`${this.serviceName}/XSRFToken`);
+    if (res && res.succeed) this.logger.info("XSRFToken has been reset.");
+    else this.logger.warn("XSRFToken reset failed!");
   }
 }

@@ -1,6 +1,5 @@
 import {
   BrowserModule,
-  TransferState,
   BrowserTransferStateModule
 } from "@angular/platform-browser";
 import { NgModule, ErrorHandler, Inject, PLATFORM_ID } from "@angular/core";

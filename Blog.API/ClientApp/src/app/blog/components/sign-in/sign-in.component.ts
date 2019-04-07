@@ -84,7 +84,6 @@ export class SignInComponent implements OnInit {
     if (!result) return;
     this.dialogRef.close();
     this._util.tip(`Reset succeed, sign in again, please.`, TipType.Success);
-    this._store.signOut();
     this._util.routeTo(["/"], { extras: { fragment: "sign-in" } });
   }
 

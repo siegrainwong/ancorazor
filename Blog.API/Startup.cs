@@ -11,9 +11,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
@@ -31,13 +33,14 @@ namespace Blog.API
     public class Startup
     {
         private const string _ServiceName = "Blog.API";
-        private const string _XSRFTokenName = "X-XSRF-TOKEN";
 
         public IConfiguration Configuration { get; }
+        public ILogger<Startup> _logger { get; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             Configuration = configuration;
+            _logger = logger;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -50,7 +53,8 @@ namespace Blog.API
                 // apply authorization by default
                 //var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 //options.Filters.Add(new AuthorizeFilter(policy));
-                //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                //options.Filters.Add<GlobalAntiforgerySetFilter>();
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             }).SetCompatibilityVersion(CompatibilityVersion.Latest);
             RegisterRepository(services);
             RegisterService(services);
@@ -75,8 +79,33 @@ namespace Blog.API
             app.UseAuthentication();
             ConfigureAuthentication(app, antiforgery);
             app.UseHttpsRedirection();
-            ConfigureMvc(app);
-            ConfigureSpa(app, env);
+
+            //app.Use(next => context =>
+            //{
+            //    var path = context.Request.Path.Value;
+            //    /*
+            //     已知坑：
+            //     1. 在 SSR 时请求无法携带 .aspnetcore.antiforgery cookie，所以无法验证 CSRF，当然大部分时候也不需要验证，修改方法一般不走 SSR。
+            //     2. Angular 默认 CSRF Cookie 名称为 XSRF-TOKEN，在检测到该名称的Cookie后会自动将其携带到请求头，名为X-XSRF-TOKEN，所以不要取错 Cookie 名字了。
+            //     3. BUG: 在用户凭据变更后老的 XSRF Token 失效，重新设置后依然提示 The provided antiforgery token was meant for a different claims-based user than the current user
+            //     */
+            //    var tokenRefreshPaths = (new[] { "/main.js" }).AsQueryable();
+            //    if (tokenRefreshPaths.Contains(path))
+            //    {
+            //        // The request token can be sent as a JavaScript-readable cookie, 
+            //        // and Angular uses it by default.
+            //        var tokens = antiforgery.GetAndStoreTokens(context);
+            //        context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
+            //            new CookieOptions() { HttpOnly = false });
+            //        _logger.LogDebug($" XSRF-TOKEN written {tokens.RequestToken} with {path}");
+            //    }
+
+            //    return next(context);
+            //});
+
+            ConfigureMvc(app, antiforgery);
+
+            ConfigureSpa(app, env, antiforgery);
         }
 
         #region Services
@@ -135,12 +164,7 @@ namespace Blog.API
              * 5. 合理的过期过期机制
              * 6. 过滤用户输入来防止 XSS
              */
-            services.AddAntiforgery(options =>
-            {
-                options.FormFieldName = _XSRFTokenName;
-                options.HeaderName = _XSRFTokenName;
-                options.SuppressXFrameOptionsHeader = false;
-            });
+            services.AddAntiforgery(options => { options.HeaderName = "X-XSRF-TOKEN"; });
         }
 
         private void RegisterRepository(IServiceCollection services)
@@ -215,30 +239,31 @@ namespace Blog.API
                     return context.Response.WriteAsync("Bad request.");
                 }
 
-                var path = context.Request.Path.Value;
-                /*
-                 这里有三个奇妙的坑
-                 1. 在 UseSPA 时好像没有办法通过匹配首页来设置 XSRF Cookie，只能把它挂到 main.js 上。
-                 2. 本来 Angular 在看到 XSRF Cookie 后应该自动设置到 Request Header上 的，结果写着写着突然就不行了。
-                 3. BUG: 在用户凭据变更后老的 XSRF Token 失效，重新设置后依然提示 The provided antiforgery token was meant for a different claims-based user than the current user
-                 */
-                var tokenRefreshPaths = (new[] { "/main.js", "/api/Users/Token", "/api/Users/SignOut" }).AsQueryable();
-                if (tokenRefreshPaths.Contains(path))
-                {
-                    // The request token can be sent as a JavaScript-readable cookie, 
-                    // and Angular uses it by default.
-                    var tokens = antiforgery.GetAndStoreTokens(context);
-                    context.Response.Cookies.Append(_XSRFTokenName, tokens.RequestToken,
-                        new CookieOptions() { HttpOnly = false });
-                    Console.WriteLine($" {_XSRFTokenName} written " + tokens.RequestToken);
-                }
+                //var path = context.Request.Path.Value;
+                ///*
+                // 这里有三个奇妙的坑
+                // 1. 在 UseSPA 时好像没有办法通过匹配首页来设置 XSRF Cookie，只能把它挂到 main.js 上。
+                // 2. 本来 Angular 在看到 XSRF Cookie 后应该自动设置到 Request Header上 的，结果写着写着突然就不行了。
+                // 3. BUG: 在用户凭据变更后老的 XSRF Token 失效，重新设置后依然提示 The provided antiforgery token was meant for a different claims-based user than the current user
+                // */
+                //var tokenRefreshPaths = (new[] { "/main.js", "/api/Users/Token", "/api/Users/SignOut" }).AsQueryable();
+                //if (tokenRefreshPaths.Contains(path))
+                //{
+                //    // The request token can be sent as a JavaScript-readable cookie, 
+                //    // and Angular uses it by default.
+                //    var tokens = antiforgery.GetAndStoreTokens(context);
+                //    context.Response.Cookies.Append(_XSRFTokenName, tokens.RequestToken,
+                //        new CookieOptions() { HttpOnly = false });
+                //    Console.WriteLine($" {_XSRFTokenName} written " + tokens.RequestToken);
+                //}
 
                 return next(context);
             });
         }
 
-        private void ConfigureMvc(IApplicationBuilder app)
+        private void ConfigureMvc(IApplicationBuilder app, IAntiforgery antiforgery)
         {
+
             app.MapWhen(context => context.Request.Path.StartsWithSegments("/api"),
                 apiApp =>
                 {
@@ -253,7 +278,7 @@ namespace Blog.API
          * MARK: Angular 7 + .NET Core Server side rendering
          * https://github.com/joshberry/dotnetcore-angular-ssr
          */
-        private void ConfigureSpa(IApplicationBuilder app, IHostingEnvironment env)
+        private void ConfigureSpa(IApplicationBuilder app, IHostingEnvironment env, IAntiforgery antiforgery)
         {
             // now the static files will be served by new request URL
             app.UseStaticFiles();

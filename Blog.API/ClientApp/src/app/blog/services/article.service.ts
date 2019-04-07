@@ -9,6 +9,7 @@ import ArticleModel from "../models/article-model";
 })
 export class ArticleService extends BaseService implements ISubService {
   serviceName = "article";
+  protected initialize() {}
 
   async getPagedArticles(
     params?: ArticleParameters

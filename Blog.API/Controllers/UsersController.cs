@@ -4,7 +4,9 @@ using Blog.API.Messages;
 using Blog.API.Messages.Users;
 using Blog.Entity;
 using Blog.Repository;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -28,13 +30,15 @@ namespace Blog.API.Controllers
         private readonly IConfiguration _configuration;
         private readonly IUsersRepository _repository;
         private readonly IRoleRepository _roleRepository;
+        private readonly IAntiforgery _antiforgery;
 
         public UsersController(IUsersRepository repository, IConfiguration configuration,
-            IRoleRepository roleRepository)
+            IRoleRepository roleRepository, IAntiforgery antiforgery)
         {
             _repository = repository;
             _configuration = configuration;
             _roleRepository = roleRepository;
+            _antiforgery = antiforgery;
         }
 
         [AllowAnonymous]
@@ -64,12 +68,16 @@ namespace Blog.API.Controllers
             });
         }
 
+        [AllowAnonymous]
         [HttpGet]
-        [Route("SignOut")]
-        public IActionResult SignOut()
+        [Route("XSRFToken")]
+        public IActionResult GetXSRFToken()
         {
-            // Do nothing but refresh xsrf token;
-            return Ok();
+            // TODO: 这个方法应该仅用于页面初始化，其余的token set在gettoken方法跟signout方法做即可。
+            var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
+            HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
+                new CookieOptions() { HttpOnly = false });
+            return Ok(new ResponseMessage<object>());
         }
 
         /// <summary>

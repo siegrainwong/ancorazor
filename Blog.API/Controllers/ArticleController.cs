@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace Blog.API.Controllers
 {
-    [ValidateAntiForgeryToken]
     [ApiController]
     [Route("api/[controller]")]
     public class ArticleController : ControllerBase

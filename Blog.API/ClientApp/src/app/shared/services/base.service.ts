@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnDestroy, OnInit } from "@angular/core";
 import { environment } from "src/environments/environment";
-import { AxiosResponse, AxiosRequestConfig } from "axios";
+import { AxiosResponse, AxiosRequestConfig, AxiosError } from "axios";
 import { ResponseResult } from "../models/response-result";
 import axios from "axios";
 import { LoggingService } from "./logging.service";
@@ -9,23 +9,31 @@ import { Store } from "../store/store";
 import { TaskWrapper } from "./async-helper.service";
 import { TransferState, makeStateKey } from "@angular/platform-browser";
 import { Router } from "@angular/router";
+import { Subscription } from "rxjs";
 
 @Injectable({
   providedIn: "root"
 })
-export abstract class BaseService {
+export abstract class BaseService implements OnDestroy {
+  protected subscription = new Subscription();
+
   constructor(
-    private _logger: LoggingService,
     private _util: SGUtil,
     private _wrapper: TaskWrapper,
     private _state: TransferState,
     private _route: Router,
+    protected logger: LoggingService,
     protected store: Store
   ) {
-    this.setup();
+    this.setupAxios();
+    this.initialize();
   }
 
-  protected setup() {
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  protected setupAxios() {
     axios.defaults.baseURL = environment.apiUrlBase;
     axios.defaults.timeout = 100000;
     axios.defaults.headers = { "Content-Type": "application/json" };
@@ -33,10 +41,6 @@ export abstract class BaseService {
       config => {
         if (this.store.userIsAvailable)
           config.headers.Authorization = `Bearer ${this.store.user.token}`;
-
-        var xsrfToken =
-          this.store.renderFromClient && this._util.getCookie("X-XSRF-TOKEN");
-        if (xsrfToken) config.headers["X-XSRF-TOKEN"] = xsrfToken;
         return config;
       },
       err => {
@@ -44,6 +48,11 @@ export abstract class BaseService {
       }
     );
   }
+
+  /**
+   * initialize for child services
+   */
+  protected abstract initialize();
 
   async get(
     url: string,
@@ -57,9 +66,14 @@ export abstract class BaseService {
     const stateKey = makeStateKey(url);
     let storedData = this._state.get(stateKey, null);
     if (storedData) {
-      this._logger.info("server side state detected: ", storedData);
       this._state.remove(stateKey);
-      return Promise.resolve(storedData as ResponseResult);
+      var response = storedData as ResponseResult;
+      if (response.succeed) {
+        this.logger.info("server side state detected: ", storedData);
+        return Promise.resolve(storedData as ResponseResult);
+      } else {
+        this.logger.error("server side request failed: ", storedData);
+      }
     }
 
     /**
@@ -67,12 +81,17 @@ export abstract class BaseService {
      * https://github.com/angular/angular/issues/20520#issuecomment-449597926
      */
     return new Promise<ResponseResult>(resolve => {
+      if (!this.store.renderFromClient)
+        this.logger.info(
+          "Server side requesting",
+          `${environment.apiUrlBase}/${url}`
+        );
       this._wrapper
         .doTask(this.handleRequest(Methods.GET, url, null, query, option))
         .subscribe(result => {
           if (!this.store.renderFromClient) {
             this._state.set(stateKey, result);
-            this._logger.info("transfer state stored: ", result);
+            this.logger.info("transfer state stored: ", result);
           }
           resolve(result);
         });
@@ -134,8 +153,10 @@ export abstract class BaseService {
         return this.handleResponse(error.response as AxiosResponse);
       } else {
         this._util.tip(error);
-        this._logger.error(error);
-        return new ResponseResult({ message: error.message });
+        this.logger.error(error);
+        return new ResponseResult({
+          message: `${error.message} for url: ${error.request.url}`
+        });
       }
     }
   }
@@ -184,7 +205,7 @@ export abstract class BaseService {
         break;
       default:
         this._util.tip(result.message);
-        this._logger.error(result);
+        this.logger.error(result);
     }
     return new ResponseResult(result);
   }

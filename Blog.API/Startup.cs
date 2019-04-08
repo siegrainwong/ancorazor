@@ -209,9 +209,9 @@ namespace Blog.API
 
         private void ConfigureAuthentication(IApplicationBuilder app)
         {
-            // prohibited form submit
             app.Use(next => context =>
             {
+                // prohibited form submit
                 var contentType = context.Request.ContentType;
                 if (!string.IsNullOrEmpty(contentType) &&
                     contentType.ToLower().Contains("application/x-www-form-urlencoded"))
@@ -221,22 +221,18 @@ namespace Blog.API
                     return context.Response.WriteAsync("Bad request.");
                 }
 
-                return next(context);
-            });
-
-            // intercept requests which contains access_token cookies
-            // then append access_token into the header.
-            app.Use((context, next) =>
-            {
-                // BUG: 切换凭据后第一次append上去会报 No SecurityTokenValidator available for token，然后从日志里面看 token 前面莫名其妙多了个 undefined?...
+                // fetch access_token from http only cookie
+                // then append it into authorization header
+                const string headerKey = "Authorization";
                 if (context.Request.Cookies.TryGetValue("access_token", out string token))
                 {
                     var headerToken = new StringValues($"Bearer {token}");
-                    context.Request.Headers.Append("Authorization", headerToken);
-                    Logger.LogInformation($"Authorization token appended: {headerToken}");
+                    context.Request.Headers.Remove(headerKey);
+                    context.Request.Headers.Append(headerKey, headerToken);
+                    Logger.LogInformation($"{headerKey} token appended: {headerToken}");
                 }
 
-                return next.Invoke();
+                return next(context);
             });
 
             app.UseAuthentication();

@@ -2,8 +2,8 @@
 
 using AspectCore.Extensions.DependencyInjection;
 using AspectCore.Injector;
+using Blog.API.Common;
 using Blog.API.Filters;
-using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -11,20 +11,19 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
+using Siegrain.Common;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
 #endregion
 
@@ -35,12 +34,12 @@ namespace Blog.API
         private const string _ServiceName = "Blog.API";
 
         public IConfiguration Configuration { get; }
-        public ILogger<Startup> _logger { get; }
+        public ILogger<Startup> Logger { get; }
 
         public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             Configuration = configuration;
-            _logger = logger;
+            Logger = logger;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -50,11 +49,9 @@ namespace Blog.API
             {
                 options.Filters.Add<GlobalExceptionFilter>();
                 options.Filters.Add<GlobalValidateModelFilter>();
-                // apply authorization by default
-                //var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-                //options.Filters.Add(new AuthorizeFilter(policy));
-                //options.Filters.Add<GlobalAntiforgerySetFilter>();
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             }).SetCompatibilityVersion(CompatibilityVersion.Latest);
             RegisterRepository(services);
             RegisterService(services);
@@ -67,7 +64,7 @@ namespace Blog.API
             return container.Build();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IAntiforgery antiforgery)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             //if (env.IsDevelopment())
             //{
@@ -76,36 +73,10 @@ namespace Blog.API
             //}
 
             app.UseCors();
-            app.UseAuthentication();
-            ConfigureAuthentication(app, antiforgery);
+            ConfigureAuthentication(app);
             app.UseHttpsRedirection();
-
-            //app.Use(next => context =>
-            //{
-            //    var path = context.Request.Path.Value;
-            //    /*
-            //     已知坑：
-            //     1. 在 SSR 时请求无法携带 .aspnetcore.antiforgery cookie，所以无法验证 CSRF，当然大部分时候也不需要验证，修改方法一般不走 SSR。
-            //     2. Angular 默认 CSRF Cookie 名称为 XSRF-TOKEN，在检测到该名称的Cookie后会自动将其携带到请求头，名为X-XSRF-TOKEN，所以不要取错 Cookie 名字了。
-            //     3. BUG: 在用户凭据变更后老的 XSRF Token 失效，重新设置后依然提示 The provided antiforgery token was meant for a different claims-based user than the current user
-            //     */
-            //    var tokenRefreshPaths = (new[] { "/main.js" }).AsQueryable();
-            //    if (tokenRefreshPaths.Contains(path))
-            //    {
-            //        // The request token can be sent as a JavaScript-readable cookie, 
-            //        // and Angular uses it by default.
-            //        var tokens = antiforgery.GetAndStoreTokens(context);
-            //        context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
-            //            new CookieOptions() { HttpOnly = false });
-            //        _logger.LogDebug($" XSRF-TOKEN written {tokens.RequestToken} with {path}");
-            //    }
-
-            //    return next(context);
-            //});
-
-            ConfigureMvc(app, antiforgery);
-
-            ConfigureSpa(app, env, antiforgery);
+            ConfigureMvc(app);
+            ConfigureSpa(app, env);
         }
 
         #region Services
@@ -128,9 +99,9 @@ namespace Blog.API
         private void RegisterAuthentication(IServiceCollection services)
         {
             // Mark: JWT Token https://stackoverflow.com/a/50523668
-            
+
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            var jwtOptions = Configuration.GetSection("Jwt");
+            var jwtSettings = Configuration.GetSection("Jwt");
             services
                 .AddAuthentication(options =>
                 {
@@ -142,27 +113,38 @@ namespace Blog.API
                 {
                     cfg.RequireHttpsMetadata = false;
                     cfg.SaveToken = true;
+                    var rsa = RSACryptography.CreateRsaFromPrivateKey(Constants.RSAForToken.PrivateKey);
                     cfg.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidIssuer = jwtOptions["JwtIssuer"],
-                        ValidAudience = jwtOptions["JwtIssuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions["JwtKey"])),
-                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
+                        ClockSkew = TimeSpan.Zero, // remove delay of token when expire
+
+                        ValidIssuer = jwtSettings["JwtIssuer"],
+                        ValidAudience = jwtSettings["JwtIssuer"],
+                        IssuerSigningKey = new RsaSecurityKey(rsa),
+
+                        RequireExpirationTime = true,
+                        ValidateLifetime = true
                     };
                 });
 
             /**
-             * MARK: 基于 JWT 认证预防 XSRF 和 XSS 攻击
-             * 
-             * https://stackoverflow.com/a/37396572
-             * https://www.jianshu.com/p/805dc2a0f49e
+             * MARK: 基于 JWT 预防 XSRF 和 XSS 攻击
              *  
-             * 1. XSRF: X-XSRF-TOKEN 验证 https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-2.2
-             * 2. 将 JWT 存放在 HttpOnly（无法被脚本访问）、SameSite=Strict（提交源跨域时不携带该Cookie）、Secure（仅HTTPS下携带该Cookie） 的 Cookie 中，而不是 LocalStorage 一类的地方。
-             * 3. 禁止 Form 表单提交，因为表单提交可以跨域
-             * 4. 使用 HTTPS
-             * 5. 合理的过期过期机制
-             * 6. 过滤用户输入来防止 XSS
+             * - 将凭据（JWT）存放在 HttpOnly（无法被脚本访问）、SameSite=Strict（提交源跨域时不携带该Cookie）、Secure（仅HTTPS下携带该Cookie） 的 Cookie 中，而不是 LocalStorage 一类的地方。因为 Local Storage、Session Storage 会有 XSS 的风险，类似于 chrome extension 一类的东西可以随意读取这两类存储；而 Cookie 虽然有 XSRF 的风险，但可以通过双提交 Cookie 来预防，所以将凭证存放在 Cookie 依然是优先方案。
+             * - 禁止 Form 表单提交，因为表单提交可以跨域。
+             * - 使用 HTTPS
+             * - 合理的过期机制
+             * - 过滤用户输入来防止 XSS
+             * - 在用户凭据变更后刷新 XSRF Token（刷新接口在 UserController -> GetXSRFToken）
+             * - 禁止 HTTP TRACE 防止 XST 攻击（测试了一下好像默认就是禁止的）
+             * - 由于默认的 JWT Authentication 中间件是通过 Header Authorize 节进行验证的，这里我添加一个 Filter 在 AuthorizeFilter 执行之前执行，判断是否有 JWT Cookie，有的话手动在 Header 中插入一个 Authorize 节以支持 JWT 进行验证。
+             * 
+             * - refs:
+             *  Where to store JWT in browser? How to protect against CSRF? https://stackoverflow.com/a/37396572
+             *  实现一个靠谱的Web认证：https://www.jianshu.com/p/805dc2a0f49e
+             *  How can I validate a JWT passed via cookies? https://stackoverflow.com/a/39386631
+             *  Prevent Cross-Site Request Forgery (XSRF/CSRF) attacks in ASP.NET Core https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-2.2
+             *  
              */
             services.AddAntiforgery(options => { options.HeaderName = "X-XSRF-TOKEN"; });
         }
@@ -178,9 +160,9 @@ namespace Blog.API
 
         private void RegisterService(IServiceCollection services)
         {
-            Assembly assembly = Assembly.Load("Blog.Service");
-            Type[] allTypes = assembly.GetTypes();
-            foreach (Type type in allTypes) services.AddSingleton(type);
+            var assembly = Assembly.Load("Blog.Service");
+            var allTypes = assembly.GetTypes();
+            foreach (var type in allTypes) services.AddSingleton(type);
         }
 
         private void RegisterSpa(IServiceCollection services)
@@ -225,11 +207,11 @@ namespace Blog.API
 
         #region Configurations
 
-        private void ConfigureAuthentication(IApplicationBuilder app, IAntiforgery antiforgery)
+        private void ConfigureAuthentication(IApplicationBuilder app)
         {
+            // prohibited form submit
             app.Use(next => context =>
             {
-                // prohibited form submit
                 var contentType = context.Request.ContentType;
                 if (!string.IsNullOrEmpty(contentType) &&
                     contentType.ToLower().Contains("application/x-www-form-urlencoded"))
@@ -239,29 +221,28 @@ namespace Blog.API
                     return context.Response.WriteAsync("Bad request.");
                 }
 
-                //var path = context.Request.Path.Value;
-                ///*
-                // 这里有三个奇妙的坑
-                // 1. 在 UseSPA 时好像没有办法通过匹配首页来设置 XSRF Cookie，只能把它挂到 main.js 上。
-                // 2. 本来 Angular 在看到 XSRF Cookie 后应该自动设置到 Request Header上 的，结果写着写着突然就不行了。
-                // 3. BUG: 在用户凭据变更后老的 XSRF Token 失效，重新设置后依然提示 The provided antiforgery token was meant for a different claims-based user than the current user
-                // */
-                //var tokenRefreshPaths = (new[] { "/main.js", "/api/Users/Token", "/api/Users/SignOut" }).AsQueryable();
-                //if (tokenRefreshPaths.Contains(path))
-                //{
-                //    // The request token can be sent as a JavaScript-readable cookie, 
-                //    // and Angular uses it by default.
-                //    var tokens = antiforgery.GetAndStoreTokens(context);
-                //    context.Response.Cookies.Append(_XSRFTokenName, tokens.RequestToken,
-                //        new CookieOptions() { HttpOnly = false });
-                //    Console.WriteLine($" {_XSRFTokenName} written " + tokens.RequestToken);
-                //}
-
                 return next(context);
             });
+
+            // intercept requests which contains access_token cookies
+            // then append access_token into the header.
+            app.Use((context, next) =>
+            {
+                // BUG: 切换凭据后第一次append上去会报 No SecurityTokenValidator available for token，然后从日志里面看 token 前面莫名其妙多了个 undefined?...
+                if (context.Request.Cookies.TryGetValue("access_token", out string token))
+                {
+                    var headerToken = new StringValues($"Bearer {token}");
+                    context.Request.Headers.Append("Authorization", headerToken);
+                    Logger.LogInformation($"Authorization token appended: {headerToken}");
+                }
+
+                return next.Invoke();
+            });
+
+            app.UseAuthentication();
         }
 
-        private void ConfigureMvc(IApplicationBuilder app, IAntiforgery antiforgery)
+        private void ConfigureMvc(IApplicationBuilder app)
         {
 
             app.MapWhen(context => context.Request.Path.StartsWithSegments("/api"),
@@ -278,7 +259,7 @@ namespace Blog.API
          * MARK: Angular 7 + .NET Core Server side rendering
          * https://github.com/joshberry/dotnetcore-angular-ssr
          */
-        private void ConfigureSpa(IApplicationBuilder app, IHostingEnvironment env, IAntiforgery antiforgery)
+        private void ConfigureSpa(IApplicationBuilder app, IHostingEnvironment env)
         {
             // now the static files will be served by new request URL
             app.UseStaticFiles();

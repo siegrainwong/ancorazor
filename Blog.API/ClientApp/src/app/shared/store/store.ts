@@ -19,7 +19,7 @@ export class Store {
   /**##### Variables */
   /** 是否是客户端渲染 */
   renderFromClient: boolean = false;
-  /** 是否是首屏加载（禁用首屏动画） */
+  /** 是否是首屏加载 */
   _isFirstScreen: boolean = true;
   get isFirstScreen(): boolean {
     return this._isFirstScreen && this.renderFromClient;
@@ -56,7 +56,7 @@ export class Store {
     if (user && user.token) {
       window.localStorage.setItem(UserStoreKey, JSON.stringify(user));
     } else {
-      window.localStorage.setItem(UserStoreKey, null);
+      window.localStorage.removeItem(UserStoreKey);
     }
 
     this.userChanged$.next(user);

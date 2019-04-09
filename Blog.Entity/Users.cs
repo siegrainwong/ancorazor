@@ -52,5 +52,12 @@ namespace Blog.Entity
         /// UpdatedAt
         /// </summary>
         public DateTime? UpdatedAt { get; set; }
+
+        /// <summary>
+        /// 上次凭据变更时间
+        /// 
+        /// 当该时间大于凭据 Cookie 中的 AuthUpdatedAt 值时，需要清除 Cookie 让用户重新登录
+        /// </summary>
+        public DateTime AuthUpdatedAt { get; set; }
     }
 }

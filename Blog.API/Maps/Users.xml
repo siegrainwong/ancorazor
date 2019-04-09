@@ -34,6 +34,9 @@
         <IsNotEmpty Prepend="And" Property="UpdatedAt">
           T.UpdatedAt = @UpdatedAt
         </IsNotEmpty>
+        <IsNotEmpty Prepend="And" Property="AuthUpdatedAt">
+          T.AuthUpdatedAt = @AuthUpdatedAt
+        </IsNotEmpty>
         <IsNotEmpty Prepend="And" Property="Remark">
           T.Remark = @Remark
         </IsNotEmpty>
@@ -53,6 +56,7 @@
       Status,
       CreatedAt,
       UpdatedAt,
+      AuthUpdatedAt,
       Remark,
       IsDeleted
       )
@@ -64,6 +68,7 @@
       @Status,
       @CreatedAt,
       @UpdatedAt,
+      @AuthUpdatedAt,
       @Remark,
       @IsDeleted
       )
@@ -98,6 +103,9 @@
         <IsProperty Prepend="," Property="UpdatedAt">
           UpdatedAt = @UpdatedAt
         </IsProperty>
+        <IsProperty Prepend="," Property="AuthUpdatedAt">
+          AuthUpdatedAt = @AuthUpdatedAt
+        </IsProperty>
         <IsProperty Prepend="," Property="Remark">
           Remark = @Remark
         </IsProperty>
@@ -125,7 +133,6 @@
 
     <!--获取分页数据-->
     <Statement Id="QueryByPage">
-
       Select TT.* From
       (Select ROW_NUMBER() Over(Order By T.Id Desc) Row_Index,T.* From Users T With(NoLock)
       <Include RefId="QueryParams" />) TT
@@ -141,7 +148,7 @@
     <!--获取表映射实体-->
     <Statement Id="GetEntity">
       Select Top 1
-      T.Id, T.LoginName, T.RealName, T.Status, T.CreatedAt, T.UpdatedAt, T.IsDeleted, T.Remark From Users T
+      T.Id, T.LoginName, T.RealName, T.Status, T.CreatedAt, T.UpdatedAt, T.AuthUpdatedAt, T.IsDeleted, T.Remark From Users T
       With(NoLock)
       <Include RefId="QueryParams" />
     </Statement>
@@ -149,7 +156,7 @@
     <!--获取表映射实体-->
     <Statement Id="GetById">
       Select Top 1
-      T.Id, T.LoginName, T.Password, T.RealName, T.Status, T.CreatedAt, T.UpdatedAt, T.IsDeleted, T.Remark From Users T
+      T.Id, T.LoginName, T.Password, T.RealName, T.Status, T.CreatedAt, T.UpdatedAt , T.AuthUpdatedAt, T.IsDeleted, T.Remark From Users T
       With(NoLock)
       Where T.Id = @id
     </Statement>
@@ -157,7 +164,7 @@
     <!--获取表映射实体-->
     <Statement Id="GetByLoginName">
       Select Top 1
-      T.Id, T.LoginName, T.Password, T.RealName, T.Status, T.CreatedAt, T.UpdatedAt, T.IsDeleted, T.Remark From Users T
+      T.Id, T.LoginName, T.Password, T.RealName, T.Status, T.CreatedAt, T.UpdatedAt, T.AuthUpdatedAt, T.IsDeleted, T.Remark From Users T
       With(NoLock)
       Where T.LoginName = @loginName
     </Statement>

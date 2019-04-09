@@ -2,8 +2,10 @@
 
 using AspectCore.Extensions.DependencyInjection;
 using AspectCore.Injector;
+using Blog.API.Authentication;
 using Blog.API.Common;
 using Blog.API.Filters;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -98,34 +100,67 @@ namespace Blog.API
 
         private void RegisterAuthentication(IServiceCollection services)
         {
-            // Mark: JWT Token https://stackoverflow.com/a/50523668
+            /*
+             Mark: JWT for session 从入门到放弃
+             入门：
+                - https://stackoverflow.com/questions/42036810/asp-net-core-jwt-mapping-role-claims-to-claimsidentity/50523668#50523668
+                - Refresh token: https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/
+                - How can I validate a JWT passed via cookies? https://stackoverflow.com/a/39386631
+             攻击防治：
+                - Where to store JWT in browser? How to protect against CSRF? https://stackoverflow.com/a/37396572
+                - Prevent Cross-Site Request Forgery (XSRF/CSRF) attacks in ASP.NET Core https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-2.2
+             放弃：
+                Stop using JWT for sessions
+                - http://cryto.net/~joepie91/blog/2016/06/13/stop-using-jwt-for-sessions/
+                - http://cryto.net/~joepie91/blog/2016/06/19/stop-using-jwt-for-sessions-part-2-why-your-solution-doesnt-work/
 
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            var jwtSettings = Configuration.GetSection("Jwt");
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(cfg =>
-                {
-                    cfg.RequireHttpsMetadata = false;
-                    cfg.SaveToken = true;
-                    var rsa = RSACryptography.CreateRsaFromPrivateKey(Constants.RSAForToken.PrivateKey);
-                    cfg.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ClockSkew = TimeSpan.Zero, // remove delay of token when expire
+             总结：
+                其本身并不适合拿来做 Session，Session 注定无法保证无状态，无法利用好 JWT 的优点，要强行用只能每次从认证服务器检查 refresh token 是否有效；
+                很多现有的解决方案在你每次请求时检查 refresh token 后颁发一个新的 access token，然而旧的 access token 又在有效期内，多个 access_token 可以一起用听上去说实话挺2b的，所以为了让其“过期”，你又要维护一个 blacklist 或者 whitelist，再加上刷新方案自带的并发问题，说实话这套 JWT session 实践真的是一言难尽。
 
-                        ValidIssuer = jwtSettings["JwtIssuer"],
-                        ValidAudience = jwtSettings["JwtIssuer"],
-                        IssuerSigningKey = new RsaSecurityKey(rsa),
+                等你把这套 access token、refresh token 全部实现下来，你会发现它还不如传统的 session 方案，而其中任何一步用了不恰当的实现方式，都会带来更多的安全漏洞。
+             */
+            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            //var jwtSettings = Configuration.GetSection("Jwt");
+            //services
+            //    .AddAuthentication(options =>
+            //    {
+            //        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            //        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    })
+            //    .AddJwtBearer(cfg =>
+            //    {
+            //        cfg.RequireHttpsMetadata = false;
+            //        cfg.SaveToken = true;
+            //        var rsa = RSACryptography.CreateRsaFromPrivateKey(Constants.RSAForToken.PrivateKey);
+            //        cfg.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            ClockSkew = TimeSpan.Zero, // remove delay of token when expire
 
-                        RequireExpirationTime = true,
-                        ValidateLifetime = true
-                    };
-                });
+            //            ValidIssuer = jwtSettings["JwtIssuer"],
+            //            ValidAudience = jwtSettings["JwtIssuer"],
+            //            IssuerSigningKey = new RsaSecurityKey(rsa),
+
+            //            RequireExpirationTime = true,
+            //            ValidateLifetime = true
+            //        };
+            //    });
+
+            /**
+             * MARK: Cookie based authentication
+             * 
+             * https://docs.microsoft.com/zh-cn/aspnet/core/security/authentication/cookie?view=aspnetcore-2.0&tabs=aspnetcore2x#persistent-cookies
+             * TODO:自定义秘钥 https://docs.microsoft.com/zh-cn/aspnet/core/security/data-protection/configuration/overview?view=aspnetcore-2.0
+             */
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            {
+                options.SlidingExpiration = true;
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                options.EventsType = typeof(SGCookieAuthenticationEvents);
+            });
 
             /**
              * MARK: 基于 JWT 预防 XSRF 和 XSS 攻击
@@ -137,13 +172,14 @@ namespace Blog.API
              * - 过滤用户输入来防止 XSS
              * - 在用户凭据变更后刷新 XSRF Token（刷新接口在 UserController -> GetXSRFToken）
              * - 禁止 HTTP TRACE 防止 XST 攻击（测试了一下好像默认就是禁止的）
-             * - 由于默认的 JWT Authentication 中间件是通过 Header Authorize 节进行验证的，这里我添加一个 Filter 在 AuthorizeFilter 执行之前执行，判断是否有 JWT Cookie，有的话手动在 Header 中插入一个 Authorize 节以支持 JWT 进行验证。
+             * - 由于 JWT Authentication 中间件是采用 Header Authorization 节进行验证，这里需要在Authentication 前加入一个中间件判断是否有 access token，有的话手动在 Header 中插入 Authorization 节以支持 JWT 验证。
              * 
              * - refs:
              *  Where to store JWT in browser? How to protect against CSRF? https://stackoverflow.com/a/37396572
              *  实现一个靠谱的Web认证：https://www.jianshu.com/p/805dc2a0f49e
              *  How can I validate a JWT passed via cookies? https://stackoverflow.com/a/39386631
              *  Prevent Cross-Site Request Forgery (XSRF/CSRF) attacks in ASP.NET Core https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-2.2
+             *  2 楼评论讨论了 refresh token 是否有意义，有不错的参考价值：https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/
              *  
              */
             services.AddAntiforgery(options => { options.HeaderName = "X-XSRF-TOKEN"; });
@@ -223,14 +259,14 @@ namespace Blog.API
 
                 // fetch access_token from http only cookie
                 // then append it into authorization header
-                const string headerKey = "Authorization";
-                if (context.Request.Cookies.TryGetValue("access_token", out string token))
-                {
-                    var headerToken = new StringValues($"Bearer {token}");
-                    context.Request.Headers.Remove(headerKey);
-                    context.Request.Headers.Append(headerKey, headerToken);
-                    Logger.LogInformation($"{headerKey} token appended: {headerToken}");
-                }
+                //const string headerKey = "Authorization";
+                //if (context.Request.Cookies.TryGetValue("access_token", out string token))
+                //{
+                //    var headerToken = new StringValues($"Bearer {token}");
+                //    context.Request.Headers.Remove(headerKey);
+                //    context.Request.Headers.Append(headerKey, headerToken);
+                //    Logger.LogInformation($"{headerKey} token appended: {headerToken}");
+                //}
 
                 return next(context);
             });

@@ -199,6 +199,7 @@ namespace Blog.API
             var assembly = Assembly.Load("Blog.Service");
             var allTypes = assembly.GetTypes();
             foreach (var type in allTypes) services.AddSingleton(type);
+            services.AddSingleton<SGCookieAuthenticationEvents>();
         }
 
         private void RegisterSpa(IServiceCollection services)

@@ -158,7 +158,7 @@
       Select Top 1
       T.Id, T.LoginName, T.Password, T.RealName, T.Status, T.CreatedAt, T.UpdatedAt , T.AuthUpdatedAt, T.IsDeleted, T.Remark From Users T
       With(NoLock)
-      Where T.Id = @id
+      Where T.Id = @id and T.IsDeleted = 0
     </Statement>
 
     <!--获取表映射实体-->
@@ -166,7 +166,7 @@
       Select Top 1
       T.Id, T.LoginName, T.Password, T.RealName, T.Status, T.CreatedAt, T.UpdatedAt, T.AuthUpdatedAt, T.IsDeleted, T.Remark From Users T
       With(NoLock)
-      Where T.LoginName = @loginName
+      Where T.LoginName = @loginName and T.IsDeleted = 0
     </Statement>
 
     <!--是否存在该记录-->

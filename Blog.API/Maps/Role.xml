@@ -141,7 +141,6 @@
 
     <!--获取分页数据-->
     <Statement Id="QueryByPage">
-
       Select TT.* From
       (Select ROW_NUMBER() Over(Order By T.Id Desc) Row_Index,T.* From Role T With(NoLock)
       <Include RefId="QueryParams" />) TT

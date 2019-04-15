@@ -13,6 +13,7 @@ import { SignInComponent } from "../sign-in/sign-in.component";
 import { ActivatedRoute } from "@angular/router";
 import { constants } from "src/app/shared/constants/siegrain.constants";
 import { Subscription } from "rxjs";
+import { UserService } from "../../services/user.service";
 
 @Component({
   selector: "app-nav",
@@ -37,7 +38,8 @@ export class NavComponent implements OnInit, OnDestroy {
     public util: SGUtil,
     public transition: SGTransition,
     public dialog: MatDialog,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _service: UserService
   ) {}
 
   ngOnInit() {
@@ -88,8 +90,8 @@ export class NavComponent implements OnInit, OnDestroy {
     this.navbarOpen = !this.navbarOpen;
   }
 
-  signOut() {
-    this.store.signOut();
+  async signOut() {
+    await this._service.signOut();
     this.util.tip("Signed out", TipType.Success);
   }
 

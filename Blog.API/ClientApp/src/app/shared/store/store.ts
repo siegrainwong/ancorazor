@@ -53,7 +53,7 @@ export class Store {
 
   set user(user: UserModel) {
     this._user = user;
-    if (user && user.token) {
+    if (user) {
       window.localStorage.setItem(UserStoreKey, JSON.stringify(user));
     } else {
       window.localStorage.removeItem(UserStoreKey);

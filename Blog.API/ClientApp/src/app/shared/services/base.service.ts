@@ -39,8 +39,8 @@ export abstract class BaseService implements OnDestroy {
     axios.defaults.headers = { "Content-Type": "application/json" };
     axios.interceptors.request.use(
       config => {
-        if (this.store.userIsAvailable)
-          config.headers.Authorization = `Bearer ${this.store.user.token}`;
+        // if (this.store.userIsAvailable)
+        //   config.headers.Authorization = `Bearer ${this.store.user.token}`;
         return config;
       },
       err => {

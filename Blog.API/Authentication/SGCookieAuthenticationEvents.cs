@@ -26,10 +26,11 @@ namespace Blog.API.Authentication
 
             // sign out if user credential info(e.g. password) has changed
             var user = await _repository.GetByLoginNameAsync(loginName);
+            var truncated = user.AuthUpdatedAt.AddMilliseconds(-user.AuthUpdatedAt.Millisecond); // truncate millisecond for date comparison
             if (user == null ||
                 string.IsNullOrEmpty(authUpdatedTimeStr) ||
                 !DateTime.TryParse(authUpdatedTimeStr, out var authUpdatedAt) ||
-                user.AuthUpdatedAt > authUpdatedAt)
+                truncated > authUpdatedAt)
             {
                 context.RejectPrincipal();
                 await context.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

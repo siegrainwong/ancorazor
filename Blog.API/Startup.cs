@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 
 #endregion
 
@@ -91,7 +92,7 @@ namespace Blog.API
                 {
                     policy
                         .WithOrigins("http://localhost:4200")
-
+                        .AllowCredentials()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
@@ -160,6 +161,11 @@ namespace Blog.API
                 options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                 options.EventsType = typeof(SGCookieAuthenticationEvents);
+                options.Events.OnRedirectToLogin = (context) =>
+                {
+                    context.Response.StatusCode = 401;
+                    return Task.CompletedTask;
+                };
             });
 
             /**
@@ -257,17 +263,6 @@ namespace Blog.API
                     context.Response.StatusCode = 400;
                     return context.Response.WriteAsync("Bad request.");
                 }
-
-                // fetch access_token from http only cookie
-                // then append it into authorization header
-                //const string headerKey = "Authorization";
-                //if (context.Request.Cookies.TryGetValue("access_token", out string token))
-                //{
-                //    var headerToken = new StringValues($"Bearer {token}");
-                //    context.Request.Headers.Remove(headerKey);
-                //    context.Request.Headers.Append(headerKey, headerToken);
-                //    Logger.LogInformation($"{headerKey} token appended: {headerToken}");
-                //}
 
                 return next(context);
             });

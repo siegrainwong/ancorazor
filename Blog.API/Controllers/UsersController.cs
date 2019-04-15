@@ -16,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using Siegrain.Common;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -74,23 +75,22 @@ namespace Blog.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("SignIn")]
-        public async Task<IActionResult> SignIn([FromQuery] AuthUserParameter parameter)
+        [HttpPost("SignIn")]
+        public async Task<IActionResult> SignIn([FromBody] AuthUserParameter parameter)
         {
             var user = await _repository.GetByLoginNameAsync(parameter.LoginName);
             if (user == null || !SecurePasswordHasher.Verify(parameter.Password, user.Password)) return Forbid();
 
-            var rehashTask = PasswordRehashAsync(user.Id, parameter.Password);
+            var rehashTask = await PasswordRehashAsync(user.Id, parameter.Password);
 
             var roles = await _roleRepository.GetRolesByUserAsync(user.Id);
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.LoginName),
-                new Claim(nameof(Users.AuthUpdatedAt), user.UpdatedAt.ToString())
+                new Claim(nameof(Users.AuthUpdatedAt), user.AuthUpdatedAt.ToString())
             };
             claims.AddRange(roles.Select(role => new Claim(ClaimsIdentity.DefaultRoleClaimType, role.Name)));
-
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             await HttpContext.SignInAsync(
@@ -105,7 +105,6 @@ namespace Blog.API.Controllers
             // clear credentials
             user.LoginName = null;
             user.Password = null;
-
             return Ok(new ResponseMessage<object>
             {
                 Data = new
@@ -115,7 +114,7 @@ namespace Blog.API.Controllers
             });
         }
 
-        [HttpGet("SignOut")]
+        [HttpPost("SignOut")]
         public async Task<IActionResult> SignOut()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -166,7 +165,7 @@ namespace Blog.API.Controllers
 
             return Ok(new ResponseMessage<object>
             {
-                Succeed = await PasswordRehashAsync(parameter.Id, parameter.NewPassword)
+                Succeed = await PasswordRehashAsync(parameter.Id, parameter.NewPassword, true)
             });
         }
 
@@ -199,15 +198,15 @@ namespace Blog.API.Controllers
             return new Tuple<string, DateTime>(new JwtSecurityTokenHandler().WriteToken(token), expires);
         }
 
-        private async Task<bool> PasswordRehashAsync(int id, string password)
+        private async Task<bool> PasswordRehashAsync(int id, string password, bool resetting = false)
         {
-            
-            return await _repository.UpdateAsync(new
-            {
-                Id = id,
-                Password = SecurePasswordHasher.Hash(password),
-                AuthUpdatedAt = DateTime.Now
-            }) > 0;
+            var parameters = new Dictionary<string, object> {
+                [nameof(Users.Id)] = id,
+                [nameof(Users.Password)] = SecurePasswordHasher.Hash(password)
+            };
+            if (resetting) parameters.Add(nameof(Users.AuthUpdatedAt), DateTime.Now);
+
+            return await _repository.UpdateAsync(parameters) > 0;
         }
     }
 }

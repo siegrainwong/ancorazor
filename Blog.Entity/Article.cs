@@ -47,14 +47,19 @@ namespace Blog.Entity
         public string Digest { get; set; }
 
         /// <summary>
+        /// Alias
+        /// </summary>
+        public string Alias { get; set; }
+
+        /// <summary>
         /// Id
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// IsDeleted
+        /// IsDraft
         /// </summary>
-        public bool IsDeleted { get; set; }
+        public bool IsDraft { get; set; }
 
         /// <summary>
         /// Remark

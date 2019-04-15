@@ -5,7 +5,7 @@
             "launchBrowser": true,
             "launchUrl": "swagger",
             "environmentVariables": {
-                // Mark: Smartsql 会取这个环境变量作为优先选择的配置中缀
+                // MARK: Smartsql 会取这个环境变量作为优先选择的配置中缀
                 // e.g. SmartSqlMapConfig.Development.xml
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },

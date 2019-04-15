@@ -28,6 +28,9 @@
         <IsNotEmpty Prepend="And" Property="Digest">
           T.Digest = @Digest
         </IsNotEmpty>
+        <IsNotEmpty Prepend="And" Property="Alias">
+          T.Alias = @Alias
+        </IsNotEmpty>
         <IsNotEmpty Prepend="And" Property="ViewCount">
           T.ViewCount = @ViewCount
         </IsNotEmpty>
@@ -40,8 +43,8 @@
         <IsNotEmpty Prepend="And" Property="CreatedAt">
           T.CreatedAt = @CreatedAt
         </IsNotEmpty>
-        <IsNotEmpty Prepend="And" Property="IsDeleted">
-          T.IsDeleted = @IsDeleted
+        <IsNotEmpty Prepend="And" Property="IsDraft">
+          T.IsDraft = @IsDraft
         </IsNotEmpty>
         <IsNotEmpty Prepend="And" Property="Remark">
           T.Remark = @Remark
@@ -58,11 +61,12 @@
       Title,
       Content,
       Digest,
+      Alias,
       ViewCount,
       CommentCount,
       UpdatedAt,
       CreatedAt,
-      IsDeleted,
+      IsDraft,
       Remark
       )
       VALUES
@@ -72,6 +76,7 @@
       @Title,
       @Content,
       @Digest,
+      @Alias,
       default,
       default,
       @UpdatedAt,
@@ -84,7 +89,7 @@
 
     <!--删除-->
     <Statement Id="Delete">
-      Update Article Set IsDeleted = 1
+      Delete From Article
       Where Id=@Id
     </Statement>
 
@@ -107,6 +112,9 @@
         <IsNotEmpty Prepend="," Property="Digest">
           Digest = @Digest
         </IsNotEmpty>
+        <IsNotEmpty Prepend="," Property="Alias">
+          Alias = @Alias
+        </IsNotEmpty>
         <IsNotEmpty Prepend="," Property="ViewCount">
           ViewCount = @ViewCount
         </IsNotEmpty>
@@ -122,8 +130,8 @@
         <IsEmpty Prepend="," Property="UpdatedAt">
           UpdatedAt = getdate()
         </IsEmpty>
-        <IsNotEmpty Prepend="," Property="IsDeleted">
-          IsDeleted = @IsDeleted
+        <IsNotEmpty Prepend="," Property="IsDraft">
+          IsDraft = @IsDraft
         </IsNotEmpty>
         <IsNotEmpty Prepend="," Property="Remark">
           Remark = @Remark
@@ -158,7 +166,7 @@
         <Default>T.Id Desc</Default>
       </Switch>
       ) Row_Index,
-      T.Author, T.Id, T.Title, T.CreatedAt, T.Digest, T.Cover
+      T.Author, T.Id, T.Title, T.CreatedAt, T.Digest, T.Alias, T.Cover
       From Article T With(NoLock)
       <Include RefId="QueryParams" />
       ) TT

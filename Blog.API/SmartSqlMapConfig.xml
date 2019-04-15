@@ -3,7 +3,7 @@
   <Settings IsWatchConfigFile="true" />
   <Database>
     <DbProvider Name="SqlClientFactory" ParameterPrefix="@" Type="System.Data.SqlClient.SqlClientFactory,System.Data.SqlClient" />
-    <!-- Mark: Replace secrets in Azure pipeline
+    <!-- MARK: Replace secrets in Azure pipeline
     https://marketplace.visualstudio.com/items?itemName=qetza.replacetokens -->
     <Write Name="WriteDB" ConnectionString="#{ConnectionString}#" />
     <Read Name="ReadDB" ConnectionString="#{ConnectionString}#" Weight="80" />

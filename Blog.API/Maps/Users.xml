@@ -9,7 +9,6 @@
 //*******************************-->
 
 <SmartSqlMap Scope="Users" xmlns="http://SmartSql.net/schemas/SmartSqlMap.xsd">
-
   <Statements>
     <Statement Id="QueryParams">
       <Where>

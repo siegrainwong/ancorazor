@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -35,6 +36,25 @@ namespace Blog.API.Authentication
                 context.RejectPrincipal();
                 await context.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             }
+        }
+
+        public override async Task RedirectToLogin(RedirectContext<CookieAuthenticationOptions> context)
+        {
+            context.Response.Headers.Remove("Location");
+            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            await Task.CompletedTask;
+        }
+
+        public override async Task RedirectToAccessDenied(RedirectContext<CookieAuthenticationOptions> context)
+        {
+            context.Response.Headers.Remove("Location");
+            context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+            await Task.CompletedTask;
+        }
+
+        public override Task RedirectToLogout(RedirectContext<CookieAuthenticationOptions> context)
+        {
+            return base.RedirectToLogout(context);
         }
     }
 }

@@ -28,9 +28,6 @@
         <IsNotEmpty Prepend="And" Property="Remark">
           T.Remark = @Remark
         </IsNotEmpty>
-        <IsNotEmpty Prepend="And" Property="IsDeleted">
-          T.IsDeleted = @IsDeleted
-        </IsNotEmpty>
       </Where>
     </Statement>
 
@@ -41,16 +38,14 @@
       Name,
       CreatedAt,
       UpdatedAt,
-      Remark,
-      IsDeleted
+      Remark
       )
       VALUES
       (
       @Name,
       @CreatedAt,
       @UpdatedAt,
-      @Remark,
-      @IsDeleted
+      @Remark
       )
       ;Select Scope_Identity();
     </Statement>
@@ -94,9 +89,6 @@
         </IsProperty>
         <IsProperty Prepend="," Property="Remark">
           Remark = @Remark
-        </IsProperty>
-        <IsProperty Prepend="," Property="IsDeleted">
-          IsDeleted = @IsDeleted
         </IsProperty>
       </Set>
       Where Id=@Id

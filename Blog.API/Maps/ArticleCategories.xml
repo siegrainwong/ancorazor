@@ -25,9 +25,6 @@
         <IsNotEmpty Prepend="And" Property="CreatedAt">
           T.CreatedAt = @CreatedAt
         </IsNotEmpty>
-        <IsNotEmpty Prepend="And" Property="UpdatedAt">
-          T.UpdatedAt = @UpdatedAt
-        </IsNotEmpty>
       </Where>
     </Statement>
 
@@ -37,15 +34,13 @@
       (
       Article,
       Category,
-      CreatedAt,
-      UpdatedAt
+      CreatedAt
       )
       VALUES
       (
       @Article,
       @Category,
-      @CreatedAt,
-      @UpdatedAt
+      @CreatedAt
       )
       ;Select Scope_Identity();
     </Statement>
@@ -55,8 +50,7 @@
       (
       Article,
       Category,
-      CreatedAt,
-      UpdatedAt
+      CreatedAt
       )
       VALUES
       <For Open="" Close="" Key="T" Property="articleCategories" Separator=",">
@@ -64,7 +58,6 @@
         @Article
         ,@Category
         ,@CreatedAt
-        ,@UpdatedAt
         )
       </For>
     </Statement>
@@ -87,9 +80,6 @@
         </IsProperty>
         <IsProperty Prepend="," Property="CreatedAt">
           CreatedAt = @CreatedAt
-        </IsProperty>
-        <IsProperty Prepend="," Property="UpdatedAt">
-          UpdatedAt = @UpdatedAt
         </IsProperty>
       </Set>
       Where Id=@Id

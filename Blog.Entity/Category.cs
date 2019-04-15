@@ -22,11 +22,6 @@ namespace Blog.Entity
         public int Id { get; set; }
 
         /// <summary>
-        /// IsDeleted
-        /// </summary>
-        public bool IsDeleted { get; set; }
-
-        /// <summary>
         /// Name
         /// </summary>
         public string Name { get; set; }

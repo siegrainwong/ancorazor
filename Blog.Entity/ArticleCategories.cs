@@ -30,10 +30,5 @@ namespace Blog.Entity
         /// Id
         /// </summary>
         public int Id { get; set; }
-
-        /// <summary>
-        /// UpdatedAt
-        /// </summary>
-        public DateTime? UpdatedAt { get; set; }
     }
 }

@@ -30,7 +30,7 @@ namespace Blog.API.Messages.Article
 
         // only provide single-user currently
 
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDraft { get; set; } = false;
 
         public string Remark { get; set; }
 

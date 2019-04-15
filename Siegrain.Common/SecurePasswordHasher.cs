@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 namespace Siegrain.Common
 {
     /// <summary>
-    /// Mark: 密码哈希
+    /// MARK: 密码哈希
     /// 
     /// https://stackoverflow.com/a/32191537
     /// </summary>

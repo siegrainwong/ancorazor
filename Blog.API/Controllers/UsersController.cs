@@ -46,35 +46,6 @@ namespace Blog.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
-        [Route("Token")]
-        public async Task<IActionResult> GetToken([FromQuery] AuthUserParameter parameter)
-        {
-            var user = await _repository.GetByLoginNameAsync(parameter.LoginName);
-            if (user == null || !SecurePasswordHasher.Verify(parameter.Password, user.Password)) return Forbid();
-
-            var rehashTask = PasswordRehashAsync(user.Id, parameter.Password);
-            var tokenTask = GenerateJwtTokenAsync(user);
-            await Task.WhenAll(rehashTask, tokenTask);
-
-            // clear credentials
-            user.LoginName = null;
-            user.Password = null;
-
-            Response.Cookies.Append("access_token", tokenTask.Result.Item1,
-                new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
-
-            return Ok(new ResponseMessage<object>
-            {
-                Data = new
-                {
-                    expires = tokenTask.Result.Item2,
-                    user
-                }
-            });
-        }
-
-        [AllowAnonymous]
         [HttpPost("SignIn")]
         public async Task<IActionResult> SignIn([FromBody] AuthUserParameter parameter)
         {
@@ -118,7 +89,6 @@ namespace Blog.API.Controllers
         public async Task<IActionResult> SignOut()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
             return Ok(new ResponseMessage<object>());
         }
 
@@ -147,7 +117,7 @@ namespace Blog.API.Controllers
         /// <summary>
         /// 重置密码
         ///
-        /// Mark: Password hashing
+        /// MARK: Password hashing
         /// 1. 前端用 密码+用户名+域名 的 PBKDF2 哈希值传递到后端
         /// 2. 后端检验后，用 CSPRNG 重新算盐，拼接密码哈希后用 PBKDF2 再哈希一次
         /// 3. 保存用户的新密码哈希
@@ -169,6 +139,50 @@ namespace Blog.API.Controllers
             });
         }
 
+        private async Task<bool> PasswordRehashAsync(int id, string password, bool isNewCreadential = false)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                [nameof(Users.Id)] = id,
+                [nameof(Users.Password)] = SecurePasswordHasher.Hash(password)
+            };
+            if (isNewCreadential) parameters.Add(nameof(Users.AuthUpdatedAt), DateTime.Now);
+            return await _repository.UpdateAsync(parameters) > 0;
+        }
+
+        #region deprecated
+
+        [Obsolete("Jwt authentication is deprecated")]
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("Token")]
+        private async Task<IActionResult> GetToken([FromQuery] AuthUserParameter parameter)
+        {
+            var user = await _repository.GetByLoginNameAsync(parameter.LoginName);
+            if (user == null || !SecurePasswordHasher.Verify(parameter.Password, user.Password)) return Forbid();
+
+            var rehashTask = PasswordRehashAsync(user.Id, parameter.Password);
+            var tokenTask = GenerateJwtTokenAsync(user);
+            await Task.WhenAll(rehashTask, tokenTask);
+
+            // clear credentials
+            user.LoginName = null;
+            user.Password = null;
+
+            Response.Cookies.Append("access_token", tokenTask.Result.Item1,
+                new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+
+            return Ok(new ResponseMessage<object>
+            {
+                Data = new
+                {
+                    expires = tokenTask.Result.Item2,
+                    user
+                }
+            });
+        }
+
+        [Obsolete("Jwt authentication is deprecated")]
         private async Task<Tuple<string, DateTime>> GenerateJwtTokenAsync(Users user)
         {
             var claims = new List<Claim>
@@ -197,16 +211,6 @@ namespace Blog.API.Controllers
 
             return new Tuple<string, DateTime>(new JwtSecurityTokenHandler().WriteToken(token), expires);
         }
-
-        private async Task<bool> PasswordRehashAsync(int id, string password, bool resetting = false)
-        {
-            var parameters = new Dictionary<string, object> {
-                [nameof(Users.Id)] = id,
-                [nameof(Users.Password)] = SecurePasswordHasher.Hash(password)
-            };
-            if (resetting) parameters.Add(nameof(Users.AuthUpdatedAt), DateTime.Now);
-
-            return await _repository.UpdateAsync(parameters) > 0;
-        }
+        #endregion
     }
 }

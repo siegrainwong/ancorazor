@@ -10,6 +10,5 @@ namespace Blog.Repository
 {
     public interface ICategoryRepository : IRepositoryAsync<Category, int>
     {
-        Task SetArticleCategoriesAsync(int articleId, string[] categories);
     }
 }

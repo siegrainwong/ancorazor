@@ -51,9 +51,9 @@
 
   <ItemGroup>
     <PackageReference Include="NETCore.Encrypt" Version="2.0.7" />
-    <PackageReference Include="SmartSql.AOP" Version="4.0.0" />
-    <PackageReference Include="SmartSql.DIExtension" Version="4.0.10" />
-    <PackageReference Include="SmartSql.TypeHandler" Version="4.0.2" />
+    <PackageReference Include="SmartSql.AOP" Version="4.0.20" />
+    <PackageReference Include="SmartSql.DIExtension" Version="4.0.20" />
+    <PackageReference Include="SmartSql.TypeHandler" Version="4.0.20" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>
 

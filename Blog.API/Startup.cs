@@ -50,14 +50,7 @@ namespace Blog.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(options =>
-            {
-                options.Filters.Add<GlobalExceptionFilter>();
-                options.Filters.Add<GlobalValidateModelFilter>();
-                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
-                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
-            }).SetCompatibilityVersion(CompatibilityVersion.Latest);
+            RegisterMvc(services);
             RegisterRepository(services);
             RegisterService(services);
             RegisterSwagger(services);
@@ -65,8 +58,7 @@ namespace Blog.API
             RegisterAuthentication(services);
             RegisterSpa(services);
 
-            var container = services.ToServiceContainer();
-            return container.Build();
+            return services.ToServiceContainer().Build();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -85,6 +77,18 @@ namespace Blog.API
         }
 
         #region Services
+
+        private void RegisterMvc(IServiceCollection services)
+        {
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<GlobalExceptionFilter>();
+                options.Filters.Add<GlobalValidateModelFilter>();
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            }).SetCompatibilityVersion(CompatibilityVersion.Latest);
+        }
 
         private void RegisterCors(IServiceCollection services)
         {

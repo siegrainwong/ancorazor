@@ -1,4 +1,4 @@
-
+﻿
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="SmartSql.AOP" Version="4.0.0" />
+      <PackageReference Include="SmartSql.AOP" Version="4.0.20" />
     </ItemGroup>
 
     <ItemGroup>

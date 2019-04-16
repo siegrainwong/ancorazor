@@ -1,10 +1,10 @@
 #region
 
 using Blog.Entity;
+using SmartSql.AOP;
 using SmartSql.DyRepository;
-using SmartSql;
-using System.Threading.Tasks;
 using SmartSql.DyRepository.Annotations;
+using System.Threading.Tasks;
 
 #endregion
 
@@ -15,10 +15,17 @@ namespace Blog.Repository
         [Statement(Id = "GetEntity")]
         Task<Article> GetByIdAsync([Param("Id")] int id, [Param("IsDraft")] bool isDraft = false);
 
+        [Transaction]
+        Task<int> DeleteAsync(int id);
+
         Task<int> InsertAsync(object parameters);
 
         Task<T> QueryByPageAsync<T>(object parameters);
 
         Task<int> UpdateAsync(object parameters);
+
+        Task SetArticleCategoriesAsync(int articleId, string[] categories);
+
+        Task SetArticleTagsAsync(int articleId, string[] tags);
     }
 }

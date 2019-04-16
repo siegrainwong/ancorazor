@@ -10,6 +10,5 @@ namespace Blog.Repository
 {
     public interface ITagRepository : IRepositoryAsync<Tag, int>
     {
-        Task SetArticleTagsAsync(int articleId, string[] tags);
     }
 }

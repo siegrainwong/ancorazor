@@ -27,13 +27,6 @@ namespace Blog.API.Controllers
             _repository = repository;
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var result = await _repository.DeleteByIdAsync(id);
-            return Ok(new ResponseMessage<int> { Succeed = result > 0, Data = id });
-        }
-
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
@@ -63,6 +56,13 @@ namespace Blog.API.Controllers
         {
             var result = await _service.UpdateAsync(parameter);
             return Ok(new ResponseMessage<int> { Succeed = result, Data = parameter.Id });
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _repository.DeleteAsync(id);
+            return Ok(new ResponseMessage<int> { Succeed = result > 0, Data = id });
         }
     }
 }

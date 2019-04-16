@@ -15,23 +15,9 @@ namespace Blog.Service
     {
         public IArticleRepository ArticleRepository { get; }
 
-        public ICategoryRepository CategoryRepository { get; }
-
-        public ITagRepository TagRepository { get; }
-
-        public ArticleService(IArticleRepository articleRepository, ICategoryRepository categoryRepository, ITagRepository tagRepository)
+        public ArticleService(IArticleRepository articleRepository)
         {
             ArticleRepository = articleRepository;
-            CategoryRepository = categoryRepository;
-            TagRepository = tagRepository;
-        }
-
-        [Transaction]
-        public virtual async Task<int> InsertAsync(ArticleUpdateParameter parameter)
-        {
-            var id = await ArticleRepository.InsertAsync(parameter);
-            await SetArticleTagsAndCategories(id, parameter.Tags, parameter.Categories);
-            return id;
         }
 
         public async Task<QueryByPageResponse<Article>> QueryByPageAsync(QueryByPageParameter request)
@@ -43,7 +29,15 @@ namespace Blog.Service
         }
 
         [Transaction]
-        public async Task<bool> UpdateAsync(ArticleUpdateParameter parameter)
+        public virtual async Task<int> InsertAsync(ArticleUpdateParameter parameter)
+        {
+            var id = await ArticleRepository.InsertAsync(parameter);
+            await SetArticleTagsAndCategories(id, parameter.Tags, parameter.Categories);
+            return id;
+        }
+
+        [Transaction]
+        public virtual async Task<bool> UpdateAsync(ArticleUpdateParameter parameter)
         {
             var externalTask = SetArticleTagsAndCategories(parameter.Id, parameter.Tags, parameter.Categories);
             var updateTask = ArticleRepository.UpdateAsync(parameter);
@@ -54,8 +48,8 @@ namespace Blog.Service
         private Task SetArticleTagsAndCategories(int articleId, string[] tags, string[] categories)
         {
             // 这里要在 ConnectionString 中打开 MultipleActiveResultSets，允许一个连接返回多个结果集。
-            var t1 = TagRepository.SetArticleTagsAsync(articleId, tags);
-            var t2 = CategoryRepository.SetArticleCategoriesAsync(articleId, categories);
+            var t1 = ArticleRepository.SetArticleTagsAsync(articleId, tags);
+            var t2 = ArticleRepository.SetArticleCategoriesAsync(articleId, categories);
             return Task.WhenAll(t1, t2);
         }
     }

@@ -27,7 +27,7 @@ namespace Blog.API.Messages.Article
 
         public string Alias { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "Invalid Id")]
+        [Range(0, int.MaxValue)]
         public int Id { get; set; }
 
         // only provide single-user currently

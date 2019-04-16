@@ -20,6 +20,7 @@ namespace Blog.API.Messages.Users
     public class ResetPasswordParameter : AuthUserParameter
     {
         [Required]
+        [Range(1, int.MaxValue)]
         public int Id { get; set; }
 
         [Required]

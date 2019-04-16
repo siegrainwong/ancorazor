@@ -25,6 +25,8 @@ namespace Blog.API.Messages.Article
         [StringLength(500, MinimumLength = 0, ErrorMessage = "Digest must be less than 500 characters")]
         public string Digest { get; set; }
 
+        public string Alias { get; set; }
+
         [Range(0, int.MaxValue, ErrorMessage = "Invalid Id")]
         public int Id { get; set; }
 

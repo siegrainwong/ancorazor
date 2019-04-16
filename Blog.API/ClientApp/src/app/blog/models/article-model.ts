@@ -5,12 +5,14 @@ export default class ArticleModel extends BaseModel {
   author: string;
   title: string;
   digest: string;
+  alias: string;
   tags?: string[];
   categories?: string[];
   content: string;
   viewCount: number = 0;
   commentCount: number = 0;
   cover: string = "assets/img/placeholder.jpg";
+  isDraft: boolean = false;
 
   // helper fields
   animation?: SGAnimation;

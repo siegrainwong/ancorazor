@@ -76,6 +76,7 @@ export class SignInComponent implements OnInit {
     this.loading = true;
     let result = await this._service.reset(
       this._store.user.id,
+      this.username.value,
       await this.passwordHash(this.password.value),
       await this.passwordHash(this.newPassword.value)
     );

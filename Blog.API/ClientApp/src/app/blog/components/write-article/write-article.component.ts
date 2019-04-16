@@ -6,7 +6,11 @@ import { Store } from "src/app/shared/store/store";
 import { LoggingService } from "src/app/shared/services/logging.service";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
 import { SGUtil, topElementId } from "src/app/shared/utils/siegrain.utils";
-import { externalScripts } from "src/app/shared/constants/siegrain.constants";
+import {
+  externalScripts,
+  constants,
+  articleDefaultContent
+} from "src/app/shared/constants/siegrain.constants";
 import { timeFormat } from "src/app/shared/utils/time-format";
 const yamlFront = require("yaml-front-matter");
 
@@ -76,7 +80,7 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
     // PS：改了很多样式在 _reset.css 里
     this._editor = new EasyMDE({
       element: document.querySelector("#editor"),
-      initialValue: this.model.content,
+      initialValue: this.model.content || articleDefaultContent,
       autoDownloadFontAwesome: false,
       spellChecker: false,
       renderingConfig: {
@@ -101,12 +105,7 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
         let parsed = (self._frontMatter = yamlFront.loadFront(text));
         if (!self.hasFrontMatter) return lex(text, options);
 
-        return lex(
-          `# ${parsed.title} \n *Posted on ${parsed.date}* \n\n\n ${
-            parsed.__content
-          }`,
-          options
-        );
+        return lex(`# ${parsed.title} \n\n\n ${parsed.__content}`, options);
       } catch {
         return lex(text, options);
       }
@@ -144,6 +143,8 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
     this.model.tags = this._frontMatter.tags;
     this.model.categories = this._frontMatter.categories;
     this.model.digest = this._frontMatter.description;
+    this.model.alias = this._frontMatter.alias;
+    this.model.isDraft = !!this._frontMatter.draft;
 
     // submit
     this.preloading = true;

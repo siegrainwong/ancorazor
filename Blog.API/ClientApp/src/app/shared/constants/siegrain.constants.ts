@@ -17,3 +17,14 @@ export const externalScripts = {
   highlight: "assets/libraries/highlight.pack.js",
   marked: "https://cdn.jsdelivr.net/npm/marked/marked.min.js"
 };
+
+export const articleDefaultContent = `---
+title: Enter your title here.
+categories:
+- development
+tags:
+- dotnet
+- dotnet core
+---
+
+**Hello world!**`;

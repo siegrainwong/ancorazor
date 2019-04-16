@@ -16,7 +16,6 @@ using Microsoft.IdentityModel.Tokens;
 using Siegrain.Common;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -50,10 +49,86 @@ namespace Blog.API.Controllers
         public async Task<IActionResult> SignIn([FromBody] AuthUserParameter parameter)
         {
             var user = await _repository.GetByLoginNameAsync(parameter.LoginName);
-            if (user == null || !SecurePasswordHasher.Verify(parameter.Password, user.Password)) return Forbid();
+            if (user == null || !SecurePasswordHasher.Verify(parameter.Password, user.Password))
+                return Forbid();
 
-            var rehashTask = await PasswordRehashAsync(user.Id, parameter.Password);
+            var rehashTask = PasswordRehashAsync(user.Id, parameter.Password);
+            await Task.WhenAll(rehashTask, SignIn(user));
 
+            if (!rehashTask.Result)
+                return NotFound("Password rehash failed.");
+
+            // clear credentials
+            user.LoginName = null;
+            user.Password = null;
+            return Ok(new ResponseMessage<object> { Data = new { user } });
+        }
+
+        [HttpPost("SignOut")]
+        public async Task<IActionResult> SignOut()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return Ok(new ResponseMessage<object>());
+        }
+
+        /// <summary>
+        /// 在 SPA 初始化、凭据更换时刷新 XSRF Token
+        ///
+        /// MARK: XSRFToken refresh 为什么采取接口方案刷新？
+        /// 
+        /// TODO: 
+        ///     这里好像可以在请求SignIn、SignOut接口的结尾再请求一波这个接口，直接把新的XSRFToken附上去？
+        ///     登录后操作Header, Set-Cookie，把Cookie提取出来直接附加到Header里面去然后调用这个接口。
+        ///     同理调用完注销接口后清掉Header中对应cookie即可。
+        ///     那Cookie过期后怎么办？。。。在AuthenticationEvents里面判断吗？
+        /// 
+        /// 1. 因为不希望 SSR 时传递凭据，前端也需要做很多兼容处理。
+        /// 2. XSRF Token 无法设置到首页上，估计也是 SSR 的锅，要设置只能把 Cookie 放在 main.js 上，非常怪异。
+        /// 3. 本来是想尝试让请求过来时判断一下如果有凭据自动把 XSRFToken Cookie Append 到 Request.Cookie 上，但你 Append 不了 .AspNetCore.Antiforgery Cookie
+        /// 还是迂回实现算了。
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [IgnoreAntiforgeryToken]
+        [HttpGet]
+        [Route("XSRFToken")]
+        public IActionResult GetXSRFToken()
+        {
+            var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
+            Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false });
+            return Ok(new ResponseMessage<object>());
+        }
+
+        /// <summary>
+        /// 重置密码
+        ///
+        /// MARK: Password hashing
+        /// 1. 前端用 密码+用户名 的 PBKDF2 哈希值传递到后端
+        /// 2. 后端检验后，用 CSPRNG 重新算盐，拼接密码哈希后用 PBKDF2 再哈希一次
+        /// 3. 保存用户的新密码哈希
+        /// 4. 每次用户登录后也要更新一次哈希值
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("Reset")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordParameter parameter)
+        {
+            var user = await _repository.GetByLoginNameAsync(parameter.LoginName);
+            if (user == null || 
+                user.Id != parameter.Id || 
+                !SecurePasswordHasher.Verify(parameter.Password, user.Password))
+                return Forbid();
+
+            var rehashTask = PasswordRehashAsync(parameter.Id, parameter.NewPassword, true);
+            await Task.WhenAll(SignOut(), rehashTask);
+            return Ok(new ResponseMessage<object> { Succeed = rehashTask.Result });
+        }
+
+        #region Private Methods
+
+        private async Task SignIn(Users user)
+        {
             var roles = await _roleRepository.GetRolesByUserAsync(user.Id);
             var claims = new List<Claim>
             {
@@ -70,73 +145,8 @@ namespace Blog.API.Controllers
                 new AuthenticationProperties
                 {
                     IsPersistent = true,
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10)
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7)
                 });
-
-            // clear credentials
-            user.LoginName = null;
-            user.Password = null;
-            return Ok(new ResponseMessage<object>
-            {
-                Data = new
-                {
-                    user
-                }
-            });
-        }
-
-        [HttpPost("SignOut")]
-        public async Task<IActionResult> SignOut()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Ok(new ResponseMessage<object>());
-        }
-
-        /// <summary>
-        /// 在 SPA 初始化、凭据更换时刷新 XSRF Token
-        ///
-        /// MARK: XSRFToken refresh 为什么采取接口方案刷新？
-        /// 1. 因为不希望 SSR 时传递凭据，前端也需要做很多兼容处理。
-        /// 2. XSRF Token 无法设置到首页上，估计也是 SSR 的锅，要设置只能把 Cookie 放在 main.js 上，非常怪异。
-        /// 3. 本来是想尝试让请求过来时判断一下如果有凭据自动把 XSRFToken Cookie Append 到 Request.Cookie 上，但你 Append 不了 .AspNetCore.Antiforgery Cookie
-        /// 还是迂回实现算了。
-        /// </summary>
-        /// <returns></returns>
-        [AllowAnonymous]
-        [IgnoreAntiforgeryToken]
-        [HttpGet]
-        [Route("XSRFToken")]
-        public IActionResult GetXSRFToken()
-        {
-            var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
-            Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
-                new CookieOptions() { HttpOnly = false });
-            return Ok(new ResponseMessage<object>());
-        }
-
-        /// <summary>
-        /// 重置密码
-        ///
-        /// MARK: Password hashing
-        /// 1. 前端用 密码+用户名+域名 的 PBKDF2 哈希值传递到后端
-        /// 2. 后端检验后，用 CSPRNG 重新算盐，拼接密码哈希后用 PBKDF2 再哈希一次
-        /// 3. 保存用户的新密码哈希
-        /// 4. 每次用户登录后也要更新一次哈希值
-        /// </summary>
-        /// <param name="parameter"></param>
-        /// <returns></returns>
-        [HttpPut]
-        [Route("Reset")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordParameter parameter)
-        {
-            var user = await _repository.GetByIdAsync(parameter.Id);
-            if (user == null || !SecurePasswordHasher.Verify(parameter.Password, user.Password))
-                return Forbid();
-
-            return Ok(new ResponseMessage<object>
-            {
-                Succeed = await PasswordRehashAsync(parameter.Id, parameter.NewPassword, true)
-            });
         }
 
         private async Task<bool> PasswordRehashAsync(int id, string password, bool isNewCreadential = false)
@@ -150,7 +160,9 @@ namespace Blog.API.Controllers
             return await _repository.UpdateAsync(parameters) > 0;
         }
 
-        #region deprecated
+        #endregion
+
+        #region Deprecated
 
         [Obsolete("Jwt authentication is deprecated")]
         [AllowAnonymous]

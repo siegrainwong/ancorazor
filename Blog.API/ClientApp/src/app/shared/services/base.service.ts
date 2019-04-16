@@ -18,10 +18,10 @@ export abstract class BaseService implements OnDestroy {
   protected subscription = new Subscription();
 
   constructor(
-    private _util: SGUtil,
     private _wrapper: TaskWrapper,
     private _state: TransferState,
-    private _route: Router,
+    protected util: SGUtil,
+    protected route: Router,
     protected logger: LoggingService,
     protected store: Store
   ) {
@@ -142,7 +142,7 @@ export abstract class BaseService implements OnDestroy {
       if (error.response) {
         return this.handleResponse(error.response as AxiosResponse);
       } else {
-        this._util.tip(error);
+        this.util.tip(error);
         this.logger.error(error);
         return new ResponseResult({
           message: `${error.message} for url: ${error.request.url}`
@@ -183,18 +183,13 @@ export abstract class BaseService implements OnDestroy {
    */
   handleError(result: ResponseResult, code?: number): ResponseResult {
     switch (code) {
-      case 403:
       case 401:
-        if (this.store.userIsAvailable) {
-          this._util.tip("Session expired, please sign-in again.");
-          this.store.signOut();
-          this._route.navigate([], { fragment: "sign-in" });
-        } else {
-          this._util.tip("Invalid username or password");
-        }
+        this.util.tip("Session expired, please sign-in again.");
+        this.store.signOut();
+        this.route.navigate([], { fragment: "sign-in" });
         break;
       default:
-        this._util.tip(result.message);
+        this.util.tip(result.message);
         this.logger.error(result);
     }
     return new ResponseResult(result);

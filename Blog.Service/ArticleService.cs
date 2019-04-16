@@ -53,7 +53,7 @@ namespace Blog.Service
 
         private Task SetArticleTagsAndCategories(int articleId, string[] tags, string[] categories)
         {
-            // 这里要在 ConnectionString 中打开 MultipleActiveResultSets，原因不明。
+            // 这里要在 ConnectionString 中打开 MultipleActiveResultSets，允许一个连接返回多个结果集。
             var t1 = TagRepository.SetArticleTagsAsync(articleId, tags);
             var t2 = CategoryRepository.SetArticleCategoriesAsync(articleId, categories);
             return Task.WhenAll(t1, t2);

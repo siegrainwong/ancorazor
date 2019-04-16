@@ -17,14 +17,10 @@ namespace Blog.API.Messages.Users
         public string Password { get; set; }
     }
 
-    public class ResetPasswordParameter : QueryParameter
+    public class ResetPasswordParameter : AuthUserParameter
     {
         [Required]
         public int Id { get; set; }
-
-        [Required]
-        [StringLength(256, MinimumLength = 6, ErrorMessage = "Password must be 6-30 characters")]
-        public string Password { get; set; }
 
         [Required]
         [StringLength(256, MinimumLength = 6, ErrorMessage = "Password must be 6-30 characters")]

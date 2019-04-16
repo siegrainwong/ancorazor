@@ -1,6 +1,7 @@
 import { Injectable, OnInit } from "@angular/core";
 import { BaseService, ISubService } from "src/app/shared/services/base.service";
 import { UserModel } from "../models/user-model";
+import { ResponseResult } from "src/app/shared/models/response-result";
 
 @Injectable({
   providedIn: "root"
@@ -19,7 +20,6 @@ export class UserService extends BaseService implements ISubService {
     });
     if (!res || !res.succeed) return null;
     let model = res.data.user as UserModel;
-    // model.token = res.data.token;
     this.store.signIn(model);
     return model;
   }
@@ -38,16 +38,21 @@ export class UserService extends BaseService implements ISubService {
    */
   async reset(
     id: number,
+    username: string,
     password: string,
     newPassword: string
   ): Promise<boolean> {
     let res = await this.put(`${this.serviceName}/Reset`, {
       id: id,
+      loginName: username,
       password: password,
       newPassword: newPassword
     });
-    this.store.signOut();
-    return res && res.succeed;
+    if (res && res.succeed) {
+      this.store.signOut();
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -57,5 +62,16 @@ export class UserService extends BaseService implements ISubService {
     let res = await this.get(`${this.serviceName}/XSRFToken`);
     if (res && res.succeed) this.logger.info("XSRFToken has been reset.");
     else this.logger.warn("XSRFToken reset failed!");
+  }
+
+  handleError(result: ResponseResult, code?: number): ResponseResult {
+    switch (code) {
+      case 403:
+        this.util.tip("Invalid username or password");
+        break;
+      default:
+        return super.handleError(result, code);
+    }
+    return new ResponseResult(result);
   }
 }

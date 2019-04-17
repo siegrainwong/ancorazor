@@ -13,7 +13,7 @@ namespace Blog.Repository
     public interface IArticleRepository : IRepositoryAsync<Article, int>
     {
         [Statement(Id = "GetEntity")]
-        Task<Article> GetByIdAsync([Param("Id")] int id, [Param("IsDraft")] bool isDraft = false);
+        Task<Article> GetByIdAsync([Param("Id")] int id, [Param("IsDraft")] bool? isDraft = false);
 
         [Transaction]
         Task<int> DeleteAsync(int id);

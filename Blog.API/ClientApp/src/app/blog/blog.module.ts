@@ -19,6 +19,8 @@ import { UserService } from "./services/user.service";
 import { ConfirmDialog } from "../shared/components/confirm-dialog.component";
 import { AuthGuard } from "../shared/guard/auth.guard";
 import { ScrollDispatchModule } from "@angular/cdk/scrolling";
+import { ArticleResolver } from "./services/article.resolver";
+import { SGBaseResolver } from "../shared/services/siegrain.animation.resolver";
 
 @NgModule({
   declarations: [
@@ -42,7 +44,14 @@ import { ScrollDispatchModule } from "@angular/cdk/scrolling";
     ReactiveFormsModule,
     ScrollDispatchModule
   ],
-  providers: [SGUtil, ArticleService, UserService, AuthGuard]
+  providers: [
+    SGUtil,
+    ArticleService,
+    UserService,
+    AuthGuard,
+    ArticleResolver,
+    SGBaseResolver
+  ]
 })
 export class BlogModule {
   constructor(logger: LoggingService) {

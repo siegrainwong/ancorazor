@@ -30,7 +30,7 @@ namespace Blog.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var article = await _repository.GetByIdAsync(id, HttpContext.User.Identity.IsAuthenticated);
+            var article = await _repository.GetByIdAsync(id, HttpContext.User.Identity.IsAuthenticated ? (bool?)null : false);
             if (article == null) return NotFound();
             return Ok(article);
         }
@@ -44,17 +44,17 @@ namespace Blog.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Insert([FromBody] ArticleUpdateParameter parameter) 
+        public async Task<IActionResult> Insert([FromBody] ArticleUpdateParameter parameter)
             => Ok(await _service.InsertAsync(parameter));
 
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] ArticleUpdateParameter parameter) 
+        public async Task<IActionResult> Update([FromBody] ArticleUpdateParameter parameter)
             => Ok(succeed: await _service.UpdateAsync(parameter), data: parameter.Id);
 
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id) 
+        public async Task<IActionResult> Delete(int id)
             => Ok(succeed: await _repository.DeleteAsync(id) > 0, data: id);
     }
 }

@@ -5,7 +5,8 @@
       <ng-container *ngFor="let item of data.list; let i = index">
         <div class="item delay-{{ i + 1 }}" [ngClass]="item.animation.class">
           <div class="post-preview {{ item.isDraft ? 'draft' : '' }}">
-            <a (click)="read(item)">
+            <a [routerLink]="['/article', item.id]">
+              <!-- <a [routerLink]="['/article', item.id]" (click)="read(item)"> -->
               <h2 class="post-title">
                 {{ item.title }}
               </h2>

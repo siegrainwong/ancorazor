@@ -11,6 +11,7 @@ import {
   externalScripts
 } from "src/app/shared/constants/siegrain.constants";
 import { SGUtil } from "src/app/shared/utils/siegrain.utils";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-article",
@@ -18,6 +19,7 @@ import { SGUtil } from "src/app/shared/utils/siegrain.utils";
   styleUrls: ["./article.component.scss"]
 })
 export class ArticleComponent implements OnInit {
+  private _subscription = new Subscription();
   model: ArticleModel;
   content: string;
   constructor(
@@ -28,32 +30,27 @@ export class ArticleComponent implements OnInit {
     public store: Store,
     public transition: SGTransition
   ) {}
-  async ngOnInit() {
-    await this.getArticle();
-    this.setupEditor();
+  ngOnInit() {
+    this.getArticle();
+    this.setupViewer();
   }
 
   private async getArticle() {
-    if (this.store.preloadArticle) {
-      this.model = this.store.preloadArticle;
-      this.store.preloadArticle = null;
-    } else {
-      let id = parseInt(this._route.snapshot.params.id);
-      let res = await this._service.getArticle(id);
-      if (!res) return;
-      this.model = res;
-    }
-    await timeout(10); // 这里必须要 await 一下，给 angular render 的时间
-    this._titleService.setTitle(
-      `${this.model.title} - ${constants.titlePlainText}`
-    );
+    this._route.data.subscribe(async (data: { article: ArticleModel }) => {
+      this.model = data.article;
+      this._titleService.setTitle(
+        `${this.model.title} - ${constants.titlePlainText}`
+      );
+
+      await timeout(10);
+    });
   }
 
   get transitionClass() {
     return this.transition.apply("fade-opposite");
   }
 
-  async setupEditor() {
+  private async setupViewer() {
     await this._util.loadExternalScripts([externalScripts.highlight]);
     const md = require("markdown-it")({
       highlight: function(str, lang) {

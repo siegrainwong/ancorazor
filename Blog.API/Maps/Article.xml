@@ -162,7 +162,7 @@
           <Default>T.Id Desc</Default>
         </Switch>
         ) Row_Index,
-        T.Author, T.Id, T.Title, T.CreatedAt, T.Digest, T.Alias, T.Cover
+        T.Author, T.Id, T.Title, T.CreatedAt, T.Digest, T.IsDraft, T.Alias, T.Cover
       From Article T With(NoLock)
       <Include RefId="QueryParams" />
       ) TT

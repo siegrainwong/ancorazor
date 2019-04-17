@@ -7,6 +7,7 @@
     <BuildServerSideRenderer>true</BuildServerSideRenderer>
     <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
     <UserSecretsId>24dec880-1d4c-4d3c-8102-9aef836b6ee3</UserSecretsId>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
   <!-- 排除客户端项目，因为我不用VS写前端 -->
@@ -86,6 +87,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Extensions\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 </Project>

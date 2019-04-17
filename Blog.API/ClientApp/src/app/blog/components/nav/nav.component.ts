@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Output,
-  EventEmitter,
-  OnDestroy
-} from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "src/app/shared/store/store";
 import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
 import { SGTransition } from "src/app/shared/utils/siegrain.animations";
@@ -91,8 +85,8 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   async signOut() {
-    await this._service.signOut();
-    this.util.tip("Signed out", TipType.Success);
+    (await this._service.signOut()) &&
+      this.util.tip("Signed out", TipType.Success);
   }
 
   registerRouteChanged() {

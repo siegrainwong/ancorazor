@@ -27,9 +27,9 @@ export class UserService extends BaseService implements ISubService {
   /**
    * 注销
    */
-  async signOut(): Promise<void> {
+  async signOut(): Promise<boolean> {
     let res = await this.post(`${this.serviceName}/SignOut`, null);
-    if (!res || !res.succeed) return null;
+    if (!res || !res.succeed) return false;
     this.store.signOut();
   }
 

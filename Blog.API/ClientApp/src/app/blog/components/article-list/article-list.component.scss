@@ -44,13 +44,23 @@
   }
 }
 
+$highlight-normal: $primary;
+$highlight-draft: $green;
+
 .post-preview {
+  &.draft > a {
+    color: $gray-600;
+    &:focus,
+    &:hover {
+      color: $highlight-draft;
+    }
+  }
   > a {
     color: $gray-900;
     &:focus,
     &:hover {
       text-decoration: none;
-      color: $primary;
+      color: $highlight-normal;
       cursor: pointer;
     }
     > .post-title {

@@ -1,7 +1,6 @@
 #region
 
 using Blog.API.Common;
-using Blog.API.Messages;
 using Blog.API.Messages.Users;
 using Blog.Entity;
 using Blog.Repository;
@@ -20,6 +19,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Blog.API.Controllers.Base;
 
 #endregion
 
@@ -28,7 +28,7 @@ namespace Blog.API.Controllers
     [ValidateAntiForgeryToken]
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    public class UsersController : SGControllerBase
     {
         private readonly IAntiforgery _antiforgery;
         private readonly IConfiguration _configuration;
@@ -54,21 +54,20 @@ namespace Blog.API.Controllers
 
             var rehashTask = PasswordRehashAsync(user.Id, parameter.Password);
             await Task.WhenAll(rehashTask, SignIn(user));
-
             if (!rehashTask.Result)
                 return NotFound("Password rehash failed.");
 
             // clear credentials
             user.LoginName = null;
             user.Password = null;
-            return Ok(new ResponseMessage<object> { Data = new { user } });
+            return Ok(new { user });
         }
 
         [HttpPost("SignOut")]
         public async Task<IActionResult> SignOut()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Ok(new ResponseMessage<object>());
+            return Ok();
         }
 
         /// <summary>
@@ -96,7 +95,7 @@ namespace Blog.API.Controllers
         {
             var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
             Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false });
-            return Ok(new ResponseMessage<object>());
+            return Ok();
         }
 
         /// <summary>
@@ -115,14 +114,14 @@ namespace Blog.API.Controllers
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordParameter parameter)
         {
             var user = await _repository.GetByLoginNameAsync(parameter.LoginName);
-            if (user == null || 
-                user.Id != parameter.Id || 
+            if (user == null ||
+                user.Id != parameter.Id ||
                 !SecurePasswordHasher.Verify(parameter.Password, user.Password))
                 return Forbid();
 
             var rehashTask = PasswordRehashAsync(parameter.Id, parameter.NewPassword, true);
             await Task.WhenAll(SignOut(), rehashTask);
-            return Ok(new ResponseMessage<object> { Succeed = rehashTask.Result });
+            return Ok(succeed: rehashTask.Result);
         }
 
         #region Private Methods
@@ -181,21 +180,14 @@ namespace Blog.API.Controllers
             user.LoginName = null;
             user.Password = null;
 
-            Response.Cookies.Append("access_token", tokenTask.Result.Item1,
+            Response.Cookies.Append("access_token", tokenTask.Result.token,
                 new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
 
-            return Ok(new ResponseMessage<object>
-            {
-                Data = new
-                {
-                    expires = tokenTask.Result.Item2,
-                    user
-                }
-            });
+            return Ok(new { tokenTask.Result.expires, user });
         }
 
         [Obsolete("Jwt authentication is deprecated")]
-        private async Task<Tuple<string, DateTime>> GenerateJwtTokenAsync(Users user)
+        private async Task<(string token, DateTime expires)> GenerateJwtTokenAsync(Users user)
         {
             var claims = new List<Claim>
             {
@@ -221,7 +213,7 @@ namespace Blog.API.Controllers
                 signingCredentials: creds
             );
 
-            return new Tuple<string, DateTime>(new JwtSecurityTokenHandler().WriteToken(token), expires);
+            return (new JwtSecurityTokenHandler().WriteToken(token), expires);
         }
         #endregion
     }

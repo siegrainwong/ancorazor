@@ -14,12 +14,10 @@ namespace Blog.API.Filters
 {
     public class GlobalExceptionFilter : IExceptionFilter
     {
-        private readonly IHostingEnvironment env;
         private readonly ILogger<GlobalExceptionFilter> logger;
 
-        public GlobalExceptionFilter(IHostingEnvironment env, ILogger<GlobalExceptionFilter> logger)
+        public GlobalExceptionFilter(ILogger<GlobalExceptionFilter> logger)
         {
-            this.env = env;
             this.logger = logger;
         }
 

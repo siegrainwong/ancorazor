@@ -4,7 +4,7 @@
     <div class="col-lg-11 col-md-11 mx-auto list" *ngIf="data">
       <ng-container *ngFor="let item of data.list; let i = index">
         <div class="item delay-{{ i + 1 }}" [ngClass]="item.animation.class">
-          <div class="post-preview">
+          <div class="post-preview {{ item.isDraft ? 'draft' : '' }}">
             <a (click)="read(item)">
               <h2 class="post-title">
                 {{ item.title }}

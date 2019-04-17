@@ -20,9 +20,9 @@ namespace Blog.Service
             ArticleRepository = articleRepository;
         }
 
-        public async Task<QueryByPageResponse<Article>> QueryByPageAsync(QueryByPageParameter request)
+        public async Task<PaginationResponse<Article>> QueryByPageAsync(PaginationParameter request)
         {
-            var result = await ArticleRepository.QueryByPageAsync<QueryByPageResponse<Article>>(request);
+            var result = await ArticleRepository.QueryByPageAsync<PaginationResponse<Article>>(request);
             result.PageIndex = request.PageIndex;
             result.PageSize = request.PageSize;
             return result;

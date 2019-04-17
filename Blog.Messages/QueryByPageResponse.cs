@@ -1,6 +1,6 @@
 namespace Blog.API.Messages
 {
-    public class QueryByPageResponse<TItem> : QueryResponse<TItem>
+    public class PaginationResponse<TItem> : QueryResponse<TItem>
     {
         private int _total;
         public bool HasNext => PageIndex < PageCount - 1;

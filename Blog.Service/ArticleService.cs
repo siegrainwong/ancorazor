@@ -13,25 +13,29 @@ namespace Blog.Service
 {
     public class ArticleService
     {
-        public IArticleRepository ArticleRepository { get; }
+        public IArticleRepository Repository { get; }
 
         public ArticleService(IArticleRepository articleRepository)
         {
-            ArticleRepository = articleRepository;
+            Repository = articleRepository;
         }
 
         public async Task<PaginationResponse<Article>> QueryByPageAsync(PaginationParameter request)
         {
-            var result = await ArticleRepository.QueryByPageAsync<PaginationResponse<Article>>(request);
+            var result = await Repository.QueryByPageAsync<PaginationResponse<Article>>(request);
             result.PageIndex = request.PageIndex;
             result.PageSize = request.PageSize;
             return result;
         }
 
+        //[Transaction]
+        //public virtual async Task<bool> DeleteAsync(int id)
+        //    => await Repository.DeleteAsync(id) > 0;
+
         [Transaction]
         public virtual async Task<int> InsertAsync(ArticleUpdateParameter parameter)
         {
-            var id = await ArticleRepository.InsertAsync(parameter);
+            var id = await Repository.InsertAsync(parameter);
             await SetArticleTagsAndCategories(id, parameter.Tags, parameter.Categories);
             return id;
         }
@@ -40,7 +44,7 @@ namespace Blog.Service
         public virtual async Task<bool> UpdateAsync(ArticleUpdateParameter parameter)
         {
             var externalTask = SetArticleTagsAndCategories(parameter.Id, parameter.Tags, parameter.Categories);
-            var updateTask = ArticleRepository.UpdateAsync(parameter);
+            var updateTask = Repository.UpdateAsync(parameter);
             await Task.WhenAll(externalTask, updateTask);
             return true;
         }
@@ -48,8 +52,8 @@ namespace Blog.Service
         private Task SetArticleTagsAndCategories(int articleId, string[] tags, string[] categories)
         {
             // 这里要在 ConnectionString 中打开 MultipleActiveResultSets，允许一个连接返回多个结果集。
-            var t1 = ArticleRepository.SetArticleTagsAsync(articleId, tags);
-            var t2 = ArticleRepository.SetArticleCategoriesAsync(articleId, categories);
+            var t1 = Repository.SetArticleTagsAsync(articleId, tags);
+            var t2 = Repository.SetArticleCategoriesAsync(articleId, categories);
             return Task.WhenAll(t1, t2);
         }
     }

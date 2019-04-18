@@ -7,8 +7,8 @@ import RouteData from "../shared/models/route-data.model";
 import { ArticleListComponent } from "./components/article-list/article-list.component";
 import { ArticleComponent } from "./components/article/article.component";
 import { AuthGuard } from "../shared/guard/auth.guard";
-import { ArticleResolver } from "./services/article.resolver";
-import { SGBaseResolver } from "../shared/services/siegrain.animation.resolver";
+import { SGBaseCanDeactivatedGuard } from "../shared/guard/base.deactivate.guard";
+import { LeavingAnimationGuard } from "../shared/guard/transition-leaving.deactivate.guard";
 
 const routes: Routes = [
   {
@@ -17,11 +17,6 @@ const routes: Routes = [
     children: [
       {
         path: "",
-        component: ArticleListComponent,
-        data: new RouteData({ kind: "home" })
-      },
-      {
-        path: "home",
         component: ArticleListComponent,
         data: new RouteData({ kind: "home" })
       },
@@ -35,30 +30,23 @@ const routes: Routes = [
         path: "edit/:id",
         component: WriteArticleComponent,
         canActivate: [AuthGuard],
-        data: new RouteData({ kind: "edit" }),
-        resolve: {
-          article: ArticleResolver
-        }
+        data: new RouteData({ kind: "edit" })
       },
       {
         path: "article/:id",
         component: ArticleComponent,
-        data: new RouteData({ kind: "article" }),
-        resolve: {
-          article: ArticleResolver
-        }
+        data: new RouteData({ kind: "article" })
       },
       {
         path: "about",
         component: AboutComponent,
-        data: new RouteData({ kind: "about" }),
-        resolve: {
-          article: SGBaseResolver
-        }
+        data: new RouteData({ kind: "about" })
       }
     ]
   }
 ];
+// guard for transition
+routes[0].children.map(x => (x.canDeactivate = [LeavingAnimationGuard]));
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

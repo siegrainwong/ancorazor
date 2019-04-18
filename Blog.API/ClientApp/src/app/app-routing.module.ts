@@ -3,7 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 
 const routes: Routes = [
   { path: "", loadChildren: "./blog/blog.module#BlogModule" },
-  { path: "**", redirectTo: "home" }
+  { path: "**", redirectTo: "" }
 ];
 @NgModule({
   // https://github.com/angular/angular/issues/15716

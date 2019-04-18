@@ -18,4 +18,7 @@ export class PagedResult<T extends BaseModel> {
   pageCount: number;
   hasNext: boolean;
   hasPrevious: boolean;
+
+  nextPageIndex: number;
+  previousPageIndex: number;
 }

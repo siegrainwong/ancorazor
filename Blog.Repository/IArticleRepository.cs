@@ -15,7 +15,7 @@ namespace Blog.Repository
         [Statement(Id = "GetEntity")]
         Task<Article> GetByIdAsync([Param("Id")] int id, [Param("IsDraft")] bool? isDraft = false);
 
-        [Transaction]
+        [UseTransaction]
         Task<int> DeleteAsync(int id);
 
         Task<int> InsertAsync(object parameters);

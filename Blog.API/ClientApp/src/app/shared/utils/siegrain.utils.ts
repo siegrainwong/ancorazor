@@ -6,6 +6,7 @@ import {
   ConfirmDialog,
   ConfirmDialogData
 } from "../components/confirm-dialog.component";
+import RouteData from "../models/route-data.model";
 
 export const enum TipType {
   Confirm = "❔",

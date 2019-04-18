@@ -3,7 +3,7 @@ import { ArticleParameters } from "../../models/article-parameters";
 import { ArticleService } from "../../services/article.service";
 import ArticleModel from "../../models/article-model";
 import { PagedResult } from "src/app/shared/models/response-result";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterStateSnapshot } from "@angular/router";
 import {
   SGUtil,
   TipType,
@@ -17,6 +17,10 @@ import {
 import { Title } from "@angular/platform-browser";
 import { Store } from "src/app/shared/store/store";
 import { constants } from "src/app/shared/constants/siegrain.constants";
+import {
+  CanComponentTransitionToLeave,
+  TransitionToLeaveCommands
+} from "src/app/shared/guard/transition-leaving.deactivate.guard";
 
 enum ItemAnimationName {
   route = "fade-opposite",
@@ -30,7 +34,8 @@ const StaggerDuration = 200; // 列表总动画时长 = transition duration + st
   templateUrl: "./article-list.component.html",
   styleUrls: ["./article-list.component.scss"]
 })
-export class ArticleListComponent implements OnInit {
+export class ArticleListComponent
+  implements OnInit, CanComponentTransitionToLeave {
   // component
   headerModel: ArticleModel = new ArticleModel({
     title: constants.title,
@@ -40,7 +45,7 @@ export class ArticleListComponent implements OnInit {
   data: PagedResult<ArticleModel>;
   preloading: boolean = false;
   private _preloads: PagedResult<ArticleModel>;
-  private _parameter = new ArticleParameters();
+  parameter = new ArticleParameters();
   // article item animation
   private _itemAnimationName: ItemAnimationName;
 
@@ -56,7 +61,7 @@ export class ArticleListComponent implements OnInit {
   ngOnInit() {
     this._titleService.setTitle(`${constants.titlePlainText}`);
     this._route.queryParams.subscribe(param => {
-      this._parameter.pageIndex = param.index || 0;
+      this.parameter.pageIndex = param.index || 0;
       this.data = null;
       this.getArticles();
     });
@@ -65,6 +70,17 @@ export class ArticleListComponent implements OnInit {
         data.mode == SGTransitionMode.route &&
         this.setupTransitions(ItemAnimationName.route);
     });
+  }
+
+  // TODO: 搞一个返回 CustomTransitionCommands 的接口，用于调用自定义动画
+
+  CanComponentTransitionToLeaving?(
+    nextState: RouterStateSnapshot
+  ): boolean | TransitionToLeaveCommands {
+    if (nextState.url.startsWith("/article"))
+      return new TransitionToLeaveCommands({ scrollTo: topElementId });
+
+    return true;
   }
 
   public async read(model: ArticleModel) {
@@ -95,13 +111,13 @@ export class ArticleListComponent implements OnInit {
 
   public async previous() {
     if (!this.data.hasPrevious) return;
-    this._parameter.pageIndex--;
+    this.parameter.pageIndex = this.data.previousPageIndex;
     (await this.preloadArticles()) && this.turnPage(ItemAnimationName.previous);
   }
 
   public async next() {
     if (!this.data.hasNext) return;
-    this._parameter.pageIndex++;
+    this.parameter.pageIndex = this.data.nextPageIndex;
     (await this.preloadArticles()) && this.turnPage(ItemAnimationName.next);
   }
 
@@ -111,7 +127,7 @@ export class ArticleListComponent implements OnInit {
       this._preloads = null;
       this.preloading = false;
     } else {
-      let res = await this._service.getPagedArticles(this._parameter);
+      let res = await this._service.getPagedArticles(this.parameter);
       if (!res) return;
       this.data = res;
     }
@@ -127,7 +143,7 @@ export class ArticleListComponent implements OnInit {
 
   private async preloadArticles(): Promise<boolean> {
     this.preloading = true;
-    let res = await this._service.getPagedArticles(this._parameter);
+    let res = await this._service.getPagedArticles(this.parameter);
     if (!res) {
       this.preloading = false;
       return Promise.resolve(false);
@@ -150,7 +166,7 @@ export class ArticleListComponent implements OnInit {
     this.setupTransitions(animationName);
     this.util.routeTo(["/"], {
       extras: {
-        queryParams: { index: this._parameter.pageIndex }
+        queryParams: { index: this.parameter.pageIndex }
       },
       names: this._preloads
         ? [this._itemAnimationName, "page-turn-button"]

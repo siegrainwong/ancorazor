@@ -4,7 +4,9 @@ namespace Blog.API.Messages
     {
         private int _total;
         public bool HasNext => PageIndex < PageCount - 1;
+        public int NextPageIndex => HasNext ? PageIndex + 1 : PageIndex;
         public bool HasPrevious => PageIndex > 0;
+        public int PreviousPageIndex => HasPrevious ? PageIndex - 1 : PageIndex;
         public int PageCount => Total <= 0 ? 0 : Total / PageSize + (Total % PageSize > 0 ? 1 : 0);
         public int PageIndex { get; set; } = 0;
         public int PageSize { get; set; } = 10;

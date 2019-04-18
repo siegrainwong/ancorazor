@@ -20,7 +20,9 @@ import { ConfirmDialog } from "../shared/components/confirm-dialog.component";
 import { AuthGuard } from "../shared/guard/auth.guard";
 import { ScrollDispatchModule } from "@angular/cdk/scrolling";
 import { ArticleResolver } from "./services/article.resolver";
-import { SGBaseResolver } from "../shared/services/siegrain.animation.resolver";
+import { SGBaseResolver } from "../shared/services/base.resolver";
+import { SGBaseCanDeactivatedGuard } from "../shared/guard/base.deactivate.guard";
+import { LeavingAnimationGuard } from "../shared/guard/transition-leaving.deactivate.guard";
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import { SGBaseResolver } from "../shared/services/siegrain.animation.resolver";
     UserService,
     AuthGuard,
     ArticleResolver,
-    SGBaseResolver
+    SGBaseResolver,
+    SGBaseCanDeactivatedGuard,
+    LeavingAnimationGuard
   ]
 })
 export class BlogModule {

@@ -6,7 +6,7 @@ import {
   Router
 } from "@angular/router";
 import { ArticleService } from "./article.service";
-import { SGBaseResolver } from "src/app/shared/services/siegrain.animation.resolver";
+import { SGBaseResolver } from "src/app/shared/services/base.resolver";
 import { Store } from "src/app/shared/store/store";
 import ArticleModel from "../models/article-model";
 

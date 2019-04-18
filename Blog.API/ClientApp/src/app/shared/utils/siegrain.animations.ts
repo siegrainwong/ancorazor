@@ -29,7 +29,7 @@ export class SGTransition implements OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this._subscription.unsubscribe();
   }
 
@@ -83,6 +83,7 @@ export class SGTransition implements OnDestroy {
 
   /**
    * 在`_routeAnimationEnableDelay`后启用路由动画
+   * 用于触发自定义入场动画时禁用路由动画
    */
   private async enableRouteAnimationAfterDelay() {
     await timeout(this._routeAnimationEnableDelay);
@@ -92,7 +93,7 @@ export class SGTransition implements OnDestroy {
 
   /**
    * 禁用路由动画
-   * @param extraDelay 额外延时
+   * @param extraDelay 额外延时，用于处理页面、动画卡顿造成路由动画禁用时间不够的问题
    */
   private disableRouteAnimation(extraDelay: number = 0) {
     const animations = this.routeAnimations;
@@ -121,7 +122,7 @@ export class SGTransition implements OnDestroy {
     return this._animations.filter(x => names.indexOf(x.name) > -1);
   }
 
-  /** 获取一个动画集合的 duration，按最长来取 */
+  /** 获取一个动画集合的 duration，总是取集合中最长的 duration 值 */
   private getDuration(animations: Array<SGAnimation>): number {
     const duration = Math.max.apply(
       null,
@@ -133,9 +134,9 @@ export class SGTransition implements OnDestroy {
   /**
    * ######### Animation declarations
    */
-  // animation reference: https://daneden.github.io/animate.css/
+  // animation references: https://daneden.github.io/animate.css/
   private _animations: SGAnimation[] = [
-    // router animations
+    // route animations
     new SGAnimation({
       name: "fade",
       enterClass: "fadeIn",
@@ -177,6 +178,7 @@ export class SGTransition implements OnDestroy {
 /**
  * animation-duration
  * 定义在`_reset.css`的`animate.css`节内
+ * 这里并不会对动画时长有实际性效果，只用于计算
  */
 const speed = {
   slow: { name: "slow", duration: 2000 },

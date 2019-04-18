@@ -5,8 +5,7 @@
       <ng-container *ngFor="let item of data.list; let i = index">
         <div class="item delay-{{ i + 1 }}" [ngClass]="item.animation.class">
           <div class="post-preview {{ item.isDraft ? 'draft' : '' }}">
-            <a [routerLink]="['/article', item.id]">
-              <!-- <a [routerLink]="['/article', item.id]" (click)="read(item)"> -->
+            <a [routerLink]="['/article', item.id]" title="{{ item.alias }}">
               <h2 class="post-title">
                 {{ item.title }}
               </h2>
@@ -33,8 +32,36 @@
           <hr />
         </div>
       </ng-container>
+
+      <!-- link button for SEO -->
+      <div class="clearfix" *ngIf="!store.renderFromClient">
+        <a
+          mat-flat-button
+          title="Newer posts"
+          color="primary"
+          class="float-left"
+          [routerLink]="['/']"
+          [queryParams]="{ index: data.previousPageIndex }"
+          *ngIf="data.hasPrevious"
+          >← Newer</a
+        >
+        <a
+          mat-flat-button
+          title="Older posts"
+          color="primary"
+          class="float-right"
+          [routerLink]="['/']"
+          [queryParams]="{ index: data.nextPageIndex }"
+          *ngIf="data.hasNext"
+          >Older →</a
+        >
+      </div>
+
       <!-- button route animation -->
-      <div [ngClass]="transition.apply('fade-opposite')">
+      <div
+        [ngClass]="transition.apply('fade-opposite')"
+        *ngIf="store.renderFromClient"
+      >
         <!-- button page turn animation -->
         <div class="clearfix" [ngClass]="transition.apply('page-turn-button')">
           <a

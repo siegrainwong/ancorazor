@@ -30,7 +30,8 @@ namespace Blog.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var article = await _repository.GetByIdAsync(id, HttpContext.User.Identity.IsAuthenticated ? (bool?)null : false);
+            var article = await _repository.GetByIdAsync(id, 
+                HttpContext.User.Identity.IsAuthenticated ? (bool?)null : false);
             if (article == null) return NotFound();
             return Ok(article);
         }

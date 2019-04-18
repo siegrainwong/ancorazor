@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import ArticleModel from "../../models/article-model";
 import { ArticleService } from "../../services/article.service";
 import { ActivatedRoute } from "@angular/router";
@@ -18,7 +18,7 @@ import { Subscription } from "rxjs";
   templateUrl: "./article.component.html",
   styleUrls: ["./article.component.scss"]
 })
-export class ArticleComponent implements OnInit {
+export class ArticleComponent implements OnInit, OnDestroy {
   private _subscription = new Subscription();
   model: ArticleModel;
   content: string;
@@ -35,15 +35,21 @@ export class ArticleComponent implements OnInit {
     this.setupViewer();
   }
 
-  private async getArticle() {
-    this._route.data.subscribe(async (data: { article: ArticleModel }) => {
-      this.model = data.article;
-      this._titleService.setTitle(
-        `${this.model.title} - ${constants.titlePlainText}`
-      );
+  ngOnDestroy() {
+    this._subscription.unsubscribe();
+  }
 
-      await timeout(10);
-    });
+  private async getArticle() {
+    this._subscription.add(
+      this._route.data.subscribe(async (data: { article: ArticleModel }) => {
+        this.model = data.article;
+        this._titleService.setTitle(
+          `${this.model.title} - ${constants.titlePlainText}`
+        );
+
+        await timeout(10);
+      })
+    );
   }
 
   get transitionClass() {

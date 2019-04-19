@@ -20,12 +20,16 @@
               </span>
               <span class="operations col-auto" *ngIf="store.userIsAvailable">
                 <!-- <span class="operations col-auto"> -->
-                <button mat-button color="danger" (click)="delete(item, i)">
+                <a mat-button color="danger" (click)="delete(item, i)">
                   Delete
-                </button>
-                <button mat-button color="primary" (click)="edit(item)">
+                </a>
+                <a
+                  mat-button
+                  color="primary"
+                  [routerLink]="['/article', item.id]"
+                >
                   Edit
-                </button>
+                </a>
               </span>
             </div>
           </div>
@@ -33,42 +37,16 @@
         </div>
       </ng-container>
 
-      <!-- link button for SEO -->
-      <div class="clearfix" *ngIf="!store.renderFromClient">
-        <a
-          mat-flat-button
-          title="Newer posts"
-          color="primary"
-          class="float-left"
-          [routerLink]="['/']"
-          [queryParams]="{ index: data.previousPageIndex }"
-          *ngIf="data.hasPrevious"
-          >← Newer</a
-        >
-        <a
-          mat-flat-button
-          title="Older posts"
-          color="primary"
-          class="float-right"
-          [routerLink]="['/']"
-          [queryParams]="{ index: data.nextPageIndex }"
-          *ngIf="data.hasNext"
-          >Older →</a
-        >
-      </div>
-
       <!-- button route animation -->
-      <div
-        [ngClass]="transition.apply('fade-opposite')"
-        *ngIf="store.renderFromClient"
-      >
+      <div [ngClass]="transition.apply('fade-opposite')">
         <!-- button page turn animation -->
         <div class="clearfix" [ngClass]="transition.apply('page-turn-button')">
           <a
             mat-flat-button
             color="primary"
             class="float-left"
-            (click)="preloading || previous()"
+            [routerLink]="['/', data.previousPageIndex]"
+            (click)="preloading || setItemTransition(itemAnimations.previous)"
             *ngIf="data.hasPrevious"
             [attr.disabled]="preloading ? '' : null"
             >← Newer</a
@@ -77,7 +55,8 @@
             mat-flat-button
             color="primary"
             class="float-right"
-            (click)="preloading || next()"
+            [routerLink]="['/', data.nextPageIndex]"
+            (click)="preloading || setItemTransition(itemAnimations.next)"
             *ngIf="data.hasNext"
             [attr.disabled]="preloading ? '' : null"
             >Older →</a

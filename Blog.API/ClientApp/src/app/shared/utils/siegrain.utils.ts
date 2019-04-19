@@ -1,12 +1,11 @@
 import { Injectable } from "@angular/core";
 import { MatSnackBar, MatDialog } from "@angular/material";
 import { Router, NavigationExtras } from "@angular/router";
-import { SGTransition } from "./siegrain.animations";
+import { SGTransition } from "../animations/sg-transition";
 import {
   ConfirmDialog,
   ConfirmDialogData
 } from "../components/confirm-dialog.component";
-import RouteData from "../models/route-data.model";
 
 export const enum TipType {
   Confirm = "❔",
@@ -139,10 +138,3 @@ export class SGUtil {
     });
   }
 }
-
-export {
-  pastStringForTime as timeFormat,
-  pastStringForDate as dateFormat
-} from "./time-format";
-export { timeout } from "./promise-delay";
-export { random } from "./random";

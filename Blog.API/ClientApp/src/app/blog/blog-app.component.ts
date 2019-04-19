@@ -9,8 +9,8 @@ import {
 import { filter } from "rxjs/operators";
 import { Store } from "../shared/store/store";
 import RouteData from "../shared/models/route-data.model";
-import { SGTransition } from "../shared/utils/siegrain.animations";
-import { SGUtil, timeout } from "../shared/utils/siegrain.utils";
+import { SGTransition } from "../shared/animations/sg-transition";
+import { SGUtil } from "../shared/utils/siegrain.utils";
 import { externalScripts } from "../shared/constants/siegrain.constants";
 import { onScroll } from "../shared/utils/scroll-listener";
 import { Subscription } from "rxjs";

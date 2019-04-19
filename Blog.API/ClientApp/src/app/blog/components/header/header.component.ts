@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
-import { SGTransition } from "src/app/shared/utils/siegrain.animations";
+import { SGTransition } from "src/app/shared/animations/sg-transition";
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "src/app/shared/store/store";
 import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
-import { SGTransition } from "src/app/shared/utils/siegrain.animations";
+import { SGTransition } from "src/app/shared/animations/sg-transition";
 import { MatDialog } from "@angular/material";
 import { SignInComponent } from "../sign-in/sign-in.component";
 import { ActivatedRoute } from "@angular/router";

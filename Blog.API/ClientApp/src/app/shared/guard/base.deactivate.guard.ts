@@ -2,14 +2,9 @@ import { Injectable } from "@angular/core";
 import {
   CanDeactivate,
   ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  UrlTree
+  RouterStateSnapshot
 } from "@angular/router";
-import { Observable } from "rxjs";
-
-export interface CanComponentDeactivate {
-  canDeactivate?: () => Promise<boolean> | boolean;
-}
+import { CanComponentDeactivate } from "../animations/sg-transition.interface";
 
 @Injectable({
   providedIn: "root"

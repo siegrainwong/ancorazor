@@ -1,8 +1,9 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { timeout } from "./promise-delay";
+import { timeout } from "../utils/promise-delay";
 import { Store } from "../store/store";
 import { BehaviorSubject, Subscription } from "rxjs";
-import { constants } from "../constants/siegrain.constants";
+import { SGTransitionMode, SGAnimation } from "./sg-transition.model";
+import { SGAnimations as animations } from "./sg-animations";
 
 @Injectable({
   providedIn: "root"
@@ -11,6 +12,7 @@ export class SGTransition implements OnDestroy {
   private _subscription = new Subscription();
   private _currentTransitionMode: SGTransitionMode = SGTransitionMode.route;
   private _routeAnimationEnableDelay = 0;
+
   public transitionWillBegin$ = new BehaviorSubject<{
     mode: SGTransitionMode;
     animations: SGAnimation[];
@@ -82,6 +84,10 @@ export class SGTransition implements OnDestroy {
   }
 
   /**
+   * ######### Private Methods
+   */
+
+  /**
    * 在`_routeAnimationEnableDelay`后启用路由动画
    * 用于触发自定义入场动画时禁用路由动画
    */
@@ -115,11 +121,11 @@ export class SGTransition implements OnDestroy {
   }
 
   private get routeAnimations(): Array<SGAnimation> {
-    return this._animations.filter(x => x.type == SGTransitionMode.route);
+    return animations.filter(x => x.type == SGTransitionMode.route);
   }
 
   private getAnimations(names: string[]): Array<SGAnimation> {
-    return this._animations.filter(x => names.indexOf(x.name) > -1);
+    return animations.filter(x => names.indexOf(x.name) > -1);
   }
 
   /** 获取一个动画集合的 duration，总是取集合中最长的 duration 值 */
@@ -129,102 +135,5 @@ export class SGTransition implements OnDestroy {
       animations.map(x => x.speed.duration)
     );
     return duration;
-  }
-
-  /**
-   * ######### Animation declarations
-   */
-  // animation references: https://daneden.github.io/animate.css/
-  private _animations: SGAnimation[] = [
-    // route animations
-    new SGAnimation({
-      name: "fade",
-      enterClass: "fadeIn",
-      leaveClass: "fadeOut"
-    }),
-    new SGAnimation({
-      name: "fade-up",
-      enterClass: "fadeInUp",
-      leaveClass: "fadeOutUp"
-    }),
-    new SGAnimation({
-      name: "fade-opposite",
-      enterClass: "fadeInUp",
-      leaveClass: "fadeOutDown"
-    }),
-
-    // custom animations
-    new SGAnimation({
-      name: "page-turn-next",
-      enterClass: "fadeInRight",
-      leaveClass: "fadeOutLeft",
-      type: SGTransitionMode.custom
-    }),
-    new SGAnimation({
-      name: "page-turn-previous",
-      enterClass: "fadeInLeft",
-      leaveClass: "fadeOutRight",
-      type: SGTransitionMode.custom
-    }),
-    new SGAnimation({
-      name: "page-turn-button",
-      enterClass: "fadeInUp",
-      leaveClass: "fadeOutDown",
-      type: SGTransitionMode.custom
-    })
-  ];
-}
-
-/**
- * animation-duration
- * 定义在`_reset.css`的`animate.css`节内
- * 这里并不会对动画时长有实际性效果，只用于计算
- */
-const speed = {
-  slow: { name: "slow", duration: 2000 },
-  slower: { name: "slower", duration: 3000 },
-  fast: { name: "fast", duration: 800 },
-  faster: { name: "faster", duration: 500 }
-};
-
-/** 动画类型 */
-export enum SGTransitionMode {
-  /**
-   * 路由动画：每次激活时会触发当前页面的所有路由动画
-   **/
-  route = "route",
-  /**
-   * 自定义动画：每次只激活指定名称的动画
-   **/
-  custom = "custom"
-}
-
-export class SGAnimation {
-  name: string;
-  speed: { name: string; duration: number } = speed.faster;
-  type: SGTransitionMode = SGTransitionMode.route;
-  /** 是否触发离开动画 */
-  leaving: boolean = false;
-  /** 是否执行动画 */
-  animated: boolean = constants.enableAnimation;
-
-  enterClass: string;
-  leaveClass: string;
-  constructor(init?: Partial<SGAnimation>) {
-    Object.assign(this, init);
-  }
-
-  /**
-   * 获取 `[ngClass]` 对象，通过这个对象操控`dom`元素的动画效果
-   */
-  get class() {
-    let animation = {};
-    animation[this.enterClass] = !this.leaving;
-    animation["enter"] = !this.leaving;
-    animation[this.leaveClass] = this.leaving;
-    animation["leave"] = this.leaving;
-    animation[this.speed.name] = true;
-    animation["animated"] = this.animated;
-    return animation;
   }
 }

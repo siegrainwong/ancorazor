@@ -1,16 +1,8 @@
 import { Injectable } from "@angular/core";
-import {
-  CanDeactivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  UrlTree
-} from "@angular/router";
-import { Observable } from "rxjs";
-import {
-  LeavingAnimationGuard,
-  CanComponentTransitionToLeave
-} from "src/app/shared/guard/transition-leaving.deactivate.guard";
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
+import { SGTransitionToLeaveGuard } from "src/app/shared/animations/sg-transition-to-leave.deactivate.guard";
 import ArticleModel from "../models/article-model";
+import { CanComponentTransitionToLeave } from "src/app/shared/animations/sg-transition.interface";
 
 export interface CanArticleResolvedBeforeTransition
   extends CanComponentTransitionToLeave {
@@ -22,7 +14,7 @@ export interface CanArticleResolvedBeforeTransition
 @Injectable({
   providedIn: "root"
 })
-export class ArticleResolveGuard extends LeavingAnimationGuard<
+export class ArticleResolveGuard extends SGTransitionToLeaveGuard<
   CanArticleResolvedBeforeTransition
 > {
   async canDeactivate(

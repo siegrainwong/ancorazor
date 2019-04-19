@@ -1,5 +1,5 @@
 import BaseModel from "src/app/shared/models/base-model";
-import { SGAnimation } from "src/app/shared/utils/siegrain.animations";
+import { SGAnimation } from "src/app/shared/animations/sg-transition.model";
 
 export default class ArticleModel extends BaseModel {
   author: string;

@@ -22,7 +22,7 @@ import { ScrollDispatchModule } from "@angular/cdk/scrolling";
 import { ArticleResolver } from "./services/article.resolver";
 import { SGBaseResolver } from "../shared/services/base.resolver";
 import { SGBaseCanDeactivatedGuard } from "../shared/guard/base.deactivate.guard";
-import { LeavingAnimationGuard } from "../shared/guard/transition-leaving.deactivate.guard";
+import { SGTransitionToLeaveGuard } from "../shared/animations/sg-transition-to-leave.deactivate.guard";
 
 @NgModule({
   declarations: [
@@ -54,7 +54,7 @@ import { LeavingAnimationGuard } from "../shared/guard/transition-leaving.deacti
     ArticleResolver,
     SGBaseResolver,
     SGBaseCanDeactivatedGuard,
-    LeavingAnimationGuard
+    SGTransitionToLeaveGuard
   ]
 })
 export class BlogModule {

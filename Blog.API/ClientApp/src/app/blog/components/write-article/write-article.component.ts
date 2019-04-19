@@ -4,7 +4,7 @@ import { ActivatedRoute } from "@angular/router";
 import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
 import { LoggingService } from "src/app/shared/services/logging.service";
-import { SGTransition } from "src/app/shared/utils/siegrain.animations";
+import { SGTransition } from "src/app/shared/animations/sg-transition";
 import { SGUtil, topElementId } from "src/app/shared/utils/siegrain.utils";
 import {
   externalScripts,

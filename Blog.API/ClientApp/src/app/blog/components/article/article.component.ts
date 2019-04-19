@@ -3,7 +3,7 @@ import ArticleModel from "../../models/article-model";
 import { ArticleService } from "../../services/article.service";
 import { ActivatedRoute } from "@angular/router";
 import { Store } from "src/app/shared/store/store";
-import { SGTransition } from "src/app/shared/utils/siegrain.animations";
+import { SGTransition } from "src/app/shared/animations/sg-transition";
 import { Title } from "@angular/platform-browser";
 import { timeout } from "src/app/shared/utils/promise-delay";
 import {

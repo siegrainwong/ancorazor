@@ -7,8 +7,7 @@ import RouteData from "../shared/models/route-data.model";
 import { ArticleListComponent } from "./components/article-list/article-list.component";
 import { ArticleComponent } from "./components/article/article.component";
 import { AuthGuard } from "../shared/guard/auth.guard";
-import { SGBaseCanDeactivatedGuard } from "../shared/guard/base.deactivate.guard";
-import { LeavingAnimationGuard } from "../shared/guard/transition-leaving.deactivate.guard";
+import { SGTransitionToLeaveGuard } from "../shared/animations/sg-transition-to-leave.deactivate.guard";
 
 const routes: Routes = [
   {
@@ -17,6 +16,11 @@ const routes: Routes = [
     children: [
       {
         path: "",
+        component: ArticleListComponent,
+        data: new RouteData({ kind: "home" })
+      },
+      {
+        path: ":index",
         component: ArticleListComponent,
         data: new RouteData({ kind: "home" })
       },
@@ -46,7 +50,7 @@ const routes: Routes = [
   }
 ];
 // guard for transition
-routes[0].children.map(x => (x.canDeactivate = [LeavingAnimationGuard]));
+routes[0].children.map(x => (x.canDeactivate = [SGTransitionToLeaveGuard]));
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

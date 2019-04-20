@@ -21,15 +21,19 @@ namespace Blog.API.Authentication
 
         public override async Task ValidatePrincipal(CookieValidatePrincipalContext context)
         {
+            var url = context.Request.Path.ToString();
+            if (url != "/" && !url.StartsWith("/api")) return;
+
             var claims = context.Principal.Claims;
             var loginName = claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
             var authUpdatedTimeStr = claims.FirstOrDefault(x => x.Type == nameof(Users.AuthUpdatedAt)).Value;
+
+            if (string.IsNullOrEmpty(authUpdatedTimeStr)) return;
 
             // sign out if user credential info(e.g. password) has changed
             var user = await _repository.GetByLoginNameAsync(loginName);
             var truncated = user.AuthUpdatedAt.AddMilliseconds(-user.AuthUpdatedAt.Millisecond); // truncate millisecond for date comparison
             if (user == null ||
-                string.IsNullOrEmpty(authUpdatedTimeStr) ||
                 !DateTime.TryParse(authUpdatedTimeStr, out var authUpdatedAt) ||
                 truncated > authUpdatedAt)
             {

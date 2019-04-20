@@ -1,12 +1,17 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
+import {
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  CanDeactivate
+} from "@angular/router";
 import { SGBaseCanDeactivatedGuard } from "../guard/base.deactivate.guard";
 import { SGUtil } from "../utils/siegrain.utils";
 import { SGTransition } from "./sg-transition";
 import {
   CanComponentTransitionToLeave,
   CustomizeTransitionForComponent,
-  RouteTransitionForComponent
+  RouteTransitionForComponent,
+  SGTransitionDelegate
 } from "./sg-transition.interface";
 import {
   SGTransitionMode,
@@ -15,6 +20,25 @@ import {
 } from "./sg-transition.model";
 import { LoggingService } from "../services/logging.service";
 import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
+import { SGTransitionStore } from "./sg-transition.store";
+
+@Injectable({
+  providedIn: "root"
+})
+export class SGTransitionGuard<T extends SGTransitionDelegate>
+  implements CanDeactivate<T> {
+  constructor(private _transitionStore: SGTransitionStore) {}
+  async canDeactivate(
+    component: T,
+    currentRoute: ActivatedRouteSnapshot,
+    currentState: RouterStateSnapshot
+  ): Promise<boolean> {
+    this._transitionStore.transitionDelegate = component;
+    console.log("delegate set with component: ", component);
+
+    return true;
+  }
+}
 
 /** 过渡管道 */
 export const enum SGTransitionPipeline {

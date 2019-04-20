@@ -20,7 +20,7 @@ export class Store {
   /** 是否是客户端渲染 */
   renderFromClient: boolean = false;
   /** 是否是首屏加载 */
-  _isFirstScreen: boolean = true;
+  private _isFirstScreen: boolean = true;
   get isFirstScreen(): boolean {
     return this._isFirstScreen && this.renderFromClient;
   }

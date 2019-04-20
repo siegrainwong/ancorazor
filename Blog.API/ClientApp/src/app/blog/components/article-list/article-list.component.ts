@@ -14,8 +14,8 @@ import { Title } from "@angular/platform-browser";
 import { Store } from "src/app/shared/store/store";
 import { constants } from "src/app/shared/constants/siegrain.constants";
 import {
-  CanComponentTransitionToLeave,
-  CustomizeTransitionForComponent
+  SGTransitionDelegate,
+  SGCustomTransitionDelegate
 } from "src/app/shared/animations/sg-transition.interface";
 import {
   SGTransitionMode,
@@ -34,7 +34,7 @@ const StaggerDuration = 200; // 列表总动画时长 = transition duration + st
   styleUrls: ["./article-list.component.scss"]
 })
 export class ArticleListComponent
-  implements OnInit, OnDestroy, CustomizeTransitionForComponent {
+  implements OnInit, OnDestroy, SGCustomTransitionDelegate {
   // component
   public headerModel: ArticleModel = new ArticleModel({
     title: constants.title,
@@ -79,44 +79,45 @@ export class ArticleListComponent
     this._subscription.unsubscribe();
   }
 
-  get animationNames(): string[] {
-    return [this._currentItemAnimationName, "page-turn-button"];
-  }
+  // get animationNames(): string[] {
+  //   return [this._currentItemAnimationName, "page-turn-button"];
+  // }
 
   RouteTransitionForComponent?(
-    component: CanComponentTransitionToLeave,
+    component: SGTransitionDelegate,
     url: string
   ): TransitionCommands {
     if (url.startsWith("/article") || url.startsWith("/edit"))
       return new RouteTransitionCommands({ scrollTo: topElementId });
-
-    return new RouteTransitionCommands();
+    return null;
   }
 
   CustomizeTransitionForComponent(
-    component: CanComponentTransitionToLeave,
+    component: SGCustomTransitionDelegate,
     url: string
   ): CustomizeTransitionCommands {
     return new CustomizeTransitionCommands({
+      names: [this._currentItemAnimationName, "page-turn-button"],
       extraDuration: StaggerDuration,
       scrollTo: topElementId
     });
   }
 
   ModeForComponentTransition(
-    component: CanComponentTransitionToLeave,
+    component: SGCustomTransitionDelegate,
     url: string
   ): SGTransitionMode {
-    const isTurningPage = url.length > 0 && parseInt(url.replace("/", ""));
+    const isTurningPage =
+      url.length > 0 && typeof parseInt(url.replace("/", "")) == "number";
     return isTurningPage ? SGTransitionMode.custom : SGTransitionMode.route;
   }
 
-  public async edit(model: ArticleModel) {
-    (await this.preloadArticle(model)) &&
-      this.util.routeTo(["/edit", model.id], {
-        scrollToElementId: topElementId
-      });
-  }
+  // public async edit(model: ArticleModel) {
+  //   (await this.preloadArticle(model)) &&
+  //     this.util.routeTo(["/edit", model.id], {
+  //       scrollToElementId: topElementId
+  //     });
+  // }
 
   public async delete(item: ArticleModel, index: number) {
     let result =
@@ -144,12 +145,12 @@ export class ArticleListComponent
     }
   }
 
-  private async preloadArticle(model: ArticleModel): Promise<boolean> {
-    let res = await this._service.getArticle(model.id);
-    if (!res) return Promise.resolve(false);
-    this.store.preloadArticle = res;
-    return Promise.resolve(true);
-  }
+  // private async preloadArticle(model: ArticleModel): Promise<boolean> {
+  //   let res = await this._service.getArticle(model.id);
+  //   if (!res) return Promise.resolve(false);
+  //   this.store.preloadArticle = res;
+  //   return Promise.resolve(true);
+  // }
 
   // private async preloadArticles(): Promise<boolean> {
   //   this.preloading = true;

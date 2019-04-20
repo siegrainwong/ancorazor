@@ -23,7 +23,6 @@ export class ArticleComponent implements OnInit, OnDestroy {
   model: ArticleModel;
   content: string;
   constructor(
-    private _service: ArticleService,
     private _route: ActivatedRoute,
     private _titleService: Title,
     private _util: SGUtil,

@@ -13,6 +13,7 @@ import { Store } from "./shared/store/store";
 import { isPlatformBrowser } from "@angular/common";
 import { TaskWrapper } from "./shared/services/async-helper.service";
 import { constants } from "./shared/constants/siegrain.constants";
+import { SGUtil } from "./shared/utils/siegrain.utils";
 
 @NgModule({
   declarations: [AppComponent],

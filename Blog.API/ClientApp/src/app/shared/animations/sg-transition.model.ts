@@ -74,9 +74,11 @@ export class RouteTransitionCommands extends TransitionCommands {
 
 /* 自定义动画过渡指令 */
 export class CustomizeTransitionCommands extends RouteTransitionCommands {
+  /* 要执行的自定义动画名称 */
+  names!: string[];
   /* 额外动画时间 */
   extraDuration: number = 0;
-  constructor(obj?: Partial<CustomizeTransitionCommands>) {
+  constructor(obj: CustomizeTransitionCommands) {
     super();
     Object.assign(this, obj);
   }

@@ -7,7 +7,12 @@ import RouteData from "../shared/models/route-data.model";
 import { ArticleListComponent } from "./components/article-list/article-list.component";
 import { ArticleComponent } from "./components/article/article.component";
 import { AuthGuard } from "../shared/guard/auth.guard";
-import { SGTransitionToLeaveGuard } from "../shared/animations/sg-transition-to-leave.deactivate.guard";
+import {
+  SGTransitionResolveGuard,
+  SGBaseResolveGuard
+} from "../shared/animations/sg-transition.resolve.guard";
+import { ArticleResolver } from "./services/article.resolver";
+import { SGTransitionGuard } from "../shared/animations/sg-transition-to-leave.deactivate.guard";
 
 const routes: Routes = [
   {
@@ -39,7 +44,11 @@ const routes: Routes = [
       {
         path: "article/:id",
         component: ArticleComponent,
-        data: new RouteData({ kind: "article" })
+        data: new RouteData({ kind: "article" }),
+        resolve: {
+          shit: SGBaseResolveGuard,
+          article: ArticleResolver
+        }
       },
       {
         path: "about",
@@ -49,8 +58,13 @@ const routes: Routes = [
     ]
   }
 ];
-// guard for transition
-routes[0].children.map(x => (x.canDeactivate = [SGTransitionToLeaveGuard]));
+// setup SGTransition guards
+routes[0].children.map(x => {
+  if (!x.canDeactivate) x.canDeactivate = [SGTransitionGuard];
+  x.canDeactivate.push();
+  if (!x.resolve) x.resolve = {};
+  x.resolve.sg_transition = SGTransitionResolveGuard;
+});
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

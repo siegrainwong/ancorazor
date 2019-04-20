@@ -6,18 +6,18 @@ import {
   Router
 } from "@angular/router";
 import { ArticleService } from "./article.service";
-import { SGBaseResolver } from "src/app/shared/services/base.resolver";
-import { Store } from "src/app/shared/store/store";
 import ArticleModel from "../models/article-model";
+import { SGTransitionStore } from "src/app/shared/animations/sg-transition.store";
 
 @Injectable({
   providedIn: "root"
 })
-export class ArticleResolver extends SGBaseResolver
-  implements Resolve<ArticleModel> {
-  constructor(private _service: ArticleService, private _router: Router) {
-    super();
-  }
+export class ArticleResolver implements Resolve<ArticleModel> {
+  constructor(
+    private _service: ArticleService,
+    private _router: Router,
+    private _transitionStore: SGTransitionStore
+  ) {}
   async resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -26,7 +26,7 @@ export class ArticleResolver extends SGBaseResolver
     let res = await this._service.getArticle(parseInt(id));
     if (!res) this._router.navigate(["/"]);
 
-    await super.resolve(route, state);
+    this._transitionStore.setResolved();
     return res;
   }
 }

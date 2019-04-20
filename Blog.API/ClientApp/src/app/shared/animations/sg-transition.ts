@@ -4,6 +4,7 @@ import { Store } from "../store/store";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { SGTransitionMode, SGAnimation } from "./sg-transition.model";
 import { SGAnimations as animations } from "./sg-animations";
+import { SGTransitionStore } from "./sg-transition.store";
 
 @Injectable({
   providedIn: "root"
@@ -13,12 +14,10 @@ export class SGTransition implements OnDestroy {
   private _currentTransitionMode: SGTransitionMode = SGTransitionMode.route;
   private _routeAnimationEnableDelay = 0;
 
-  public transitionWillBegin$ = new BehaviorSubject<{
-    mode: SGTransitionMode;
-    animations: SGAnimation[];
-  }>({ mode: SGTransitionMode.route, animations: [] });
-
-  constructor(private _store: Store) {
+  constructor(
+    private _store: Store,
+    private _transitionStore: SGTransitionStore
+  ) {
     this._subscription.add(
       this._store.routeDataChanged$.subscribe(async () => {
         if (this._store.isFirstScreen) this.disableRouteAnimation(500);
@@ -61,7 +60,7 @@ export class SGTransition implements OnDestroy {
       this.disableRouteAnimation();
     }
 
-    this.transitionWillBegin$.next({
+    this._transitionStore.transitionWillBegin$.next({
       mode: this._currentTransitionMode,
       animations
     });

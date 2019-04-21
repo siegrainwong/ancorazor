@@ -46,7 +46,7 @@
             color="primary"
             class="float-left"
             [routerLink]="['/index', data.previousPageIndex]"
-            (click)="preloading || setItemTransition(itemAnimations.previous)"
+            (click)="(preloading)"
             *ngIf="data.hasPrevious"
             [attr.disabled]="preloading ? '' : null"
             >← Newer</a
@@ -56,7 +56,7 @@
             color="primary"
             class="float-right"
             [routerLink]="['/index', data.nextPageIndex]"
-            (click)="preloading || setItemTransition(itemAnimations.next)"
+            (click)="(preloading)"
             *ngIf="data.hasNext"
             [attr.disabled]="preloading ? '' : null"
             >Older →</a

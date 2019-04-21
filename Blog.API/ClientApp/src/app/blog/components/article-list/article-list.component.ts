@@ -49,8 +49,8 @@ export class ArticleListComponent
   };
 
   public currentItemAnimation: string = this.itemAnimations.route;
+
   private _subscription = new Subscription();
-  state$: any;
   constructor(
     private _service: ArticleService,
     private _route: ActivatedRoute,
@@ -89,6 +89,11 @@ export class ArticleListComponent
   CustomizeTransitionForComponent(
     nextRoute: ActivatedRouteSnapshot
   ): CustomizeTransitionCommands {
+    let index = parseInt(nextRoute.params.index) || 0;
+    let isNextPage = index == this.data.nextPageIndex;
+    this.setItemTransition(
+      isNextPage ? this.itemAnimations.next : this.itemAnimations.previous
+    );
     return new CustomizeTransitionCommands({
       names: [this.currentItemAnimation, "page-turn-button"],
       extraDuration: StaggerDuration,

@@ -1,17 +1,15 @@
-import { Injectable, OnDestroy } from "@angular/core";
+import { Injectable } from "@angular/core";
 import {
   Resolve,
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from "@angular/router";
-import { Observable, EMPTY, Subscription } from "rxjs";
 import { SGTransitionStore } from "./sg-transition.store";
-import { take } from "rxjs/operators";
-import { timeout } from "../utils/promise-delay";
+import { first } from "rxjs/operators";
 import {
-  SGCustomTransitionDelegate as SGCustomizeTransitionDelegate,
+  SGCustomizeTransitionDelegate,
   SGTransitionDelegate
-} from "./sg-transition.interface";
+} from "./sg-transition.delegate";
 import {
   RouteTransitionCommands,
   SGTransitionMode,
@@ -20,87 +18,98 @@ import {
 import { SGTransition } from "./sg-transition";
 import { SGUtil } from "../utils/siegrain.utils";
 import { Store } from "../store/store";
+import { LoggingService } from "../services/logging.service";
 
 @Injectable({
   providedIn: "root"
 })
-export class SGTransitionResolveGuard implements Resolve<boolean>, OnDestroy {
-  private _subscription = new Subscription();
+export class SGTransitionResolveGuard
+  implements Resolve<RouteTransitionCommands> {
   constructor(
     private _transitionStore: SGTransitionStore,
     private _transition: SGTransition,
     private _util: SGUtil,
-    private _store: Store
+    private _store: Store,
+    private _logger: LoggingService
   ) {}
 
   async resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Promise<boolean> {
-    if (this._store.isFirstScreen || !this._store.renderFromClient) return true;
+  ): Promise<RouteTransitionCommands> {
+    // 首屏及 SSR 时不执行过渡
+    if (this._store.isFirstScreen || !this._store.renderFromClient) return null;
 
+    // 获取路由上其他resolve的数量
     const resolveCount = this.getResolveCount(route);
+
+    // 没有其他 resolve 就直接执行过渡
     if (!resolveCount) {
-      console.log("nothing resolved before transition");
-      await this.transition(route);
-      return true;
+      this._logger.info("nothing resolved before transition to ", route);
+      return await this.transition(route);
     }
 
-    console.log(`${resolveCount} resolves executing`);
-    return new Promise(resolve => {
-      this._subscription.add(
-        this._transitionStore.resolveCompletedChanged$
-          .pipe(take(resolveCount))
-          .subscribe(async number => {
-            if (number != resolveCount) return;
-            console.log(`${number} resolves completed`);
-            await this.transition(route);
-            resolve(true);
-          })
-      );
-    });
+    // 等待其他 resolve 执行完毕再执行过渡
+    this._logger.info(
+      `sg-transition module is waiting for another ${resolveCount} resolvers...`
+    );
+    await this._transitionStore.resolveCompletedChanged$
+      .pipe(first(x => x == resolveCount))
+      .toPromise();
+    this._logger.info("resolves completed, transition to ", route);
+    return await this.transition(route);
   }
 
   private async transition(route: ActivatedRouteSnapshot) {
-    const url = route.url.toString();
     let delegates = this.setupDelegate(
       this._transitionStore.transitionDelegate
     );
+    let commands = null;
     if (delegates.customDelegate)
-      await this.transitionWithCustomMode(delegates.customDelegate, url);
-    else await this.transitionWithRouteMode(delegates.routeDelegate, url);
+      commands = await this.transitionWithCustomMode(
+        delegates.customDelegate,
+        route
+      );
+    else
+      commands = await this.transitionWithRouteMode(
+        delegates.routeDelegate,
+        route
+      );
     this._transitionStore.setTransitioned();
+    return commands;
   }
 
-  /* 执行路由过渡动画 */
+  /* 执行路由过渡 */
   private async transitionWithRouteMode(
     delegate: SGTransitionDelegate,
-    url: string
+    route: ActivatedRouteSnapshot
   ) {
     let commands =
-      (delegate.RouteTransitionForComponent &&
-        delegate.RouteTransitionForComponent(delegate, url)) ||
+      (delegate.TransitionForComponent &&
+        delegate.TransitionForComponent(route)) ||
       new RouteTransitionCommands();
 
     this.scroll(commands);
-    await this._transition.triggerTransition();
+    await this._transition.triggerLeaveTransition();
+    return commands;
   }
 
-  /* 执行自定义过渡动画 */
+  /* 执行自定义过渡 */
   private async transitionWithCustomMode(
     delegate: SGCustomizeTransitionDelegate,
-    url: string
+    route: ActivatedRouteSnapshot
   ) {
-    const mode = delegate.ModeForComponentTransition(delegate, url);
+    const mode = delegate.ModeForComponentTransition(route);
     if (mode == SGTransitionMode.route)
-      return this.transitionWithRouteMode(delegate, url);
+      return this.transitionWithRouteMode(delegate, route);
 
-    const commands = delegate.CustomizeTransitionForComponent(delegate, url);
+    const commands = delegate.CustomizeTransitionForComponent(route);
     this.scroll(commands);
-    await this._transition.triggerTransition(
+    await this._transition.triggerLeaveTransition(
       commands.names,
       commands.extraDuration
     );
+    return commands;
   }
 
   private scroll(commands: TransitionCommands) {
@@ -129,29 +138,11 @@ export class SGTransitionResolveGuard implements Resolve<boolean>, OnDestroy {
     };
   }
 
+  /* 获取其他Resolve的数量 */
   private getResolveCount(route: ActivatedRouteSnapshot): number {
     const resolveKey = "_resolve";
     return (
       (route[resolveKey] && Object.keys(route[resolveKey]).length - 1) || 0
     );
-  }
-
-  ngOnDestroy(): void {
-    this._subscription.unsubscribe();
-  }
-}
-
-@Injectable({
-  providedIn: "root"
-})
-export class SGBaseResolveGuard<TOutput> implements Resolve<TOutput> {
-  constructor(private _transitionStore: SGTransitionStore) {}
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<TOutput> {
-    console.log("SGBaseResolveGuard");
-    this._transitionStore.setResolved();
-    return EMPTY;
   }
 }

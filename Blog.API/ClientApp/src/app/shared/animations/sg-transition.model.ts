@@ -1,5 +1,3 @@
-import { constants } from "../constants/siegrain.constants";
-
 /**
  * 动画速度
  * 定义在`_reset.css`的`animate.css`节内
@@ -31,7 +29,7 @@ export class SGAnimation {
   /** 是否触发离开动画 */
   leaving: boolean = false;
   /** 是否执行动画 */
-  animated: boolean = constants.enableAnimation;
+  animated: boolean = false;
 
   enterClass: string;
   leaveClass: string;
@@ -58,13 +56,17 @@ export class SGAnimation {
  * === Transition Commands ===
  */
 
+export function isCustomizeCommands(commands: TransitionCommands): boolean {
+  return commands.constructor.name === CustomizeTransitionCommands.name;
+}
+
 /** 过渡指令 */
 export class TransitionCommands {
-  /* 滚动到指定锚点 */
+  /** 滚动到指定锚点 */
   scrollTo?: string;
 }
 
-/* 离场过渡指令 */
+/** 离场过渡指令 */
 export class RouteTransitionCommands extends TransitionCommands {
   constructor(obj?: Partial<RouteTransitionCommands>) {
     super();
@@ -72,11 +74,11 @@ export class RouteTransitionCommands extends TransitionCommands {
   }
 }
 
-/* 自定义动画过渡指令 */
+/** 自定义动画过渡指令 */
 export class CustomizeTransitionCommands extends RouteTransitionCommands {
-  /* 要执行的自定义动画名称 */
+  /** 要执行的自定义动画名称 */
   names!: string[];
-  /* 额外动画时间 */
+  /** 额外动画时间 */
   extraDuration: number = 0;
   constructor(obj: CustomizeTransitionCommands) {
     super();

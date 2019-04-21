@@ -91,7 +91,7 @@ export class SGUtil {
   ) {
     if (!argument) argument = {};
     argument.scrollToElementId && this.scrollTo(argument.scrollToElementId);
-    await this._transition.triggerTransition(
+    await this._transition.triggerLeaveTransition(
       argument.names,
       argument.extraDuration || 0
     );

@@ -1,7 +1,6 @@
-import { Injectable, OnDestroy } from "@angular/core";
-import { BehaviorSubject, Subscription, Observable } from "rxjs";
-import { SGTransitionMode, SGAnimation } from "./sg-transition.model";
-import { SGTransitionDelegate } from "./sg-transition.interface";
+import { Injectable } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
+import { SGTransitionDelegate } from "./sg-transition.delegate";
 
 @Injectable({
   providedIn: "root"
@@ -9,29 +8,32 @@ import { SGTransitionDelegate } from "./sg-transition.interface";
 export class SGTransitionStore {
   public transitionDelegate: SGTransitionDelegate;
 
-  public transitionWillBegin$ = new BehaviorSubject<{
-    mode: SGTransitionMode;
-    animations: SGAnimation[];
-  }>({ mode: SGTransitionMode.route, animations: [] });
-
   /**
    * 为其他`Resolve`计数
    * 当计数达到其他`Resolve`的数量时才执行转场
    **/
   private _completedResolveCount: number = 0;
+  private set completedResolveCount(val: number) {
+    this._completedResolveCount = val;
+    this.resolveCompletedChanged$.next(val);
+  }
+  private get completedResolveCount() {
+    return this._completedResolveCount;
+  }
   public resolveCompletedChanged$ = new BehaviorSubject<number>(
-    this._completedResolveCount
+    this.completedResolveCount
   );
 
   /** 标记该`Resolve`已执行完毕 */
   public setResolved() {
-    this._completedResolveCount++;
-    this.resolveCompletedChanged$.next(this._completedResolveCount);
+    if (!this.transitionDelegate) return;
+    this.completedResolveCount++;
   }
 
   /** 清理转场状态 */
   public setTransitioned() {
+    if (!this.transitionDelegate) return;
     this.transitionDelegate = null;
-    this._completedResolveCount = 0;
+    this.completedResolveCount = 0;
   }
 }

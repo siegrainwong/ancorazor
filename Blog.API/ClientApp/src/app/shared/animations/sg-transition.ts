@@ -1,32 +1,40 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { timeout } from "../utils/promise-delay";
 import { Store } from "../store/store";
-import { BehaviorSubject, Subscription } from "rxjs";
-import { SGTransitionMode, SGAnimation } from "./sg-transition.model";
-import { SGAnimations as animations } from "./sg-animations";
-import { SGTransitionStore } from "./sg-transition.store";
+import { Subscription } from "rxjs";
+import {
+  SGTransitionMode,
+  SGAnimation,
+  TransitionCommands,
+  CustomizeTransitionCommands,
+  isCustomizeCommands
+} from "./sg-transition.model";
+import { first } from "rxjs/operators";
+import { SGAnimations } from "./sg-animations";
+
+enum SGTransitionDirection {
+  enter,
+  leave
+}
 
 @Injectable({
   providedIn: "root"
 })
 export class SGTransition implements OnDestroy {
   private _subscription = new Subscription();
-  private _currentTransitionMode: SGTransitionMode = SGTransitionMode.route;
   private _routeAnimationEnableDelay = 0;
 
-  constructor(
-    private _store: Store,
-    private _transitionStore: SGTransitionStore
-  ) {
-    this._subscription.add(
-      this._store.routeDataChanged$.subscribe(async () => {
-        if (this._store.isFirstScreen) this.disableRouteAnimation(500);
+  constructor(private _store: Store) {
+    // 首屏禁用入场动画（因为SSR时已经有内容了）
+    this._store.routeDataChanged$
+      .pipe(first(_ => this._store.isFirstScreen))
+      .subscribe(async () => await this.disableRouteTransitionAtFirstScreen());
 
-        if (this._routeAnimationEnableDelay != 0)
-          await this.enableRouteAnimationAfterDelay();
-
-        if (this._store.isFirstScreen) this._store.isFirstScreen = false;
-      })
+    // `NavigationEnd`时执行入场动画
+    this._store.routeDataChanged$.subscribe(
+      async data =>
+        !this._store.isFirstScreen &&
+        (await this.triggerEnterTransition(data.sg_transition))
     );
   }
 
@@ -47,25 +55,24 @@ export class SGTransition implements OnDestroy {
    * @param names 自定义动画集合（不传则触发当前页面所有路由动画）
    * 自定义动画时间内会禁用路由动画
    */
-  public async triggerTransition(names?: string[], extraDuration: number = 0) {
-    this._currentTransitionMode = names
-      ? SGTransitionMode.custom
-      : SGTransitionMode.route;
+  public async triggerLeaveTransition(
+    names?: string[],
+    extraDuration: number = 0
+  ) {
     let animations: SGAnimation[] = [];
 
     if (!names || names.length == 0) {
       animations = this.routeAnimations;
     } else {
       animations = this.getAnimations(names);
-      this.disableRouteAnimation();
+      this.disableRouteTransition();
     }
 
-    this._transitionStore.transitionWillBegin$.next({
-      mode: this._currentTransitionMode,
-      animations
-    });
-
-    await this.triggerAnimations(animations, extraDuration);
+    await this.triggerAnimations(
+      animations,
+      SGTransitionDirection.leave,
+      extraDuration
+    );
   }
 
   /**
@@ -74,23 +81,46 @@ export class SGTransition implements OnDestroy {
    */
   public async triggerAnimations(
     animations: SGAnimation[],
+    direction: SGTransitionDirection,
     extraDuration: number = 0
   ) {
     let duration = this.getDuration(animations) + extraDuration;
-    animations.map(x => (x.leaving = true));
+    animations.map(x => (x.leaving = direction == SGTransitionDirection.leave));
+    animations.map(x => (x.animated = true));
     await timeout(duration);
-    animations.map(x => (x.leaving = false));
+    animations.map(x => (x.animated = false));
   }
 
   /**
    * ######### Private Methods
    */
+  /** 执行路由入场动画 */
+  private async triggerEnterTransition(routeCommands: TransitionCommands) {
+    let animations = this.routeAnimations;
+    if (routeCommands && isCustomizeCommands(routeCommands)) {
+      this.disableRouteTransition();
+      animations = this.getAnimations(
+        (routeCommands as CustomizeTransitionCommands).names
+      );
+    }
+    await this.triggerAnimations(animations, SGTransitionDirection.enter);
+  }
+
+  /** 禁用首屏路由过渡 */
+  private async disableRouteTransitionAtFirstScreen() {
+    if (this._store.isFirstScreen) this.disableRouteTransition(500);
+
+    if (this._routeAnimationEnableDelay != 0)
+      await this.enableRouteTransitionAfterDelay();
+
+    if (this._store.isFirstScreen) this._store.isFirstScreen = false;
+  }
 
   /**
    * 在`_routeAnimationEnableDelay`后启用路由动画
    * 用于触发自定义入场动画时禁用路由动画
    */
-  private async enableRouteAnimationAfterDelay() {
+  private async enableRouteTransitionAfterDelay() {
     await timeout(this._routeAnimationEnableDelay);
     this._routeAnimationEnableDelay = 0;
     this.routeAnimations.map(x => (x.animated = true));
@@ -100,7 +130,7 @@ export class SGTransition implements OnDestroy {
    * 禁用路由动画
    * @param extraDelay 额外延时，用于处理页面、动画卡顿造成路由动画禁用时间不够的问题
    */
-  private disableRouteAnimation(extraDelay: number = 0) {
+  private disableRouteTransition(extraDelay: number = 0) {
     const animations = this.routeAnimations;
     animations.map(x => (x.animated = false));
     const duration = this.getDuration(animations);
@@ -120,11 +150,11 @@ export class SGTransition implements OnDestroy {
   }
 
   private get routeAnimations(): Array<SGAnimation> {
-    return animations.filter(x => x.type == SGTransitionMode.route);
+    return SGAnimations.filter(x => x.type == SGTransitionMode.route);
   }
 
   private getAnimations(names: string[]): Array<SGAnimation> {
-    return animations.filter(x => names.indexOf(x.name) > -1);
+    return SGAnimations.filter(x => names.indexOf(x.name) > -1);
   }
 
   /** 获取一个动画集合的 duration，总是取集合中最长的 duration 值 */

@@ -8,7 +8,8 @@
     <a
       mat-button
       class="navbar-brand"
-      (click)="util.routeTo(['/'])"
+      [routerLink]="['/']"
+      (click)="navbarOpen = false"
       [ngClass]="transition.apply('fade')"
       >{{ title }}
     </a>
@@ -33,41 +34,40 @@
             class="nav-link"
             href="https://github.com/Seanwong933"
             target="_blank"
-            (click)="onItemTapped()"
+            (click)="navbarOpen = false"
             >Github</a
           >
         </li>
         <li class="nav-item">
-          <a mat-button class="nav-link" (click)="onItemTapped(items.about)">{{
-            items.about
-          }}</a>
+          <a
+            mat-button
+            class="nav-link"
+            [routerLink]="['/about']"
+            (click)="navbarOpen = false"
+          >
+            About
+          </a>
         </li>
 
         <li class="nav-item" *ngIf="!store.userIsAvailable">
-          <a mat-button class="nav-link" (click)="onItemTapped(items.signIn)">{{
-            items.signIn
-          }}</a>
+          <a mat-button class="nav-link" (click)="openDialog(false)">
+            Sign In
+          </a>
         </li>
         <li class="nav-item" *ngIf="store.userIsAvailable">
           <a
             mat-button
             class="nav-link"
-            (click)="onItemTapped(items.newPost)"
-            >{{ items.newPost }}</a
+            [routerLink]="['/add']"
+            (click)="navbarOpen = false"
+            >New Post</a
           >
         </li>
         <li class="nav-item" *ngIf="store.userIsAvailable">
-          <a
-            mat-button
-            class="nav-link"
-            (click)="onItemTapped(items.signOut)"
-            >{{ items.signOut }}</a
-          >
+          <a mat-button class="nav-link" (click)="signOut()">Sign Out</a>
         </li>
         <li class="nav-item" *ngIf="store.userIsAvailable">
-          <a mat-button class="nav-link" (click)="onItemTapped(items.reset)">{{
-            items.reset
-          }}</a>
+          <a mat-button class="nav-link" (click)="openDialog(false)">Reset</a>
         </li>
       </ul>
     </div>

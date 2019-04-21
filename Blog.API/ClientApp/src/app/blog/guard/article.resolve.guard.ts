@@ -5,14 +5,15 @@ import {
   RouterStateSnapshot,
   Router
 } from "@angular/router";
-import { ArticleService } from "./article.service";
 import ArticleModel from "../models/article-model";
 import { SGTransitionStore } from "src/app/shared/animations/sg-transition.store";
+import { ArticleService } from "../services/article.service";
+import { timeout } from "src/app/shared/utils/promise-delay";
 
 @Injectable({
   providedIn: "root"
 })
-export class ArticleResolver implements Resolve<ArticleModel> {
+export class ArticleResolveGuard implements Resolve<ArticleModel> {
   constructor(
     private _service: ArticleService,
     private _router: Router,

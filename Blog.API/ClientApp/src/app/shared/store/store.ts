@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, ReplaySubject } from "rxjs";
-import RouteData from "../models/route-data.model";
+import RouteData, { RouteKinds } from "../models/route-data.model";
 import { LoggingService } from "../services/logging.service";
 import ArticleModel from "src/app/blog/models/article-model";
 import { UserModel } from "src/app/blog/models/user-model";
@@ -16,7 +16,10 @@ const UserStoreKey = "sg:user";
 export class Store {
   constructor(private _logger: LoggingService) {}
 
-  /**##### Variables */
+  /**
+   * === Variables ===
+   **/
+
   /** 是否是客户端渲染 */
   renderFromClient: boolean = false;
   /** 是否是首屏加载 */
@@ -30,7 +33,10 @@ export class Store {
   /** 文章预加载用 */
   preloadArticle: ArticleModel;
 
-  /**##### Methods */
+  /**
+   * === Methods ===
+   **/
+
   setupUser() {
     if (!this.renderFromClient) return;
     let userJson = window.localStorage.getItem(UserStoreKey);
@@ -39,7 +45,10 @@ export class Store {
     this._logger.info("user restored: ", this.user);
   }
 
-  /**##### Observables */
+  /**
+   * === Observables ===
+   **/
+
   private _user: UserModel;
   userChanged$ = new BehaviorSubject<UserModel>(this._user);
 
@@ -72,10 +81,7 @@ export class Store {
     this._logger.info("user signed out");
   }
 
-  /** An observer for `NavigationStart` */
-  routeWillBegin$ = new ReplaySubject(1);
-
-  private _routeData: RouteData = new RouteData({ kind: "home" });
+  private _routeData: RouteData = new RouteData({ kind: RouteKinds.home });
   /** An observer for `NavigationEnd` with a `RouteData` */
   routeDataChanged$ = new BehaviorSubject<RouteData>(this._routeData);
 

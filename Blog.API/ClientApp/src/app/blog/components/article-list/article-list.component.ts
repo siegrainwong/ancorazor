@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ArticleParameters } from "../../models/article-parameters";
 import { ArticleService } from "../../services/article.service";
 import ArticleModel from "../../models/article-model";
 import { PagedResult } from "src/app/shared/models/response-result";
-import { ActivatedRoute, RouterStateSnapshot } from "@angular/router";
+import { ActivatedRoute, ActivatedRouteSnapshot } from "@angular/router";
 import {
   SGUtil,
   TipType,
@@ -13,18 +12,16 @@ import { SGTransition } from "src/app/shared/animations/sg-transition";
 import { Title } from "@angular/platform-browser";
 import { Store } from "src/app/shared/store/store";
 import { constants } from "src/app/shared/constants/siegrain.constants";
-import {
-  SGTransitionDelegate,
-  SGCustomTransitionDelegate
-} from "src/app/shared/animations/sg-transition.interface";
+import { SGCustomizeTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
 import {
   SGTransitionMode,
-  SGAnimation,
   RouteTransitionCommands,
   CustomizeTransitionCommands,
-  TransitionCommands
+  TransitionCommands,
+  isCustomizeCommands
 } from "src/app/shared/animations/sg-transition.model";
 import { Subscription } from "rxjs";
+import RouteData, { RouteKinds } from "src/app/shared/models/route-data.model";
 
 const StaggerDuration = 200; // 列表总动画时长 = transition duration + stagger duration
 
@@ -34,7 +31,7 @@ const StaggerDuration = 200; // 列表总动画时长 = transition duration + st
   styleUrls: ["./article-list.component.scss"]
 })
 export class ArticleListComponent
-  implements OnInit, OnDestroy, SGCustomTransitionDelegate {
+  implements OnInit, OnDestroy, SGCustomizeTransitionDelegate {
   // component
   public headerModel: ArticleModel = new ArticleModel({
     title: constants.title,
@@ -51,10 +48,9 @@ export class ArticleListComponent
     previous: "page-turn-previous"
   };
 
-  private _parameter = new ArticleParameters();
-  private _currentItemAnimationName: string = this.itemAnimations.route;
-  private _preloads: PagedResult<ArticleModel>;
+  public currentItemAnimation: string = this.itemAnimations.route;
   private _subscription = new Subscription();
+  state$: any;
   constructor(
     private _service: ArticleService,
     private _route: ActivatedRoute,
@@ -67,10 +63,11 @@ export class ArticleListComponent
   ngOnInit() {
     this._titleService.setTitle(`${constants.titlePlainText}`);
     this._subscription.add(
-      this._route.params.subscribe(async param => {
-        this._parameter.pageIndex = param.index || 0;
-        await this.getArticles();
-        this.setItemTransition(this._currentItemAnimationName);
+      this.store.routeDataChanged$.subscribe(async data => {
+        this.data = data.list;
+        this.setItemTransition(
+          this.restoreTransitionFromLastRouteCommands(data.sg_transition)
+        );
       })
     );
   }
@@ -79,45 +76,34 @@ export class ArticleListComponent
     this._subscription.unsubscribe();
   }
 
-  // get animationNames(): string[] {
-  //   return [this._currentItemAnimationName, "page-turn-button"];
-  // }
-
-  RouteTransitionForComponent?(
-    component: SGTransitionDelegate,
-    url: string
+  TransitionForComponent?(
+    nextRoute: ActivatedRouteSnapshot
   ): TransitionCommands {
-    if (url.startsWith("/article") || url.startsWith("/edit"))
+    this.setItemTransition(this.itemAnimations.route);
+    let data = nextRoute.data as RouteData;
+    if (data.kind == RouteKinds.home || data.kind == RouteKinds.edit)
       return new RouteTransitionCommands({ scrollTo: topElementId });
     return null;
   }
 
   CustomizeTransitionForComponent(
-    component: SGCustomTransitionDelegate,
-    url: string
+    nextRoute: ActivatedRouteSnapshot
   ): CustomizeTransitionCommands {
     return new CustomizeTransitionCommands({
-      names: [this._currentItemAnimationName, "page-turn-button"],
+      names: [this.currentItemAnimation, "page-turn-button"],
       extraDuration: StaggerDuration,
       scrollTo: topElementId
     });
   }
 
   ModeForComponentTransition(
-    component: SGCustomTransitionDelegate,
-    url: string
+    nextRoute: ActivatedRouteSnapshot
   ): SGTransitionMode {
-    const isTurningPage =
-      url.length > 0 && typeof parseInt(url.replace("/", "")) == "number";
-    return isTurningPage ? SGTransitionMode.custom : SGTransitionMode.route;
+    let data = nextRoute.data as RouteData;
+    return data.kind == RouteKinds.homePaged
+      ? SGTransitionMode.custom
+      : SGTransitionMode.route;
   }
-
-  // public async edit(model: ArticleModel) {
-  //   (await this.preloadArticle(model)) &&
-  //     this.util.routeTo(["/edit", model.id], {
-  //       scrollToElementId: topElementId
-  //     });
-  // }
 
   public async delete(item: ArticleModel, index: number) {
     let result =
@@ -126,46 +112,25 @@ export class ArticleListComponent
     if (!result) return;
 
     // 创建一个新动画对象单独执行动画
-    item.animation = new SGAnimation(item.animation);
-    await this.transition.triggerAnimations([item.animation]);
+    // item.animation = new SGAnimation(item.animation);
+    // await this.transition.triggerAnimations([item.animation]);
     this.data.list.splice(index, 1);
-    this.setItemTransition(this.itemAnimations.route);
-    await this.transition.triggerAnimations([item.animation]);
+    // this.setItemTransition(this.itemAnimations.route);
+    // await this.transition.triggerAnimations([item.animation]);
   }
 
-  private async getArticles() {
-    if (this._preloads) {
-      this.data = this._preloads;
-      this._preloads = null;
-      this.preloading = false;
-    } else {
-      let res = await this._service.getPagedArticles(this._parameter);
-      if (!res) return;
-      this.data = res;
-    }
+  private restoreTransitionFromLastRouteCommands(
+    routeCommands: TransitionCommands
+  ) {
+    if (!routeCommands || !isCustomizeCommands(routeCommands))
+      return this.currentItemAnimation;
+    let commands = routeCommands as CustomizeTransitionCommands;
+    return commands.names[0];
   }
-
-  // private async preloadArticle(model: ArticleModel): Promise<boolean> {
-  //   let res = await this._service.getArticle(model.id);
-  //   if (!res) return Promise.resolve(false);
-  //   this.store.preloadArticle = res;
-  //   return Promise.resolve(true);
-  // }
-
-  // private async preloadArticles(): Promise<boolean> {
-  //   this.preloading = true;
-  //   let res = await this._service.getPagedArticles(this.parameter);
-  //   if (!res) {
-  //     this.preloading = false;
-  //     return Promise.resolve(false);
-  //   }
-  //   this._preloads = res;
-  //   return Promise.resolve(true);
-  // }
 
   /** 设置 article item 的动画 */
-  private setItemTransition(name: string) {
-    this._currentItemAnimationName = name;
+  public setItemTransition(name: string) {
+    this.currentItemAnimation = name;
     this.data &&
       this.data.list.map(
         x => (x.animation = this.transition.getAnimation(name))

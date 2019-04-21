@@ -45,7 +45,7 @@
             mat-flat-button
             color="primary"
             class="float-left"
-            [routerLink]="['/', data.previousPageIndex]"
+            [routerLink]="['/index', data.previousPageIndex]"
             (click)="preloading || setItemTransition(itemAnimations.previous)"
             *ngIf="data.hasPrevious"
             [attr.disabled]="preloading ? '' : null"
@@ -55,7 +55,7 @@
             mat-flat-button
             color="primary"
             class="float-right"
-            [routerLink]="['/', data.nextPageIndex]"
+            [routerLink]="['/index', data.nextPageIndex]"
             (click)="preloading || setItemTransition(itemAnimations.next)"
             *ngIf="data.hasNext"
             [attr.disabled]="preloading ? '' : null"

@@ -72,10 +72,5 @@ export class BlogAppComponent implements OnInit, OnDestroy {
             .data as RouteData;
         })
     );
-    this._subscription.add(
-      this._router.events
-        .pipe(filter(event => event instanceof NavigationStart))
-        .subscribe(event => this.store.routeWillBegin$.next())
-    );
   }
 }

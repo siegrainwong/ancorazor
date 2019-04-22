@@ -4,8 +4,8 @@ import {
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from "@angular/router";
-import { SGTransitionStore } from "./sg-transition.store";
-import { first } from "rxjs/operators";
+import { SGTransitionStore, SGTransitionPipeline } from "./sg-transition.store";
+import { first, switchMap, filter, map, tap } from "rxjs/operators";
 import {
   SGCustomizeTransitionDelegate,
   SGTransitionDelegate
@@ -17,6 +17,7 @@ import {
 } from "./sg-transition.model";
 import { SGTransition } from "./sg-transition";
 import { LoggingService } from "../services/logging.service";
+import { nextContext } from "@angular/core/src/render3";
 
 @Injectable({
   providedIn: "root"
@@ -34,24 +35,78 @@ export class SGTransitionResolveGuard implements Resolve<TransitionCommands> {
   ): Promise<TransitionCommands> {
     if (!this._transitionStore.isLeaveTransitionAvailable) return null;
 
+    const transition = async () => {
+      this.setStream(SGTransitionPipeline.TransitionLeavingStart);
+      let commands = await this.transition(route);
+      this.setStream(SGTransitionPipeline.TransitionLeavingEnd);
+      return commands;
+    };
+
     // 获取路由上其他resolve的数量
     const resolveCount = this.getResolveCount(route);
 
     // 没有其他 resolve 就直接执行过渡
     if (!resolveCount) {
       this._logger.info("nothing resolved before transition to ", route);
-      return await this.transition(route);
+      return await transition();
     }
 
+    this.setStream(SGTransitionPipeline.ResolveStart);
     // 等待其他 resolve 执行完毕再执行过渡
     this._logger.info(
       `sg-transition module is waiting for another ${resolveCount} resolvers...`
     );
-    await this._transitionStore.resolveCompletedChanged$
+    await this._transitionStore.resolveCountChanged$
       .pipe(first(x => x == resolveCount))
       .toPromise();
     this._logger.info("resolves completed, transition to ", route);
-    return await this.transition(route);
+    this.setStream(SGTransitionPipeline.ResolveEnd);
+
+    return await transition();
+  }
+
+  // 这个状态驱动写得太狗屎了，还是慢慢学rxjs吧。。。
+  private async next(
+    route: ActivatedRouteSnapshot
+  ): Promise<TransitionCommands> {
+    switch (this._transitionStore.transitionStream) {
+      case SGTransitionPipeline.Ready:
+        const resolveCount = this.getResolveCount(route);
+        if (!resolveCount) {
+          this.setStream(SGTransitionPipeline.TransitionLeavingStart);
+          break;
+        }
+
+        this.setStream(SGTransitionPipeline.ResolveStart);
+      case SGTransitionPipeline.ResolveStart:
+        await this._transitionStore.resolveCountChanged$
+          .pipe(first(x => x == resolveCount))
+          .toPromise();
+        this.setStream(SGTransitionPipeline.ResolveEnd);
+
+      case SGTransitionPipeline.ResolveEnd:
+        this.setStream(SGTransitionPipeline.TransitionLeavingStart);
+
+      case SGTransitionPipeline.TransitionLeavingStart:
+        let commands = await this.transition(route);
+        this.setStream(SGTransitionPipeline.TransitionLeavingEnd);
+
+      case SGTransitionPipeline.TransitionLeavingEnd:
+        return commands;
+
+      default:
+        this._logger.error(
+          `sg-transition leaving guard handled unknown stream: `,
+          this._transitionStore.setTransitionStream
+        );
+        return null;
+    }
+
+    return await this.next(route);
+  }
+
+  private setStream(stream: SGTransitionPipeline) {
+    this._transitionStore.setTransitionStream(stream);
   }
 
   private async transition(route: ActivatedRouteSnapshot) {

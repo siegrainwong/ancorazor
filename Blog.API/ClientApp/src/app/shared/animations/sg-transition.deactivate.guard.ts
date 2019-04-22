@@ -5,7 +5,7 @@ import {
   CanDeactivate
 } from "@angular/router";
 import { SGTransitionDelegate } from "./sg-transition.delegate";
-import { SGTransitionStore } from "./sg-transition.store";
+import { SGTransitionStore, SGTransitionPipeline } from "./sg-transition.store";
 import { LoggingService } from "../services/logging.service";
 
 @Injectable({
@@ -27,6 +27,11 @@ export class SGTransitionDeactivateGuard<T extends SGTransitionDelegate>
       "component is deactivating, delegate set with component: ",
       component
     );
+    this.setStream(SGTransitionPipeline.Ready);
     return true;
+  }
+
+  private setStream(stream: SGTransitionPipeline) {
+    this._transitionStore.setTransitionStream(stream);
   }
 }

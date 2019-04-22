@@ -33,7 +33,7 @@ export class ArticleListResolveGuard
     if (!res)
       this._logger.error("can't resolve data in ArticleListResolveGuard");
 
-    await timeout(3000);
+    // await timeout(3000);
     this._transitionStore.setResolved();
     return res;
   }

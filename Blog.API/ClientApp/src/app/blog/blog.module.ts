@@ -23,6 +23,16 @@ import { ArticleResolveGuard } from "./guard/article.resolve.guard";
 import { SGTransitionResolveGuard } from "../shared/animations/sg-transition.resolve.guard";
 import { ArticleListResolveGuard } from "./guard/article-list.resolve.guard";
 
+/**
+ * MARK: `providedIn: 'root'` or `providedIn: SomeModule`
+ *
+ * Angular 文档中提到过应将服务注册到你需要的模块上避免全部加载，但貌似对于现在的版本(Angular 6+)来说，
+ * `AOT`编译后`tree shaking`会自动帮你把服务绑定到对应的`lazy module`上，
+ * 意味着你不需要再去管这方面的事情，直接`providedIn: root`即可。
+ * 就算你想绑到某个`Module`上，也有极高概率会遇到TS的循环引用提示。
+ *
+ * ref: https://github.com/angular/angular-cli/issues/10170#issuecomment-380673276
+ */
 @NgModule({
   declarations: [
     BlogAppComponent,

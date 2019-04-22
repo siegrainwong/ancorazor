@@ -52,15 +52,15 @@ export class WriteArticleComponent implements OnInit, OnDestroy {
   }
 
   private async preloadArticle() {
-    if (this._store.preloadArticle) {
-      this.model = this._store.preloadArticle;
-      this._store.preloadArticle = null;
-    } else {
-      let id = this._route.snapshot.params.id;
-      let res = id && (await this._service.getArticle(id));
-      if (!res) return;
-      this.model = res;
-    }
+    // if (this._store.preloadArticle) {
+    //   this.model = this._store.preloadArticle;
+    //   this._store.preloadArticle = null;
+    // } else {
+    let id = this._route.snapshot.params.id;
+    let res = id && (await this._service.getArticle(id));
+    if (!res) return;
+    this.model = res;
+    // }
     this.isEditing = true;
   }
 

@@ -56,10 +56,6 @@ export class SGAnimation {
  * === Transition Commands ===
  */
 
-export function isCustomizeCommands(commands: TransitionCommands): boolean {
-  return commands.constructor.name === CustomizeTransitionCommands.name;
-}
-
 /** 过渡指令 */
 export class TransitionCommands {
   /** 滚动到指定锚点 */

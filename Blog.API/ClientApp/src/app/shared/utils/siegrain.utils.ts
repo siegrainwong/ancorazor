@@ -63,14 +63,6 @@ export class SGUtil {
     });
   }
 
-  public scrollTo(elementId: string) {
-    document.querySelector(elementId).scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest"
-    });
-  }
-
   /**
    * 路由
    * 此方法会触发动画
@@ -90,11 +82,10 @@ export class SGUtil {
     }
   ) {
     if (!argument) argument = {};
-    argument.scrollToElementId && this.scrollTo(argument.scrollToElementId);
-    await this._transition.triggerLeaveTransition(
-      argument.names,
-      argument.extraDuration || 0
-    );
+    // await this._transition.transitionToLeave(
+    //   argument.names,
+    //   argument.extraDuration || 0
+    // );
     this._router.navigate(commands, argument.extras);
   }
 
@@ -109,9 +100,13 @@ export class SGUtil {
     return null;
   }
 
-  /** === Lazy loading ===*/
+  /**
+   * === Lazy loading ===
+   **/
+
   /**
    * 懒加载 JS
+   *
    * Mark: https://codinglatte.com/posts/angular/lazy-loading-scripts-and-styles-angular/
    */
   public loadExternalScripts(urls: string[]) {

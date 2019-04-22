@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ArticleService } from "../../services/article.service";
 import ArticleModel from "../../models/article-model";
 import { PagedResult } from "src/app/shared/models/response-result";
-import { ActivatedRoute, ActivatedRouteSnapshot } from "@angular/router";
+import { ActivatedRouteSnapshot } from "@angular/router";
 import {
   SGUtil,
   TipType,
@@ -17,11 +17,11 @@ import {
   SGTransitionMode,
   RouteTransitionCommands,
   CustomizeTransitionCommands,
-  TransitionCommands,
-  isCustomizeCommands
+  TransitionCommands
 } from "src/app/shared/animations/sg-transition.model";
 import { Subscription } from "rxjs";
 import RouteData, { RouteKinds } from "src/app/shared/models/route-data.model";
+import { SGTransitionUtil } from "src/app/shared/animations/sg-transition.util";
 
 const StaggerDuration = 200; // 列表总动画时长 = transition duration + stagger duration
 
@@ -53,8 +53,8 @@ export class ArticleListComponent
   private _subscription = new Subscription();
   constructor(
     private _service: ArticleService,
-    private _route: ActivatedRoute,
     private _titleService: Title,
+    private _transitionUtil: SGTransitionUtil,
     public util: SGUtil,
     public transition: SGTransition,
     public store: Store
@@ -76,7 +76,7 @@ export class ArticleListComponent
     this._subscription.unsubscribe();
   }
 
-  TransitionForComponent?(
+  transitionForComponent?(
     nextRoute: ActivatedRouteSnapshot
   ): TransitionCommands {
     this.setItemTransition(this.itemAnimations.route);
@@ -86,7 +86,7 @@ export class ArticleListComponent
     return null;
   }
 
-  CustomizeTransitionForComponent(
+  customizeTransitionForComponent(
     nextRoute: ActivatedRouteSnapshot
   ): CustomizeTransitionCommands {
     let index = parseInt(nextRoute.params.index) || 0;
@@ -101,7 +101,7 @@ export class ArticleListComponent
     });
   }
 
-  ModeForComponentTransition(
+  modeForComponentTransition(
     nextRoute: ActivatedRouteSnapshot
   ): SGTransitionMode {
     let data = nextRoute.data as RouteData;
@@ -127,7 +127,10 @@ export class ArticleListComponent
   private restoreTransitionFromLastRouteCommands(
     routeCommands: TransitionCommands
   ) {
-    if (!routeCommands || !isCustomizeCommands(routeCommands))
+    if (
+      !routeCommands ||
+      !this._transitionUtil.isCustomizeCommands(routeCommands)
+    )
       return this.currentItemAnimation;
     let commands = routeCommands as CustomizeTransitionCommands;
     return commands.names[0];
@@ -138,7 +141,7 @@ export class ArticleListComponent
     this.currentItemAnimation = name;
     this.data &&
       this.data.list.map(
-        x => (x.animation = this.transition.getAnimation(name))
+        x => (x.animation = this._transitionUtil.getAnimation(name))
       );
   }
 }

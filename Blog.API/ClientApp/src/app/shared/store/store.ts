@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject, ReplaySubject } from "rxjs";
 import RouteData, { RouteKinds } from "../models/route-data.model";
 import { LoggingService } from "../services/logging.service";
-import ArticleModel from "src/app/blog/models/article-model";
 import { UserModel } from "src/app/blog/models/user-model";
 
 const UserStoreKey = "sg:user";
@@ -30,8 +29,6 @@ export class Store {
   set isFirstScreen(val: boolean) {
     this._isFirstScreen = val;
   }
-  /** 文章预加载用 */
-  preloadArticle: ArticleModel;
 
   /**
    * === Methods ===

@@ -2,11 +2,19 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { SGTransitionDelegate } from "./sg-transition.delegate";
 
+export const enum SGTransitionPipeline {}
+
 @Injectable({
   providedIn: "root"
 })
+/**
+ * 过渡状态管理
+ */
 export class SGTransitionStore {
   public transitionDelegate: SGTransitionDelegate;
+  public get isLeaveTransitionAvailable(): boolean {
+    return !!this.transitionDelegate;
+  }
 
   /**
    * 为其他`Resolve`计数
@@ -26,13 +34,13 @@ export class SGTransitionStore {
 
   /** 标记该`Resolve`已执行完毕 */
   public setResolved() {
-    if (!this.transitionDelegate) return;
+    if (!this.isLeaveTransitionAvailable) return;
     this.completedResolveCount++;
   }
 
   /** 清理转场状态 */
   public setTransitioned() {
-    if (!this.transitionDelegate) return;
+    if (!this.isLeaveTransitionAvailable) return;
     this.transitionDelegate = null;
     this.completedResolveCount = 0;
   }

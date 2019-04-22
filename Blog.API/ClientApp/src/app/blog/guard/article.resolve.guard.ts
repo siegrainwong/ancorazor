@@ -8,7 +8,6 @@ import {
 import ArticleModel from "../models/article-model";
 import { SGTransitionStore } from "src/app/shared/animations/sg-transition.store";
 import { ArticleService } from "../services/article.service";
-import { timeout } from "src/app/shared/utils/promise-delay";
 
 @Injectable({
   providedIn: "root"

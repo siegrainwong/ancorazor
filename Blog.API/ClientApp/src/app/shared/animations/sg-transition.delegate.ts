@@ -13,7 +13,7 @@ export interface SGTransitionDelegate {
   /**
    * 路由过渡离场配置
    */
-  TransitionForComponent?(
+  transitionForComponent?(
     nextRoute: ActivatedRouteSnapshot
   ): RouteTransitionCommands;
 }
@@ -30,14 +30,14 @@ export interface SGCustomizeTransitionDelegate extends SGTransitionDelegate {
    * - `SGTransitionMode.route` 执行路由动画
    * - `SGTransitionMode.custom` 执行自定义动画
    **/
-  ModeForComponentTransition(
+  modeForComponentTransition(
     nextRoute: ActivatedRouteSnapshot
   ): SGTransitionMode;
 
   /**
    * 自定义路由过渡配置
    */
-  CustomizeTransitionForComponent(
+  customizeTransitionForComponent(
     nextRoute: ActivatedRouteSnapshot
   ): CustomizeTransitionCommands;
 }

@@ -16,29 +16,23 @@ import {
   TransitionCommands
 } from "./sg-transition.model";
 import { SGTransition } from "./sg-transition";
-import { SGUtil } from "../utils/siegrain.utils";
-import { Store } from "../store/store";
 import { LoggingService } from "../services/logging.service";
 
 @Injectable({
   providedIn: "root"
 })
-export class SGTransitionResolveGuard
-  implements Resolve<RouteTransitionCommands> {
+export class SGTransitionResolveGuard implements Resolve<TransitionCommands> {
   constructor(
     private _transitionStore: SGTransitionStore,
     private _transition: SGTransition,
-    private _util: SGUtil,
-    private _store: Store,
     private _logger: LoggingService
   ) {}
 
   async resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Promise<RouteTransitionCommands> {
-    // 首屏及 SSR 时不执行过渡
-    if (this._store.isFirstScreen || !this._store.renderFromClient) return null;
+  ): Promise<TransitionCommands> {
+    if (!this._transitionStore.isLeaveTransitionAvailable) return null;
 
     // 获取路由上其他resolve的数量
     const resolveCount = this.getResolveCount(route);
@@ -61,62 +55,53 @@ export class SGTransitionResolveGuard
   }
 
   private async transition(route: ActivatedRouteSnapshot) {
+    // 获取对应代理
     let delegates = this.setupDelegate(
       this._transitionStore.transitionDelegate
     );
-    let commands = null;
+
+    // 获取命令
+    let commands: TransitionCommands = null;
     if (delegates.customDelegate)
-      commands = await this.transitionWithCustomMode(
+      commands = this.customizeCommandsFromDelegate(
         delegates.customDelegate,
         route
       );
     else
-      commands = await this.transitionWithRouteMode(
-        delegates.routeDelegate,
-        route
-      );
+      commands = this.routeCommandsFromDelegate(delegates.routeDelegate, route);
+
+    // 执行过渡
+    await this._transition.transitionToLeave(commands);
+
+    // 标记过渡完成
     this._transitionStore.setTransitioned();
     return commands;
   }
 
-  /* 执行路由过渡 */
-  private async transitionWithRouteMode(
+  /** 从代理获取路由过渡命令 */
+  private routeCommandsFromDelegate(
     delegate: SGTransitionDelegate,
     route: ActivatedRouteSnapshot
   ) {
-    let commands =
-      (delegate.TransitionForComponent &&
-        delegate.TransitionForComponent(route)) ||
-      new RouteTransitionCommands();
-
-    this.scroll(commands);
-    await this._transition.triggerLeaveTransition();
-    return commands;
+    return (
+      (delegate.transitionForComponent &&
+        delegate.transitionForComponent(route)) ||
+      new RouteTransitionCommands()
+    );
   }
 
-  /* 执行自定义过渡 */
-  private async transitionWithCustomMode(
+  /** 从代理获取自定义过渡命令 */
+  private customizeCommandsFromDelegate(
     delegate: SGCustomizeTransitionDelegate,
     route: ActivatedRouteSnapshot
   ) {
-    const mode = delegate.ModeForComponentTransition(route);
+    const mode = delegate.modeForComponentTransition(route);
     if (mode == SGTransitionMode.route)
-      return this.transitionWithRouteMode(delegate, route);
-
-    const commands = delegate.CustomizeTransitionForComponent(route);
-    this.scroll(commands);
-    await this._transition.triggerLeaveTransition(
-      commands.names,
-      commands.extraDuration
-    );
-    return commands;
+      return this.routeCommandsFromDelegate(delegate, route);
+    return delegate.customizeTransitionForComponent(route);
   }
 
-  private scroll(commands: TransitionCommands) {
-    commands.scrollTo && this._util.scrollTo(commands.scrollTo);
-  }
-
-  /* 根据当前页面实现的接口返回对应的代理 */
+  /** 根据当前页面实现的接口返回对应的代理 */
   private setupDelegate(
     component: SGTransitionDelegate
   ): {
@@ -125,8 +110,8 @@ export class SGTransitionResolveGuard
   } {
     let customized = <SGCustomizeTransitionDelegate>(<unknown>component);
     if (
-      customized.ModeForComponentTransition &&
-      customized.CustomizeTransitionForComponent
+      customized.modeForComponentTransition &&
+      customized.customizeTransitionForComponent
     ) {
       return {
         customDelegate: customized
@@ -138,7 +123,7 @@ export class SGTransitionResolveGuard
     };
   }
 
-  /* 获取其他Resolve的数量 */
+  /** 获取其他Resolve的数量 */
   private getResolveCount(route: ActivatedRouteSnapshot): number {
     const resolveKey = "_resolve";
     return (

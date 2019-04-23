@@ -5,6 +5,7 @@ import { Subscription } from "rxjs";
 import { SGAnimation, TransitionCommands } from "./sg-transition.model";
 import { filter } from "rxjs/operators";
 import { SGTransitionUtil } from "./sg-transition.util";
+import { SGTransitionPipeline, SGTransitionStore } from "./sg-transition.store";
 
 export enum SGTransitionDirection {
   enter,
@@ -17,7 +18,11 @@ export enum SGTransitionDirection {
 export class SGTransition implements OnDestroy {
   private _subscription = new Subscription();
 
-  constructor(private _store: Store, private _util: SGTransitionUtil) {
+  constructor(
+    private _store: Store,
+    private _util: SGTransitionUtil,
+    private _transitionStore: SGTransitionStore
+  ) {
     // 首屏禁用入场动画（因为SSR时已经有内容了）
     this.disableRouteTransitionAtFirstScreen();
 
@@ -25,9 +30,11 @@ export class SGTransition implements OnDestroy {
     this._subscription.add(
       this._store.routeDataChanged$
         .pipe(filter(_ => !this._store.isFirstScreen))
-        .subscribe(
-          async data => await this.transitionToEnter(data.sg_transition)
-        )
+        .subscribe(async data => {
+          this.setStream(SGTransitionPipeline.NavigationEnd);
+          await this.transitionToEnter(data.sg_transition);
+          this.setStream(SGTransitionPipeline.Complete);
+        })
     );
   }
 
@@ -65,7 +72,9 @@ export class SGTransition implements OnDestroy {
    */
   public async transitionToEnter(commands: TransitionCommands) {
     let res = this._util.resolveCommands(commands);
+    this.setStream(SGTransitionPipeline.TransitionEnteringStart);
     await this.triggerAnimations(SGTransitionDirection.enter, res.animations);
+    this.setStream(SGTransitionPipeline.TransiitonEnteringEnd);
   }
 
   /**
@@ -113,5 +122,9 @@ export class SGTransition implements OnDestroy {
       animations.map(x => x.speed.duration)
     );
     return duration;
+  }
+
+  private setStream(stream: SGTransitionPipeline) {
+    this._transitionStore.setTransitionStream(stream);
   }
 }

@@ -39,7 +39,10 @@ export class SGTransitionUtil {
     return commands.constructor.name === CustomizeTransitionCommands.name;
   }
 
-  /** 解析命令 */
+  /**
+   * 解析命令
+   * @internal
+   **/
   public resolveCommands(
     commands?: TransitionCommands
   ): {

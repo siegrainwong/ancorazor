@@ -128,8 +128,6 @@ export class SGTransitionResolveGuard implements Resolve<TransitionCommands> {
     // 执行过渡
     await this._transition.transitionToLeave(commands);
 
-    // 标记过渡完成
-    this._transitionStore.setTransitioned();
     return commands;
   }
 

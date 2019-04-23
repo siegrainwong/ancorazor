@@ -26,7 +26,7 @@ export class ArticleResolveGuard implements Resolve<ArticleModel> {
     let res = await this._service.getArticle(parseInt(id));
     if (!res) this._router.navigate(["/"]);
 
-    this._transitionStore.setResolved();
+    this._transitionStore.setGuardResolved();
     return res;
   }
 }

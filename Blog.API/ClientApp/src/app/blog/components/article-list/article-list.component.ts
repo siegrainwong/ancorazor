@@ -65,9 +65,7 @@ export class ArticleListComponent
     this._subscription.add(
       this.store.routeDataChanged$.subscribe(async data => {
         this.data = data.list;
-        this.setItemTransition(
-          this.restoreTransitionFromLastRouteCommands(data.sg_transition)
-        );
+        this.restoreTransitionFromLastRouteCommands(data.sg_transition);
       })
     );
   }
@@ -116,7 +114,7 @@ export class ArticleListComponent
       (await this._service.remove(item.id));
     if (!result) return;
 
-    // 创建一个新动画对象单独执行动画
+    // TODO: 单动画机制
     // item.animation = new SGAnimation(item.animation);
     // await this.transition.triggerAnimations([item.animation]);
     this.data.list.splice(index, 1);
@@ -124,16 +122,11 @@ export class ArticleListComponent
     // await this.transition.triggerAnimations([item.animation]);
   }
 
-  private restoreTransitionFromLastRouteCommands(
-    routeCommands: TransitionCommands
-  ) {
-    if (
-      !routeCommands ||
-      !this._transitionUtil.isCustomizeCommands(routeCommands)
-    )
-      return this.currentItemAnimation;
-    let commands = routeCommands as CustomizeTransitionCommands;
-    return commands.names[0];
+  private restoreTransitionFromLastRouteCommands(commands: TransitionCommands) {
+    let animationName = this.currentItemAnimation;
+    if (commands && this._transitionUtil.isCustomizeCommands(commands))
+      animationName = (commands as CustomizeTransitionCommands).names[0];
+    this.setItemTransition(animationName);
   }
 
   /** 设置 article item 的动画 */

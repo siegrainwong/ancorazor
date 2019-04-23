@@ -1,9 +1,11 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Subject } from "rxjs";
 import { SGTransitionDelegate } from "./sg-transition.delegate";
+import { LoggingService } from "../services/logging.service";
+import { SGTransition } from "./sg-transition";
 
 /** `SGTransition`过渡管道 */
-export const enum SGTransitionPipeline {
+export enum SGTransitionPipeline {
   /** 管道流开始，当`SGTransition`模块在`Candeactivated guard`中获取到`Component`代理时 */
   Ready,
   /** 等待当前路由上其他`Resolver`解析完毕 */
@@ -31,6 +33,7 @@ export const enum SGTransitionPipeline {
  * 过渡状态管理
  */
 export class SGTransitionStore {
+  constructor(private _logger: LoggingService) {}
   /**
    * `SGTransition`代理
    * 代理会在`Component Candecativated`时被自动赋值，不要手动操作这个状态。
@@ -70,6 +73,11 @@ export class SGTransitionStore {
   public setTransitionStream(val: SGTransitionPipeline) {
     this.transitionStream = val;
     this.transitionStreamChanged$.next(val);
+    if (val === SGTransitionPipeline.Complete) this.setTransitioned();
+    this._logger.info(
+      "sg-transition stream: ",
+      this.nameOfEnumMember(SGTransitionPipeline, val)
+    );
   }
   /**
    * `SGTransitionPipeline`过渡管道流变化时触发
@@ -79,7 +87,7 @@ export class SGTransitionStore {
   );
 
   /** 标记该`Resolve`已执行完毕 */
-  public setResolved() {
+  public setGuardResolved() {
     if (!this.isLeaveTransitionAvailable) return;
     this.completedResolveCount++;
   }
@@ -88,5 +96,15 @@ export class SGTransitionStore {
   public setTransitioned() {
     if (!this.isLeaveTransitionAvailable) return;
     this.completedResolveCount = 0;
+    this.transitionDelegate = null;
+  }
+
+  public nameOfEnumMember(source: any, member: any) {
+    for (const enumMember in source) {
+      const isValueProperty = parseInt(enumMember, 10) >= 0;
+      if (isValueProperty && member === parseInt(enumMember)) {
+        return source[enumMember];
+      }
+    }
   }
 }

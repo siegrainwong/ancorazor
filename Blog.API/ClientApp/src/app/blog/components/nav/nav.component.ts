@@ -9,13 +9,18 @@ import { constants } from "src/app/shared/constants/siegrain.constants";
 import { Subscription } from "rxjs";
 import { UserService } from "../../services/user.service";
 import { filter } from "rxjs/operators";
+import { SGTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
+import { SGAnimations } from "src/app/shared/animations/sg-animations";
 
 @Component({
   selector: "app-nav",
   templateUrl: "./nav.component.html",
   styleUrls: ["./nav.component.scss"]
 })
-export class NavComponent implements OnInit, OnDestroy {
+export class NavComponent implements OnInit, OnDestroy, SGTransitionDelegate {
+  public animations = {
+    title: SGAnimations.fade
+  };
   private _subscription = new Subscription();
 
   title: String;

@@ -10,7 +10,7 @@
       class="navbar-brand"
       [routerLink]="['/']"
       (click)="navbarOpen = false"
-      [ngClass]="transition.apply('fade')"
+      [ngClass]="animations.title.class"
       >{{ title }}
     </a>
     <button

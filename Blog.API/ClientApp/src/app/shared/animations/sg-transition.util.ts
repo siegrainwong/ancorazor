@@ -15,15 +15,22 @@ export class SGTransitionUtil {
    * 获取所有`SGAnimation`的路由引用
    */
   public get getRouteAnimations(): Array<SGAnimation> {
-    return SGAnimations.filter(x => x.type == SGTransitionMode.route);
+    return Object.values(SGAnimations).filter(
+      x => x.type == SGTransitionMode.route
+    );
   }
+
+  public pick = (obj: any, ...props) =>
+    props.reduce((a, e) => ((a[e] = obj[e]), a), {});
 
   /**
    * 根据动画名称获取`SGAnimation`引用集合
    * @param names 动画名称集合
    */
   public getAnimations(names: string[]): Array<SGAnimation> {
-    return SGAnimations.filter(x => names.indexOf(x.name) > -1);
+    return Object.entries(SGAnimations)
+      .filter(x => names.indexOf(x[0]) > 0)
+      .map(x => x[1]);
   }
 
   /**
@@ -31,17 +38,17 @@ export class SGTransitionUtil {
    * @param name 动画名称
    */
   public getAnimation(name: string): SGAnimation {
-    return this.getAnimations([name])[0];
+    return SGAnimation[name];
   }
 
   /** 判断是否是自定义命令 */
-  public isCustomizeCommands(commands: TransitionCommands): boolean {
+  private isCustomizeCommands(commands: TransitionCommands): boolean {
     return commands.constructor.name === CustomizeTransitionCommands.name;
   }
 
   /**
    * 解析命令
-   * @internal
+   * @internal implementation detail, do not use!
    **/
   public resolveCommands(
     commands?: TransitionCommands
@@ -49,17 +56,18 @@ export class SGTransitionUtil {
     animations: SGAnimation[];
     extraDuration: number;
     scrollTo?: string;
+    crossRoute: boolean;
   } {
     let data = {
       animations: this.getRouteAnimations,
-      scrollTo: null,
-      extraDuration: 0
+      scrollTo: commands.scrollTo,
+      extraDuration: 0,
+      crossRoute: commands.crossRoute
     };
 
     if (commands && this.isCustomizeCommands(commands)) {
       const customizeCommands = commands as CustomizeTransitionCommands;
-      data.animations = this.getAnimations(customizeCommands.names);
-      data.scrollTo = customizeCommands.scrollTo;
+      data.animations = Object.values(customizeCommands.animations);
       data.extraDuration = customizeCommands.extraDuration;
     }
 

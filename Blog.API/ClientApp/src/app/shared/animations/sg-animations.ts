@@ -4,41 +4,35 @@ import { SGAnimation, SGTransitionMode } from "./sg-transition.model";
  * Animation declarations
  * 其中的CSS动画大部分来自 https://daneden.github.io/animate.css/
  */
-export const SGAnimations: SGAnimation[] = [
+export const SGAnimations = {
   // route animations
-  new SGAnimation({
-    name: "fade",
+  fade: new SGAnimation({
     enterClass: "fadeIn",
     leaveClass: "fadeOut"
   }),
-  new SGAnimation({
-    name: "fade-up",
+  fadeUp: new SGAnimation({
     enterClass: "fadeInUp",
     leaveClass: "fadeOutUp"
   }),
-  new SGAnimation({
-    name: "fade-opposite",
+  fadeOpposite: new SGAnimation({
     enterClass: "fadeInUp",
     leaveClass: "fadeOutDown"
   }),
 
   // custom animations
-  new SGAnimation({
-    name: "page-turn-next",
+  pageTurnNext: new SGAnimation({
     enterClass: "fadeInRight",
     leaveClass: "fadeOutLeft",
     type: SGTransitionMode.custom
   }),
-  new SGAnimation({
-    name: "page-turn-previous",
+  pageTurnPrevious: new SGAnimation({
     enterClass: "fadeInLeft",
     leaveClass: "fadeOutRight",
     type: SGTransitionMode.custom
   }),
-  new SGAnimation({
-    name: "page-turn-button",
+  pageTurnButton: new SGAnimation({
     enterClass: "fadeInUp",
     leaveClass: "fadeOutDown",
     type: SGTransitionMode.custom
   })
-];
+};

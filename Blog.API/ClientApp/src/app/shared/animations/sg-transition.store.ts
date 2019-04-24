@@ -35,15 +35,21 @@ export enum SGTransitionPipeline {
 export class SGTransitionStore {
   constructor(private _logger: LoggingService) {}
   /**
-   * `SGTransition`代理
-   * 代理会在`Component Candecativated`时被自动赋值，不要手动操作这个状态。
+   * `SGTransition`代理，用于操控离场过渡
+   * @internal implementation detail, do not use!
    **/
-  public transitionDelegate: SGTransitionDelegate;
+  public _transitionDelegate: SGTransitionDelegate;
+  /**
+   * 下一个路由的`SGTransition`代理，用于操控入场过渡
+   * @internal implementation detail, do not use!
+   */
+  public _nextTransitionDelegate: SGTransitionDelegate;
   /**
    * 当前组件是否支持转场
+   * @internal implementation detail, do not use!
    **/
-  public get isLeaveTransitionAvailable(): boolean {
-    return !!this.transitionDelegate;
+  public get _isLeaveTransitionAvailable(): boolean {
+    return !!this._transitionDelegate;
   }
 
   /**
@@ -53,7 +59,7 @@ export class SGTransitionStore {
   private _completedResolveCount: number = 0;
   private set completedResolveCount(val: number) {
     this._completedResolveCount = val;
-    this.resolveCountChanged$.next(val);
+    this._resolveCountChanged$.next(val);
   }
   private get completedResolveCount() {
     return this._completedResolveCount;
@@ -61,19 +67,22 @@ export class SGTransitionStore {
   /**
    * `setResolved`后计数变化时触发
    * 用于监听其他`Resolve`是否完成
+   * @internal implementation detail, do not use!
    **/
-  public resolveCountChanged$ = new BehaviorSubject<number>(
+  public _resolveCountChanged$ = new BehaviorSubject<number>(
     this.completedResolveCount
   );
 
-  public transitionStream: SGTransitionPipeline = SGTransitionPipeline.Complete;
+  private _transitionStream: SGTransitionPipeline =
+    SGTransitionPipeline.Complete;
   /**
-   * 设置`transitionStream`，由模块管理外部不要设置。
+   * 设置`transitionStream`，由模块管理外部不要设置
+   * @internal implementation detail, do not use!
    */
-  public setTransitionStream(val: SGTransitionPipeline) {
-    this.transitionStream = val;
+  public _setTransitionStream(val: SGTransitionPipeline) {
+    this._transitionStream = val;
     this.transitionStreamChanged$.next(val);
-    if (val === SGTransitionPipeline.Complete) this.setTransitioned();
+    if (val === SGTransitionPipeline.Complete) this._setTransitioned();
     this._logger.info(
       "sg-transition stream: ",
       this.nameOfEnumMember(SGTransitionPipeline, val)
@@ -83,23 +92,41 @@ export class SGTransitionStore {
    * `SGTransitionPipeline`过渡管道流变化时触发
    */
   public transitionStreamChanged$ = new BehaviorSubject<SGTransitionPipeline>(
-    this.transitionStream
+    this._transitionStream
   );
 
-  /** 标记该`Resolve`已执行完毕 */
+  /**
+   * 标记该`Resolve`已执行完毕
+   *
+   * e.g.
+   * ```ts
+   * async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot)
+   *   : Promise<ArticleModel> {
+   *   let id = route.paramMap.get("id");
+   *   let res = await this._service.getArticle(parseInt(id));
+   *   if (!res) this._router.navigate(["/"]);
+   *   this._transitionStore.setGuardResolved();  // 在这里调用
+   *   return res;
+   * }
+   * ```
+   **/
   public setGuardResolved() {
-    if (!this.isLeaveTransitionAvailable) return;
+    if (!this._isLeaveTransitionAvailable) return;
     this.completedResolveCount++;
   }
 
-  /** 清理转场状态 */
-  public setTransitioned() {
-    if (!this.isLeaveTransitionAvailable) return;
+  /**
+   * 清理转场状态
+   * @internal implementation detail, do not use!
+   **/
+  private _setTransitioned() {
+    if (!this._isLeaveTransitionAvailable) return;
     this.completedResolveCount = 0;
-    this.transitionDelegate = null;
+    this._transitionDelegate = null;
+    this._nextTransitionDelegate = null;
   }
 
-  public nameOfEnumMember(source: any, member: any) {
+  private nameOfEnumMember(source: any, member: any) {
     for (const enumMember in source) {
       const isValueProperty = parseInt(enumMember, 10) >= 0;
       if (isValueProperty && member === parseInt(enumMember)) {

@@ -43,60 +43,39 @@ export class SGTransition implements OnDestroy {
   }
 
   /**
-   * 从已有动画定义中返回一个`SGAnimation`的`[ngClass]` 对象
-   * @param name 动画名称
-   */
-  public apply(name: string) {
-    return this._util.getAnimation(name).class;
-  }
-
-  /**
-   * 触发离场过渡
-   * @param names 自定义动画集合（不传则触发当前页面所有路由动画）
-   * @param extraDuration 额外过渡时间
-   * 自定义动画时间内会禁用路由动画
-   */
-  public async transitionToLeave(commands: TransitionCommands) {
-    let res = this._util.resolveCommands(commands);
-    await this.triggerAnimations(
-      SGTransitionDirection.leave,
-      res.animations,
-      res.extraDuration,
-      res.scrollTo
-    );
-  }
-
-  /**
    * 触发入场过渡
    * @param commands 过渡指令
    */
   public async transitionToEnter(commands: TransitionCommands) {
-    let res = this._util.resolveCommands(commands);
     this.setStream(SGTransitionPipeline.TransitionEnteringStart);
-    await this.triggerAnimations(SGTransitionDirection.enter, res.animations);
+    await this._triggerAnimations(SGTransitionDirection.leave, commands);
     this.setStream(SGTransitionPipeline.TransiitonEnteringEnd);
   }
 
   /**
    * 触发动画
    * @param animations `SGAnimation` 对象集合
+   * @internal implementation details, do not use!
    */
-  public async triggerAnimations(
+  public async _triggerAnimations(
     direction: SGTransitionDirection,
-    animations: SGAnimation[],
-    extraDuration: number = 0,
-    scrollTo?: string
+    commands: TransitionCommands
   ) {
-    let duration = this.getDuration(animations) + extraDuration;
-    scrollTo && this.scrollTo(scrollTo);
-    animations.map(x => {
+    let res = this._util.resolveCommands(commands);
+    let duration = this.getDuration(res.animations) + res.extraDuration;
+    scrollTo && this.scrollTo(res.scrollTo);
+    res.animations.map(x => {
       x.leaving = direction == SGTransitionDirection.leave;
       x.animated = true;
     });
     await timeout(duration);
-    animations.map(x => (x.animated = false));
+    res.animations.map(x => (x.animated = false));
   }
 
+  /**
+   * 滚动到元素
+   * @param elementId
+   */
   private scrollTo(elementId: string) {
     document.querySelector(elementId).scrollIntoView({
       behavior: "smooth",
@@ -125,6 +104,6 @@ export class SGTransition implements OnDestroy {
   }
 
   private setStream(stream: SGTransitionPipeline) {
-    this._transitionStore.setTransitionStream(stream);
+    this._transitionStore._setTransitionStream(stream);
   }
 }

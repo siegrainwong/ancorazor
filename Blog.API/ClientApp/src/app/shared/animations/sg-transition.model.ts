@@ -23,7 +23,6 @@ export enum SGTransitionMode {
 }
 
 export class SGAnimation {
-  name: string;
   speed: { name: string; duration: number } = SGAnimationSpeed.faster;
   type: SGTransitionMode = SGTransitionMode.route;
   /** 是否触发离开动画 */
@@ -60,6 +59,13 @@ export class SGAnimation {
 export class TransitionCommands {
   /** 滚动到指定锚点 */
   scrollTo?: string;
+  /**
+   * 指示当前是否是跨路由过渡
+   * 值为`true`时，本次命令中执行的动画会覆盖下一个组件中的同名动画
+   *
+   * 一般用于中途修改过渡效果后，让下一个组件继承当前的过渡效果，让过渡更自然
+   **/
+  crossRoute: boolean = false;
 }
 
 /** 离场过渡指令 */
@@ -71,11 +77,12 @@ export class RouteTransitionCommands extends TransitionCommands {
 }
 
 /** 自定义动画过渡指令 */
-export class CustomizeTransitionCommands extends RouteTransitionCommands {
-  /** 要执行的自定义动画名称 */
-  names!: string[];
+export class CustomizeTransitionCommands extends TransitionCommands {
+  /** 要执行的动画 */
+  animations!: { [name: string]: SGAnimation };
   /** 额外动画时间 */
   extraDuration: number = 0;
+
   constructor(obj: CustomizeTransitionCommands) {
     super();
     Object.assign(this, obj);

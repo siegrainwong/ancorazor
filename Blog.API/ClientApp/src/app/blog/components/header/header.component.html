@@ -1,41 +1,19 @@
 <!-- Page Header -->
 <header class="masthead" id="header">
-  <div class="header-bg" [ngClass]="transition.apply('fade')"></div>
+  <div class="header-bg" [ngClass]="animations.cover.class"></div>
   <div class="overlay"></div>
   <div class="container">
     <div class="row align-items-center">
       <div
         class="col-lg-12 col-md-12 mx-auto"
         *ngIf="model"
-        [ngClass]="transition.apply('fade-up')"
+        [ngClass]="animations.title.class"
       >
-        <div class="site-heading" *ngIf="!isEditing">
+        <div class="site-heading">
           <h1>{{ model.title }}</h1>
           <span class="subheading">{{ model.digest }}</span>
-        </div>
-        <div class="site-heading" *ngIf="isEditing">
-          <mat-form-field class="col-12 title">
-            <textarea
-              matInput
-              #title
-              (blur)="onTitleChanged(title.value)"
-              [value]="model.title"
-              placeholder="Title"
-              required
-            ></textarea>
-          </mat-form-field>
-          <mat-form-field class="col-12">
-            <textarea
-              matInput
-              #digest
-              (blur)="onDigestChanged(digest.value)"
-              [value]="model.digest"
-              placeholder="Digest"
-            ></textarea>
-          </mat-form-field>
         </div>
       </div>
     </div>
   </div>
 </header>
-<!-- <div class="holder"></div> -->

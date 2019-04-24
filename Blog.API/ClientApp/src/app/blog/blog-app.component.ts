@@ -1,11 +1,6 @@
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import {
-  ActivatedRoute,
-  Router,
-  NavigationEnd,
-  NavigationStart
-} from "@angular/router";
+import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { filter } from "rxjs/operators";
 import { Store } from "../shared/store/store";
 import RouteData from "../shared/models/route-data.model";

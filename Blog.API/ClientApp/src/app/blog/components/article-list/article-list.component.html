@@ -3,7 +3,10 @@
   <div class="row">
     <div class="col-lg-11 col-md-11 mx-auto list" *ngIf="data">
       <ng-container *ngFor="let item of data.list; let i = index">
-        <div class="item delay-{{ i + 1 }}" [ngClass]="item.animation.class">
+        <div
+          class="item delay-{{ i + 1 }}"
+          [ngClass]="animations.articles.class"
+        >
           <div class="post-preview {{ item.isDraft ? 'draft' : '' }}">
             <a [routerLink]="['/article', item.id]" title="{{ item.alias }}">
               <h2 class="post-title">
@@ -36,32 +39,26 @@
           <hr />
         </div>
       </ng-container>
-
-      <!-- button route animation -->
-      <div [ngClass]="transition.apply('fade-opposite')">
-        <!-- button page turn animation -->
-        <div class="clearfix" [ngClass]="transition.apply('page-turn-button')">
-          <a
-            mat-flat-button
-            color="primary"
-            class="float-left"
-            [routerLink]="['/index', data.previousPageIndex]"
-            (click)="(preloading)"
-            *ngIf="data.hasPrevious"
-            [attr.disabled]="preloading ? '' : null"
-            >← Newer</a
-          >
-          <a
-            mat-flat-button
-            color="primary"
-            class="float-right"
-            [routerLink]="['/index', data.nextPageIndex]"
-            (click)="(preloading)"
-            *ngIf="data.hasNext"
-            [attr.disabled]="preloading ? '' : null"
-            >Older →</a
-          >
-        </div>
+      <!-- button page turn animation -->
+      <div class="clearfix" [ngClass]="animations.pagination.class">
+        <a
+          mat-flat-button
+          color="primary"
+          class="float-left"
+          [routerLink]="['/index', data.previousPageIndex]"
+          *ngIf="data.hasPrevious"
+          [attr.disabled]="preloading ? '' : null"
+          >← Newer</a
+        >
+        <a
+          mat-flat-button
+          color="primary"
+          class="float-right"
+          [routerLink]="['/index', data.nextPageIndex]"
+          *ngIf="data.hasNext"
+          [attr.disabled]="preloading ? '' : null"
+          >Older →</a
+        >
       </div>
     </div>
   </div>

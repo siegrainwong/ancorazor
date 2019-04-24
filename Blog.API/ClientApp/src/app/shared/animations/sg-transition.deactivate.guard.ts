@@ -22,7 +22,7 @@ export class SGTransitionDeactivateGuard<T extends SGTransitionDelegate>
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot
   ): Promise<boolean> {
-    this._transitionStore.transitionDelegate = component;
+    this._transitionStore._transitionDelegate = component;
     this._logger.info(
       "component is deactivating, delegate set with component: ",
       component
@@ -32,6 +32,6 @@ export class SGTransitionDeactivateGuard<T extends SGTransitionDelegate>
   }
 
   private setStream(stream: SGTransitionPipeline) {
-    this._transitionStore.setTransitionStream(stream);
+    this._transitionStore._setTransitionStream(stream);
   }
 }

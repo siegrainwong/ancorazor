@@ -9,6 +9,7 @@ import {
   topElementId
 } from "src/app/shared/utils/siegrain.utils";
 import { SGTransition } from "src/app/shared/animations/sg-transition";
+import { SGAnimations } from "src/app/shared/animations/sg-animations";
 import { Title } from "@angular/platform-browser";
 import { Store } from "src/app/shared/store/store";
 import { constants } from "src/app/shared/constants/siegrain.constants";
@@ -41,14 +42,10 @@ export class ArticleListComponent
   public data: PagedResult<ArticleModel>;
   public preloading: boolean = false;
 
-  // item animation types
-  public readonly itemAnimations = {
-    route: "fade-opposite",
-    next: "page-turn-next",
-    previous: "page-turn-previous"
+  public animations = {
+    articles: SGAnimations.fadeOpposite,
+    pagination: SGAnimations.pageTurnButton
   };
-
-  public currentItemAnimation: string = this.itemAnimations.route;
 
   private _subscription = new Subscription();
   constructor(
@@ -65,7 +62,6 @@ export class ArticleListComponent
     this._subscription.add(
       this.store.routeDataChanged$.subscribe(async data => {
         this.data = data.list;
-        this.restoreTransitionFromLastRouteCommands(data.sg_transition);
       })
     );
   }
@@ -77,7 +73,7 @@ export class ArticleListComponent
   transitionForComponent?(
     nextRoute: ActivatedRouteSnapshot
   ): TransitionCommands {
-    this.setItemTransition(this.itemAnimations.route);
+    this.animations.articles = SGAnimations.fadeOpposite;
     let data = nextRoute.data as RouteData;
     if (data.kind == RouteKinds.home || data.kind == RouteKinds.edit)
       return new RouteTransitionCommands({ scrollTo: topElementId });
@@ -89,11 +85,13 @@ export class ArticleListComponent
   ): CustomizeTransitionCommands {
     let index = parseInt(nextRoute.params.index) || 0;
     let isNextPage = index == this.data.nextPageIndex;
-    this.setItemTransition(
-      isNextPage ? this.itemAnimations.next : this.itemAnimations.previous
-    );
+    this.animations.articles = isNextPage
+      ? SGAnimations.pageTurnNext
+      : SGAnimations.pageTurnPrevious;
+
     return new CustomizeTransitionCommands({
-      names: [this.currentItemAnimation, "page-turn-button"],
+      crossRoute: true,
+      animations: this.animations,
       extraDuration: StaggerDuration,
       scrollTo: topElementId
     });
@@ -115,26 +113,6 @@ export class ArticleListComponent
     if (!result) return;
 
     // TODO: 单动画机制
-    // item.animation = new SGAnimation(item.animation);
-    // await this.transition.triggerAnimations([item.animation]);
     this.data.list.splice(index, 1);
-    // this.setItemTransition(this.itemAnimations.route);
-    // await this.transition.triggerAnimations([item.animation]);
-  }
-
-  private restoreTransitionFromLastRouteCommands(commands: TransitionCommands) {
-    let animationName = this.currentItemAnimation;
-    if (commands && this._transitionUtil.isCustomizeCommands(commands))
-      animationName = (commands as CustomizeTransitionCommands).names[0];
-    this.setItemTransition(animationName);
-  }
-
-  /** 设置 article item 的动画 */
-  public setItemTransition(name: string) {
-    this.currentItemAnimation = name;
-    this.data &&
-      this.data.list.map(
-        x => (x.animation = this._transitionUtil.getAnimation(name))
-      );
   }
 }

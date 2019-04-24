@@ -15,9 +15,8 @@ import {
   SGTransitionMode,
   TransitionCommands
 } from "./sg-transition.model";
-import { SGTransition } from "./sg-transition";
+import { SGTransition, SGTransitionDirection } from "./sg-transition";
 import { LoggingService } from "../services/logging.service";
-import { nextContext } from "@angular/core/src/render3";
 
 @Injectable({
   providedIn: "root"
@@ -33,12 +32,15 @@ export class SGTransitionResolveGuard implements Resolve<TransitionCommands> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Promise<TransitionCommands> {
-    if (!this._transitionStore.isLeaveTransitionAvailable) return null;
+    if (!this._transitionStore._isLeaveTransitionAvailable) return null;
 
     const transition = async () => {
       this.setStream(SGTransitionPipeline.TransitionLeavingStart);
       let commands = await this.transition(route);
       this.setStream(SGTransitionPipeline.TransitionLeavingEnd);
+      this._transitionStore._nextTransitionDelegate = <SGTransitionDelegate>(
+        (<unknown>route.component)
+      );
       return commands;
     };
 
@@ -56,7 +58,7 @@ export class SGTransitionResolveGuard implements Resolve<TransitionCommands> {
     this._logger.info(
       `sg-transition module is waiting for another ${resolveCount} resolvers...`
     );
-    await this._transitionStore.resolveCountChanged$
+    await this._transitionStore._resolveCountChanged$
       .pipe(first(x => x == resolveCount))
       .toPromise();
     this._logger.info("resolves completed, transition to ", route);
@@ -65,54 +67,14 @@ export class SGTransitionResolveGuard implements Resolve<TransitionCommands> {
     return await transition();
   }
 
-  // 这个状态驱动写得太狗屎了，还是慢慢学rxjs吧。。。
-  private async next(
-    route: ActivatedRouteSnapshot
-  ): Promise<TransitionCommands> {
-    switch (this._transitionStore.transitionStream) {
-      case SGTransitionPipeline.Ready:
-        const resolveCount = this.getResolveCount(route);
-        if (!resolveCount) {
-          this.setStream(SGTransitionPipeline.TransitionLeavingStart);
-          break;
-        }
-
-        this.setStream(SGTransitionPipeline.ResolveStart);
-      case SGTransitionPipeline.ResolveStart:
-        await this._transitionStore.resolveCountChanged$
-          .pipe(first(x => x == resolveCount))
-          .toPromise();
-        this.setStream(SGTransitionPipeline.ResolveEnd);
-
-      case SGTransitionPipeline.ResolveEnd:
-        this.setStream(SGTransitionPipeline.TransitionLeavingStart);
-
-      case SGTransitionPipeline.TransitionLeavingStart:
-        let commands = await this.transition(route);
-        this.setStream(SGTransitionPipeline.TransitionLeavingEnd);
-
-      case SGTransitionPipeline.TransitionLeavingEnd:
-        return commands;
-
-      default:
-        this._logger.error(
-          `sg-transition leaving guard handled unknown stream: `,
-          this._transitionStore.setTransitionStream
-        );
-        return null;
-    }
-
-    return await this.next(route);
-  }
-
   private setStream(stream: SGTransitionPipeline) {
-    this._transitionStore.setTransitionStream(stream);
+    this._transitionStore._setTransitionStream(stream);
   }
 
   private async transition(route: ActivatedRouteSnapshot) {
     // 获取对应代理
     let delegates = this.setupDelegate(
-      this._transitionStore.transitionDelegate
+      this._transitionStore._transitionDelegate
     );
 
     // 获取命令
@@ -126,9 +88,22 @@ export class SGTransitionResolveGuard implements Resolve<TransitionCommands> {
       commands = this.routeCommandsFromDelegate(delegates.routeDelegate, route);
 
     // 执行过渡
-    await this._transition.transitionToLeave(commands);
+    await this.transitionToLeave(commands);
 
     return commands;
+  }
+
+  /**
+   * 触发离场过渡
+   * @param names 自定义动画集合（不传则触发当前页面所有路由动画）
+   * @param extraDuration 额外过渡时间
+   * 自定义动画时间内会禁用路由动画
+   */
+  private async transitionToLeave(commands: TransitionCommands) {
+    await this._transition._triggerAnimations(
+      SGTransitionDirection.leave,
+      commands
+    );
   }
 
   /** 从代理获取路由过渡命令 */

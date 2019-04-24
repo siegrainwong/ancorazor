@@ -82,10 +82,6 @@ export class SGUtil {
     }
   ) {
     if (!argument) argument = {};
-    // await this._transition.transitionToLeave(
-    //   argument.names,
-    //   argument.extraDuration || 0
-    // );
     this._router.navigate(commands, argument.extras);
   }
 

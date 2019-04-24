@@ -84,7 +84,7 @@ export class SGTransitionStore {
     this.transitionStreamChanged$.next(val);
     if (val === SGTransitionPipeline.Complete) this._setTransitioned();
     this._logger.info(
-      "sg-transition stream: ",
+      `sg-transition stream ${val}: `,
       this.nameOfEnumMember(SGTransitionPipeline, val)
     );
   }

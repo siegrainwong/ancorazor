@@ -31,6 +31,7 @@ export class SGTransition implements OnDestroy {
       this._store.routeDataChanged$
         .pipe(filter(_ => !this._store.isFirstScreen))
         .subscribe(async data => {
+          // TODO: 在这里覆盖下一个代理的动画...
           this.setStream(SGTransitionPipeline.NavigationEnd);
           await this.transitionToEnter(data.sg_transition);
           this.setStream(SGTransitionPipeline.Complete);
@@ -48,7 +49,7 @@ export class SGTransition implements OnDestroy {
    */
   public async transitionToEnter(commands: TransitionCommands) {
     this.setStream(SGTransitionPipeline.TransitionEnteringStart);
-    await this._triggerAnimations(SGTransitionDirection.leave, commands);
+    await this._triggerAnimations(SGTransitionDirection.enter, commands);
     this.setStream(SGTransitionPipeline.TransiitonEnteringEnd);
   }
 

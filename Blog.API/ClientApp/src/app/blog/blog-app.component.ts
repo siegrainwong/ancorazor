@@ -62,7 +62,9 @@ export class BlogAppComponent implements OnInit, OnDestroy {
     this._subscription.add(
       this._router.events
         .pipe(filter(event => event instanceof NavigationEnd))
-        .subscribe(async () => {
+        .subscribe(async event => {
+          console.log(event);
+
           this.store.routeData = this._route.firstChild.snapshot
             .data as RouteData;
         })

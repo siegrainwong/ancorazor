@@ -10,7 +10,6 @@ abstract class ZoneMacroTaskWrapper<S, R> {
       let savedResult: any = null;
       let savedError: any = null;
 
-      // tslint:disable-next-line:no-shadowed-variable
       const scheduleTask = (_task: any) => {
         task = _task;
         scheduled = true;
@@ -40,7 +39,6 @@ abstract class ZoneMacroTaskWrapper<S, R> {
         );
       };
 
-      // tslint:disable-next-line:no-shadowed-variable
       const cancelTask = (_task: any) => {
         if (!scheduled) {
           return;

@@ -12,6 +12,8 @@ import {
   articleDefaultContent
 } from "src/app/shared/constants/siegrain.constants";
 import { timeFormat } from "src/app/shared/utils/time-format";
+import { SGTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
+import { SGAnimations } from "src/app/shared/animations/sg-animations";
 const yamlFront = require("yaml-front-matter");
 
 @Component({
@@ -19,7 +21,11 @@ const yamlFront = require("yaml-front-matter");
   templateUrl: "./write-article.component.html",
   styleUrls: ["./write-article.component.scss"]
 })
-export class WriteArticleComponent implements OnInit, OnDestroy {
+export class WriteArticleComponent
+  implements OnInit, OnDestroy, SGTransitionDelegate {
+  public animations = {
+    editor: SGAnimations.fadeOpposite
+  };
   @Input() model = new ArticleModel({
     cover: "assets/img/write-bg.jpg",
     title: "",

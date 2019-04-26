@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import ArticleModel from "../../models/article-model";
-import { ArticleService } from "../../services/article.service";
 import { ActivatedRoute } from "@angular/router";
 import { Store } from "src/app/shared/store/store";
-import { SGTransition } from "src/app/shared/animations/sg-transition";
 import { Title } from "@angular/platform-browser";
 import { timeout } from "src/app/shared/utils/promise-delay";
 import {
@@ -12,22 +10,27 @@ import {
 } from "src/app/shared/constants/siegrain.constants";
 import { SGUtil } from "src/app/shared/utils/siegrain.utils";
 import { Subscription } from "rxjs";
+import { SGTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
+import { SGAnimations } from "src/app/shared/animations/sg-animations";
 
 @Component({
   selector: "app-article",
   templateUrl: "./article.component.html",
   styleUrls: ["./article.component.scss"]
 })
-export class ArticleComponent implements OnInit, OnDestroy {
+export class ArticleComponent
+  implements OnInit, OnDestroy, SGTransitionDelegate {
   private _subscription = new Subscription();
-  model: ArticleModel;
-  content: string;
+  public animations = {
+    content: SGAnimations.fade
+  };
+  public model: ArticleModel;
+  public content: string;
   constructor(
     private _route: ActivatedRoute,
     private _titleService: Title,
     private _util: SGUtil,
-    public store: Store,
-    public transition: SGTransition
+    public store: Store
   ) {}
   ngOnInit() {
     this.getArticle();
@@ -49,10 +52,6 @@ export class ArticleComponent implements OnInit, OnDestroy {
         await timeout(10);
       })
     );
-  }
-
-  get transitionClass() {
-    return this.transition.apply("fade-opposite");
   }
 
   private async setupViewer() {

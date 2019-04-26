@@ -5,7 +5,7 @@ import {
   ActivatedRouteSnapshot
 } from "@angular/router";
 import { SGTransitionStore, SGTransitionPipeline } from "./sg-transition.store";
-import { first, switchMap, filter, map, tap } from "rxjs/operators";
+import { first } from "rxjs/operators";
 import {
   SGCustomizeTransitionDelegate,
   SGTransitionDelegate
@@ -39,7 +39,7 @@ export class SGTransitionResolveGuard implements Resolve<TransitionCommands> {
       let commands = await this.transition(route);
       this.setStream(SGTransitionPipeline.TransitionLeavingEnd);
       this._transitionStore._nextTransitionDelegate = <SGTransitionDelegate>(
-        (<unknown>route.component)
+        (<unknown>{ animations: this.animationsFromNextRoute(route) })
       );
       return commands;
     };
@@ -65,10 +65,6 @@ export class SGTransitionResolveGuard implements Resolve<TransitionCommands> {
     this.setStream(SGTransitionPipeline.ResolveEnd);
 
     return await transition();
-  }
-
-  private setStream(stream: SGTransitionPipeline) {
-    this._transitionStore._setTransitionStream(stream);
   }
 
   private async transition(route: ActivatedRouteSnapshot) {
@@ -157,5 +153,21 @@ export class SGTransitionResolveGuard implements Resolve<TransitionCommands> {
     return (
       (route[resolveKey] && Object.keys(route[resolveKey]).length - 1) || 0
     );
+  }
+
+  private animationsFromNextRoute(route: ActivatedRouteSnapshot) {
+    try {
+      if (!route.component) return null;
+      let proto = route.component["prototype"];
+      // 手动调用构造器初始化字段
+      proto.constructor();
+      return proto.animations;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  private setStream(stream: SGTransitionPipeline) {
+    this._transitionStore._setTransitionStream(stream);
   }
 }

@@ -14,10 +14,21 @@ export class SGTransitionUtil {
   /**
    * 获取所有`SGAnimation`的路由引用
    */
-  public get getRouteAnimations(): Array<SGAnimation> {
-    return Object.values(SGAnimations).filter(
-      x => x.type == SGTransitionMode.route
+  public get getRouteAnimations(): { [name: string]: SGAnimation } {
+    return this.entriesToObject(
+      Object.entries(SGAnimations).filter(
+        x => x[1].type == SGTransitionMode.route
+      )
     );
+  }
+
+  public entriesToObject(
+    entries: [string, SGAnimation][]
+  ): { [name: string]: SGAnimation } {
+    return entries.reduce((acc, cur) => {
+      acc[cur[0]] = cur[1];
+      return acc;
+    }, {});
   }
 
   public pick = (obj: any, ...props) =>
@@ -53,21 +64,21 @@ export class SGTransitionUtil {
   public resolveCommands(
     commands?: TransitionCommands
   ): {
-    animations: SGAnimation[];
+    animations: { [name: string]: SGAnimation };
     extraDuration: number;
     scrollTo?: string;
     crossRoute: boolean;
   } {
     let data = {
       animations: this.getRouteAnimations,
-      scrollTo: commands.scrollTo,
+      scrollTo: commands && commands.scrollTo,
       extraDuration: 0,
-      crossRoute: commands.crossRoute
+      crossRoute: (commands && commands.crossRoute) || false
     };
 
     if (commands && this.isCustomizeCommands(commands)) {
       const customizeCommands = commands as CustomizeTransitionCommands;
-      data.animations = Object.values(customizeCommands.animations);
+      data.animations = customizeCommands.animations;
       data.extraDuration = customizeCommands.extraDuration;
     }
 

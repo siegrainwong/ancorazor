@@ -4,7 +4,8 @@ import {
   SGTransitionMode,
   SGAnimation,
   TransitionCommands,
-  CustomizeTransitionCommands
+  CustomizeTransitionCommands,
+  SGAnimationData
 } from "./sg-transition.model";
 
 @Injectable({
@@ -14,7 +15,7 @@ export class SGTransitionUtil {
   /**
    * 获取所有`SGAnimation`的路由引用
    */
-  public get getRouteAnimations(): { [name: string]: SGAnimation } {
+  public get getRouteAnimations(): SGAnimationData {
     return this.entriesToObject(
       Object.entries(SGAnimations).filter(
         x => x[1].type == SGTransitionMode.route
@@ -22,34 +23,26 @@ export class SGTransitionUtil {
     );
   }
 
-  public entriesToObject(
-    entries: [string, SGAnimation][]
-  ): { [name: string]: SGAnimation } {
+  public entriesToObject(entries: [string, any][]): { [name: string]: any } {
     return entries.reduce((acc, cur) => {
       acc[cur[0]] = cur[1];
       return acc;
     }, {});
   }
 
-  public pick = (obj: any, ...props) =>
-    props.reduce((a, e) => ((a[e] = obj[e]), a), {});
-
-  /**
-   * 根据动画名称获取`SGAnimation`引用集合
-   * @param names 动画名称集合
-   */
-  public getAnimations(names: string[]): Array<SGAnimation> {
-    return Object.entries(SGAnimations)
-      .filter(x => names.indexOf(x[0]) > 0)
-      .map(x => x[1]);
-  }
-
-  /**
-   * 从已有动画定义中返回一个 `SGAnimation` 对象的一个**引用**
-   * @param name 动画名称
-   */
-  public getAnimation(name: string): SGAnimation {
-    return SGAnimation[name];
+  public deepCopy(object) {
+    // const getCircularReplacer = () => {
+    //   const seen = new WeakSet();
+    //   return (key, value) => {
+    //     if (typeof value === "object" && value !== null) {
+    //       if (seen.has(value)) return;
+    //       seen.add(value);
+    //     }
+    //     return value;
+    //   };
+    // };
+    // return JSON.parse(JSON.stringify(object, getCircularReplacer()));
+    return JSON.parse(JSON.stringify(object));
   }
 
   /** 判断是否是自定义命令 */
@@ -64,7 +57,7 @@ export class SGTransitionUtil {
   public resolveCommands(
     commands?: TransitionCommands
   ): {
-    animations: { [name: string]: SGAnimation };
+    animations: SGAnimationData;
     extraDuration: number;
     scrollTo?: string;
     crossRoute: boolean;

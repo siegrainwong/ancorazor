@@ -1,4 +1,17 @@
 /**
+ * === Types ===
+ */
+
+export declare type SGAnimationData = {
+  [name: string]: SGAnimation;
+};
+
+export declare type SGTransitionSpeed = {
+  name: string;
+  duration: number;
+};
+
+/**
  * 动画速度
  * 定义在`_reset.css`的`animate.css`节内
  * 修改这里的值并不会对动画时长有实际性效果，只用于计算
@@ -23,7 +36,7 @@ export enum SGTransitionMode {
 }
 
 export class SGAnimation {
-  speed: { name: string; duration: number } = SGAnimationSpeed.faster;
+  speed: SGTransitionSpeed = SGAnimationSpeed.faster;
   type: SGTransitionMode = SGTransitionMode.route;
   /** 是否触发离开动画 */
   leaving: boolean = false;
@@ -36,18 +49,30 @@ export class SGAnimation {
     Object.assign(this, init);
   }
 
+  protected _class = {};
   /**
    * 获取 `[ngClass]` 对象，通过这个对象操控`dom`元素的动画效果
    */
   get class() {
-    let animation = {};
-    animation[this.enterClass] = !this.leaving;
-    animation["enter"] = !this.leaving;
-    animation[this.leaveClass] = this.leaving;
-    animation["leave"] = this.leaving;
-    animation[this.speed.name] = true;
-    animation["animated"] = this.animated;
-    return animation;
+    this.buildClass();
+    return this._class;
+  }
+
+  protected buildClass() {
+    this._class = {};
+    this._class[this.enterClass] = !this.leaving;
+    this._class["enter"] = !this.leaving;
+    this._class[this.leaveClass] = this.leaving;
+    this._class["leave"] = this.leaving;
+    this._class[this.speed.name] = true;
+    this._class["animated"] = this.animated;
+  }
+}
+
+export class SGFadeAnimation extends SGAnimation {
+  protected buildClass() {
+    super.buildClass();
+    this._class["transparent"] = true;
   }
 }
 
@@ -61,7 +86,7 @@ export class TransitionCommands {
   scrollTo?: string;
   /**
    * 指示当前是否是跨路由过渡
-   * 值为`true`时，本次命令中执行的动画会覆盖下一个组件中的同名动画
+   * 值为`true`时，本次命令中执行的离场动画会覆盖下一个组件中的同名入场动画
    *
    * 一般用于中途修改过渡效果后，让下一个组件继承当前的过渡效果，让过渡更自然
    **/
@@ -79,7 +104,7 @@ export class RouteTransitionCommands extends TransitionCommands {
 /** 自定义动画过渡指令 */
 export class CustomizeTransitionCommands extends TransitionCommands {
   /** 要执行的动画 */
-  animations!: { [name: string]: SGAnimation };
+  animations!: SGAnimationData;
   /** 额外动画时间 */
   extraDuration: number = 0;
 

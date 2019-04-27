@@ -2,7 +2,8 @@ import {
   CustomizeTransitionCommands,
   SGTransitionMode,
   RouteTransitionCommands,
-  SGAnimation
+  SGAnimation,
+  SGAnimationData
 } from "./sg-transition.model";
 import { ActivatedRouteSnapshot } from "@angular/router";
 
@@ -22,7 +23,7 @@ export interface SGTransitionDelegate {
    * }
    * ```
    */
-  animations: { [name: string]: SGAnimation };
+  animations: SGAnimationData;
 
   /**
    * 路由过渡离场配置

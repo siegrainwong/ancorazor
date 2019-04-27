@@ -2,12 +2,16 @@ import { Injectable, OnDestroy } from "@angular/core";
 import { timeout } from "../utils/promise-delay";
 import { Store } from "../store/store";
 import { Subscription } from "rxjs";
-import { SGAnimation, TransitionCommands } from "./sg-transition.model";
+import {
+  SGAnimation,
+  TransitionCommands,
+  CustomizeTransitionCommands,
+  RouteTransitionCommands,
+  SGAnimationData
+} from "./sg-transition.model";
 import { filter } from "rxjs/operators";
 import { SGTransitionUtil } from "./sg-transition.util";
 import { SGTransitionPipeline, SGTransitionStore } from "./sg-transition.store";
-import { ActivatedRoute } from "@angular/router";
-import { SGAnimations } from "./sg-animations";
 
 export enum SGTransitionDirection {
   enter,
@@ -19,12 +23,12 @@ export enum SGTransitionDirection {
 })
 export class SGTransition implements OnDestroy {
   private _subscription = new Subscription();
+  private _currentTransitionsBackup: SGAnimationData;
 
   constructor(
     private _store: Store,
     private _util: SGTransitionUtil,
-    private _transitionStore: SGTransitionStore,
-    private _route: ActivatedRoute
+    private _transitionStore: SGTransitionStore
   ) {
     // 首屏禁用入场动画（因为SSR时已经有内容了）
     this.disableRouteTransitionAtFirstScreen();
@@ -47,31 +51,72 @@ export class SGTransition implements OnDestroy {
 
   /**
    * 触发入场过渡
-   * @param commands 过渡指令
+   * @param previousCommands 上一个路由的过渡指令
    */
-  public async transitionToEnter(commands: TransitionCommands) {
+  private async transitionToEnter(previousCommands?: TransitionCommands) {
     this.setStream(SGTransitionPipeline.TransitionEnteringStart);
 
-    // 虽然这里其实每次在切换路由后都会收到上一个路由的commands，但其实。
-    // triggerAnimation 的时候 trigger 不动。
+    const shouldCrossRoute =
+      previousCommands &&
+      previousCommands.crossRoute &&
+      this._transitionStore._isTransitionCrossedRoute;
 
-    // 用上一个路由的动画声明替换当前路由同名动画声明
-    // if (commands.crossRoute) {
-    //   let delegate = this._transitionStore._nextTransitionDelegate;
-    //   // let previousAnimations = commands["animations"];
-    //   // let animations = this._util.entriesToObject(
-    //   //   Object.entries(delegate.animations).map(x => {
-    //   //     let sameNameAnim = previousAnimations[x[0]];
-    //   //     return (sameNameAnim && [x[0], sameNameAnim]) || x;
-    //   //   })
-    //   // );
-    //   // commands["animations"] = animations;
-    //   commands["animations"] = delegate.animations;
-    //   commands["animations"].articles = SGAnimations.fade;
-    // }
-    if (commands) commands["animations"] = this._util.getRouteAnimations;
+    let commands = null;
+    if (shouldCrossRoute)
+      commands = this.replaceWithPreviousTransitions(previousCommands);
+    else commands = previousCommands || new RouteTransitionCommands();
+
     await this._triggerAnimations(SGTransitionDirection.enter, commands);
+
+    if (shouldCrossRoute) this.restoreCurrentTransitions();
     this.setStream(SGTransitionPipeline.TransiitonEnteringEnd);
+  }
+
+  /**
+   * 用上一个路由的过渡替换当前路由过渡
+   * @param previousCommands 上一个路由的过渡指令
+   */
+  private replaceWithPreviousTransitions(
+    previousCommands: TransitionCommands
+  ): CustomizeTransitionCommands {
+    let delegate = this._transitionStore._nextTransitionDelegate;
+    let previousAnimations = previousCommands["animations"];
+
+    this._currentTransitionsBackup = this._util.deepCopy(delegate.animations);
+
+    this.replaceAnimations(delegate.animations, previousAnimations);
+
+    return new CustomizeTransitionCommands({
+      animations: delegate.animations,
+      crossRoute: false,
+      scrollTo: previousCommands.scrollTo,
+      extraDuration: previousCommands["extraDuration"] || 0
+    });
+  }
+
+  /**
+   * 恢复当前路由的过渡
+   */
+  private restoreCurrentTransitions() {
+    let delegate = this._transitionStore._nextTransitionDelegate;
+    this.replaceAnimations(delegate.animations, this._currentTransitionsBackup);
+    this._currentTransitionsBackup = null;
+  }
+
+  /**
+   * 替换动画
+   * 仅替换样式跟速度，保留对象引用
+   */
+  private replaceAnimations(source: SGAnimationData, target: SGAnimationData) {
+    Object.entries(source).map(x => {
+      const name = x[0];
+      const animation = x[1];
+      const replacedBy = target[name];
+      if (!replacedBy) return x;
+      animation.enterClass = replacedBy.enterClass;
+      animation.leaveClass = replacedBy.leaveClass;
+      animation.speed = replacedBy.speed;
+    });
   }
 
   /**
@@ -85,7 +130,9 @@ export class SGTransition implements OnDestroy {
   ) {
     let res = this._util.resolveCommands(commands);
     let duration = this.getDuration(res.animations) + res.extraDuration;
-    this.scrollTo(res.scrollTo);
+    direction == SGTransitionDirection.leave &&
+      res.scrollTo &&
+      this.scrollTo(res.scrollTo);
     let anims = Object.values(res.animations);
     anims.map(x => {
       x.leaving = direction == SGTransitionDirection.leave;

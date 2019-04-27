@@ -23,6 +23,7 @@ export class SGTransitionDeactivateGuard<T extends SGTransitionDelegate>
     currentState: RouterStateSnapshot
   ): Promise<boolean> {
     this._transitionStore._transitionDelegate = component;
+    this._transitionStore._previousRouteConfig = currentRoute.routeConfig.path;
     this._logger.info(
       "component is deactivating, delegate set with component: ",
       component

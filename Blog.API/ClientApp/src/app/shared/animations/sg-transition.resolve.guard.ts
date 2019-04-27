@@ -33,6 +33,7 @@ export class SGTransitionResolveGuard implements Resolve<TransitionCommands> {
     state: RouterStateSnapshot
   ): Promise<TransitionCommands> {
     if (!this._transitionStore._isLeaveTransitionAvailable) return null;
+    this._transitionStore._nextRouteConfig = route.routeConfig.path;
 
     const transition = async () => {
       this.setStream(SGTransitionPipeline.TransitionLeavingStart);

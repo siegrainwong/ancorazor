@@ -30,14 +30,6 @@
 
   // 模拟 stagger 效果
   // 总转场动画时间 = transition duration + stagger duration
-  // 入场时设置 opacity 为 0，动画开始前闪烁，当然这个效果只对 Fade 系列有效
-  opacity: 0;
-  &.enter {
-    opacity: 1;
-    &.animated {
-      opacity: 0;
-    }
-  }
   $pageSize: 10;
   $duartion: 200ms;
   @for $i from 1 through $pageSize {

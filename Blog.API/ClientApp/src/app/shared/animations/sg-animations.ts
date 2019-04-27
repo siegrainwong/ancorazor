@@ -1,4 +1,8 @@
-import { SGAnimation, SGTransitionMode } from "./sg-transition.model";
+import {
+  SGAnimation,
+  SGTransitionMode,
+  SGFadeAnimation
+} from "./sg-transition.model";
 
 /**
  * Animation declarations
@@ -6,31 +10,31 @@ import { SGAnimation, SGTransitionMode } from "./sg-transition.model";
  */
 export const SGAnimations = {
   // route animations
-  fade: new SGAnimation({
+  fade: new SGFadeAnimation({
     enterClass: "fadeIn",
     leaveClass: "fadeOut"
   }),
-  fadeUp: new SGAnimation({
+  fadeUp: new SGFadeAnimation({
     enterClass: "fadeInUp",
     leaveClass: "fadeOutUp"
   }),
-  fadeOpposite: new SGAnimation({
+  fadeOpposite: new SGFadeAnimation({
     enterClass: "fadeInUp",
     leaveClass: "fadeOutDown"
   }),
 
   // custom animations
-  pageTurnNext: new SGAnimation({
+  pageTurnNext: new SGFadeAnimation({
     enterClass: "fadeInRight",
     leaveClass: "fadeOutLeft",
     type: SGTransitionMode.custom
   }),
-  pageTurnPrevious: new SGAnimation({
+  pageTurnPrevious: new SGFadeAnimation({
     enterClass: "fadeInLeft",
     leaveClass: "fadeOutRight",
     type: SGTransitionMode.custom
   }),
-  pageTurnButton: new SGAnimation({
+  pageTurnButton: new SGFadeAnimation({
     enterClass: "fadeInUp",
     leaveClass: "fadeOutDown",
     type: SGTransitionMode.custom

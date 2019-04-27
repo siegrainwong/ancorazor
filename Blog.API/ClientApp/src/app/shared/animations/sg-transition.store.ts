@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Subject } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 import { SGTransitionDelegate } from "./sg-transition.delegate";
 import { LoggingService } from "../services/logging.service";
-import { SGTransition } from "./sg-transition";
 
 /** `SGTransition`过渡管道 */
 export enum SGTransitionPipeline {
@@ -52,6 +51,18 @@ export class SGTransitionStore {
     return !!this._transitionDelegate;
   }
 
+  /** @internal */
+  public _previousRouteConfig: string;
+  /** @internal */
+  public _nextRouteConfig: string;
+  /**
+   * 根据过渡的两个`RouteConfigPath`判断是否是跨路由过渡
+   * @internal
+   **/
+  public get _isTransitionCrossedRoute(): boolean {
+    return this._previousRouteConfig !== this._nextRouteConfig;
+  }
+
   /**
    * 为其他`Resolve`计数
    * 当计数达到其他`Resolve`的数量时（意为着其他`Resolver`执行完毕）才执行转场
@@ -82,7 +93,7 @@ export class SGTransitionStore {
   public _setTransitionStream(val: SGTransitionPipeline) {
     this._transitionStream = val;
     this.transitionStreamChanged$.next(val);
-    if (val === SGTransitionPipeline.Complete) this._setTransitioned();
+    if (val === SGTransitionPipeline.Complete) this._clear();
     this._logger.info(
       `sg-transition stream ${val}: `,
       this.nameOfEnumMember(SGTransitionPipeline, val)
@@ -105,13 +116,14 @@ export class SGTransitionStore {
    *   let id = route.paramMap.get("id");
    *   let res = await this._service.getArticle(parseInt(id));
    *   if (!res) this._router.navigate(["/"]);
-   *   this._transitionStore.setGuardResolved();  // 在这里调用
+   *   this._transitionStore.setResolved();  // 在这里调用
    *   return res;
    * }
    * ```
    **/
-  public setGuardResolved() {
+  public setResolved() {
     if (!this._isLeaveTransitionAvailable) return;
+    // TODO: 这里可以内部维护一个Resolved列表，根据Caller来判断一下，避免重复调用。
     this.completedResolveCount++;
   }
 
@@ -119,11 +131,15 @@ export class SGTransitionStore {
    * 清理转场状态
    * @internal implementation detail, do not use!
    **/
-  private _setTransitioned() {
+  private _clear() {
     if (!this._isLeaveTransitionAvailable) return;
     this.completedResolveCount = 0;
+
     this._transitionDelegate = null;
     this._nextTransitionDelegate = null;
+
+    this._previousRouteConfig = null;
+    this._nextRouteConfig = null;
   }
 
   private nameOfEnumMember(source: any, member: any) {

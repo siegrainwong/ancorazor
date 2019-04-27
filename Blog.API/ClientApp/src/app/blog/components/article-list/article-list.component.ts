@@ -22,7 +22,6 @@ import {
 } from "src/app/shared/animations/sg-transition.model";
 import { Subscription } from "rxjs";
 import RouteData, { RouteKinds } from "src/app/shared/models/route-data.model";
-import { SGTransitionUtil } from "src/app/shared/animations/sg-transition.util";
 
 const StaggerDuration = 200; // 列表总动画时长 = transition duration + stagger duration
 
@@ -51,7 +50,6 @@ export class ArticleListComponent
   constructor(
     private _service: ArticleService,
     private _titleService: Title,
-    private _transitionUtil: SGTransitionUtil,
     public util: SGUtil,
     public transition: SGTransition,
     public store: Store
@@ -74,10 +72,7 @@ export class ArticleListComponent
     nextRoute: ActivatedRouteSnapshot
   ): TransitionCommands {
     this.animations.articles = SGAnimations.fadeOpposite;
-    let data = nextRoute.data as RouteData;
-    if (data.kind == RouteKinds.home || data.kind == RouteKinds.edit)
-      return new RouteTransitionCommands({ scrollTo: topElementId });
-    return null;
+    return new RouteTransitionCommands({ scrollTo: topElementId });
   }
 
   customizeTransitionForComponent(

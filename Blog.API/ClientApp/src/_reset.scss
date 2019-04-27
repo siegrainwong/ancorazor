@@ -118,6 +118,22 @@ label {
   }
 }
 
+// 避免 fade 系动画在 Angular 渲染后还没有开始动画前闪烁
+.transparent {
+  &.enter {
+    opacity: 1;
+    &.animated {
+      opacity: 0;
+    }
+  }
+  &.leave {
+    opacity: 0;
+    &.animated {
+      opacity: 1;
+    }
+  }
+}
+
 /* === highlight.js === */
 
 @mixin code-block() {

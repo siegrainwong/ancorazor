@@ -8,7 +8,6 @@ import {
   TipType,
   topElementId
 } from "src/app/shared/utils/siegrain.utils";
-import { SGTransitionToEnter } from "src/app/shared/animations/sg-transition.enter";
 import { SGAnimations } from "src/app/shared/animations/sg-animations";
 import { Title } from "@angular/platform-browser";
 import { Store } from "src/app/shared/store/store";
@@ -50,8 +49,7 @@ export class ArticleListComponent
   constructor(
     private _service: ArticleService,
     private _titleService: Title,
-    public util: SGUtil,
-    public transition: SGTransitionToEnter,
+    private _util: SGUtil,
     public store: Store
   ) {}
 
@@ -65,6 +63,7 @@ export class ArticleListComponent
   }
 
   ngOnDestroy() {
+    console.log(ArticleListComponent.name + " destroyed");
     this._subscription.unsubscribe();
   }
 
@@ -103,7 +102,7 @@ export class ArticleListComponent
 
   public async delete(item: ArticleModel, index: number) {
     let result =
-      (await this.util.confirm("Delete", TipType.Danger)) &&
+      (await this._util.confirm("Delete", TipType.Danger)) &&
       (await this._service.remove(item.id));
     if (!result) return;
 

@@ -14,7 +14,7 @@ export const enum TipType {
 
 export const topElementId = "#content";
 
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class SGUtil {
   constructor(private _snackBar: MatSnackBar, private _dialog: MatDialog) {}
 

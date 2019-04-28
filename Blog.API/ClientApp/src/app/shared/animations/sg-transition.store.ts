@@ -91,13 +91,13 @@ export class SGTransitionStore {
    * @internal implementation detail, do not use!
    */
   public _setTransitionStream(val: SGTransitionPipeline) {
-    this._transitionStream = val;
-    this.transitionStreamChanged$.next(val);
-    if (val === SGTransitionPipeline.Complete) this._clear();
     this._logger.info(
       `sg-transition stream ${val}: `,
       this.nameOfEnumMember(SGTransitionPipeline, val)
     );
+    this._transitionStream = val;
+    this.transitionStreamChanged$.next(val);
+    if (val === SGTransitionPipeline.Complete) this._clear();
   }
   /**
    * `SGTransitionPipeline`过渡管道流变化时触发

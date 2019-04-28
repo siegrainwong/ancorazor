@@ -17,11 +17,16 @@ namespace Blog.API
             var config = new ConfigurationBuilder()
                 .AddCommandLine(args)
                 .Build();
+
             Console.Clear();
             Console.WriteLine($"ProcessId: {Process.GetCurrentProcess().Id}");
+
             return WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(config)
-                .UseStartup<Startup>().Build();
+                .UseIISIntegration()
+                .UseStartup<Startup>()
+                .UseUrls("http://localhost:8088/")
+                .Build();
         }
 
         public static void Main(string[] args)

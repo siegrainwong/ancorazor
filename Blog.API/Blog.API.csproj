@@ -78,9 +78,6 @@
     <None Update="SmartSqlMapConfig.Development.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SmartSqlMapConfig.Release.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="SmartSqlMapConfig.Development.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

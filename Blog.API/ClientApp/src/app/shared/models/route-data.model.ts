@@ -1,5 +1,5 @@
 import ArticleModel from "src/app/blog/models/article-model";
-import { TransitionCommands } from "../animations/sg-transition.model";
+import { SGTransitionCommands } from "../animations/sg-transition.model";
 import { PagedResult } from "./response-result";
 
 export const enum RouteKinds {
@@ -18,7 +18,7 @@ export default class RouteData {
   /** resolved from `ArticleListResolveGuard` */
   list?: PagedResult<ArticleModel>;
   /** resolved from `SGTransitionResolveGuard` */
-  sg_transition?: TransitionCommands;
+  sg_transition?: SGTransitionCommands;
   constructor(obj?: Partial<RouteData>) {
     Object.assign(this, obj);
   }

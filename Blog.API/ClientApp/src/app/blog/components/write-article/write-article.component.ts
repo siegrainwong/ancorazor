@@ -1,10 +1,14 @@
 import { Component, OnInit, Input, OnDestroy, Renderer } from "@angular/core";
 import { ArticleService } from "../../services/article.service";
-import { ActivatedRoute } from "@angular/router";
+import {
+  ActivatedRoute,
+  Router,
+  ActivatedRouteSnapshot
+} from "@angular/router";
 import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
 import { LoggingService } from "src/app/shared/services/logging.service";
-import { SGTransition } from "src/app/shared/animations/sg-transition";
+import { SGTransitionToEnter } from "src/app/shared/animations/sg-transition.enter";
 import { SGUtil, topElementId } from "src/app/shared/utils/siegrain.utils";
 import {
   externalScripts,
@@ -14,6 +18,7 @@ import {
 import { timeFormat } from "src/app/shared/utils/time-format";
 import { SGTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
 import { SGAnimations } from "src/app/shared/animations/sg-animations";
+import { SGRouteTransitionCommands } from "src/app/shared/animations/sg-transition.model";
 const yamlFront = require("yaml-front-matter");
 
 @Component({
@@ -43,7 +48,8 @@ export class WriteArticleComponent
     private _logger: LoggingService,
     private _route: ActivatedRoute,
     private _util: SGUtil,
-    public transition: SGTransition
+    private _router: Router,
+    public transition: SGTransitionToEnter
   ) {}
 
   async ngOnInit() {
@@ -55,6 +61,12 @@ export class WriteArticleComponent
 
   ngOnDestroy() {
     this.restoreNav();
+  }
+
+  transitionForComponent?(
+    nextRoute: ActivatedRouteSnapshot
+  ): SGRouteTransitionCommands {
+    return new SGRouteTransitionCommands({ scrollTo: topElementId });
   }
 
   private async preloadArticle() {
@@ -160,6 +172,6 @@ export class WriteArticleComponent
       : await this._service.add(this.model);
     this.preloading = false;
     if (!res) return;
-    this._util.routeTo([`article/${res}`], { scrollToElementId: topElementId });
+    this._router.navigate([`article/${res}`]);
   }
 }

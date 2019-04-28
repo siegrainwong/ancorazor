@@ -2,7 +2,8 @@ import { Injectable } from "@angular/core";
 import {
   CanActivate,
   ActivatedRouteSnapshot,
-  RouterStateSnapshot
+  RouterStateSnapshot,
+  Router
 } from "@angular/router";
 import { Store } from "../store/store";
 import { SGUtil } from "../utils/siegrain.utils";
@@ -11,7 +12,7 @@ import { SGUtil } from "../utils/siegrain.utils";
   providedIn: "root"
 })
 export class AuthGuard implements CanActivate {
-  constructor(private _store: Store, private _util: SGUtil) {}
+  constructor(private _store: Store, private _router: Router) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -19,11 +20,9 @@ export class AuthGuard implements CanActivate {
   ): boolean {
     const canActivate = this._store.userIsAvailable;
     if (!canActivate)
-      this._util.routeTo(
+      this._router.navigate(
         ["/"],
-        this._store.renderFromClient
-          ? { extras: { fragment: "sign-in" } }
-          : null
+        this._store.renderFromClient ? { fragment: "sign-in" } : null
       );
     return canActivate;
   }

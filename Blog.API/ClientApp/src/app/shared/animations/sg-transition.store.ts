@@ -140,6 +140,8 @@ export class SGTransitionStore {
 
     this._previousRouteConfig = null;
     this._nextRouteConfig = null;
+
+    this._logger.info("sg-transition states cleared.");
   }
 
   private nameOfEnumMember(source: any, member: any) {

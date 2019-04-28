@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
 import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
-import { SGTransition } from "src/app/shared/animations/sg-transition";
+import { SGTransitionToEnter } from "src/app/shared/animations/sg-transition.enter";
 import { SGTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
 import { SGAnimations } from "src/app/shared/animations/sg-animations";
 @Component({
@@ -18,7 +18,7 @@ export class HeaderComponent implements SGTransitionDelegate {
   @Input() isEditing: boolean = false;
   @Output() headerUpdated = new EventEmitter<ArticleModel>();
 
-  constructor(private _store: Store, public transition: SGTransition) {}
+  constructor(private _store: Store, public transition: SGTransitionToEnter) {}
   private _model: ArticleModel;
   get model() {
     return this._model;

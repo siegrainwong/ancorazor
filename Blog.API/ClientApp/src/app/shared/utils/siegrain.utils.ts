@@ -1,7 +1,5 @@
 import { Injectable } from "@angular/core";
 import { MatSnackBar, MatDialog } from "@angular/material";
-import { Router, NavigationExtras } from "@angular/router";
-import { SGTransition } from "../animations/sg-transition";
 import {
   ConfirmDialog,
   ConfirmDialogData
@@ -18,12 +16,7 @@ export const topElementId = "#content";
 
 @Injectable()
 export class SGUtil {
-  constructor(
-    private _snackBar: MatSnackBar,
-    private _router: Router,
-    private _transition: SGTransition,
-    private _dialog: MatDialog
-  ) {}
+  constructor(private _snackBar: MatSnackBar, private _dialog: MatDialog) {}
 
   /** === Utilities ===*/
 
@@ -61,39 +54,6 @@ export class SGUtil {
         resolve(data);
       });
     });
-  }
-
-  /**
-   * 路由
-   * 此方法会触发动画
-   * @param commands `router.navigate` parameter
-   * @param extras `router.navigate` parameter
-   * @param names 动画名称集合
-   * @param extraDuration 延长动画过渡时间
-   * @param scrollToElementId 滚动到元素
-   */
-  public async routeTo(
-    commands: any[],
-    argument?: {
-      extras?: NavigationExtras;
-      names?: string[];
-      extraDuration?: number;
-      scrollToElementId?: string;
-    }
-  ) {
-    if (!argument) argument = {};
-    this._router.navigate(commands, argument.extras);
-  }
-
-  public getCookie(name: string) {
-    const splitCookie = document.cookie.split(";");
-    for (const key in splitCookie) {
-      const splitValue = splitCookie[key].split("=");
-      if (splitValue[0] === name) {
-        return splitValue[1];
-      }
-    }
-    return null;
   }
 
   /**

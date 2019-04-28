@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { filter } from "rxjs/operators";
 import { Store } from "../shared/store/store";
 import RouteData from "../shared/models/route-data.model";
-import { SGTransition } from "../shared/animations/sg-transition";
+import { SGTransitionToEnter } from "../shared/animations/sg-transition.enter";
 import { SGUtil } from "../shared/utils/siegrain.utils";
 import { externalScripts } from "../shared/constants/siegrain.constants";
 import { onScroll } from "../shared/utils/scroll-listener";
@@ -29,7 +29,7 @@ export class BlogAppComponent implements OnInit, OnDestroy {
     private _scrollDispatcher: ScrollDispatcher,
     private _userService: UserService,
     public store: Store,
-    public transition: SGTransition
+    public transition: SGTransitionToEnter
   ) {}
 
   ngOnInit() {

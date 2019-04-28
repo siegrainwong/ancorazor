@@ -6,6 +6,7 @@ import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
 import { AbstractControl, ValidatorFn } from "@angular/forms";
 import { Store } from "src/app/shared/store/store";
 import { deriveAKey } from "src/app/shared/utils/pbkdf2.cryptography";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-sign-in",
@@ -18,7 +19,8 @@ export class SignInComponent implements OnInit {
     public dialogRef: MatDialogRef<SignInComponent>,
     private _service: UserService,
     private _util: SGUtil,
-    private _store: Store
+    private _store: Store,
+    private _router: Router
   ) {
     this.isReseting = data.isReseting;
   }
@@ -45,7 +47,7 @@ export class SignInComponent implements OnInit {
 
   cancel() {
     this.dialogRef.close();
-    if (!this.isReseting) this._util.routeTo(["/"]);
+    if (!this.isReseting) this._router.navigate(["/"]);
   }
 
   async submit() {
@@ -85,7 +87,7 @@ export class SignInComponent implements OnInit {
     if (!result) return;
     this.dialogRef.close();
     this._util.tip(`Reset succeed, sign in again, please.`, TipType.Success);
-    this._util.routeTo(["/"], { extras: { fragment: "sign-in" } });
+    this._router.navigate(["/"], { fragment: "sign-in" });
   }
 
   private async passwordHash(password: string): Promise<string> {

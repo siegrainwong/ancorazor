@@ -1,8 +1,4 @@
-import {
-  SGAnimation,
-  SGTransitionMode,
-  SGFadeAnimation
-} from "./sg-transition.model";
+import { SGTransitionMode, SGFadeAnimation } from "./sg-transition.model";
 
 /**
  * Animation declarations

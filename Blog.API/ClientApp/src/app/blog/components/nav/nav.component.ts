@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "src/app/shared/store/store";
 import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
-import { SGTransition } from "src/app/shared/animations/sg-transition";
+import { SGTransitionToEnter } from "src/app/shared/animations/sg-transition.enter";
 import { MatDialog } from "@angular/material";
 import { SignInComponent } from "../sign-in/sign-in.component";
 import { ActivatedRoute } from "@angular/router";
@@ -28,7 +28,7 @@ export class NavComponent implements OnInit, OnDestroy, SGTransitionDelegate {
   constructor(
     public store: Store,
     public util: SGUtil,
-    public transition: SGTransition,
+    public transition: SGTransitionToEnter,
     public dialog: MatDialog,
     private _route: ActivatedRoute,
     private _service: UserService

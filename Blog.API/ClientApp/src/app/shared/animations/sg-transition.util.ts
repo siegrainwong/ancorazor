@@ -2,10 +2,10 @@ import { Injectable } from "@angular/core";
 import { SGAnimations } from "./sg-animations";
 import {
   SGTransitionMode,
-  SGAnimation,
-  TransitionCommands,
-  CustomizeTransitionCommands,
-  SGAnimationData
+  SGTransitionCommands,
+  SGCustomizeTransitionCommands,
+  SGAnimationData,
+  SGCommandData
 } from "./sg-transition.model";
 
 @Injectable({
@@ -31,38 +31,29 @@ export class SGTransitionUtil {
   }
 
   public deepCopy(object) {
-    // const getCircularReplacer = () => {
-    //   const seen = new WeakSet();
-    //   return (key, value) => {
-    //     if (typeof value === "object" && value !== null) {
-    //       if (seen.has(value)) return;
-    //       seen.add(value);
-    //     }
-    //     return value;
-    //   };
-    // };
-    // return JSON.parse(JSON.stringify(object, getCircularReplacer()));
     return JSON.parse(JSON.stringify(object));
   }
 
+  /** 获取一个动画集合的 duration，总是取集合中最长的 duration 值 */
+  public getDuration(animations: SGAnimationData): number {
+    const duration = Math.max.apply(
+      null,
+      Object.values(animations).map(x => x.speed.duration)
+    );
+    return duration;
+  }
+
   /** 判断是否是自定义命令 */
-  private isCustomizeCommands(commands: TransitionCommands): boolean {
-    return commands.constructor.name === CustomizeTransitionCommands.name;
+  private isCustomizeCommands(commands: SGTransitionCommands): boolean {
+    return commands.constructor.name === SGCustomizeTransitionCommands.name;
   }
 
   /**
    * 解析命令
    * @internal implementation detail, do not use!
    **/
-  public resolveCommands(
-    commands?: TransitionCommands
-  ): {
-    animations: SGAnimationData;
-    extraDuration: number;
-    scrollTo?: string;
-    crossRoute: boolean;
-  } {
-    let data = {
+  public resolveCommands(commands?: SGTransitionCommands): SGCommandData {
+    let data: SGCommandData = {
       animations: this.getRouteAnimations,
       scrollTo: commands && commands.scrollTo,
       extraDuration: 0,
@@ -70,7 +61,7 @@ export class SGTransitionUtil {
     };
 
     if (commands && this.isCustomizeCommands(commands)) {
-      const customizeCommands = commands as CustomizeTransitionCommands;
+      const customizeCommands = commands as SGCustomizeTransitionCommands;
       data.animations = customizeCommands.animations;
       data.extraDuration = customizeCommands.extraDuration;
     }

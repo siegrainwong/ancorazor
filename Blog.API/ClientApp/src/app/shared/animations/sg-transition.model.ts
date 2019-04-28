@@ -11,6 +11,13 @@ export declare type SGTransitionSpeed = {
   duration: number;
 };
 
+export declare type SGCommandData = {
+  animations: SGAnimationData;
+  extraDuration: number;
+  scrollTo?: string;
+  crossRoute: boolean;
+};
+
 /**
  * 动画速度
  * 定义在`_reset.css`的`animate.css`节内
@@ -81,7 +88,7 @@ export class SGFadeAnimation extends SGAnimation {
  */
 
 /** 过渡指令 */
-export class TransitionCommands {
+export class SGTransitionCommands {
   /** 滚动到指定锚点 */
   scrollTo?: string;
   /**
@@ -94,21 +101,21 @@ export class TransitionCommands {
 }
 
 /** 离场过渡指令 */
-export class RouteTransitionCommands extends TransitionCommands {
-  constructor(obj?: Partial<RouteTransitionCommands>) {
+export class SGRouteTransitionCommands extends SGTransitionCommands {
+  constructor(obj?: Partial<SGRouteTransitionCommands>) {
     super();
     Object.assign(this, obj);
   }
 }
 
 /** 自定义动画过渡指令 */
-export class CustomizeTransitionCommands extends TransitionCommands {
+export class SGCustomizeTransitionCommands extends SGTransitionCommands {
   /** 要执行的动画 */
   animations!: SGAnimationData;
   /** 额外动画时间 */
   extraDuration: number = 0;
 
-  constructor(obj: CustomizeTransitionCommands) {
+  constructor(obj: SGCustomizeTransitionCommands) {
     super();
     Object.assign(this, obj);
   }

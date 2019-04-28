@@ -8,7 +8,7 @@ import {
   TipType,
   topElementId
 } from "src/app/shared/utils/siegrain.utils";
-import { SGTransition } from "src/app/shared/animations/sg-transition";
+import { SGTransitionToEnter } from "src/app/shared/animations/sg-transition.enter";
 import { SGAnimations } from "src/app/shared/animations/sg-animations";
 import { Title } from "@angular/platform-browser";
 import { Store } from "src/app/shared/store/store";
@@ -16,9 +16,9 @@ import { constants } from "src/app/shared/constants/siegrain.constants";
 import { SGCustomizeTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
 import {
   SGTransitionMode,
-  RouteTransitionCommands,
-  CustomizeTransitionCommands,
-  TransitionCommands
+  SGRouteTransitionCommands,
+  SGCustomizeTransitionCommands,
+  SGTransitionCommands
 } from "src/app/shared/animations/sg-transition.model";
 import { Subscription } from "rxjs";
 import RouteData, { RouteKinds } from "src/app/shared/models/route-data.model";
@@ -51,7 +51,7 @@ export class ArticleListComponent
     private _service: ArticleService,
     private _titleService: Title,
     public util: SGUtil,
-    public transition: SGTransition,
+    public transition: SGTransitionToEnter,
     public store: Store
   ) {}
 
@@ -70,21 +70,21 @@ export class ArticleListComponent
 
   transitionForComponent?(
     nextRoute: ActivatedRouteSnapshot
-  ): TransitionCommands {
+  ): SGTransitionCommands {
     this.animations.articles = SGAnimations.fadeOpposite;
-    return new RouteTransitionCommands({ scrollTo: topElementId });
+    return new SGRouteTransitionCommands({ scrollTo: topElementId });
   }
 
   customizeTransitionForComponent(
     nextRoute: ActivatedRouteSnapshot
-  ): CustomizeTransitionCommands {
+  ): SGCustomizeTransitionCommands {
     let index = parseInt(nextRoute.params.index) || 0;
     let isNextPage = index == this.data.nextPageIndex;
     this.animations.articles = isNextPage
       ? SGAnimations.pageTurnNext
       : SGAnimations.pageTurnPrevious;
 
-    return new CustomizeTransitionCommands({
+    return new SGCustomizeTransitionCommands({
       crossRoute: true,
       animations: this.animations,
       extraDuration: StaggerDuration,

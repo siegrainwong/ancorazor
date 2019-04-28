@@ -1,7 +1,7 @@
 import {
-  CustomizeTransitionCommands,
+  SGCustomizeTransitionCommands,
   SGTransitionMode,
-  RouteTransitionCommands,
+  SGRouteTransitionCommands,
   SGAnimation,
   SGAnimationData
 } from "./sg-transition.model";
@@ -31,7 +31,7 @@ export interface SGTransitionDelegate {
    */
   transitionForComponent?(
     nextRoute: ActivatedRouteSnapshot
-  ): RouteTransitionCommands;
+  ): SGRouteTransitionCommands;
 }
 
 /**
@@ -59,5 +59,5 @@ export interface SGCustomizeTransitionDelegate extends SGTransitionDelegate {
    */
   customizeTransitionForComponent(
     nextRoute: ActivatedRouteSnapshot
-  ): CustomizeTransitionCommands;
+  ): SGCustomizeTransitionCommands;
 }

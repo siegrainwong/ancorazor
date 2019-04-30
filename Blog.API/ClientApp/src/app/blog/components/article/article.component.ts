@@ -48,7 +48,6 @@ export class ArticleComponent
         this._titleService.setTitle(
           `${this.model.title} - ${constants.titlePlainText}`
         );
-
         await timeout(10);
       })
     );

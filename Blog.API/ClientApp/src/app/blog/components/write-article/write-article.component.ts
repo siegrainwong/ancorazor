@@ -19,6 +19,8 @@ import { timeFormat } from "src/app/shared/utils/time-format";
 import { SGTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
 import { SGAnimations } from "src/app/shared/animations/sg-animations";
 import { SGRouteTransitionCommands } from "src/app/shared/animations/sg-transition.model";
+import { first, take, map } from "rxjs/operators";
+import RouteData from "src/app/shared/models/route-data.model";
 const yamlFront = require("yaml-front-matter");
 
 @Component({
@@ -53,8 +55,24 @@ export class WriteArticleComponent
   ) {}
 
   async ngOnInit() {
-    await this.preloadArticle();
     if (!this._store.renderFromClient) return;
+    // this._route.data.pipe(first(data => x.)).subscribe(async (data: { article: ArticleModel }) => {
+    //   this.model = data.article;
+    //   this._titleService.setTitle(
+    //     `${this.model.title} - ${constants.titlePlainText}`
+    //   );
+    //   await timeout(10);
+    // })
+    let article = await this._store.routeDataChanged$
+      .pipe(
+        take(1),
+        map(x => x.article)
+      )
+      .toPromise();
+    if (article) {
+      this.isEditing = true;
+      this.model = article;
+    }
     this.setupNav();
     this.setupEditor();
   }
@@ -69,18 +87,18 @@ export class WriteArticleComponent
     return new SGRouteTransitionCommands({ scrollTo: topElementId });
   }
 
-  private async preloadArticle() {
-    // if (this._store.preloadArticle) {
-    //   this.model = this._store.preloadArticle;
-    //   this._store.preloadArticle = null;
-    // } else {
-    let id = this._route.snapshot.params.id;
-    let res = id && (await this._service.getArticle(id));
-    if (!res) return;
-    this.model = res;
-    // }
-    this.isEditing = true;
-  }
+  // private async preloadArticle() {
+  //   // if (this._store.preloadArticle) {
+  //   //   this.model = this._store.preloadArticle;
+  //   //   this._store.preloadArticle = null;
+  //   // } else {
+  //   let id = this._route.snapshot.params.id;
+  //   let res = id && (await this._service.getArticle(id));
+  //   if (!res) return;
+  //   this.model = res;
+  //   // }
+  //   this.isEditing = true;
+  // }
 
   private setupNav() {
     let nav = document.querySelector("#mainNav");
@@ -93,7 +111,10 @@ export class WriteArticleComponent
   }
 
   private async setupEditor() {
-    await this._util.loadExternalScripts(Object.values(externalScripts));
+    await this._util.loadExternalScripts([
+      externalScripts.editor,
+      externalScripts.highlight
+    ]);
 
     // PS：改了很多样式在 _reset.css 里
     this._editor = new EasyMDE({

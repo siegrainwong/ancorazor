@@ -16,7 +16,7 @@ export const topElementId = "#content";
 
 @Injectable({ providedIn: "root" })
 export class SGUtil {
-  private loadedScripts: string[] = [];
+  private _loadedScripts = new Set<string>();
   constructor(private _snackBar: MatSnackBar, private _dialog: MatDialog) {}
 
   /** === Utilities ===*/
@@ -69,14 +69,14 @@ export class SGUtil {
   public loadExternalScripts(urls: string[]) {
     let promises: Promise<any>[] = [];
     urls.forEach(url => {
+      if (this._loadedScripts.has(url)) return;
       promises.push(
         new Promise(resolve => {
-          if (this.loadedScripts.includes(url)) return;
           const scriptElement = document.createElement("script");
           scriptElement.src = url;
           scriptElement.onload = () => {
             resolve();
-            this.loadedScripts.push(url);
+            this._loadedScripts.add(url);
           };
           document.body.appendChild(scriptElement);
         })

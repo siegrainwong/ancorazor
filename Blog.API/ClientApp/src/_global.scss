@@ -129,26 +129,27 @@ img::-moz-selection {
 /* nprogress */
 #nprogress {
   pointer-events: none;
-  .spinner {
-    display: block;
-    position: fixed;
-    z-index: 1031;
-    top: 15px;
-    right: 15px;
-  }
-  .spinner-icon {
-    width: 18px;
-    height: 18px;
-    box-sizing: border-box;
+  // 光设置好像有时候干不掉这个spinner
+  // .spinner {
+  //   display: block;
+  //   position: fixed;
+  //   z-index: 1031;
+  //   top: 15px;
+  //   right: 15px;
+  // }
+  // .spinner-icon {
+  //   width: 18px;
+  //   height: 18px;
+  //   box-sizing: border-box;
 
-    border: solid 2px transparent;
-    border-top-color: $primary;
-    border-left-color: $primary;
-    border-radius: 50%;
+  //   border: solid 2px transparent;
+  //   border-top-color: $primary;
+  //   border-left-color: $primary;
+  //   border-radius: 50%;
 
-    -webkit-animation: nprogress-spinner 400ms linear infinite;
-    animation: nprogress-spinner 400ms linear infinite;
-  }
+  //   -webkit-animation: nprogress-spinner 400ms linear infinite;
+  //   animation: nprogress-spinner 400ms linear infinite;
+  // }
   /* Fancy blur effect */
   .peg {
     display: block;

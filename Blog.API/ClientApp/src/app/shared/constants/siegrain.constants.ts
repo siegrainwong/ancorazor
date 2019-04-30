@@ -14,7 +14,8 @@ export const externalScripts = {
    * 定制地址：https://highlightjs.org/download/
    */
   highlight: "assets/libraries/highlight.pack.js",
-  marked: "https://cdn.jsdelivr.net/npm/marked/marked.min.js"
+  marked: "assets/libraries/marked.min.js",
+  nprogress: "assets/libraries/nprogress.min.js"
 };
 
 export const articleDefaultContent = `---

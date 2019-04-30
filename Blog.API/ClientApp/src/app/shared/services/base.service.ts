@@ -1,6 +1,6 @@
-import { Injectable, OnDestroy, OnInit } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 import { environment } from "src/environments/environment";
-import { AxiosResponse, AxiosRequestConfig, AxiosError } from "axios";
+import { AxiosResponse, AxiosRequestConfig } from "axios";
 import { ResponseResult } from "../models/response-result";
 import axios from "axios";
 import { LoggingService } from "./logging.service";
@@ -10,6 +10,7 @@ import { TaskWrapper } from "./async-helper.service";
 import { TransferState, makeStateKey } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
+import { SGProgress } from "../utils/siegrain.progress";
 
 @Injectable({
   providedIn: "root"
@@ -20,6 +21,7 @@ export abstract class BaseService implements OnDestroy {
   constructor(
     private _wrapper: TaskWrapper,
     private _state: TransferState,
+    private _progress: SGProgress,
     protected util: SGUtil,
     protected route: Router,
     protected logger: LoggingService,
@@ -37,6 +39,14 @@ export abstract class BaseService implements OnDestroy {
     axios.defaults.baseURL = environment.apiUrlBase;
     axios.defaults.timeout = 100000;
     axios.defaults.headers = { "Content-Type": "application/json" };
+    axios.interceptors.request.use(_ => {
+      this._progress.progressStart();
+      return _;
+    });
+    axios.interceptors.response.use(_ => {
+      this._progress.progressDone();
+      return _;
+    });
   }
 
   /**
@@ -77,7 +87,7 @@ export abstract class BaseService implements OnDestroy {
           `${environment.apiUrlBase}/${url}`
         );
       this._wrapper
-        .doTask(this.handleRequest(Methods.GET, url, null, query, option))
+        .doTask(this.handleRequest(Methods.GET, url, null, query))
         .subscribe(result => {
           if (!this.store.renderFromClient) {
             this._state.set(stateKey, result);
@@ -94,7 +104,7 @@ export abstract class BaseService implements OnDestroy {
     query?: any,
     option?: AxiosRequestConfig
   ): Promise<ResponseResult> {
-    return await this.handleRequest(Methods.POST, url, body, query, option);
+    return await this.handleRequest(Methods.POST, url, body, query);
   }
 
   async put(
@@ -103,7 +113,7 @@ export abstract class BaseService implements OnDestroy {
     query?: any,
     option?: AxiosRequestConfig
   ): Promise<ResponseResult> {
-    return await this.handleRequest(Methods.PUT, url, body, query, option);
+    return await this.handleRequest(Methods.PUT, url, body, query);
   }
 
   async delete(
@@ -111,7 +121,7 @@ export abstract class BaseService implements OnDestroy {
     query?: any,
     option?: AxiosRequestConfig
   ): Promise<ResponseResult> {
-    return await this.handleRequest(Methods.DELETE, url, null, query, option);
+    return await this.handleRequest(Methods.DELETE, url, null, query);
   }
 
   /**
@@ -126,8 +136,7 @@ export abstract class BaseService implements OnDestroy {
     method: Methods,
     url: string,
     body?: any,
-    query?: any,
-    option?: AxiosRequestConfig
+    query?: any
   ): Promise<ResponseResult> {
     try {
       const res = await axios.request({

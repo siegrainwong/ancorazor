@@ -4,6 +4,7 @@ import {
   ConfirmDialog,
   ConfirmDialogData
 } from "../components/confirm-dialog.component";
+import { externalScripts } from "../constants/siegrain.constants";
 
 export const enum TipType {
   Confirm = "❔",
@@ -16,6 +17,7 @@ export const topElementId = "#content";
 
 @Injectable({ providedIn: "root" })
 export class SGUtil {
+  private loadedScripts: string[] = [];
   constructor(private _snackBar: MatSnackBar, private _dialog: MatDialog) {}
 
   /** === Utilities ===*/
@@ -70,22 +72,17 @@ export class SGUtil {
     urls.forEach(url => {
       promises.push(
         new Promise(resolve => {
+          if (this.loadedScripts.includes(url)) return;
           const scriptElement = document.createElement("script");
           scriptElement.src = url;
-          scriptElement.onload = resolve;
+          scriptElement.onload = () => {
+            resolve();
+            this.loadedScripts.push(url);
+          };
           document.body.appendChild(scriptElement);
         })
       );
     });
     return Promise.all(promises);
-  }
-
-  public loadExternalStyles(url: string) {
-    return new Promise(resolve => {
-      const styleElement = document.createElement("link");
-      styleElement.href = url;
-      styleElement.onload = resolve;
-      document.head.appendChild(styleElement);
-    });
   }
 }

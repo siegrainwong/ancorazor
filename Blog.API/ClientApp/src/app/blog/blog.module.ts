@@ -22,6 +22,7 @@ import { ScrollDispatchModule } from "@angular/cdk/scrolling";
 import { ArticleResolveGuard } from "./guard/article.resolve.guard";
 import { SGTransitionResolveGuard } from "../shared/animations/sg-transition.resolve.guard";
 import { ArticleListResolveGuard } from "./guard/article-list.resolve.guard";
+import { SGProgress } from "../shared/utils/siegrain.progress";
 
 /**
  * MARK: `providedIn: 'root'` or `providedIn: SomeModule`
@@ -57,6 +58,7 @@ import { ArticleListResolveGuard } from "./guard/article-list.resolve.guard";
   ],
   providers: [
     SGUtil,
+    SGProgress,
     ArticleService,
     UserService,
     AuthGuard,

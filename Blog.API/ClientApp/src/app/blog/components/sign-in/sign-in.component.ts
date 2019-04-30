@@ -17,9 +17,9 @@ export class SignInComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<SignInComponent>,
+    public store: Store,
     private _service: UserService,
     private _util: SGUtil,
-    private _store: Store,
     private _router: Router
   ) {
     this.isReseting = data.isReseting;
@@ -33,7 +33,6 @@ export class SignInComponent implements OnInit {
     this.getValidator(6).concat(MatchValidator.matchTo(this.newPassword))
   );
   @Input() isReseting: boolean = false;
-  loading: boolean = false;
 
   private getValidator(minLength: number): ValidatorFn[] {
     return [
@@ -54,12 +53,10 @@ export class SignInComponent implements OnInit {
     if (this.username.invalid || this.password.invalid || this.isReseting)
       return;
 
-    this.loading = true;
     let result = await this._service.signIn(
       this.username.value,
       await this.passwordHash(this.password.value)
     );
-    this.loading = false;
 
     if (!result) return;
     this._util.tip(`Welcome, ${result.realName}`, TipType.Success);
@@ -75,14 +72,12 @@ export class SignInComponent implements OnInit {
     )
       return;
 
-    this.loading = true;
     let result = await this._service.reset(
-      this._store.user.id,
+      this.store.user.id,
       this.username.value,
       await this.passwordHash(this.password.value),
       await this.passwordHash(this.newPassword.value)
     );
-    this.loading = false;
 
     if (!result) return;
     this.dialogRef.close();
@@ -91,7 +86,7 @@ export class SignInComponent implements OnInit {
   }
 
   private async passwordHash(password: string): Promise<string> {
-    if (!this._store.renderFromClient) return;
+    if (!this.store.renderFromClient) return;
     return await deriveAKey(
       password,
       this.username.value, // salt

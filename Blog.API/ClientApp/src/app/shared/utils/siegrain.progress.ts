@@ -8,23 +8,26 @@ import {
 } from "../animations/sg-transition.store";
 import { Subscription } from "rxjs";
 
-let NProgress: any;
-
 declare global {
   interface Window {
     NProgress: any;
   }
 }
 
-const enum ProgressMode {
+const enum SGProgressMode {
   manually,
   transition
 }
 
+/**
+ * 进度条
+ *
+ * ref: https://github.com/rstacruz/nprogress
+ */
 @Injectable({ providedIn: "root" })
 export class SGProgress implements OnDestroy {
   private _subsribtion = new Subscription();
-  private _mode: ProgressMode;
+  private _mode: SGProgressMode;
   constructor(
     private _util: SGUtil,
     private _store: Store,
@@ -37,28 +40,32 @@ export class SGProgress implements OnDestroy {
     this._subsribtion.unsubscribe();
   }
 
+  private get isAvailable() {
+    return this._store.renderFromClient && window && window.NProgress;
+  }
+
   private async setup() {
     if (!this._store.renderFromClient) return;
     await this._util.loadExternalScripts([externalScripts.nprogress]);
-    NProgress = window.NProgress;
+    window.NProgress.configure({ showSpinner: false });
     this.progressWithTransition();
   }
 
   private async progressWithTransition() {
     this._subsribtion.add(
       this._transitionStore.transitionStreamChanged$.subscribe(progress => {
-        if (!NProgress) return;
+        if (!this.isAvailable) return;
         switch (progress) {
           case SGTransitionPipeline.Ready:
-            this._mode = ProgressMode.transition;
-            NProgress.start();
+            this._mode = SGProgressMode.transition;
+            window.NProgress.start();
             break;
           case SGTransitionPipeline.Complete:
             this.progressDone();
             break;
           default:
             var total = Object.keys(SGTransitionPipeline).length / 2;
-            NProgress.set(progress / total);
+            window.NProgress.set(progress / total);
             break;
         }
       })
@@ -66,14 +73,14 @@ export class SGProgress implements OnDestroy {
   }
 
   public progressStart() {
-    if (!NProgress || this._mode == ProgressMode.transition) return;
-    NProgress.start();
-    this._mode = ProgressMode.manually;
+    if (!this.isAvailable || this._mode == SGProgressMode.transition) return;
+    window.NProgress.start();
+    this._mode = SGProgressMode.manually;
   }
 
   public progressDone() {
-    if (!NProgress) return;
-    NProgress.done();
+    if (!this.isAvailable) return;
+    window.NProgress.done();
     this.clear();
   }
 

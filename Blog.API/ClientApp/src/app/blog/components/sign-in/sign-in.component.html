@@ -90,7 +90,7 @@
     color="primary"
     class="float-right"
     (click)="submit()"
-    [attr.disabled]="loading ? '' : null"
+    [attr.disabled]="store.isRequesting ? '' : null"
   >
     Sign In
   </button>
@@ -100,7 +100,7 @@
     color="warn"
     class="float-right"
     (click)="reset()"
-    [attr.disabled]="loading ? '' : null"
+    [attr.disabled]="store.isRequesting ? '' : null"
   >
     Reset
   </button>

@@ -4,6 +4,7 @@ using AspectCore.Extensions.DependencyInjection;
 using AspectCore.Injector;
 using Blog.API.Authentication;
 using Blog.API.Common;
+using Blog.API.Exceptions;
 using Blog.API.Filters;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -96,7 +97,7 @@ namespace Blog.API
                 {
                     AutoRegisterTemplate = true,
                     MinimumLogEventLevel = LogEventLevel.Information,
-                    CustomFormatter = new ElasticsearchJsonFormatter()
+                    CustomFormatter = new CustomLogJsonFormmater()
                 })
             .CreateLogger();
         }

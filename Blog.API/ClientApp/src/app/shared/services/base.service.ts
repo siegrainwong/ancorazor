@@ -40,10 +40,12 @@ export abstract class BaseService implements OnDestroy {
     axios.defaults.timeout = 100000;
     axios.defaults.headers = { "Content-Type": "application/json" };
     axios.interceptors.request.use(_ => {
+      this.store.isRequesting = true;
       this._progress.progressStart();
       return _;
     });
     axios.interceptors.response.use(_ => {
+      this.store.isRequesting = false;
       this._progress.progressDone();
       return _;
     });

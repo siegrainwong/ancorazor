@@ -30,6 +30,9 @@ export class Store {
     this._isFirstScreen = val;
   }
 
+  /** 当前是否正在进行网络请求 */
+  isRequesting: boolean = false;
+
   /**
    * === Methods ===
    **/

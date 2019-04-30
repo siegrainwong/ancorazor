@@ -4,7 +4,6 @@ import {
   ConfirmDialog,
   ConfirmDialogData
 } from "../components/confirm-dialog.component";
-import { externalScripts } from "../constants/siegrain.constants";
 
 export const enum TipType {
   Confirm = "❔",

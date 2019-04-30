@@ -55,6 +55,9 @@ export class ArticleComponent
   }
 
   private async setupViewer() {
+    this.content = this.model.content;
+    if (!this.store.renderFromClient) return;
+
     await this._util.loadExternalScripts([externalScripts.highlight]);
     const md = require("markdown-it")({
       highlight: function(str, lang) {

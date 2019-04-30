@@ -15,7 +15,6 @@ namespace Blog.API
         public static IWebHost BuildWebHost(string[] args)
         {
             var config = new ConfigurationBuilder()
-                .AddCommandLine(args)
                 .Build();
 
             Console.Clear();

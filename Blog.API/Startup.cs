@@ -7,7 +7,6 @@ using Blog.API.Common;
 using Blog.API.Filters;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,8 +17,13 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using Serilog.Events;
+using Serilog.Exceptions;
+using Serilog.Formatting.Compact;
+using Serilog.Formatting.Elasticsearch;
+using Serilog.Sinks.Elasticsearch;
 using Siegrain.Common;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
@@ -28,7 +32,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Net;
 using System.Reflection;
-using System.Threading.Tasks;
 
 #endregion
 
@@ -40,16 +43,20 @@ namespace Blog.API
 
         public IConfiguration Configuration { get; }
         public ILogger<Startup> Logger { get; }
+        public IHostingEnvironment HostingEnvironment { get; }
 
         public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             Configuration = configuration;
             Logger = logger;
+
+            SetupLogger();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            
             RegisterMvc(services);
             RegisterRepository(services);
             RegisterService(services);
@@ -57,12 +64,15 @@ namespace Blog.API
             RegisterCors(services);
             RegisterAuthentication(services);
             RegisterSpa(services);
+            ResigterProfiler(services);
 
             return services.ToServiceContainer().Build();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddSerilog();
+
             //if (env.IsDevelopment())
             //{
             app.UseDeveloperExceptionPage();
@@ -76,7 +86,41 @@ namespace Blog.API
             ConfigureSpa(app, env);
         }
 
+        private void SetupLogger()
+        {
+            var elasticUri = Configuration["ElasticConfiguration:Uri"];
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .Enrich.WithExceptionDetails()
+                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(elasticUri))
+                {
+                    AutoRegisterTemplate = true,
+                    MinimumLogEventLevel = LogEventLevel.Information,
+                    CustomFormatter = new ElasticsearchJsonFormatter()
+                })
+            .CreateLogger();
+        }
+
         #region Services
+
+        private void ResigterProfiler(IServiceCollection services)
+        {
+            services.AddMiniProfiler(options =>
+            {
+                // All of this is optional. You can simply call .AddMiniProfiler() for all defaults
+
+                // (Optional) Path to use for profiler URLs, default is /mini-profiler-resources
+                options.RouteBasePath = "/profiler";
+
+                // (Optional)  To control which requests are profiled, use the Func<HttpRequest, bool> option:
+                // (default is everything should be profiled)
+                //options.ShouldProfile = request => MyShouldThisBeProfiledFunction(request);
+
+                // (Optional) Profiles are stored under a user ID, function to get it:
+                // (default is null, since above methods don't use it by default)
+                //options.UserIdProvider = request => MyGetUserIdFunction(request);
+            });
+        }
 
         private void RegisterMvc(IServiceCollection services)
         {
@@ -203,10 +247,10 @@ namespace Blog.API
 
         private void ConfigureMvc(IApplicationBuilder app)
         {
-
             app.MapWhen(context => context.Request.Path.StartsWithSegments("/api"),
                 apiApp =>
                 {
+                    apiApp.UseMiniProfiler();
                     apiApp.UseMvc(routes =>
                     {
                         routes.MapRoute("default", "{controller}/{action=Index}/{id?}");

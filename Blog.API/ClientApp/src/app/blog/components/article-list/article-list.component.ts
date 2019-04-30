@@ -21,6 +21,7 @@ import {
 } from "src/app/shared/animations/sg-transition.model";
 import { Subscription } from "rxjs";
 import RouteData, { RouteKinds } from "src/app/shared/models/route-data.model";
+import { SGTransitionStore } from "src/app/shared/animations/sg-transition.store";
 
 const StaggerDuration = 200; // 列表总动画时长 = transition duration + stagger duration
 
@@ -50,6 +51,7 @@ export class ArticleListComponent
     private _service: ArticleService,
     private _titleService: Title,
     private _util: SGUtil,
+    public transitionStore: SGTransitionStore,
     public store: Store
   ) {}
 

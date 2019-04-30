@@ -14,7 +14,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{20C12BB6-720
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.API.Messages", "Blog.Messages\Blog.API.Messages.csproj", "{A3F5E63D-3621-4406-B0A1-76A6EA02C96E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Siegrain.Common", "Siegrain.Common\Siegrain.Common.csproj", "{521E7E18-5695-4122-96E4-F4CA23E22D8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Siegrain.Common", "Siegrain.Common\Siegrain.Common.csproj", "{521E7E18-5695-4122-96E4-F4CA23E22D8F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{ADA5485B-DA9F-41DC-AF7F-C3A56296BC97}"
+	ProjectSection(SolutionItems) = preProject
+		docker\docker-compose.yml = docker\docker-compose.yml
+		docker\readme.md = docker\readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

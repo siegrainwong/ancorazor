@@ -47,7 +47,7 @@
           class="float-left"
           [routerLink]="['/index', data.previousPageIndex]"
           *ngIf="data.hasPrevious"
-          [attr.disabled]="preloading ? '' : null"
+          [attr.disabled]="transitionStore.isTransitioning ? '' : null"
           >← Newer</a
         >
         <a
@@ -56,7 +56,7 @@
           class="float-right"
           [routerLink]="['/index', data.nextPageIndex]"
           *ngIf="data.hasNext"
-          [attr.disabled]="preloading ? '' : null"
+          [attr.disabled]="transitionStore.isTransitioning ? '' : null"
           >Older →</a
         >
       </div>

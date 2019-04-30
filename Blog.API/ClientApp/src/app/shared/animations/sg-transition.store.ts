@@ -51,6 +51,11 @@ export class SGTransitionStore {
     return !!this._transitionDelegate;
   }
 
+  /** 是否正在过渡 */
+  public get isTransitioning() {
+    return this._transitionStream != SGTransitionPipeline.Complete;
+  }
+
   /** @internal */
   public _previousRouteConfig: string;
   /** @internal */

@@ -6,7 +6,6 @@ import {
   Router
 } from "@angular/router";
 import { Store } from "../store/store";
-import { SGUtil } from "../utils/siegrain.utils";
 
 @Injectable({
   providedIn: "root"
@@ -22,7 +21,7 @@ export class AuthGuard implements CanActivate {
     if (!canActivate)
       this._router.navigate(
         ["/"],
-        this._store.renderFromClient ? { fragment: "sign-in" } : null
+        this._store.renderFromClient ? { fragment: "sign-in" } : {}
       );
     return canActivate;
   }

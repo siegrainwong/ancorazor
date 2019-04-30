@@ -26,11 +26,7 @@
                 <button mat-button color="danger" (click)="delete(item, i)">
                   Delete
                 </button>
-                <a
-                  mat-button
-                  color="primary"
-                  [routerLink]="['/article', item.id]"
-                >
+                <a mat-button color="primary" [routerLink]="['/edit', item.id]">
                   Edit
                 </a>
               </span>

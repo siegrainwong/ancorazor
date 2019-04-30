@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { SGTransitionDelegate } from "./sg-transition.delegate";
 import { LoggingService } from "../services/logging.service";
@@ -31,8 +31,12 @@ export enum SGTransitionPipeline {
 /**
  * 过渡状态管理
  */
-export class SGTransitionStore {
+export class SGTransitionStore implements OnDestroy {
   constructor(private _logger: LoggingService) {}
+  ngOnDestroy(): void {
+    this._resolveCountChanged$.unsubscribe();
+    this.transitionStreamChanged$.unsubscribe();
+  }
   /**
    * `SGTransition`代理，用于操控离场过渡
    * @internal implementation detail, do not use!

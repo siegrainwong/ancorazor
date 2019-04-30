@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, Renderer } from "@angular/core";
+import { Component, OnInit, Input, OnDestroy } from "@angular/core";
 import { ArticleService } from "../../services/article.service";
 import {
   ActivatedRoute,
@@ -12,15 +12,13 @@ import { SGTransitionToEnter } from "src/app/shared/animations/sg-transition.ent
 import { SGUtil, topElementId } from "src/app/shared/utils/siegrain.utils";
 import {
   externalScripts,
-  constants,
   articleDefaultContent
 } from "src/app/shared/constants/siegrain.constants";
 import { timeFormat } from "src/app/shared/utils/time-format";
 import { SGTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
 import { SGAnimations } from "src/app/shared/animations/sg-animations";
 import { SGRouteTransitionCommands } from "src/app/shared/animations/sg-transition.model";
-import { first, take, map } from "rxjs/operators";
-import RouteData from "src/app/shared/models/route-data.model";
+import { take, map } from "rxjs/operators";
 const yamlFront = require("yaml-front-matter");
 
 @Component({
@@ -48,7 +46,6 @@ export class WriteArticleComponent
     private _service: ArticleService,
     private _store: Store,
     private _logger: LoggingService,
-    private _route: ActivatedRoute,
     private _util: SGUtil,
     private _router: Router,
     public transition: SGTransitionToEnter
@@ -56,13 +53,6 @@ export class WriteArticleComponent
 
   async ngOnInit() {
     if (!this._store.renderFromClient) return;
-    // this._route.data.pipe(first(data => x.)).subscribe(async (data: { article: ArticleModel }) => {
-    //   this.model = data.article;
-    //   this._titleService.setTitle(
-    //     `${this.model.title} - ${constants.titlePlainText}`
-    //   );
-    //   await timeout(10);
-    // })
     let article = await this._store.routeDataChanged$
       .pipe(
         take(1),
@@ -86,19 +76,6 @@ export class WriteArticleComponent
   ): SGRouteTransitionCommands {
     return new SGRouteTransitionCommands({ scrollTo: topElementId });
   }
-
-  // private async preloadArticle() {
-  //   // if (this._store.preloadArticle) {
-  //   //   this.model = this._store.preloadArticle;
-  //   //   this._store.preloadArticle = null;
-  //   // } else {
-  //   let id = this._route.snapshot.params.id;
-  //   let res = id && (await this._service.getArticle(id));
-  //   if (!res) return;
-  //   this.model = res;
-  //   // }
-  //   this.isEditing = true;
-  // }
 
   private setupNav() {
     let nav = document.querySelector("#mainNav");

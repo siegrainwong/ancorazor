@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import ArticleModel from "../../models/article-model";
-import { ActivatedRoute } from "@angular/router";
 import { Store } from "src/app/shared/store/store";
 import { Title } from "@angular/platform-browser";
-import { timeout } from "src/app/shared/utils/promise-delay";
 import {
   constants,
   externalScripts
@@ -12,6 +10,7 @@ import { SGUtil } from "src/app/shared/utils/siegrain.utils";
 import { Subscription } from "rxjs";
 import { SGTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
 import { SGAnimations } from "src/app/shared/animations/sg-animations";
+import { take, map } from "rxjs/operators";
 
 @Component({
   selector: "app-article",
@@ -27,13 +26,12 @@ export class ArticleComponent
   public model: ArticleModel;
   public content: string;
   constructor(
-    private _route: ActivatedRoute,
     private _titleService: Title,
     private _util: SGUtil,
     public store: Store
   ) {}
-  ngOnInit() {
-    this.getArticle();
+  async ngOnInit() {
+    await this.getArticle();
     this.setupViewer();
   }
 
@@ -42,14 +40,15 @@ export class ArticleComponent
   }
 
   private async getArticle() {
-    this._subscription.add(
-      this._route.data.subscribe(async (data: { article: ArticleModel }) => {
-        this.model = data.article;
-        this._titleService.setTitle(
-          `${this.model.title} - ${constants.titlePlainText}`
-        );
-        await timeout(10);
-      })
+    let article = await this.store.routeDataChanged$
+      .pipe(
+        take(1),
+        map(x => x.article)
+      )
+      .toPromise();
+    this.model = article;
+    this._titleService.setTitle(
+      `${article.title} - ${constants.titlePlainText}`
     );
   }
 

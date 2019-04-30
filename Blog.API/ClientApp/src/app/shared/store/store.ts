@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 import { BehaviorSubject, ReplaySubject } from "rxjs";
 import RouteData, { RouteKinds } from "../models/route-data.model";
 import { LoggingService } from "../services/logging.service";
@@ -12,8 +12,13 @@ const UserStoreKey = "sg:user";
 @Injectable({
   providedIn: "root"
 })
-export class Store {
+export class Store implements OnDestroy {
   constructor(private _logger: LoggingService) {}
+
+  ngOnDestroy(): void {
+    this.userChanged$.unsubscribe();
+    this.routeDataChanged$.unsubscribe();
+  }
 
   /**
    * === Variables ===

@@ -13,11 +13,7 @@ import { ArticleService } from "../services/article.service";
   providedIn: "root"
 })
 export class ArticleResolveGuard implements Resolve<ArticleModel> {
-  constructor(
-    private _service: ArticleService,
-    private _router: Router,
-    private _transitionStore: SGTransitionStore
-  ) {}
+  constructor(private _service: ArticleService, private _router: Router) {}
   async resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -25,8 +21,6 @@ export class ArticleResolveGuard implements Resolve<ArticleModel> {
     let id = route.paramMap.get("id");
     let res = await this._service.getArticle(parseInt(id));
     if (!res) this._router.navigate(["/"]);
-
-    this._transitionStore.setResolved();
     return res;
   }
 }

@@ -7,7 +7,11 @@ import RouteData, { RouteKinds } from "../shared/models/route-data.model";
 import { ArticleListComponent } from "./components/article-list/article-list.component";
 import { ArticleComponent } from "./components/article/article.component";
 import { AuthGuard } from "../shared/guard/auth.guard";
-import { SGTransitionResolveGuard } from "../shared/animations/sg-transition.resolve.guard";
+import {
+  SGTransitionResolveGuard,
+  TestObservableResolveGuard,
+  TestDirectResolveGuard
+} from "../shared/animations/sg-transition.resolve.guard";
 import { ArticleResolveGuard } from "./guard/article.resolve.guard";
 import { SGTransitionDeactivateGuard } from "../shared/animations/sg-transition.deactivate.guard";
 import { ArticleListResolveGuard } from "./guard/article-list.resolve.guard";

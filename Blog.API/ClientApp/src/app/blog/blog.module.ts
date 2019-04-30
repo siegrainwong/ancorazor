@@ -20,7 +20,11 @@ import { ConfirmDialog } from "../shared/components/confirm-dialog.component";
 import { AuthGuard } from "../shared/guard/auth.guard";
 import { ScrollDispatchModule } from "@angular/cdk/scrolling";
 import { ArticleResolveGuard } from "./guard/article.resolve.guard";
-import { SGTransitionResolveGuard } from "../shared/animations/sg-transition.resolve.guard";
+import {
+  SGTransitionResolveGuard,
+  TestObservableResolveGuard,
+  TestDirectResolveGuard
+} from "../shared/animations/sg-transition.resolve.guard";
 import { ArticleListResolveGuard } from "./guard/article-list.resolve.guard";
 import { SGProgress } from "../shared/utils/siegrain.progress";
 

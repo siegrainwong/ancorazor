@@ -106,6 +106,8 @@ export class SGTransitionStore implements OnDestroy {
     );
     this._transitionStream = val;
     this.transitionStreamChanged$.next(val);
+
+    if (val === SGTransitionPipeline.Ready) this._initialze();
     if (val === SGTransitionPipeline.Complete) this._clear();
   }
   /**
@@ -117,28 +119,23 @@ export class SGTransitionStore implements OnDestroy {
 
   /**
    * 标记该`Resolve`已执行完毕
-   *
-   * e.g.
-   * ```ts
-   * async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot)
-   *   : Promise<ArticleModel> {
-   *   let id = route.paramMap.get("id");
-   *   let res = await this._service.getArticle(parseInt(id));
-   *   if (!res) this._router.navigate(["/"]);
-   *   this._transitionStore.setResolved();  // 在这里调用
-   *   return res;
-   * }
-   * ```
+   * @internal implementation detail, do not use!
    **/
-  public setResolved() {
+  public _setResolved() {
     if (!this._isLeaveTransitionAvailable) return;
-    // TODO: 这里可以内部维护一个Resolved列表，根据Caller来判断一下，避免重复调用。
     this.completedResolveCount++;
   }
 
   /**
+   * 初始化状态
+   */
+  private _initialze() {
+    if (!this._isLeaveTransitionAvailable) return;
+    this._completedResolveCount = 0;
+  }
+
+  /**
    * 清理转场状态
-   * @internal implementation detail, do not use!
    **/
   private _clear() {
     if (!this._isLeaveTransitionAvailable) return;

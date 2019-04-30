@@ -21,7 +21,6 @@ export class ArticleListResolveGuard
   private _parameter = new ArticleParameters();
   constructor(
     private _service: ArticleService,
-    private _transitionStore: SGTransitionStore,
     private _logger: LoggingService
   ) {}
   async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -32,9 +31,6 @@ export class ArticleListResolveGuard
     let res = await this._service.getPagedArticles(this._parameter);
     if (!res)
       this._logger.error("can't resolve data in ArticleListResolveGuard");
-
-    // await timeout(3000);
-    this._transitionStore.setResolved();
     return res;
   }
 }

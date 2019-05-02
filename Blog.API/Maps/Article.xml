@@ -22,6 +22,9 @@
         <IsNotEmpty Prepend="And" Property="Title">
           T.Title = @Title
         </IsNotEmpty>
+        <IsNotEmpty Prepend="And" Property="TitlePinyin">
+          T.TitlePinyin = @TitlePinyin
+        </IsNotEmpty>
         <IsNotEmpty Prepend="And" Property="Content">
           T.Content = @Content
         </IsNotEmpty>
@@ -59,6 +62,7 @@
         Cover,
         Author,
         Title,
+        TitlePinyin,
         Content,
         Digest,
         Alias,
@@ -74,6 +78,7 @@
         @Cover,
         @Author,
         @Title,
+        @TitlePinyin,
         @Content,
         @Digest,
         @Alias,
@@ -99,6 +104,9 @@
         </IsNotEmpty>
         <IsNotEmpty Prepend="," Property="Title">
           Title = @Title
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="," Property="TitlePinyin">
+          TitlePinyin = @TitlePinyin
         </IsNotEmpty>
         <IsNotEmpty Prepend="," Property="Content">
           Content = @Content
@@ -162,7 +170,7 @@
           <Default>T.Id Desc</Default>
         </Switch>
         ) Row_Index,
-        T.Author, T.Id, T.Title, T.CreatedAt, T.Digest, T.IsDraft, T.Alias, T.Cover
+        T.Author, T.Id, T.Title, T.TitlePinyin, T.CreatedAt, T.Digest, T.IsDraft, T.Alias, T.Cover
       From Article T With(NoLock)
       <Include RefId="QueryParams" />
       ) TT

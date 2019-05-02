@@ -2,7 +2,6 @@ namespace Blog.API.Messages
 {
     public class PaginationResponse<TItem> : QueryResponse<TItem>
     {
-        private int _total;
         public bool HasNext => PageIndex < PageCount - 1;
         public int NextPageIndex => HasNext ? PageIndex + 1 : PageIndex;
         public bool HasPrevious => PageIndex > 0;
@@ -11,6 +10,7 @@ namespace Blog.API.Messages
         public int PageIndex { get; set; } = 0;
         public int PageSize { get; set; } = 10;
 
+        private int _total;
         public int Total
         {
             get => _total;

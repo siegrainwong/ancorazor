@@ -1,6 +1,5 @@
 #region
 
-using Blog.API.Common;
 using Blog.API.Messages.Users;
 using Blog.Entity;
 using Blog.Repository;
@@ -20,6 +19,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Blog.API.Controllers.Base;
+using Blog.API.Common.Constants;
 
 #endregion
 
@@ -163,58 +163,58 @@ namespace Blog.API.Controllers
 
         #region Deprecated
 
-        [Obsolete("Jwt authentication is deprecated")]
-        [AllowAnonymous]
-        [HttpGet]
-        [Route("Token")]
-        private async Task<IActionResult> GetToken([FromQuery] AuthUserParameter parameter)
-        {
-            var user = await _repository.GetByLoginNameAsync(parameter.LoginName);
-            if (user == null || !SecurePasswordHasher.Verify(parameter.Password, user.Password)) return Forbid();
+        //[Obsolete("Jwt authentication is deprecated")]
+        //[AllowAnonymous]
+        //[HttpGet]
+        //[Route("Token")]
+        //private async Task<IActionResult> GetToken([FromQuery] AuthUserParameter parameter)
+        //{
+        //    var user = await _repository.GetByLoginNameAsync(parameter.LoginName);
+        //    if (user == null || !SecurePasswordHasher.Verify(parameter.Password, user.Password)) return Forbid();
 
-            var rehashTask = PasswordRehashAsync(user.Id, parameter.Password);
-            var tokenTask = GenerateJwtTokenAsync(user);
-            await Task.WhenAll(rehashTask, tokenTask);
+        //    var rehashTask = PasswordRehashAsync(user.Id, parameter.Password);
+        //    var tokenTask = GenerateJwtTokenAsync(user);
+        //    await Task.WhenAll(rehashTask, tokenTask);
 
-            // clear credentials
-            user.LoginName = null;
-            user.Password = null;
+        //    // clear credentials
+        //    user.LoginName = null;
+        //    user.Password = null;
 
-            Response.Cookies.Append("access_token", tokenTask.Result.token,
-                new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+        //    Response.Cookies.Append("access_token", tokenTask.Result.token,
+        //        new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
 
-            return Ok(new { tokenTask.Result.expires, user });
-        }
+        //    return Ok(new { tokenTask.Result.expires, user });
+        //}
 
-        [Obsolete("Jwt authentication is deprecated")]
-        private async Task<(string token, DateTime expires)> GenerateJwtTokenAsync(Users user)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.LoginName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-            };
+        //[Obsolete("Jwt authentication is deprecated")]
+        //private async Task<(string token, DateTime expires)> GenerateJwtTokenAsync(Users user)
+        //{
+        //    var claims = new List<Claim>
+        //    {
+        //        new Claim(JwtRegisteredClaimNames.Sub, user.LoginName),
+        //        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        //        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+        //    };
 
-            var roles = await _roleRepository.GetRolesByUserAsync(user.Id);
+        //    var roles = await _roleRepository.GetRolesByUserAsync(user.Id);
 
-            claims.AddRange(roles.Select(role => new Claim(ClaimsIdentity.DefaultRoleClaimType, role.Name)));
+        //    claims.AddRange(roles.Select(role => new Claim(ClaimsIdentity.DefaultRoleClaimType, role.Name)));
 
-            var rsa = RSACryptography.CreateRsaFromPrivateKey(Constants.RSAForToken.PrivateKey);
-            var creds = new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256Signature);
+        //    var rsa = RSACryptography.CreateRsaFromPrivateKey(Constants.RSAForToken.PrivateKey);
+        //    var creds = new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256Signature);
 
-            var jwtSettings = _configuration.GetSection("Jwt");
-            var expires = DateTime.Now.AddDays(Convert.ToDouble(jwtSettings["JwtExpireDays"]));
-            var token = new JwtSecurityToken(
-                jwtSettings["JwtIssuer"],
-                jwtSettings["JwtIssuer"],
-                claims,
-                expires: expires,
-                signingCredentials: creds
-            );
+        //    var jwtSettings = _configuration.GetSection("Jwt");
+        //    var expires = DateTime.Now.AddDays(Convert.ToDouble(jwtSettings["JwtExpireDays"]));
+        //    var token = new JwtSecurityToken(
+        //        jwtSettings["JwtIssuer"],
+        //        jwtSettings["JwtIssuer"],
+        //        claims,
+        //        expires: expires,
+        //        signingCredentials: creds
+        //    );
 
-            return (new JwtSecurityTokenHandler().WriteToken(token), expires);
-        }
+        //    return (new JwtSecurityTokenHandler().WriteToken(token), expires);
+        //}
         #endregion
     }
 }

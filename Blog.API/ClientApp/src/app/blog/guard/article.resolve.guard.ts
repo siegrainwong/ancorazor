@@ -6,8 +6,12 @@ import {
   Router
 } from "@angular/router";
 import ArticleModel from "../models/article-model";
-import { SGTransitionStore } from "src/app/shared/animations/sg-transition.store";
 import { ArticleService } from "../services/article.service";
+
+export const enum ArticleRouteMode {
+  alias,
+  title
+}
 
 @Injectable({
   providedIn: "root"

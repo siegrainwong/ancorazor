@@ -8,4 +8,10 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Blog.API.Common\Blog.API.Common.csproj" />
+    <ProjectReference Include="..\Blog.Entity\Blog.Entity.csproj" />
+    <ProjectReference Include="..\Siegrain.Common\Siegrain.Common.csproj" />
+  </ItemGroup>
+
 </Project>

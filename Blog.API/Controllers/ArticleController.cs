@@ -27,13 +27,23 @@ namespace Blog.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
             var article = await _repository.GetByIdAsync(id, 
                 HttpContext.User.Identity.IsAuthenticated ? (bool?)null : false);
             if (article == null) return NotFound();
             return Ok(article);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("{alias}")]
+        public async Task<IActionResult> Get(string alias)
+        {
+            //var article = await _repository.GetByIdAsync(id,
+            //    HttpContext.User.Identity.IsAuthenticated ? (bool?)null : false);
+            //if (article == null) return NotFound();
+            return Ok(new { alias });
         }
 
         [AllowAnonymous]

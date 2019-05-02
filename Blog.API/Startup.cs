@@ -3,7 +3,7 @@
 using AspectCore.Extensions.DependencyInjection;
 using AspectCore.Injector;
 using Blog.API.Authentication;
-using Blog.API.Common;
+using Blog.API.Common.Constants;
 using Blog.API.Exceptions;
 using Blog.API.Filters;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -22,8 +22,6 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
-using Serilog.Formatting.Compact;
-using Serilog.Formatting.Elasticsearch;
 using Serilog.Sinks.Elasticsearch;
 using Siegrain.Common;
 using Swashbuckle.AspNetCore.Swagger;
@@ -57,7 +55,7 @@ namespace Blog.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            
+            RegisterAppSettings(services);
             RegisterMvc(services);
             RegisterRepository(services);
             RegisterService(services);
@@ -103,6 +101,11 @@ namespace Blog.API
         }
 
         #region Services
+
+        private void RegisterAppSettings(IServiceCollection services)
+        {
+            services.Configure<SEOConfiguration>(x => Configuration.GetSection(nameof(SEOConfiguration)).Bind(x));
+        }
 
         private void ResigterProfiler(IServiceCollection services)
         {
@@ -312,77 +315,77 @@ namespace Blog.API
 
         #region Deprecated
 
-        private void RegisterAuthenticationForJwt(IServiceCollection services)
-        {
-            /*
-             MARK: JWT for session 从入门到放弃
-             入门：
-                - https://stackoverflow.com/questions/42036810/asp-net-core-jwt-mapping-role-claims-to-claimsidentity/50523668#50523668
-                - Refresh token: https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/
-                - How can I validate a JWT passed via cookies? https://stackoverflow.com/a/39386631
-             攻击防治：
-                - Where to store JWT in browser? How to protect against CSRF? https://stackoverflow.com/a/37396572
-                - Prevent Cross-Site Request Forgery (XSRF/CSRF) attacks in ASP.NET Core https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-2.2
-             放弃：
-                Stop using JWT for sessions
-                - http://cryto.net/~joepie91/blog/2016/06/13/stop-using-jwt-for-sessions/
-                - http://cryto.net/~joepie91/blog/2016/06/19/stop-using-jwt-for-sessions-part-2-why-your-solution-doesnt-work/
+        //private void RegisterAuthenticationForJwt(IServiceCollection services)
+        //{
+        //    /*
+        //     MARK: JWT for session 从入门到放弃
+        //     入门：
+        //        - https://stackoverflow.com/questions/42036810/asp-net-core-jwt-mapping-role-claims-to-claimsidentity/50523668#50523668
+        //        - Refresh token: https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/
+        //        - How can I validate a JWT passed via cookies? https://stackoverflow.com/a/39386631
+        //     攻击防治：
+        //        - Where to store JWT in browser? How to protect against CSRF? https://stackoverflow.com/a/37396572
+        //        - Prevent Cross-Site Request Forgery (XSRF/CSRF) attacks in ASP.NET Core https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-2.2
+        //     放弃：
+        //        Stop using JWT for sessions
+        //        - http://cryto.net/~joepie91/blog/2016/06/13/stop-using-jwt-for-sessions/
+        //        - http://cryto.net/~joepie91/blog/2016/06/19/stop-using-jwt-for-sessions-part-2-why-your-solution-doesnt-work/
 
-             总结：
-                其本身并不适合拿来做 Session，Session 注定无法保证无状态，无法利用好 JWT 的优点，要强行用只能每次从认证服务器检查 refresh token 是否有效；
-                很多现有的解决方案在你每次请求时检查 refresh token 后颁发一个新的 access token，然而旧的 access token 又在有效期内，多个 access_token 可以一起用听上去说实话挺2b的，所以为了让其“过期”，你又要维护一个 blacklist 或者 whitelist，再加上刷新方案自带的并发问题，说实话这套 JWT session 实践真的是一言难尽。
+        //     总结：
+        //        其本身并不适合拿来做 Session，Session 注定无法保证无状态，无法利用好 JWT 的优点，要强行用只能每次从认证服务器检查 refresh token 是否有效；
+        //        很多现有的解决方案在你每次请求时检查 refresh token 后颁发一个新的 access token，然而旧的 access token 又在有效期内，多个 access_token 可以一起用听上去说实话挺2b的，所以为了让其“过期”，你又要维护一个 blacklist 或者 whitelist，再加上刷新方案自带的并发问题，说实话这套 JWT session 实践真的是一言难尽。
 
-                等你把这套 access token、refresh token 全部实现下来，你会发现它还不如传统的 session 方案，而其中任何一步用了不恰当的实现方式，都会带来更多的安全漏洞。
-             */
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            var jwtSettings = Configuration.GetSection("Jwt");
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(cfg =>
-                {
-                    cfg.RequireHttpsMetadata = false;
-                    cfg.SaveToken = true;
-                    var rsa = RSACryptography.CreateRsaFromPrivateKey(Constants.RSAForToken.PrivateKey);
-                    cfg.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ClockSkew = TimeSpan.Zero, // remove delay of token when expire
+        //        等你把这套 access token、refresh token 全部实现下来，你会发现它还不如传统的 session 方案，而其中任何一步用了不恰当的实现方式，都会带来更多的安全漏洞。
+        //     */
+        //    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+        //    var jwtSettings = Configuration.GetSection("Jwt");
+        //    services
+        //        .AddAuthentication(options =>
+        //        {
+        //            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        //            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        //            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        //        })
+        //        .AddJwtBearer(cfg =>
+        //        {
+        //            cfg.RequireHttpsMetadata = false;
+        //            cfg.SaveToken = true;
+        //            var rsa = RSACryptography.CreateRsaFromPrivateKey(Constants.RSAForToken.PrivateKey);
+        //            cfg.TokenValidationParameters = new TokenValidationParameters
+        //            {
+        //                ClockSkew = TimeSpan.Zero, // remove delay of token when expire
 
-                        ValidIssuer = jwtSettings["JwtIssuer"],
-                        ValidAudience = jwtSettings["JwtIssuer"],
-                        IssuerSigningKey = new RsaSecurityKey(rsa),
+        //                ValidIssuer = jwtSettings["JwtIssuer"],
+        //                ValidAudience = jwtSettings["JwtIssuer"],
+        //                IssuerSigningKey = new RsaSecurityKey(rsa),
 
-                        RequireExpirationTime = true,
-                        ValidateLifetime = true
-                    };
-                });
+        //                RequireExpirationTime = true,
+        //                ValidateLifetime = true
+        //            };
+        //        });
 
-            /**
-             * MARK: 基于 JWT 预防 XSRF 和 XSS 攻击
-             *  
-             * - 将凭据（JWT）存放在 HttpOnly（无法被脚本访问）、SameSite=Strict（提交源跨域时不携带该Cookie）、Secure（仅HTTPS下携带该Cookie） 的 Cookie 中，而不是 LocalStorage 一类的地方。因为 Local Storage、Session Storage 会有 XSS 的风险，类似于 chrome extension 一类的东西可以随意读取这两类存储；而 Cookie 虽然有 XSRF 的风险，但可以通过双提交 Cookie 来预防，所以将凭证存放在 Cookie 依然是优先方案。
-             * - 禁止 Form 表单提交，因为表单提交可以跨域。
-             * - 使用 HTTPS
-             * - 合理的过期机制
-             * - 过滤用户输入来防止 XSS
-             * - 在用户凭据变更后刷新 XSRF Token（刷新接口在 UserController -> GetXSRFToken）
-             * - 禁止 HTTP TRACE 防止 XST 攻击（测试了一下好像默认就是禁止的）
-             * - 由于 JWT Authentication 中间件是采用 Header Authorization 节进行验证，这里需要在Authentication 前加入一个中间件判断是否有 access token，有的话手动在 Header 中插入 Authorization 节以支持 JWT 验证。
-             * 
-             * - refs:
-             *  Where to store JWT in browser? How to protect against CSRF? https://stackoverflow.com/a/37396572
-             *  实现一个靠谱的Web认证：https://www.jianshu.com/p/805dc2a0f49e
-             *  How can I validate a JWT passed via cookies? https://stackoverflow.com/a/39386631
-             *  Prevent Cross-Site Request Forgery (XSRF/CSRF) attacks in ASP.NET Core https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-2.2
-             *  2 楼评论讨论了 refresh token 是否有意义，有不错的参考价值：https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/
-             *  
-             */
-            services.AddAntiforgery(options => { options.HeaderName = "X-XSRF-TOKEN"; });
-        }
+        //    /**
+        //     * MARK: 基于 JWT 预防 XSRF 和 XSS 攻击
+        //     *  
+        //     * - 将凭据（JWT）存放在 HttpOnly（无法被脚本访问）、SameSite=Strict（提交源跨域时不携带该Cookie）、Secure（仅HTTPS下携带该Cookie） 的 Cookie 中，而不是 LocalStorage 一类的地方。因为 Local Storage、Session Storage 会有 XSS 的风险，类似于 chrome extension 一类的东西可以随意读取这两类存储；而 Cookie 虽然有 XSRF 的风险，但可以通过双提交 Cookie 来预防，所以将凭证存放在 Cookie 依然是优先方案。
+        //     * - 禁止 Form 表单提交，因为表单提交可以跨域。
+        //     * - 使用 HTTPS
+        //     * - 合理的过期机制
+        //     * - 过滤用户输入来防止 XSS
+        //     * - 在用户凭据变更后刷新 XSRF Token（刷新接口在 UserController -> GetXSRFToken）
+        //     * - 禁止 HTTP TRACE 防止 XST 攻击（测试了一下好像默认就是禁止的）
+        //     * - 由于 JWT Authentication 中间件是采用 Header Authorization 节进行验证，这里需要在Authentication 前加入一个中间件判断是否有 access token，有的话手动在 Header 中插入 Authorization 节以支持 JWT 验证。
+        //     * 
+        //     * - refs:
+        //     *  Where to store JWT in browser? How to protect against CSRF? https://stackoverflow.com/a/37396572
+        //     *  实现一个靠谱的Web认证：https://www.jianshu.com/p/805dc2a0f49e
+        //     *  How can I validate a JWT passed via cookies? https://stackoverflow.com/a/39386631
+        //     *  Prevent Cross-Site Request Forgery (XSRF/CSRF) attacks in ASP.NET Core https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-2.2
+        //     *  2 楼评论讨论了 refresh token 是否有意义，有不错的参考价值：https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/
+        //     *  
+        //     */
+        //    services.AddAntiforgery(options => { options.HeaderName = "X-XSRF-TOKEN"; });
+        //}
         #endregion
     }
 }

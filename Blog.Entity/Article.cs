@@ -72,6 +72,11 @@ namespace Blog.Entity
         public string Title { get; set; }
 
         /// <summary>
+        /// TitlePinyin
+        /// </summary>
+        public string TitlePinyin { get; set; }
+
+        /// <summary>
         /// UpdatedAt
         /// </summary>
         public DateTime? UpdatedAt { get; set; }

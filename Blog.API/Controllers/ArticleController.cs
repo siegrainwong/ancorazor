@@ -30,7 +30,7 @@ namespace Blog.API.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
-            var article = await _repository.GetByIdAsync(id, IsAuthenticated ? (bool?)null : false);
+            var article = await _service.GetByIdAsync(id, IsAuthenticated ? (bool?)null : false);
             if (article == null) return NotFound();
             return Ok(article);
         }
@@ -39,7 +39,7 @@ namespace Blog.API.Controllers
         [HttpGet("{alias}")]
         public async Task<IActionResult> GetByAlias(string alias)
         {
-            var article = await _repository.GetByAliasAsync(alias, IsAuthenticated ? (bool?)null : false);
+            var article = await _service.GetByAliasAsync(alias, IsAuthenticated ? (bool?)null : false);
             if (article == null) return NotFound();
             return Ok(article);
         }

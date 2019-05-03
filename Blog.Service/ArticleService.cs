@@ -3,12 +3,19 @@
 using Blog.API.Common.Constants;
 using Blog.API.Messages;
 using Blog.API.Messages.Article;
+using Blog.EF.Entity;
 using Blog.Repository;
+using LinqKit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Siegrain.Common;
 using SmartSql.AOP;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Z.EntityFramework.Plus;
 
 #endregion
 
@@ -18,11 +25,27 @@ namespace Blog.Service
     {
         public IArticleRepository Repository { get; }
         private readonly SEOConfiguration _seoConfiguration;
+        private readonly BlogContext _context;
 
-        public ArticleService(IArticleRepository articleRepository, IOptions<SEOConfiguration> seoConfiguration)
+        public ArticleService(IArticleRepository articleRepository, IOptions<SEOConfiguration> seoConfiguration, BlogContext context)
         {
             Repository = articleRepository;
             _seoConfiguration = seoConfiguration.Value;
+            _context = context;
+        }
+
+        public async Task<Article> GetByIdAsync(int id, bool? isDraft)
+        {
+            var predicate = PredicateBuilder.New<Article>(x => x.Id == id);
+            if (isDraft.HasValue) predicate.And(x => x.IsDraft == isDraft);
+            return await _context.Article.SingleOrDefaultAsync(predicate);
+        }
+
+        public async Task<Article> GetByAliasAsync(string alias, bool? isDraft)
+        {
+            var predicate = PredicateBuilder.New<Article>(x => x.Alias == alias);
+            if (isDraft.HasValue) predicate.And(x => x.IsDraft == isDraft);
+            return await _context.Article.SingleOrDefaultAsync(predicate);
         }
 
         public async Task<PaginationResponse<ArticleViewModel>> QueryByPageAsync(PaginationParameter request)

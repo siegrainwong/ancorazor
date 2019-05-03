@@ -6,6 +6,7 @@ using Blog.API.Authentication;
 using Blog.API.Common.Constants;
 using Blog.API.Exceptions;
 using Blog.API.Filters;
+using Blog.EF.Entity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -56,6 +58,7 @@ namespace Blog.API
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             RegisterAppSettings(services);
+            RegisterEntityFramework(services);
             RegisterMvc(services);
             RegisterRepository(services);
             RegisterService(services);
@@ -124,6 +127,11 @@ namespace Blog.API
                 // (default is null, since above methods don't use it by default)
                 //options.UserIdProvider = request => MyGetUserIdFunction(request);
             });
+        }
+
+        private void RegisterEntityFramework(IServiceCollection services)
+        {
+            services.AddDbContext<BlogContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
         }
 
         private void RegisterMvc(IServiceCollection services)

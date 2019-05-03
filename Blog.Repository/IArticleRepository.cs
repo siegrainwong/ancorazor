@@ -15,6 +15,9 @@ namespace Blog.Repository
         [Statement(Id = "GetEntity")]
         Task<Article> GetByIdAsync([Param("Id")] int id, [Param("IsDraft")] bool? isDraft = false);
 
+        [Statement(Id = "GetEntity")]
+        Task<Article> GetByAliasAsync([Param("Alias")] string alias, [Param("IsDraft")] bool? isDraft = false);
+
         [UseTransaction]
         Task<int> DeleteAsync(int id);
 

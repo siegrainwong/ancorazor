@@ -27,7 +27,6 @@ namespace Blog.API.Messages.Article
         [StringLength(500, MinimumLength = 0, ErrorMessage = "Digest must be less than 500 characters.")]
         public string Digest { get; set; }
 
-        [RegularExpression("^[a-zA-Z0-9 ]$", ErrorMessage = "Alias must be English alphabet and number.")]
         public string Alias { get; set; }
 
         [Range(0, int.MaxValue)]
@@ -44,8 +43,6 @@ namespace Blog.API.Messages.Article
         [Required]
         [StringLength(256, MinimumLength = 1, ErrorMessage = "Title must be less than 256 characters.")]
         public string Title { get; set; }
-
-        public string TitlePinyin => CHNToPinyin.ConvertToPinYin(Title);
 
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }

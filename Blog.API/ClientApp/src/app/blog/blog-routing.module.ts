@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { Routes, RouterModule, UrlSegment } from "@angular/router";
 import { BlogAppComponent } from "./blog-app.component";
 import { WriteArticleComponent } from "./components/write-article/write-article.component";
 import { AboutComponent } from "./components/about/about.component";
@@ -7,11 +7,7 @@ import RouteData, { RouteKinds } from "../shared/models/route-data.model";
 import { ArticleListComponent } from "./components/article-list/article-list.component";
 import { ArticleComponent } from "./components/article/article.component";
 import { AuthGuard } from "../shared/guard/auth.guard";
-import {
-  SGTransitionResolveGuard,
-  TestObservableResolveGuard,
-  TestDirectResolveGuard
-} from "../shared/animations/sg-transition.resolve.guard";
+import { SGTransitionResolveGuard } from "../shared/animations/sg-transition.resolve.guard";
 import { ArticleResolveGuard } from "./guard/article.resolve.guard";
 import { SGTransitionDeactivateGuard } from "../shared/animations/sg-transition.deactivate.guard";
 import { ArticleListResolveGuard } from "./guard/article-list.resolve.guard";
@@ -47,7 +43,10 @@ const routes: Routes = [
         path: "edit/:id",
         component: WriteArticleComponent,
         canActivate: [AuthGuard],
-        data: new RouteData({ kind: RouteKinds.edit })
+        data: new RouteData({ kind: RouteKinds.edit }),
+        resolve: {
+          article: ArticleResolveGuard
+        }
       },
       {
         path: "article/:id",
@@ -55,7 +54,8 @@ const routes: Routes = [
         data: new RouteData({ kind: RouteKinds.article }),
         resolve: {
           article: ArticleResolveGuard
-        }
+        },
+        matcher: articleRouteMatcher
       },
       {
         path: "about",
@@ -65,10 +65,19 @@ const routes: Routes = [
     ]
   }
 ];
+
+export function articleRouteMatcher(segments: UrlSegment[]) {
+  if (!segments.length || segments[0].path !== "article") return null;
+  return {
+    consumed: segments,
+    posParams: { id: segments[segments.length - 1] }
+  };
+}
+
 // setup SGTransition guards
 routes[0].children.map(x => {
-  if (!x.canDeactivate) x.canDeactivate = [SGTransitionDeactivateGuard];
-  x.canDeactivate.push();
+  if (!x.canDeactivate) x.canDeactivate = [];
+  x.canDeactivate.push(SGTransitionDeactivateGuard);
   if (!x.resolve) x.resolve = {};
   x.resolve.sg_transition = SGTransitionResolveGuard;
 });

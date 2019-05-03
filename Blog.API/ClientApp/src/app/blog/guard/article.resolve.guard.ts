@@ -8,11 +8,6 @@ import {
 import ArticleModel from "../models/article-model";
 import { ArticleService } from "../services/article.service";
 
-export const enum ArticleRouteMode {
-  alias,
-  title
-}
-
 @Injectable({
   providedIn: "root"
 })
@@ -22,8 +17,8 @@ export class ArticleResolveGuard implements Resolve<ArticleModel> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Promise<ArticleModel> {
-    let id = route.paramMap.get("id");
-    let res = await this._service.getArticle(parseInt(id));
+    let identifier = route.paramMap.get("id");
+    let res = await this._service.getArticle(identifier);
     if (!res) this._router.navigate(["/"]);
     return res;
   }

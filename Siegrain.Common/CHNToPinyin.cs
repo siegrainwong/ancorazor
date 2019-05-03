@@ -13,7 +13,7 @@ namespace Siegrain.Common
         /// <param name="chineseStr">拼音字符串</param> 
         /// <param name="includeTone">是否包含音调</param> 
         /// <returns></returns> 
-        public static string ConvertToPinYin(string chineseStr, bool includeTone)
+        public static string ConvertToPinYin(string chineseStr)
         {
             if (chineseStr == null)
                 throw new ArgumentNullException(nameof(chineseStr));
@@ -29,26 +29,11 @@ namespace Siegrain.Common
                 var chineseChar = new ChineseChar(c);
                 var pyColl = chineseChar.Pinyins;
                 if (pyColl.Length == 0) continue;
-                sb.Append(pyColl[0] + " ");
-            }
-
-            if (!includeTone)
-            {
-                var sb2 = new StringBuilder();
-                foreach (var c in sb.ToString())
-                {
-                    if (!char.IsNumber(c))
-                        sb2.Append(c);
-                }
-                return sb2.ToString();
+                var first = pyColl[0];
+                sb.Append(first.Remove(first.Length - 1));
             }
 
             return sb.ToString();
-        }
-
-        public static string ConvertToPinYin(string chineseStr)
-        {
-            return ConvertToPinYin(chineseStr, false);
         }
 
         public static bool IsValidChar(char ch)

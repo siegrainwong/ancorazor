@@ -5,7 +5,7 @@
       class="float-right"
       color="primary"
       mat-flat-button
-      [attr.disabled]="preloading ? '' : null"
+      [attr.disabled]="store.isRequesting ? '' : null"
       (click)="submit()"
     >
       {{ isEditing ? "Update" : "Post" }}

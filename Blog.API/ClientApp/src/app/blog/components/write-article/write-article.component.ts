@@ -19,6 +19,7 @@ import { SGTransitionDelegate } from "src/app/shared/animations/sg-transition.de
 import { SGAnimations } from "src/app/shared/animations/sg-animations";
 import { SGRouteTransitionCommands } from "src/app/shared/animations/sg-transition.model";
 import { take, map } from "rxjs/operators";
+import { SGTransitionStore } from "src/app/shared/animations/sg-transition.store";
 const yamlFront = require("yaml-front-matter");
 
 @Component({
@@ -37,23 +38,21 @@ export class WriteArticleComponent
     digest: ""
   });
   public isEditing: boolean = false;
-  public preloading: boolean = false;
   private _editor: any;
   private _lexer: any;
   private _frontMatter: any;
 
   constructor(
     private _service: ArticleService,
-    private _store: Store,
     private _logger: LoggingService,
     private _util: SGUtil,
     private _router: Router,
-    public transition: SGTransitionToEnter
+    public store: Store
   ) {}
 
   async ngOnInit() {
-    if (!this._store.renderFromClient) return;
-    let article = await this._store.routeDataChanged$
+    if (!this.store.renderFromClient) return;
+    let article = await this.store.routeDataChanged$
       .pipe(
         take(1),
         map(x => x.article)
@@ -163,12 +162,10 @@ export class WriteArticleComponent
     this.model.isDraft = !!this._frontMatter.draft;
 
     // submit
-    this.preloading = true;
     this._logger.info("submiting: ", this.model);
     var res = this.isEditing
       ? await this._service.update(this.model)
       : await this._service.add(this.model);
-    this.preloading = false;
     if (!res) return;
     this._router.navigate([`article/${res}`]);
   }

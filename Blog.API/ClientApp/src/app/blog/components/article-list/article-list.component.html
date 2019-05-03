@@ -8,7 +8,7 @@
           [ngClass]="animations.articles.class"
         >
           <div class="post-preview {{ item.isDraft ? 'draft' : '' }}">
-            <a [routerLink]="['/article', item.id]" title="{{ item.alias }}">
+            <a [routerLink]="'/article/' + item.path" title="{{ item.alias }}">
               <h2 class="post-title">
                 {{ item.title }}
               </h2>

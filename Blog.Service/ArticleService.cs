@@ -37,6 +37,7 @@ namespace Blog.Service
         [Transaction]
         public virtual async Task<int> InsertAsync(ArticleUpdateParameter parameter)
         {
+            ReformmatingArticleData(ref parameter);
             var id = await Repository.InsertAsync(parameter);
             await SetArticleTagsAndCategories(id, parameter.Tags, parameter.Categories);
             return id;
@@ -45,10 +46,18 @@ namespace Blog.Service
         [Transaction]
         public virtual async Task<bool> UpdateAsync(ArticleUpdateParameter parameter)
         {
+            ReformmatingArticleData(ref parameter);
             var externalTask = SetArticleTagsAndCategories(parameter.Id, parameter.Tags, parameter.Categories);
             var updateTask = Repository.UpdateAsync(parameter);
             await Task.WhenAll(externalTask, updateTask);
             return true;
+        }
+
+        private void ReformmatingArticleData(ref ArticleUpdateParameter parameter)
+        {
+            var pinyin = CHNToPinyin.ConvertToPinYin(parameter.Alias ?? parameter.Title);
+            parameter.Alias = Regex.Replace(pinyin, Constants.Article.RouteReplaceRegex, 
+                " ").Trim().Replace(" ", "-").ToLowerInvariant();
         }
 
         private Task SetArticleTagsAndCategories(int articleId, string[] tags, string[] categories)
@@ -63,8 +72,7 @@ namespace Blog.Service
         {
             var id = viewModel.Id.ToString();
             var date = viewModel.CreatedAt.ToString("yyyy/MM/dd");
-            var title = viewModel.TitlePinyin == null ? CHNToPinyin.ConvertToPinYin(viewModel.Title) : viewModel.TitlePinyin;
-            var alias = viewModel.Alias == null ? title : viewModel.Alias;
+            var alias = viewModel.Alias;
             var category = viewModel.Category == null ? Constants.Article.DefaultCategoryName : CHNToPinyin.ConvertToPinYin(viewModel.Category);
             
             var path = _seoConfiguration.ArticleRouteMapping
@@ -73,7 +81,7 @@ namespace Blog.Service
                 .Replace(nameof(category), category)
                 .Replace(nameof(alias), alias)
                 .ToLowerInvariant();
-            return Regex.Replace(path, @"([^\w\d\/])+(-*)", "-");
+            return path;
         }
     }
 }

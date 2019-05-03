@@ -5,6 +5,7 @@
         public static class Article
         {
             public static string DefaultCategoryName = "Uncategorized";
+            public static string RouteReplaceRegex = @"([^\w\d])+";
         }
     }
 }

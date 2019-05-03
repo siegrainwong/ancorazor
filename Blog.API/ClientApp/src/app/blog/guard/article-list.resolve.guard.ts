@@ -2,16 +2,13 @@ import { Injectable } from "@angular/core";
 import {
   Resolve,
   ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router
+  RouterStateSnapshot
 } from "@angular/router";
 import ArticleModel from "../models/article-model";
-import { SGTransitionStore } from "src/app/shared/animations/sg-transition.store";
 import { ArticleService } from "../services/article.service";
 import { LoggingService } from "src/app/shared/services/logging.service";
 import { ArticleParameters } from "../models/article-parameters";
 import { PagedResult } from "src/app/shared/models/response-result";
-import { timeout } from "src/app/shared/utils/promise-delay";
 
 @Injectable({
   providedIn: "root"

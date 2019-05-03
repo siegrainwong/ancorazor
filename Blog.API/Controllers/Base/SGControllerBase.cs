@@ -21,5 +21,7 @@ namespace Blog.API.Controllers.Base
                 Succeed = succeed,
                 Message = message
             });
+
+        protected bool IsAuthenticated => HttpContext.User.Identity.IsAuthenticated;
     }
 }

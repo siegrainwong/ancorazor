@@ -18,8 +18,8 @@ export class ArticleService extends BaseService implements ISubService {
     return res.succeed && (res.data as PagedResult<ArticleModel>);
   }
 
-  async getArticle(id: number): Promise<ArticleModel> {
-    var res = await this.get(`${this.serviceName}/${id}`);
+  async getArticle(idOrAlias: number | string): Promise<ArticleModel> {
+    var res = await this.get(`${this.serviceName}/${idOrAlias}`);
     return res.succeed && (res.data as ArticleModel);
   }
 

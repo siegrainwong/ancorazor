@@ -11,6 +11,7 @@ export default class ArticleModel extends BaseModel {
   content: string;
   viewCount: number = 0;
   commentCount: number = 0;
+  path: string;
   cover: string = "assets/img/placeholder.jpg";
   isDraft: boolean = false;
 

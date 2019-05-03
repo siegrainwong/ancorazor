@@ -51,6 +51,7 @@
   </Target>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.2.4" />
     <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.165" />
     <PackageReference Include="NETCore.Encrypt" Version="2.0.7" />
@@ -71,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Blog.API.Common\Blog.API.Common.csproj" />
+    <ProjectReference Include="..\Blog.EF.Entity\Blog.EF.Entity.csproj" />
     <ProjectReference Include="..\Blog.Entity\Blog.Entity.csproj" />
     <ProjectReference Include="..\Blog.Messages\Blog.API.Messages.csproj" />
     <ProjectReference Include="..\Blog.Repository\Blog.Repository.csproj" />

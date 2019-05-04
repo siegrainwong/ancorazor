@@ -1,5 +1,6 @@
 #region
 
+using AutoMapper;
 using Blog.API.Common.Constants;
 using Blog.API.Messages;
 using Blog.API.Messages.Article;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Siegrain.Common;
 using SmartSql.AOP;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
@@ -26,12 +28,14 @@ namespace Blog.Service
         public IArticleRepository Repository { get; }
         private readonly SEOConfiguration _seoConfiguration;
         private readonly BlogContext _context;
+        private readonly IMapper _mapper;
 
-        public ArticleService(IArticleRepository articleRepository, IOptions<SEOConfiguration> seoConfiguration, BlogContext context)
+        public ArticleService(IArticleRepository articleRepository, IOptions<SEOConfiguration> seoConfiguration, BlogContext context, IMapper mapper)
         {
             Repository = articleRepository;
             _seoConfiguration = seoConfiguration.Value;
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<Article> GetByIdAsync(int id, bool? isDraft)
@@ -48,16 +52,31 @@ namespace Blog.Service
             return await _context.Article.SingleOrDefaultAsync(predicate);
         }
 
-        public async Task<PaginationResponse<ArticleViewModel>> QueryByPageAsync(PaginationParameter request)
+        public async Task<PaginationResponse<ArticleViewModel>> QueryByPageAsync(ArticlePaginationParameter parameters)
         {
-            var result = await Repository.QueryByPageAsync<PaginationResponse<ArticleViewModel>>(request);
-            foreach (var item in result.List) item.Path = GetArticleRoutePath(item);
-            result.PageIndex = request.PageIndex;
-            result.PageSize = request.PageSize;
+            var predicate = PredicateBuilder.New<Article>(true);
+            if (parameters.IsDraft.HasValue) predicate.And(x => x.IsDraft == parameters.IsDraft);
+            var result = new PaginationResponse<ArticleViewModel>();
+
+            var futureTotal = _context.Article.DeferredCount(predicate).FutureValue();
+            var futureList = _context.Article.Where(predicate)
+                .Select(x=> new { x.Alias, x.CommentCount, x.Title, x.CreatedAt, x.Id, x.IsDraft, x.Digest, x.ViewCount })
+                .Take(parameters.PageSize)
+                .Skip(parameters.PageSize * parameters.PageIndex)
+                .OrderByDescending(x => x.CreatedAt)
+                .Future();
+
+            result.Total = await futureTotal.ValueAsync();
+            result.List = _mapper.Map<IEnumerable<ArticleViewModel>>(await futureList.ToListAsync());
+            result.PageIndex = parameters.PageIndex;
+            result.PageSize = parameters.PageSize;
+
+            foreach (var i in result.List) i.Path = GetArticleRoutePath(i);
+
             return result;
         }
 
-        [Transaction]
+        //[Transaction]
         public virtual async Task<int> InsertAsync(ArticleUpdateParameter parameter)
         {
             ReformmatingArticleData(ref parameter);
@@ -96,12 +115,12 @@ namespace Blog.Service
             var id = viewModel.Id.ToString();
             var date = viewModel.CreatedAt.ToString("yyyy/MM/dd");
             var alias = viewModel.Alias;
-            var category = viewModel.Category == null ? Constants.Article.DefaultCategoryName : CHNToPinyin.ConvertToPinYin(viewModel.Category);
-            
+            var category = viewModel.ArticleCategories.FirstOrDefault()?.CategoryNavigation.Name ?? Constants.Article.DefaultCategoryName;
+
             var path = _seoConfiguration.ArticleRouteMapping
                 .Replace(nameof(id), id)
                 .Replace(nameof(date), date)
-                .Replace(nameof(category), category)
+                .Replace(nameof(category), CHNToPinyin.ConvertToPinYin(category))
                 .Replace(nameof(alias), alias)
                 .ToLowerInvariant();
             return path;

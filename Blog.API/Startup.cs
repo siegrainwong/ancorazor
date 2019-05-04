@@ -2,7 +2,9 @@
 
 using AspectCore.Extensions.DependencyInjection;
 using AspectCore.Injector;
+using AutoMapper;
 using Blog.API.Authentication;
+using Blog.API.AutoMapper;
 using Blog.API.Common.Constants;
 using Blog.API.Exceptions;
 using Blog.API.Filters;
@@ -57,6 +59,7 @@ namespace Blog.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            RegisterMapper(services);
             RegisterAppSettings(services);
             RegisterEntityFramework(services);
             RegisterMvc(services);
@@ -70,6 +73,8 @@ namespace Blog.API
 
             return services.ToServiceContainer().Build();
         }
+
+        
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
@@ -105,6 +110,19 @@ namespace Blog.API
 
         #region Services
 
+        private void RegisterMapper(IServiceCollection services)
+        {
+            var mappingConfig = new MapperConfiguration(x =>
+            {
+                x.AddProfile<MappingProfile>();
+                x.ValidateInlineMaps = false;   // ignore unmapped properties
+            });
+
+            var mapper = mappingConfig.CreateMapper();
+            
+            services.AddSingleton(mapper);
+        }
+
         private void RegisterAppSettings(IServiceCollection services)
         {
             services.Configure<SEOConfiguration>(x => Configuration.GetSection(nameof(SEOConfiguration)).Bind(x));
@@ -112,6 +130,7 @@ namespace Blog.API
 
         private void ResigterProfiler(IServiceCollection services)
         {
+            // TODO: »¹Ã»ÅªºÃ
             services.AddMiniProfiler(options =>
             {
                 // All of this is optional. You can simply call .AddMiniProfiler() for all defaults

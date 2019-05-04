@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.0" />
       <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="1.1.16" />
       <PackageReference Include="SmartSql.AOP" Version="4.0.29" />
       <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="2.2.5" />

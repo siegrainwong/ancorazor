@@ -11,6 +11,7 @@ import { TransferState, makeStateKey } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { SGProgress } from "../utils/siegrain.progress";
+import { timeout } from "../utils/promise-delay";
 
 @Injectable({
   providedIn: "root"
@@ -39,16 +40,6 @@ export abstract class BaseService implements OnDestroy {
     axios.defaults.baseURL = environment.apiUrlBase;
     axios.defaults.timeout = 100000;
     axios.defaults.headers = { "Content-Type": "application/json" };
-    axios.interceptors.request.use(_ => {
-      this.store.isRequesting = true;
-      this._progress.progressStart();
-      return _;
-    });
-    axios.interceptors.response.use(_ => {
-      this.store.isRequesting = false;
-      this._progress.progressDone();
-      return _;
-    });
   }
 
   /**
@@ -56,11 +47,7 @@ export abstract class BaseService implements OnDestroy {
    */
   protected abstract initialize();
 
-  async get(
-    url: string,
-    query?: any,
-    option?: AxiosRequestConfig
-  ): Promise<ResponseResult> {
+  async get(url: string, query?: any): Promise<ResponseResult> {
     /**
      * Mark: 让 Server side 的请求结果传递到 Client side 避免重复请求
      * https://medium.com/@evertonrobertoauler/angular-5-universal-with-transfer-state-using-angular-cli-19fe1e1d352c
@@ -100,30 +87,34 @@ export abstract class BaseService implements OnDestroy {
     });
   }
 
-  async post(
-    url: string,
-    body: any,
-    query?: any,
-    option?: AxiosRequestConfig
-  ): Promise<ResponseResult> {
+  async post(url: string, body: any, query?: any): Promise<ResponseResult> {
     return await this.handleRequest(Methods.POST, url, body, query);
   }
 
-  async put(
-    url: string,
-    body?: any,
-    query?: any,
-    option?: AxiosRequestConfig
-  ): Promise<ResponseResult> {
+  async put(url: string, body?: any, query?: any): Promise<ResponseResult> {
     return await this.handleRequest(Methods.PUT, url, body, query);
   }
 
-  async delete(
-    url: string,
-    query?: any,
-    option?: AxiosRequestConfig
-  ): Promise<ResponseResult> {
+  async delete(url: string, query?: any): Promise<ResponseResult> {
     return await this.handleRequest(Methods.DELETE, url, null, query);
+  }
+
+  /**
+   * 请求前调用
+   */
+  protected beforeRequest() {
+    this.store.isRequesting = true;
+    this._progress.progressStart();
+  }
+
+  /**
+   * 响应后调用
+   *
+   * 写这个其实是因为axios的interceptor有bug，有时候响应太快拦不到response
+   */
+  protected afterResponse() {
+    this.store.isRequesting = false;
+    this._progress.progressDone();
   }
 
   /**
@@ -140,6 +131,8 @@ export abstract class BaseService implements OnDestroy {
     body?: any,
     query?: any
   ): Promise<ResponseResult> {
+    this.beforeRequest();
+
     try {
       const res = await axios.request({
         method: method.toString(),
@@ -153,6 +146,7 @@ export abstract class BaseService implements OnDestroy {
       if (error.response) {
         return this.handleResponse(error.response as AxiosResponse);
       } else {
+        this.afterResponse();
         this.util.tip(error);
         this.logger.error(error);
         return new ResponseResult({
@@ -167,6 +161,8 @@ export abstract class BaseService implements OnDestroy {
    * @param response
    */
   handleResponse(response: AxiosResponse): ResponseResult {
+    this.afterResponse();
+
     let result: ResponseResult = null;
     if (response.status >= 200 && response.status < 300)
       result = new ResponseResult({

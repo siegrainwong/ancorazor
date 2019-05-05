@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Blog.API.Messages;
 using Blog.API.Messages.Article;
 using Blog.EF.Entity;
 
@@ -10,6 +11,7 @@ namespace Blog.API.AutoMapper
         {
             CreateMap<Article, ArticleViewModel>();
             CreateMap<ArticleViewModel, Article>();
+            CreateMap(typeof(PaginationParameter), typeof(PaginationResponse<>));
         }
     }
 }

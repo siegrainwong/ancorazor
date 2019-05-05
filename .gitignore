@@ -48,3 +48,4 @@ dist/
 SmartSqlMapConfig.Development.xml
 /Blog.API/SmartSqlMapConfig.Production.xml
 /Blog.API/SmartSqlMapConfig.Release.xml
+/Blog.EF.Entity/appsettings.json

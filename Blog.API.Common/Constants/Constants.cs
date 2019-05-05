@@ -4,8 +4,15 @@
     {
         public static class Article
         {
-            public static string DefaultCategoryName = "Uncategorized";
-            public static string RouteReplaceRegex = @"([^\w\d])+";
+            public const string DefaultCategoryName = "Uncategorized";
+            public const string RouteReplaceRegex = @"([^\w\d])+";
+        }
+
+        public static class ErrorCode
+        {
+            public const string Default = "0001";
+
+            public const string DuplicateEntity = "0010";
         }
     }
 }

@@ -1,14 +1,16 @@
-﻿using System;
+﻿using Blog.API.Common.Constants;
+using Blog.EF.Entity.Base;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace Blog.EF.Entity
 {
     public partial class BlogContext : DbContext
     {
-        public BlogContext()
-        {
-        }
+        public BlogContext() { }
 
         public BlogContext(DbContextOptions<BlogContext> options)
             : base(options)
@@ -25,11 +27,36 @@ namespace Blog.EF.Entity
         public virtual DbSet<UserRole> UserRole { get; set; }
         public virtual DbSet<Users> Users { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
+            if (!optionsBuilder.IsConfigured)
+            {
+                var config = new ConfigurationBuilder()
+                    .SetBasePath(Path.Combine(Directory.GetCurrentDirectory()))
+                    .AddJsonFile("appsettings.Development.json", optional: false).Build();
 
-            modelBuilder.Entity<Article>(entity =>
+                // for db migration
+                optionsBuilder.UseSqlServer(config[$"{nameof(DbConfiguration)}:{nameof(DbConfiguration.ConnectionString)}"]);
+            }
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
+
+            // set default value of parent entity
+            foreach (var entityType in builder.Model.GetEntityTypes()
+                .Where(e =>
+                    typeof(BaseEntity<int>).IsAssignableFrom(e.ClrType) ||
+                    typeof(BaseEntity<Guid>).IsAssignableFrom(e.ClrType)))
+            {
+                builder.Entity(entityType.ClrType).Property("CreatedAt")
+                    .HasDefaultValueSql("getdate()");
+                builder.Entity(entityType.ClrType).Property("UpdatedAt")
+                    .HasDefaultValueSql("getdate()");
+            }
+
+            builder.Entity<Article>(entity =>
             {
                 entity.HasIndex(e => e.Id)
                     .HasName("IX_Article_Title")
@@ -37,21 +64,15 @@ namespace Blog.EF.Entity
 
                 entity.Property(e => e.Author).HasDefaultValueSql("((1))");
 
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("(getdate())");
-
                 entity.HasOne(d => d.AuthorNavigation)
                     .WithMany(p => p.Article)
                     .HasForeignKey(d => d.Author)
                     .HasConstraintName("FK_Article_Users");
             });
 
-            modelBuilder.Entity<ArticleCategories>(entity =>
+            builder.Entity<ArticleCategories>(entity =>
             {
                 entity.HasIndex(e => new { e.Article, e.Category });
-
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.ArticleNavigation)
                     .WithMany(p => p.ArticleCategories)
@@ -66,11 +87,9 @@ namespace Blog.EF.Entity
                     .HasConstraintName("FK_ArticleCategories_Category");
             });
 
-            modelBuilder.Entity<ArticleTags>(entity =>
+            builder.Entity<ArticleTags>(entity =>
             {
                 entity.HasIndex(e => new { e.Article, e.Tag });
-
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.ArticleNavigation)
                     .WithMany(p => p.ArticleTags)
@@ -85,54 +104,36 @@ namespace Blog.EF.Entity
                     .HasConstraintName("FK_ArticleTags_Tag");
             });
 
-            modelBuilder.Entity<Category>(entity =>
+            builder.Entity<Category>(entity =>
             {
                 entity.HasIndex(e => e.Name)
                     .HasName("IX_Category")
                     .IsUnique();
 
                 entity.HasIndex(e => new { e.Name, e.Id });
-
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("(getdate())");
             });
 
-            modelBuilder.Entity<OperationLog>(entity =>
+            builder.Entity<OperationLog>(entity =>
             {
-                entity.Property(e => e.Guid).ValueGeneratedNever();
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Ipaddress).IsUnicode(false);
+                entity.Property(e => e.IPAddress).IsUnicode(false);
             });
 
-            modelBuilder.Entity<Role>(entity =>
+            builder.Entity<Role>(entity =>
             {
                 entity.HasIndex(e => e.Name)
                     .HasName("Role_Name_uindex")
                     .IsUnique();
-
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("(getdate())");
             });
 
-            modelBuilder.Entity<Tag>(entity =>
+            builder.Entity<Tag>(entity =>
             {
                 entity.HasIndex(e => new { e.Name, e.Id });
-
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("(getdate())");
             });
 
-            modelBuilder.Entity<UserRole>(entity =>
+            builder.Entity<UserRole>(entity =>
             {
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("(getdate())");
-
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.UserRole)
                     .HasForeignKey(d => d.RoleId)
@@ -144,18 +145,31 @@ namespace Blog.EF.Entity
                     .HasConstraintName("FK_dbo.UserRole_dbo.sysUserInfo_UserId");
             });
 
-            modelBuilder.Entity<Users>(entity =>
+            builder.Entity<Users>(entity =>
             {
                 entity.Property(e => e.AuthUpdatedAt).HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("(getdate())");
             });
 
-            OnModelCreatingPartial(modelBuilder);
+            //1	admin	$SGHASH$V1$10000$RA3Eaw5yszeel1ARIe7iFp2AGWWLd80dAMwr+V4mRcAimv8u	wwy	1	2019-01-27 00:00:00.000	2019-03-10 09:27:10.153	2019-05-05 20:01:44.540	NULL	0
+
+            // insert admin
+            builder.Entity<Users>().HasData(new Users
+            {
+                Id = 1,
+                LoginName = "admin",
+                Password = "$SGHASH$V1$10000$RA3Eaw5yszeel1ARIe7iFp2AGWWLd80dAMwr+V4mRcAimv8u",
+                RealName = "Admin",
+                Status = 1,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                AuthUpdatedAt = DateTime.Now,
+                Remark = null,
+                IsDeleted = false
+            });
+
+            OnModelCreatingPartial(builder);
         }
 
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        partial void OnModelCreatingPartial(ModelBuilder builder);
     }
 }

@@ -74,8 +74,6 @@ namespace Blog.API
             return services.ToServiceContainer().Build();
         }
 
-        
-
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddSerilog();
@@ -126,6 +124,7 @@ namespace Blog.API
         private void RegisterAppSettings(IServiceCollection services)
         {
             services.Configure<SEOConfiguration>(x => Configuration.GetSection(nameof(SEOConfiguration)).Bind(x));
+            services.Configure<DbConfiguration>(x => Configuration.GetSection(nameof(DbConfiguration)).Bind(x));
         }
 
         private void ResigterProfiler(IServiceCollection services)
@@ -150,7 +149,9 @@ namespace Blog.API
 
         private void RegisterEntityFramework(IServiceCollection services)
         {
-            services.AddDbContext<BlogContext>(options => options.UseSqlServer(Configuration.GetSection("ConnectionString").Value));
+            services.AddDbContext<BlogContext>(options => 
+                options.UseSqlServer(
+                    Configuration[$"{nameof(DbConfiguration)}:{nameof(DbConfiguration.ConnectionString)}"]));
         }
 
         private void RegisterMvc(IServiceCollection services)
@@ -229,6 +230,7 @@ namespace Blog.API
 
         private void RegisterSwagger(IServiceCollection services)
         {
+            // TODO: 换认证方式。。。
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info

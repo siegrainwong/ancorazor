@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using Blog.EF.Entity.Base;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.EF.Entity
 {
-    public partial class ArticleCategories
+    public partial class ArticleCategories : BaseEntity<int>
     {
-        public int Id { get; set; }
         public int Article { get; set; }
         public int Category { get; set; }
-        [Column(TypeName = "datetime")]
-        public DateTime CreatedAt { get; set; }
 
         [ForeignKey("Article")]
         [InverseProperty("ArticleCategories")]

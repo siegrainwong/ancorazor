@@ -1,19 +1,15 @@
-﻿using System;
+﻿using Blog.EF.Entity.Base;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.EF.Entity
 {
-    public partial class UserRole
+    public partial class UserRole: BaseEntity<int>
     {
-        public int Id { get; set; }
         public int UserId { get; set; }
         public int RoleId { get; set; }
-        [Column(TypeName = "datetime")]
-        public DateTime CreatedAt { get; set; }
-        [Column(TypeName = "datetime")]
-        public DateTime UpdatedAt { get; set; }
         public bool IsDeleted { get; set; }
 
         [ForeignKey("RoleId")]

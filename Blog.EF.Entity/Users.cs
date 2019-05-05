@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Blog.EF.Entity.Base;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.EF.Entity
 {
-    public partial class Users
+    public partial class Users: BaseEntity<int>
     {
         public Users()
         {
@@ -13,7 +14,6 @@ namespace Blog.EF.Entity
             UserRole = new HashSet<UserRole>();
         }
 
-        public int Id { get; set; }
         [Required]
         [StringLength(60)]
         public string LoginName { get; set; }
@@ -24,13 +24,7 @@ namespace Blog.EF.Entity
         public string RealName { get; set; }
         public int Status { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime CreatedAt { get; set; }
-        [Column(TypeName = "datetime")]
-        public DateTime UpdatedAt { get; set; }
-        [Column(TypeName = "datetime")]
         public DateTime AuthUpdatedAt { get; set; }
-        [StringLength(200)]
-        public string Remark { get; set; }
         public bool IsDeleted { get; set; }
 
         [InverseProperty("AuthorNavigation")]

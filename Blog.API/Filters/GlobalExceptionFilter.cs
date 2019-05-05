@@ -1,12 +1,16 @@
 #region
 
+using Blog.API.Common.Constants;
 using Blog.API.Exceptions;
 using Blog.API.Messages;
+using Blog.API.Messages.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using Siegrain.Common;
+using Blog.API.Messages.Exceptions.Attributes;
 
 #endregion
 
@@ -25,23 +29,28 @@ namespace Blog.API.Filters
         {
             context.ExceptionHandled = true;
             var exception = context.Exception;
-            logger.LogError(
-                new EventId(exception.HResult),
-                exception,
-                exception.Message);
-            var errorCode = "0001";
-            if (exception is APIException apiException) errorCode = apiException.ErrorCode;
+            logger.LogError(new EventId(exception.HResult), exception, exception.Message);
+
+            var errorCode = Constants.ErrorCode.Default;
+            var statusCode = HttpStatusCode.InternalServerError;
+            if (exception is APIException apiException)
+            {
+                var attribute = apiException.GetType().GetAttribute<APIExceptionCodeAttribute>();
+                if (attribute != null)
+                {
+                    errorCode = attribute.ErrorCode;
+                    statusCode = attribute.StatusCode;
+                }
+            }
+
             var errorResp = new ResponseMessage<object>
             {
                 Message = exception.Message,
                 ErrorCode = errorCode,
                 Succeed = false
             };
-            var result = new JsonResult(errorResp)
-            {
-                StatusCode = (int)HttpStatusCode.OK
-            };
-            context.Result = result;
+
+            context.Result = new JsonResult(errorResp) { StatusCode = (int)statusCode }; ;
         }
     }
 }

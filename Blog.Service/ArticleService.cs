@@ -4,6 +4,7 @@ using AutoMapper;
 using Blog.API.Common.Constants;
 using Blog.API.Messages;
 using Blog.API.Messages.Article;
+using Blog.API.Messages.Exceptions;
 using Blog.EF.Entity;
 using Blog.Repository;
 using LinqKit;
@@ -56,11 +57,11 @@ namespace Blog.Service
         {
             var predicate = PredicateBuilder.New<Article>(true);
             if (parameters.IsDraft.HasValue) predicate.And(x => x.IsDraft == parameters.IsDraft);
-            var result = new PaginationResponse<ArticleViewModel>();
+            var result = new PaginationResponse<ArticleViewModel> { PageIndex = parameters.PageIndex, PageSize = parameters.PageSize };
 
             var futureTotal = _context.Article.DeferredCount(predicate).FutureValue();
             var futureList = _context.Article.Where(predicate)
-                .Select(x=> new { x.Alias, x.CommentCount, x.Title, x.CreatedAt, x.Id, x.IsDraft, x.Digest, x.ViewCount })
+                .Select(x => new { x.Alias, x.CommentCount, x.Title, x.CreatedAt, x.Id, x.IsDraft, x.Digest, x.ViewCount })
                 .Take(parameters.PageSize)
                 .Skip(parameters.PageSize * parameters.PageIndex)
                 .OrderByDescending(x => x.CreatedAt)
@@ -80,9 +81,25 @@ namespace Blog.Service
         public virtual async Task<int> InsertAsync(ArticleUpdateParameter parameter)
         {
             ReformmatingArticleData(ref parameter);
-            var id = await Repository.InsertAsync(parameter);
-            await SetArticleTagsAndCategories(id, parameter.Tags, parameter.Categories);
-            return id;
+
+            if (_context.Article.Any(x => x.Title == parameter.Title || x.Alias == parameter.Alias))
+                throw new DuplicateEntityException("Duplicate title or alias of an article.");
+
+            var entity = _mapper.Map<Article>(parameter);
+            await _context.Article.AddAsync(entity);
+            //await _context.SaveChangesAsync();
+
+            _context.Category.Any(x => parameter.Categories.Contains(x.Name));
+            var categories = parameter.Categories.Select(x => new Category { Name = x });
+            var tags = parameter.Tags.Select(x => new Tag { Name = x });
+            await _context.Category.AddRangeAsync(categories);
+            await _context.Tag.AddRangeAsync(tags);
+
+            entity.ArticleCategories = categories.Select(x => new ArticleCategories { ArticleNavigation = entity, CategoryNavigation = x }).ToArray();
+            entity.ArticleTags = tags.Select(x => new ArticleTags { ArticleNavigation = entity, TagNavigation = x }).ToArray();
+
+            await _context.SaveChangesAsync();
+            return entity.Id;
         }
 
         [Transaction]
@@ -98,7 +115,7 @@ namespace Blog.Service
         private void ReformmatingArticleData(ref ArticleUpdateParameter parameter)
         {
             var pinyin = CHNToPinyin.ConvertToPinYin(parameter.Alias ?? parameter.Title);
-            parameter.Alias = Regex.Replace(pinyin, Constants.Article.RouteReplaceRegex, 
+            parameter.Alias = Regex.Replace(pinyin, Constants.Article.RouteReplaceRegex,
                 " ").Trim().Replace(" ", "-").ToLowerInvariant();
         }
 

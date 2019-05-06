@@ -55,10 +55,12 @@ namespace Blog.Service
 
         public async Task<PaginationResponse<ArticleViewModel>> QueryByPageAsync(ArticlePaginationParameter parameters)
         {
+
             var predicate = PredicateBuilder.New<Article>(true);
             if (parameters.IsDraft.HasValue) predicate.And(x => x.IsDraft == parameters.IsDraft);
             var result = new PaginationResponse<ArticleViewModel> { PageIndex = parameters.PageIndex, PageSize = parameters.PageSize };
 
+            // TODO: 这里用扩展方法封装一下
             var futureTotal = _context.Article.DeferredCount(predicate).FutureValue();
             var futureList = _context.Article.Where(predicate)
                 .Select(x => new { x.Alias, x.CommentCount, x.Title, x.CreatedAt, x.Id, x.IsDraft, x.Digest, x.ViewCount })
@@ -77,42 +79,55 @@ namespace Blog.Service
             return result;
         }
 
-        //[Transaction]
-        public virtual async Task<int> InsertAsync(ArticleUpdateParameter parameter)
+        public virtual async Task<ArticleViewModel> InsertAsync(ArticleUpdateParameter parameter)
         {
-            ReformmatingArticleData(ref parameter);
+            FormatArticleData(ref parameter);
 
             if (_context.Article.Any(x => x.Title == parameter.Title || x.Alias == parameter.Alias))
                 throw new DuplicateEntityException("Duplicate title or alias of an article.");
 
+            var categories = await _context.Category.Where(x => parameter.Categories.Contains(x.Name)).ToListAsync();
+            var tags = await _context.Tag.Where(x => parameter.Tags.Contains(x.Name)).ToListAsync();
+
+            var newCategories = parameter.Categories.Except(categories.Select(x => x.Name))
+                .Select(x => new Category { Name = x });
+            var newTags = parameter.Tags.Except(tags.Select(x => x.Name))
+                .Select(x => new Tag { Name = x });
+
             var entity = _mapper.Map<Article>(parameter);
-            await _context.Article.AddAsync(entity);
-            //await _context.SaveChangesAsync();
-
-            _context.Category.Any(x => parameter.Categories.Contains(x.Name));
-            var categories = parameter.Categories.Select(x => new Category { Name = x });
-            var tags = parameter.Tags.Select(x => new Tag { Name = x });
-            await _context.Category.AddRangeAsync(categories);
-            await _context.Tag.AddRangeAsync(tags);
-
-            entity.ArticleCategories = categories.Select(x => new ArticleCategories { ArticleNavigation = entity, CategoryNavigation = x }).ToArray();
-            entity.ArticleTags = tags.Select(x => new ArticleTags { ArticleNavigation = entity, TagNavigation = x }).ToArray();
+            await _context.ArticleCategories
+                .AddRangeAsync(categories.Concat(newCategories)
+                .Select(x => new ArticleCategories
+                {
+                    ArticleNavigation = entity,
+                    CategoryNavigation = x
+                }));
+            await _context.ArticleTags
+                .AddRangeAsync(tags.Concat(newTags)
+                .Select(x => new ArticleTags
+                {
+                    ArticleNavigation = entity,
+                    TagNavigation = x
+                }));
 
             await _context.SaveChangesAsync();
-            return entity.Id;
+
+            var viewModel = _mapper.Map<ArticleViewModel>(entity);
+            viewModel.Path = GetArticleRoutePath(viewModel);
+            return viewModel;
         }
 
         [Transaction]
         public virtual async Task<bool> UpdateAsync(ArticleUpdateParameter parameter)
         {
-            ReformmatingArticleData(ref parameter);
+            FormatArticleData(ref parameter);
             var externalTask = SetArticleTagsAndCategories(parameter.Id, parameter.Tags, parameter.Categories);
             var updateTask = Repository.UpdateAsync(parameter);
             await Task.WhenAll(externalTask, updateTask);
             return true;
         }
 
-        private void ReformmatingArticleData(ref ArticleUpdateParameter parameter)
+        private void FormatArticleData(ref ArticleUpdateParameter parameter)
         {
             var pinyin = CHNToPinyin.ConvertToPinYin(parameter.Alias ?? parameter.Title);
             parameter.Alias = Regex.Replace(pinyin, Constants.Article.RouteReplaceRegex,

@@ -167,6 +167,6 @@ export class WriteArticleComponent
       ? await this._service.update(this.model)
       : await this._service.add(this.model);
     if (!res) return;
-    this._router.navigate([`article/${res}`]);
+    this._router.navigate([`article/${res.path}`]);
   }
 }

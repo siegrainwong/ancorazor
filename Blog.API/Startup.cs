@@ -23,6 +23,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
@@ -163,7 +164,12 @@ namespace Blog.API
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
-            }).SetCompatibilityVersion(CompatibilityVersion.Latest);
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Latest)
+            .AddJsonOptions(options => 
+            {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
         }
 
         private void RegisterCors(IServiceCollection services)

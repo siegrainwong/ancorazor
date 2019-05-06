@@ -28,7 +28,7 @@ export class SGUtil {
    */
   public tip(msg: string, type: TipType = TipType.Danger) {
     this._snackBar.open(`${type} ${msg}`, "Got it", {
-      duration: 5000
+      duration: 5000 + type == TipType.Danger && 15000
     });
   }
 

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.EF.Entity
 {
-    public partial class ArticleCategories : BaseEntity<int>
+    public partial class ArticleCategories : BaseEntity
     {
         public int Article { get; set; }
         public int Category { get; set; }

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.EF.Entity
 {
-    public partial class ArticleTags: BaseEntity<int>
+    public partial class ArticleTags: BaseEntity
     {
         public int Article { get; set; }
         public int Tag { get; set; }

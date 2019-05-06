@@ -6,14 +6,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.EF.Entity
 {
-    public partial class Article: BaseEntity<int>
+    public partial class Article: BaseEntity
     {
         public Article()
         {
             ArticleCategories = new HashSet<ArticleCategories>();
             ArticleTags = new HashSet<ArticleTags>();
         }
-
         [StringLength(200)]
         public string Cover { get; set; }
         public int Author { get; set; }

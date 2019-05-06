@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.EF.Entity
 {
-    public partial class Role: BaseEntity<int>
+    public partial class Role: BaseEntity
     {
         public Role()
         {

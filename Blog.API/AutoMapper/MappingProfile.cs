@@ -11,7 +11,6 @@ namespace Blog.API.AutoMapper
         {
             CreateMap<Article, ArticleViewModel>();
             CreateMap<ArticleViewModel, Article>();
-            CreateMap(typeof(PaginationParameter), typeof(PaginationResponse<>));
         }
     }
 }

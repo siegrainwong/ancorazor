@@ -6,8 +6,10 @@ using System.Text;
 
 namespace Blog.EF.Entity.Base
 {
-    public class BaseEntity<T> : Entity<T> where T: struct
+    public class BaseEntity
     {
+        [Key]
+        public int Id { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime UpdatedAt { get; set; }
         [Column(TypeName = "datetime")]

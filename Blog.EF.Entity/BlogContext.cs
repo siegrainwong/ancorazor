@@ -46,9 +46,7 @@ namespace Blog.EF.Entity
 
             // set default value of parent entity
             foreach (var entityType in builder.Model.GetEntityTypes()
-                .Where(e =>
-                    typeof(BaseEntity<int>).IsAssignableFrom(e.ClrType) ||
-                    typeof(BaseEntity<Guid>).IsAssignableFrom(e.ClrType)))
+                .Where(e => typeof(BaseEntity).IsAssignableFrom(e.ClrType)))
             {
                 builder.Entity(entityType.ClrType).Property("CreatedAt")
                     .HasDefaultValueSql("getdate()");
@@ -115,8 +113,6 @@ namespace Blog.EF.Entity
 
             builder.Entity<OperationLog>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.IPAddress).IsUnicode(false);
             });
 
@@ -150,13 +146,12 @@ namespace Blog.EF.Entity
                 entity.Property(e => e.AuthUpdatedAt).HasDefaultValueSql("(getdate())");
             });
 
-            //1	admin	$SGHASH$V1$10000$RA3Eaw5yszeel1ARIe7iFp2AGWWLd80dAMwr+V4mRcAimv8u	wwy	1	2019-01-27 00:00:00.000	2019-03-10 09:27:10.153	2019-05-05 20:01:44.540	NULL	0
-
             // insert admin
             builder.Entity<Users>().HasData(new Users
             {
                 Id = 1,
                 LoginName = "admin",
+                // 123456
                 Password = "$SGHASH$V1$10000$RA3Eaw5yszeel1ARIe7iFp2AGWWLd80dAMwr+V4mRcAimv8u",
                 RealName = "Admin",
                 Status = 1,

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.EF.Entity
 {
-    public partial class OperationLog: BaseEntity<Guid>
+    public partial class OperationLog: BaseEntity
     {
         public int? UserId { get; set; }
         [StringLength(200)]

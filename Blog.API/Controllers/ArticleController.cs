@@ -55,19 +55,19 @@ namespace Blog.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Insert([FromBody] ArticleUpdateParameter parameter)
         {
-            return Ok(await _service.InsertAsync(parameter));
+            return Ok(await _service.UpsertAsync(parameter));
         }
 
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] ArticleUpdateParameter parameter)
         {
-            return Ok(succeed: await _service.UpdateAsync(parameter), data: parameter.Id);
+            return Ok(await _service.UpsertAsync(parameter));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            return Ok(succeed: await _repository.DeleteAsync(id) > 0, data: id);
+            return Ok(succeed: await _service.DeleteAsync(id), data: id);
         }
     }
 }

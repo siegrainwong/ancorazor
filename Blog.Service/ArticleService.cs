@@ -55,7 +55,6 @@ namespace Blog.Service
 
         public async Task<PaginationResponse<ArticleViewModel>> QueryByPageAsync(ArticlePaginationParameter parameters)
         {
-
             var predicate = PredicateBuilder.New<Article>(true);
             if (parameters.IsDraft.HasValue) predicate.And(x => x.IsDraft == parameters.IsDraft);
             var result = new PaginationResponse<ArticleViewModel> { PageIndex = parameters.PageIndex, PageSize = parameters.PageSize };
@@ -79,67 +78,80 @@ namespace Blog.Service
             return result;
         }
 
-        public virtual async Task<ArticleViewModel> InsertAsync(ArticleUpdateParameter parameter)
+        public async Task<ArticleViewModel> UpsertAsync(ArticleUpdateParameter parameter)
         {
-            FormatArticleData(ref parameter);
+            var transaction = _context.Database.BeginTransaction();
+            try
+            {
+                PreprocessArticleData(parameter);
 
-            if (_context.Article.Any(x => x.Title == parameter.Title || x.Alias == parameter.Alias))
-                throw new DuplicateEntityException("Duplicate title or alias of an article.");
-
-            var categories = await _context.Category.Where(x => parameter.Categories.Contains(x.Name)).ToListAsync();
-            var tags = await _context.Tag.Where(x => parameter.Tags.Contains(x.Name)).ToListAsync();
-
-            var newCategories = parameter.Categories.Except(categories.Select(x => x.Name))
-                .Select(x => new Category { Name = x });
-            var newTags = parameter.Tags.Except(tags.Select(x => x.Name))
-                .Select(x => new Tag { Name = x });
-
-            var entity = _mapper.Map<Article>(parameter);
-            await _context.ArticleCategories
-                .AddRangeAsync(categories.Concat(newCategories)
-                .Select(x => new ArticleCategories
+                var entity = _mapper.Map<Article>(parameter);
+                if (entity.Id != 0)
                 {
-                    ArticleNavigation = entity,
-                    CategoryNavigation = x
-                }));
-            await _context.ArticleTags
-                .AddRangeAsync(tags.Concat(newTags)
-                .Select(x => new ArticleTags
-                {
-                    ArticleNavigation = entity,
-                    TagNavigation = x
-                }));
+                    await _context.ArticleCategories.Where(x => x.Article == entity.Id).DeleteAsync();
+                    await _context.ArticleTags.Where(x => x.Article == entity.Id).DeleteAsync();
+                    entity.UpdatedAt = DateTime.Now;
+                }
 
-            await _context.SaveChangesAsync();
+                var categories = await _context.Category.Where(x => parameter.Categories.Contains(x.Name)).ToListAsync();
+                var tags = await _context.Tag.Where(x => parameter.Tags.Contains(x.Name)).ToListAsync();
 
-            var viewModel = _mapper.Map<ArticleViewModel>(entity);
-            viewModel.Path = GetArticleRoutePath(viewModel);
-            return viewModel;
+                var newCategories = parameter.Categories.Except(categories.Select(x => x.Name))
+                    .Select(x => new Category { Name = x });
+                var newTags = parameter.Tags.Except(tags.Select(x => x.Name))
+                    .Select(x => new Tag { Name = x });
+
+                await _context.ArticleCategories
+                    .AddRangeAsync(categories.Concat(newCategories)
+                    .Select(x => new ArticleCategories
+                    {
+                        ArticleNavigation = entity,
+                        CategoryNavigation = x
+                    }));
+                await _context.ArticleTags
+                    .AddRangeAsync(tags.Concat(newTags)
+                    .Select(x => new ArticleTags
+                    {
+                        ArticleNavigation = entity,
+                        TagNavigation = x
+                    }));
+
+                await _context.BulkSaveChangesAsync();
+                transaction.Commit();
+
+                var viewModel = _mapper.Map<ArticleViewModel>(entity);
+                viewModel.Path = GetArticleRoutePath(viewModel);
+
+                return viewModel;
+            }
+            catch(Exception e)
+            {
+                transaction.Rollback();
+                throw e;
+            }
         }
 
-        [Transaction]
-        public virtual async Task<bool> UpdateAsync(ArticleUpdateParameter parameter)
+        public async Task<bool> DeleteAsync(int id)
         {
-            FormatArticleData(ref parameter);
-            var externalTask = SetArticleTagsAndCategories(parameter.Id, parameter.Tags, parameter.Categories);
-            var updateTask = Repository.UpdateAsync(parameter);
-            await Task.WhenAll(externalTask, updateTask);
+            //TODO:
+            await _context.ArticleCategories.Where(x => x.Article == id).DeleteAsync();
+            await _context.ArticleTags.Where(x => x.Article == id).DeleteAsync();
+            await _context.Article.Where(x => x.Id == id).DeleteAsync();
+            await _context.Tag.Where(x => !_context.ArticleTags.Any(y=>y.Tag == id)).DeleteAsync();
+
+            await _context.BulkSaveChangesAsync();
             return true;
         }
 
-        private void FormatArticleData(ref ArticleUpdateParameter parameter)
+        private void PreprocessArticleData(ArticleUpdateParameter parameter)
         {
             var pinyin = CHNToPinyin.ConvertToPinYin(parameter.Alias ?? parameter.Title);
             parameter.Alias = Regex.Replace(pinyin, Constants.Article.RouteReplaceRegex,
                 " ").Trim().Replace(" ", "-").ToLowerInvariant();
-        }
 
-        private Task SetArticleTagsAndCategories(int articleId, string[] tags, string[] categories)
-        {
-            // 这里要在 ConnectionString 中打开 MultipleActiveResultSets，允许一个连接返回多个结果集。
-            var t1 = Repository.SetArticleTagsAsync(articleId, tags);
-            var t2 = Repository.SetArticleCategoriesAsync(articleId, categories);
-            return Task.WhenAll(t1, t2);
+            if (parameter.Id == 0 &&
+                _context.Article.Any(x => x.Title == parameter.Title || x.Alias == parameter.Alias))
+                throw new DuplicateEntityException("Duplicate title or alias of an article.");
         }
 
         private string GetArticleRoutePath(ArticleViewModel viewModel)

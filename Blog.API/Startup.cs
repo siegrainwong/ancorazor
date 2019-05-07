@@ -150,6 +150,15 @@ namespace Blog.API
 
         private void RegisterEntityFramework(IServiceCollection services)
         {
+            /*
+             * MARK: Parallel async method of ef core.
+             * https://stackoverflow.com/questions/44063832/what-is-the-best-practice-in-ef-core-for-using-parallel-async-calls-with-an-inje
+             */
+            /*
+             * MARK: EF 需要 Repository 模式吗？
+             * 不需要，EF本身就带了仓储实现，再实现一层等于画蛇添足。
+             * 即使需要封装也只需要针对 DbContext 和 DbSet 做扩展方法而已。
+             */
             services.AddDbContext<BlogContext>(options => 
                 options.UseSqlServer(
                     Configuration[$"{nameof(DbConfiguration)}:{nameof(DbConfiguration.ConnectionString)}"]));

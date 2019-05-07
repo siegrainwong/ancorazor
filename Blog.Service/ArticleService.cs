@@ -26,14 +26,12 @@ namespace Blog.Service
 {
     public class ArticleService
     {
-        public IArticleRepository Repository { get; }
         private readonly SEOConfiguration _seoConfiguration;
         private readonly BlogContext _context;
         private readonly IMapper _mapper;
 
-        public ArticleService(IArticleRepository articleRepository, IOptions<SEOConfiguration> seoConfiguration, BlogContext context, IMapper mapper)
+        public ArticleService(IOptions<SEOConfiguration> seoConfiguration, BlogContext context, IMapper mapper)
         {
-            Repository = articleRepository;
             _seoConfiguration = seoConfiguration.Value;
             _context = context;
             _mapper = mapper;
@@ -80,16 +78,17 @@ namespace Blog.Service
 
         public async Task<ArticleViewModel> UpsertAsync(ArticleUpdateParameter parameter)
         {
+            // TODO: AOP transaction
             var transaction = _context.Database.BeginTransaction();
             try
             {
                 PreprocessArticleData(parameter);
 
+                // 这个删除操作必须放在第一个上下文操作中，不然ef会跳线程，不知道里面怎么实现的。
                 var entity = _mapper.Map<Article>(parameter);
                 if (entity.Id != 0)
                 {
-                    await _context.ArticleCategories.Where(x => x.Article == entity.Id).DeleteAsync();
-                    await _context.ArticleTags.Where(x => x.Article == entity.Id).DeleteAsync();
+                    await ResetArticleRelationalData(entity.Id);
                     entity.UpdatedAt = DateTime.Now;
                 }
 
@@ -133,13 +132,22 @@ namespace Blog.Service
 
         public async Task<bool> DeleteAsync(int id)
         {
-            //TODO:
-            await _context.ArticleCategories.Where(x => x.Article == id).DeleteAsync();
-            await _context.ArticleTags.Where(x => x.Article == id).DeleteAsync();
+            await ResetArticleRelationalData(id);
             await _context.Article.Where(x => x.Id == id).DeleteAsync();
-            await _context.Tag.Where(x => !_context.ArticleTags.Any(y=>y.Tag == id)).DeleteAsync();
 
             await _context.BulkSaveChangesAsync();
+            return true;
+        }
+
+        // TODO: transaction
+        private async Task<bool> ResetArticleRelationalData(int articleId)
+        {
+            // drop middle-table data of the article
+            await _context.ArticleCategories.Where(x => x.Article == articleId).DeleteAsync();
+            await _context.ArticleTags.Where(x => x.Article == articleId).DeleteAsync();
+            // drop unused tags and categories
+            await _context.Tag.Where(x => !_context.ArticleTags.Any(y => y.Tag == x.Id)).DeleteAsync();
+            await _context.Category.Where(x => !_context.ArticleCategories.Any(y => y.Category == y.Id)).DeleteAsync();
             return true;
         }
 

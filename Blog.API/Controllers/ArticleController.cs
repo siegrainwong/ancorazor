@@ -17,13 +17,11 @@ namespace Blog.API.Controllers
     [Route("api/[controller]")]
     public class ArticleController : SGControllerBase
     {
-        private readonly IArticleRepository _repository;
         private readonly ArticleService _service;
 
-        public ArticleController(ArticleService service, IArticleRepository repository)
+        public ArticleController(ArticleService service)
         {
             _service = service;
-            _repository = repository;
         }
 
         [AllowAnonymous]

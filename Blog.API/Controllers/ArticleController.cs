@@ -3,7 +3,6 @@
 using Blog.API.Controllers.Base;
 using Blog.API.Messages;
 using Blog.API.Messages.Article;
-using Blog.Repository;
 using Blog.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +17,10 @@ namespace Blog.API.Controllers
     public class ArticleController : SGControllerBase
     {
         private readonly ArticleService _service;
-        private readonly UserService _userService;
 
         public ArticleController(ArticleService service, UserService userService) : base(userService)
         {
             _service = service;
-            _userService = userService;
         }
 
         [AllowAnonymous]

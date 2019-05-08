@@ -64,7 +64,6 @@ namespace Blog.API
             RegisterAppSettings(services);
             RegisterEntityFramework(services);
             RegisterMvc(services);
-            RegisterRepository(services);
             RegisterService(services);
             RegisterSwagger(services);
             RegisterCors(services);
@@ -218,14 +217,6 @@ namespace Blog.API
              * https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-2.2
              */
             services.AddAntiforgery(options => { options.HeaderName = "X-XSRF-TOKEN"; });
-        }
-
-        private void RegisterRepository(IServiceCollection services)
-        {
-            services.AddSmartSql().AddRepositoryFromAssembly(o =>
-            {
-                o.AssemblyString = "Blog.Repository";
-            });
         }
 
         private void RegisterService(IServiceCollection services)

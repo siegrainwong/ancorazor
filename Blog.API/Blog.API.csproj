@@ -51,6 +51,7 @@
   </Target>
 
   <ItemGroup>
+    <PackageReference Include="AspectCore.Extensions.DependencyInjection" Version="1.2.0" />
     <PackageReference Include="AutoMapper" Version="8.1.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
@@ -61,10 +62,6 @@
     <PackageReference Include="Serilog.Exceptions" Version="5.0.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.4" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="7.1.0" />
-    <PackageReference Include="SmartSql.AOP" Version="4.0.29" />
-    <PackageReference Include="SmartSql.DIExtension" Version="4.0.29" />
-    <PackageReference Include="SmartSql.Schema" Version="4.0.26" />
-    <PackageReference Include="SmartSql.TypeHandler" Version="4.0.29" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>
 
@@ -75,25 +72,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Blog.API.Common\Blog.API.Common.csproj" />
     <ProjectReference Include="..\Blog.EF.Entity\Blog.EF.Entity.csproj" />
-    <ProjectReference Include="..\Blog.Entity\Blog.Entity.csproj" />
     <ProjectReference Include="..\Blog.Messages\Blog.API.Messages.csproj" />
-    <ProjectReference Include="..\Blog.Repository\Blog.Repository.csproj" />
     <ProjectReference Include="..\Blog.Service\Blog.Service.csproj" />
     <ProjectReference Include="..\Siegrain.Common\Siegrain.Common.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Maps\*.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SmartSqlMapConfig.Development.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SmartSqlMapConfig.Development.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="SmartSqlMapConfig.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />

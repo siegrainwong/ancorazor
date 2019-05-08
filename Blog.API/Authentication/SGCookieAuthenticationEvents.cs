@@ -1,5 +1,5 @@
-﻿using Blog.Entity;
-using Blog.Repository;
+﻿using Blog.EF.Entity;
+using Blog.Service;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System;
@@ -12,11 +12,11 @@ namespace Blog.API.Authentication
 {
     public class SGCookieAuthenticationEvents : CookieAuthenticationEvents
     {
-        private readonly IUsersRepository _repository;
+        private readonly UserService _service;
 
-        public SGCookieAuthenticationEvents(IUsersRepository repository)
+        public SGCookieAuthenticationEvents(UserService service)
         {
-            _repository = repository;
+            _service = service;
         }
 
         public override async Task ValidatePrincipal(CookieValidatePrincipalContext context)
@@ -31,7 +31,7 @@ namespace Blog.API.Authentication
             if (string.IsNullOrEmpty(authUpdatedTimeStr)) return;
 
             // sign out if user credential info(e.g. password) has changed
-            var user = await _repository.GetByLoginNameAsync(loginName);
+            var user = await _service.GetByLoginNameAsync(loginName);
             var truncated = user.AuthUpdatedAt.AddMilliseconds(-user.AuthUpdatedAt.Millisecond); // truncate millisecond for date comparison
             if (user == null ||
                 !DateTime.TryParse(authUpdatedTimeStr, out var authUpdatedAt) ||

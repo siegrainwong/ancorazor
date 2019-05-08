@@ -2,24 +2,19 @@
 
 using Blog.API.Messages.Users;
 using Blog.EF.Entity;
-using Blog.Repository;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Siegrain.Common;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Blog.API.Controllers.Base;
-using Blog.API.Common.Constants;
 using Blog.Service;
 
 #endregion
@@ -32,13 +27,11 @@ namespace Blog.API.Controllers
     public class UsersController : SGControllerBase
     {
         private readonly IAntiforgery _antiforgery;
-        private readonly IRoleRepository _roleRepository;
         private readonly UserService _service;
         private readonly RoleService _roleService;
 
-        public UsersController(IRoleRepository roleRepository, IAntiforgery antiforgery, UserService service, RoleService roleService) : base(service)
+        public UsersController(IAntiforgery antiforgery, UserService service, RoleService roleService) : base(service)
         {
-            _roleRepository = roleRepository;
             _antiforgery = antiforgery;
             _service = service;
             _roleService = roleService;

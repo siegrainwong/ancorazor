@@ -2,10 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Entity", "Blog.Entity\Blog.Entity.csproj", "{88A185DB-0242-4843-9284-334850FF611C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Repository", "Blog.Repository\Blog.Repository.csproj", "{6A7E8C9E-6A9F-49FD-AD48-F297E515EB10}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Service", "Blog.Service\Blog.Service.csproj", "{D274EF03-E956-40EF-B874-58A5FBE83A00}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.API", "Blog.API\Blog.API.csproj", "{CEA52B07-9E7F-4A4D-AF6D-4C43E7255D0E}"
@@ -24,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{ADA548
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.API.Common", "Blog.API.Common\Blog.API.Common.csproj", "{1872BF42-DF9B-4D3C-ABDA-710EDC38F044}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.EF.Entity", "Blog.EF.Entity\Blog.EF.Entity.csproj", "{B379DBB2-FF6E-4A80-A29B-54BFD98EC166}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.EF.Entity", "Blog.EF.Entity\Blog.EF.Entity.csproj", "{B379DBB2-FF6E-4A80-A29B-54BFD98EC166}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,14 +28,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{88A185DB-0242-4843-9284-334850FF611C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88A185DB-0242-4843-9284-334850FF611C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88A185DB-0242-4843-9284-334850FF611C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88A185DB-0242-4843-9284-334850FF611C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6A7E8C9E-6A9F-49FD-AD48-F297E515EB10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A7E8C9E-6A9F-49FD-AD48-F297E515EB10}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A7E8C9E-6A9F-49FD-AD48-F297E515EB10}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A7E8C9E-6A9F-49FD-AD48-F297E515EB10}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D274EF03-E956-40EF-B874-58A5FBE83A00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D274EF03-E956-40EF-B874-58A5FBE83A00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D274EF03-E956-40EF-B874-58A5FBE83A00}.Release|Any CPU.ActiveCfg = Release|Any CPU

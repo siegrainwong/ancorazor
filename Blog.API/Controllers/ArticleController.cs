@@ -18,10 +18,12 @@ namespace Blog.API.Controllers
     public class ArticleController : SGControllerBase
     {
         private readonly ArticleService _service;
+        private readonly UserService _userService;
 
-        public ArticleController(ArticleService service)
+        public ArticleController(ArticleService service, UserService userService) : base(userService)
         {
             _service = service;
+            _userService = userService;
         }
 
         [AllowAnonymous]

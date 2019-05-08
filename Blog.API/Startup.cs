@@ -118,7 +118,7 @@ namespace Blog.API
             });
 
             var mapper = mappingConfig.CreateMapper();
-            
+
             services.AddSingleton(mapper);
         }
 
@@ -159,7 +159,8 @@ namespace Blog.API
              * 不需要，EF本身就带了仓储实现，再实现一层等于画蛇添足。
              * 即使需要封装也只需要针对 DbContext 和 DbSet 做扩展方法而已。
              */
-            services.AddDbContext<BlogContext>(options => 
+            services.AddScoped<BlogContext, BlogContext>();
+            services.AddDbContext<BlogContext>(options =>
                 options.UseSqlServer(
                     Configuration[$"{nameof(DbConfiguration)}:{nameof(DbConfiguration.ConnectionString)}"]));
         }
@@ -175,7 +176,7 @@ namespace Blog.API
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             })
             .SetCompatibilityVersion(CompatibilityVersion.Latest)
-            .AddJsonOptions(options => 
+            .AddJsonOptions(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
@@ -231,7 +232,7 @@ namespace Blog.API
         {
             var assembly = Assembly.Load("Blog.Service");
             var allTypes = assembly.GetTypes();
-            foreach (var type in allTypes) services.AddSingleton(type);
+            foreach (var type in allTypes) services.AddScoped(type);
         }
 
         private void RegisterSpa(IServiceCollection services)

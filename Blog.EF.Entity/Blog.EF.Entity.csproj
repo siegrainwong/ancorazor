@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20190506085056_DeprecateGenericBaseEntity.cs" />
     <Compile Remove="Migrations\20190506085056_DeprecateGenericBaseEntity.Designer.cs" />
+    <Compile Remove="Migrations\20190507080348_AddRoleSeedData.cs" />
+    <Compile Remove="Migrations\20190507080348_AddRoleSeedData.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

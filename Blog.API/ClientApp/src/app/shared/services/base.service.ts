@@ -196,7 +196,8 @@ export abstract class BaseService implements OnDestroy {
         this.route.navigate([], { fragment: "sign-in" });
         break;
       default:
-        result.message += result.data && "\n" + result.data.message;
+        result.message +=
+          result.data && "\n" + (result.data.message && result.data.message);
         this.util.tip(result.message);
         this.logger.error(result);
     }

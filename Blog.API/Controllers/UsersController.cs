@@ -1,7 +1,7 @@
 #region
 
 using Blog.API.Messages.Users;
-using Blog.Entity;
+using Blog.EF.Entity;
 using Blog.Repository;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
@@ -20,6 +20,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Blog.API.Controllers.Base;
 using Blog.API.Common.Constants;
+using Blog.Service;
 
 #endregion
 
@@ -31,31 +32,30 @@ namespace Blog.API.Controllers
     public class UsersController : SGControllerBase
     {
         private readonly IAntiforgery _antiforgery;
-        private readonly IConfiguration _configuration;
-        private readonly IUsersRepository _repository;
         private readonly IRoleRepository _roleRepository;
+        private readonly UserService _service;
+        private readonly RoleService _roleService;
 
-        public UsersController(IUsersRepository repository, IConfiguration configuration,
-            IRoleRepository roleRepository, IAntiforgery antiforgery)
+        public UsersController(IRoleRepository roleRepository, IAntiforgery antiforgery, UserService service, RoleService roleService) : base(service)
         {
-            _repository = repository;
-            _configuration = configuration;
             _roleRepository = roleRepository;
             _antiforgery = antiforgery;
+            _service = service;
+            _roleService = roleService;
         }
 
         [AllowAnonymous]
         [HttpPost("SignIn")]
         public async Task<IActionResult> SignIn([FromBody] AuthUserParameter parameter)
         {
-            var user = await _repository.GetByLoginNameAsync(parameter.LoginName);
+            var user = await _service.GetByLoginNameAsync(parameter.LoginName);
             if (user == null || !SecurePasswordHasher.Verify(parameter.Password, user.Password))
                 return Forbid();
 
-            var rehashTask = PasswordRehashAsync(user.Id, parameter.Password);
-            await Task.WhenAll(rehashTask, SignIn(user));
-            if (!rehashTask.Result)
+            if (!await _service.PasswordRehashAsync(user, parameter.Password))
                 return NotFound("Password rehash failed.");
+
+            await SignIn(user);
 
             // clear credentials
             user.LoginName = null;
@@ -113,13 +113,13 @@ namespace Blog.API.Controllers
         [Route("Reset")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordParameter parameter)
         {
-            var user = await _repository.GetByLoginNameAsync(parameter.LoginName);
+            var user = await GetCurrentUser();
             if (user == null ||
                 user.Id != parameter.Id ||
                 !SecurePasswordHasher.Verify(parameter.Password, user.Password))
                 return Forbid();
 
-            var rehashTask = PasswordRehashAsync(parameter.Id, parameter.NewPassword, true);
+            var rehashTask = _service.PasswordRehashAsync(user, parameter.NewPassword, true);
             await Task.WhenAll(SignOut(), rehashTask);
             return Ok(succeed: rehashTask.Result);
         }
@@ -128,7 +128,7 @@ namespace Blog.API.Controllers
 
         private async Task SignIn(Users user)
         {
-            var roles = await _roleRepository.GetRolesByUserAsync(user.Id);
+            var roles = await _roleService.GetByUserAsync(user.Id);
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -146,17 +146,6 @@ namespace Blog.API.Controllers
                     IsPersistent = true,
                     ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7)
                 });
-        }
-
-        private async Task<bool> PasswordRehashAsync(int id, string password, bool isNewCreadential = false)
-        {
-            var parameters = new Dictionary<string, object>
-            {
-                [nameof(Users.Id)] = id,
-                [nameof(Users.Password)] = SecurePasswordHasher.Hash(password)
-            };
-            if (isNewCreadential) parameters.Add(nameof(Users.AuthUpdatedAt), DateTime.Now);
-            return await _repository.UpdateAsync(parameters) > 0;
         }
 
         #endregion

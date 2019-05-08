@@ -162,6 +162,27 @@ namespace Blog.EF.Entity
                 IsDeleted = false
             });
 
+            builder.Entity<Role>().HasData(new Role
+            {
+                Id = 1,
+                Name = "Admin",
+                IsDeleted = false,
+                IsEnabled = true,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                Remark = null
+            });
+            builder.Entity<UserRole>().HasData(new UserRole
+            {
+                Id = 1,
+                RoleId = 1,
+                UserId = 1,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                IsDeleted = false,
+                Remark = null
+            });
+
             OnModelCreatingPartial(builder);
         }
 

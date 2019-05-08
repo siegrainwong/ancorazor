@@ -1,10 +1,19 @@
 ﻿using Blog.API.Messages;
+using Blog.EF.Entity;
+using Blog.Service;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Blog.API.Controllers.Base
 {
     public abstract class SGControllerBase : ControllerBase
     {
+        private readonly UserService _service;
+        public SGControllerBase(UserService service)
+        {
+            _service = service;
+        }
         protected new OkObjectResult Ok() 
             => Ok<object>(data: default);
 
@@ -23,5 +32,15 @@ namespace Blog.API.Controllers.Base
             });
 
         protected bool IsAuthenticated => HttpContext.User.Identity.IsAuthenticated;
+
+        protected async Task<Users> GetCurrentUser()
+        {
+            if (!IsAuthenticated) return null;
+
+            var idStr = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (!int.TryParse(idStr, out var id)) return null;
+
+            return await _service.GetByIdAsync(id);
+        }
     }
 }

@@ -24,7 +24,7 @@ using Z.EntityFramework.Plus;
 
 namespace Blog.Service
 {
-    public class ArticleService
+    public partial class ArticleService
     {
         private readonly SEOConfiguration _seoConfiguration;
         private readonly BlogContext _context;
@@ -39,16 +39,14 @@ namespace Blog.Service
 
         public async Task<Article> GetByIdAsync(int id, bool? isDraft)
         {
-            var predicate = PredicateBuilder.New<Article>(x => x.Id == id);
-            if (isDraft.HasValue) predicate.And(x => x.IsDraft == isDraft);
-            return await _context.Article.SingleOrDefaultAsync(predicate);
+            return await _context.Article.SingleOrDefaultAsync(IsDraft(isDraft)
+                .And(x => x.Id == id));
         }
 
         public async Task<Article> GetByAliasAsync(string alias, bool? isDraft)
         {
-            var predicate = PredicateBuilder.New<Article>(x => x.Alias == alias);
-            if (isDraft.HasValue) predicate.And(x => x.IsDraft == isDraft);
-            return await _context.Article.SingleOrDefaultAsync(predicate);
+            return await _context.Article.SingleOrDefaultAsync(IsDraft(isDraft)
+                .And(x => x.Alias == alias));
         }
 
         public async Task<PaginationResponse<ArticleViewModel>> QueryByPageAsync(ArticlePaginationParameter parameters)
@@ -123,7 +121,7 @@ namespace Blog.Service
 
                 return viewModel;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 transaction.Rollback();
                 throw e;

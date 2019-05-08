@@ -11,7 +11,7 @@ namespace Blog.API.Exceptions
     {
         protected override void WriteRenderedMessage(string message, ref string delim, TextWriter output)
         {
-
+            // TODO:
             base.WriteRenderedMessage(message, ref delim, output);
         }
     }

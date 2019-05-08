@@ -1,5 +1,6 @@
 #region
 
+using AspectCore.Configuration;
 using AspectCore.Extensions.DependencyInjection;
 using AspectCore.Injector;
 using AutoMapper;
@@ -9,6 +10,7 @@ using Blog.API.Common.Constants;
 using Blog.API.Exceptions;
 using Blog.API.Filters;
 using Blog.EF.Entity;
+using Blog.Service.Interceptors;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -62,6 +64,7 @@ namespace Blog.API
         {
             RegisterMapper(services);
             RegisterAppSettings(services);
+            RegisterDynamicProxy(services);
             RegisterEntityFramework(services);
             RegisterMvc(services);
             RegisterService(services);
@@ -125,6 +128,15 @@ namespace Blog.API
         {
             services.Configure<SEOConfiguration>(x => Configuration.GetSection(nameof(SEOConfiguration)).Bind(x));
             services.Configure<DbConfiguration>(x => Configuration.GetSection(nameof(DbConfiguration)).Bind(x));
+        }
+
+        private void RegisterDynamicProxy(IServiceCollection services)
+        {
+            /*
+             MARK: AOP
+             ref: https://github.com/dotnetcore/AspectCore-Framework/blob/master/docs/1.%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.md
+             */
+            services.ConfigureDynamicProxy();
         }
 
         private void ResigterProfiler(IServiceCollection services)

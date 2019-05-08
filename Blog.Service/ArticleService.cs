@@ -6,6 +6,7 @@ using Blog.API.Messages;
 using Blog.API.Messages.Article;
 using Blog.API.Messages.Exceptions;
 using Blog.EF.Entity;
+using Blog.Service.Interceptors;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -71,61 +72,51 @@ namespace Blog.Service
             return result;
         }
 
+        [Transaction]
         public async Task<ArticleViewModel> UpsertAsync(ArticleUpdateParameter parameter)
         {
-            // TODO: AOP transaction
-            var transaction = _context.Database.BeginTransaction();
-            try
-            {
-                PreprocessArticleData(parameter);
+            PreprocessArticleData(parameter);
 
-                // 这个删除操作必须放在第一个上下文操作中，不然ef会跳线程，不知道里面怎么实现的。
-                var entity = _mapper.Map<Article>(parameter);
-                if (entity.Id != 0)
+            var entity = _mapper.Map<Article>(parameter);
+            if (entity.Id != 0)
+            {
+                await ResetArticleRelationalData(entity.Id);
+                entity.UpdatedAt = DateTime.Now;
+            }
+
+            var categories = await _context.Category.Where(x => parameter.Categories.Contains(x.Name)).ToListAsync();
+            var tags = await _context.Tag.Where(x => parameter.Tags.Contains(x.Name)).ToListAsync();
+
+            var newCategories = parameter.Categories.Except(categories.Select(x => x.Name))
+                .Select(x => new Category { Name = x });
+            var newTags = parameter.Tags.Except(tags.Select(x => x.Name))
+                .Select(x => new Tag { Name = x });
+
+            await _context.ArticleCategories
+                .AddRangeAsync(categories.Concat(newCategories)
+                .Select(x => new ArticleCategories
                 {
-                    await ResetArticleRelationalData(entity.Id);
-                    entity.UpdatedAt = DateTime.Now;
-                }
+                    ArticleNavigation = entity,
+                    CategoryNavigation = x
+                }));
+            await _context.ArticleTags
+                .AddRangeAsync(tags.Concat(newTags)
+                .Select(x => new ArticleTags
+                {
+                    ArticleNavigation = entity,
+                    TagNavigation = x
+                }));
 
-                var categories = await _context.Category.Where(x => parameter.Categories.Contains(x.Name)).ToListAsync();
-                var tags = await _context.Tag.Where(x => parameter.Tags.Contains(x.Name)).ToListAsync();
+            await _context.BulkSaveChangesAsync();
 
-                var newCategories = parameter.Categories.Except(categories.Select(x => x.Name))
-                    .Select(x => new Category { Name = x });
-                var newTags = parameter.Tags.Except(tags.Select(x => x.Name))
-                    .Select(x => new Tag { Name = x });
+            var viewModel = _mapper.Map<ArticleViewModel>(entity);
+            viewModel.Path = GetArticleRoutePath(viewModel);
 
-                await _context.ArticleCategories
-                    .AddRangeAsync(categories.Concat(newCategories)
-                    .Select(x => new ArticleCategories
-                    {
-                        ArticleNavigation = entity,
-                        CategoryNavigation = x
-                    }));
-                await _context.ArticleTags
-                    .AddRangeAsync(tags.Concat(newTags)
-                    .Select(x => new ArticleTags
-                    {
-                        ArticleNavigation = entity,
-                        TagNavigation = x
-                    }));
-
-                await _context.BulkSaveChangesAsync();
-                transaction.Commit();
-
-                var viewModel = _mapper.Map<ArticleViewModel>(entity);
-                viewModel.Path = GetArticleRoutePath(viewModel);
-
-                return viewModel;
-            }
-            catch (Exception e)
-            {
-                transaction.Rollback();
-                throw e;
-            }
+            return viewModel;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        [Transaction]
+        public virtual async Task<bool> DeleteAsync(int id)
         {
             await ResetArticleRelationalData(id);
             await _context.Article.Where(x => x.Id == id).DeleteAsync();
@@ -134,7 +125,6 @@ namespace Blog.Service
             return true;
         }
 
-        // TODO: transaction
         private async Task<bool> ResetArticleRelationalData(int articleId)
         {
             // drop middle-table data of the article

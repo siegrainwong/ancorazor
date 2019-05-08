@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="AspectCore.Core" Version="1.2.0" />
       <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.0" />
       <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="1.1.16" />
       <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="2.2.5" />

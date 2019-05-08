@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using System.Net;
 using Siegrain.Common;
 using Blog.API.Messages.Exceptions.Attributes;
+using AspectCore.Extensions.Reflection;
 
 #endregion
 
@@ -35,7 +36,11 @@ namespace Blog.API.Filters
             var statusCode = HttpStatusCode.InternalServerError;
             if (exception is APIException apiException)
             {
-                var attribute = apiException.GetType().GetAttribute<APIExceptionCodeAttribute>();
+                /*
+                 MARK: Aspectcore reflection
+                 https://github.com/dotnetcore/AspectCore-Framework/blob/master/docs/reflection-extensions.md
+                 */
+                var attribute = apiException.GetType().GetReflector().GetCustomAttribute<APIExceptionCodeAttribute>();
                 if (attribute != null)
                 {
                     errorCode = attribute.ErrorCode;

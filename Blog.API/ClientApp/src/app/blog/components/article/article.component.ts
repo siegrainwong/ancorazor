@@ -74,6 +74,9 @@ export class ArticleComponent
         );
       }
     });
-    this.content = md.render(this.model.content);
+
+    const yamlFront = require("yaml-front-matter");
+    var content = yamlFront.loadFront(this.model.content).__content;
+    this.content = md.render(content);
   }
 }

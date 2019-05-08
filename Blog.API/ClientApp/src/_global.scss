@@ -202,3 +202,10 @@ img::-moz-selection {
     transform: rotate(360deg);
   }
 }
+
+/* tags */
+.article-tags {
+  a {
+    margin-right: 8px;
+  }
+}

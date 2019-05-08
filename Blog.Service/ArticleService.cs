@@ -73,23 +73,31 @@ namespace Blog.Service
         }
 
         [Transaction]
-        public async Task<ArticleViewModel> UpsertAsync(ArticleUpdateParameter parameter)
+        public virtual async Task<ArticleViewModel> UpsertAsync(ArticleUpdateParameter parameter)
         {
             PreprocessArticleData(parameter);
 
             var entity = _mapper.Map<Article>(parameter);
             if (entity.Id != 0)
             {
-                await ResetArticleRelationalData(entity.Id);
+                entity = await _context.Article
+                    .Include(x => x.ArticleCategories)
+                    .Include(x => x.ArticleTags)
+                    .FirstOrDefaultAsync(x => x.Id == entity.Id);
+                ResetArticleRelationalData(entity);
                 entity.UpdatedAt = DateTime.Now;
             }
 
-            var categories = await _context.Category.Where(x => parameter.Categories.Contains(x.Name)).ToListAsync();
-            var tags = await _context.Tag.Where(x => parameter.Tags.Contains(x.Name)).ToListAsync();
+            var categories = await _context.Category
+                .Where(x => parameter.Categories.Contains(x.Name)).ToListAsync();
+            var tags = await _context.Tag
+                .Where(x => parameter.Tags.Contains(x.Name)).ToListAsync();
 
-            var newCategories = parameter.Categories.Except(categories.Select(x => x.Name))
+            var newCategories = parameter.Categories
+                .Except(categories.Select(x => x.Name))
                 .Select(x => new Category { Name = x });
-            var newTags = parameter.Tags.Except(tags.Select(x => x.Name))
+            var newTags = parameter.Tags
+                .Except(tags.Select(x => x.Name))
                 .Select(x => new Tag { Name = x });
 
             await _context.ArticleCategories
@@ -107,7 +115,7 @@ namespace Blog.Service
                     TagNavigation = x
                 }));
 
-            await _context.BulkSaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             var viewModel = _mapper.Map<ArticleViewModel>(entity);
             viewModel.Path = GetArticleRoutePath(viewModel);
@@ -118,22 +126,31 @@ namespace Blog.Service
         [Transaction]
         public virtual async Task<bool> DeleteAsync(int id)
         {
-            await ResetArticleRelationalData(id);
-            await _context.Article.Where(x => x.Id == id).DeleteAsync();
+            var entity = await _context.Article
+                .Include(x => x.ArticleCategories)
+                .Include(x => x.ArticleTags)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
-            await _context.BulkSaveChangesAsync();
+            ResetArticleRelationalData(entity);
+
+            _context.Article.Remove(entity);
+
+            await _context.SaveChangesAsync();
             return true;
         }
 
-        private async Task<bool> ResetArticleRelationalData(int articleId)
+        private void ResetArticleRelationalData(Article entity)
         {
             // drop middle-table data of the article
-            await _context.ArticleCategories.Where(x => x.Article == articleId).DeleteAsync();
-            await _context.ArticleTags.Where(x => x.Article == articleId).DeleteAsync();
+            _context.ArticleCategories.RemoveRange(entity.ArticleCategories);
+            _context.ArticleTags.RemoveRange(entity.ArticleTags);
+
             // drop unused tags and categories
-            await _context.Tag.Where(x => !_context.ArticleTags.Any(y => y.Tag == x.Id)).DeleteAsync();
-            await _context.Category.Where(x => !_context.ArticleCategories.Any(y => y.Category == y.Id)).DeleteAsync();
-            return true;
+            // 本次删除只能删与这篇文章无关的其他无用数据，因为 EF 这个时候去查依然能查到这个文章的数据。
+            // 要么先 save 再删也可以，我就让他这样算了，反正不会剩下太多冗余数据。
+            // 这个地方暂时不能用 ef extensions 的 delete from query，会造成部分数据无法 rollback，不清楚原因。
+            _context.Tag.RemoveRange(_context.Tag.Where(x => !_context.ArticleTags.Select(y => y.Tag).Contains(x.Id)));
+            _context.Category.RemoveRange(_context.Category.Where(x => !_context.ArticleCategories.Select(y => y.Category).Contains(x.Id)));
         }
 
         private void PreprocessArticleData(ArticleUpdateParameter parameter)

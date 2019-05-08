@@ -1,7 +1,6 @@
 #region
 
 using Blog.API.Common.Constants;
-using Blog.API.Exceptions;
 using Blog.API.Messages;
 using Blog.API.Messages.Exceptions;
 using Microsoft.AspNetCore.Hosting;

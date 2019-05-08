@@ -53,13 +53,12 @@ export class ArticleComponent
   }
 
   private async setupViewer() {
-    this.content = this.model.content;
-    if (!this.store.renderFromClient) return;
-
-    await this._util.loadExternalScripts([externalScripts.highlight]);
+    const renderFromClient = this.store.renderFromClient;
+    if (renderFromClient)
+      await this._util.loadExternalScripts([externalScripts.highlight]);
     const md = require("markdown-it")({
       highlight: function(str, lang) {
-        if (lang && hljs.getLanguage(lang)) {
+        if (renderFromClient && lang && hljs.getLanguage(lang)) {
           try {
             return (
               '<pre class="hljs"><code class="hljs-code">' +
@@ -75,7 +74,6 @@ export class ArticleComponent
         );
       }
     });
-    var result = md.render(this.model.content);
-    this.content = result;
+    this.content = md.render(this.model.content);
   }
 }

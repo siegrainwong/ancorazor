@@ -1,18 +1,15 @@
 #region
 
-using AspectCore.Configuration;
 using AspectCore.Extensions.DependencyInjection;
 using AspectCore.Injector;
 using AutoMapper;
 using Blog.API.Authentication;
 using Blog.API.AutoMapper;
 using Blog.API.Common.Constants;
-using Blog.API.Exceptions;
 using Blog.API.Filters;
+using Blog.API.Logger;
 using Blog.EF.Entity;
-using Blog.Service.Interceptors;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,17 +21,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
-using Siegrain.Common;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Net;
 using System.Reflection;

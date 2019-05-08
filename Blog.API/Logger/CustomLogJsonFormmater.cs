@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blog.API.Exceptions
+namespace Blog.API.Logger
 {
     public class CustomLogJsonFormmater: ElasticsearchJsonFormatter
     {

@@ -83,13 +83,14 @@ namespace Blog.Service
         {
             PreprocessArticleData(parameter);
 
-            var entity = _mapper.Map<Article>(parameter);
-            if (entity.Id != 0)
+            Article entity = null;
+            if (parameter.Id != 0)
             {
-                entity = await GetByIdIncludeAsync(entity.Id);
+                entity = await GetByIdIncludeAsync(parameter.Id);
                 DropRelations(entity);
                 entity.UpdatedAt = DateTime.Now;
             }
+            _mapper.Map(parameter, entity);
 
             var categories = await _context.Category
                 .Where(x => parameter.Categories.Contains(x.Name)).ToListAsync();

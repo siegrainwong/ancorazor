@@ -48,8 +48,9 @@ namespace Blog.Service
 
         public async Task<Article> GetByAliasAsync(string alias, bool? isDraft)
         {
-            return await _context.Article.SingleOrDefaultAsync(IsDraft(isDraft)
-                .And(x => x.Alias == alias));
+            var entity = await _getArticleByAliasIncludedAsync(_context, alias);
+            if (isDraft.HasValue && entity.IsDraft != isDraft) return null;
+            return entity;
         }
 
         public async Task<PaginationResponse<ArticleViewModel>> QueryByPageAsync(ArticlePaginationParameter parameters)

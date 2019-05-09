@@ -5,6 +5,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Blog.Service
 {
@@ -35,5 +37,13 @@ namespace Blog.Service
                     .Include(x => x.ArticleCategories)
                     .Include(x => x.ArticleTags)
                     .FirstOrDefault(x => x.Alias == alias));
+
+        private static readonly Func<BlogContext, AsyncEnumerable<Tag>> _getUnusedTags =
+            EF.CompileAsyncQuery((BlogContext context) =>
+                context.Tag.Where(x => !context.ArticleTags.Select(y => y.Tag).Contains(x.Id)));
+
+        private static readonly Func<BlogContext, AsyncEnumerable<Category>> _getUnusedCategories =
+            EF.CompileAsyncQuery((BlogContext context) =>
+                context.Category.Where(x => !context.ArticleCategories.Select(y => y.Category).Contains(x.Id)));
     }
 }

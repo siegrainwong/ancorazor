@@ -11,6 +11,7 @@ using System.Net;
 using Siegrain.Common;
 using Blog.API.Messages.Exceptions.Attributes;
 using AspectCore.Extensions.Reflection;
+using AspectCore.DynamicProxy;
 
 #endregion
 
@@ -33,6 +34,10 @@ namespace Blog.API.Filters
 
             var errorCode = Constants.ErrorCode.Default;
             var statusCode = HttpStatusCode.InternalServerError;
+
+            if (exception is AspectInvocationException aopException)
+                exception = aopException.InnerException;
+
             if (exception is APIException apiException)
             {
                 /*

@@ -75,13 +75,13 @@ namespace Blog.Entity
                 entity.HasOne(d => d.ArticleNavigation)
                     .WithMany(p => p.ArticleCategories)
                     .HasForeignKey(d => d.Article)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_ArticleCategories_Article");
 
                 entity.HasOne(d => d.CategoryNavigation)
                     .WithMany(p => p.ArticleCategories)
                     .HasForeignKey(d => d.Category)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_ArticleCategories_Category");
             });
 
@@ -92,13 +92,13 @@ namespace Blog.Entity
                 entity.HasOne(d => d.ArticleNavigation)
                     .WithMany(p => p.ArticleTags)
                     .HasForeignKey(d => d.Article)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_ArticleTags_Article");
 
                 entity.HasOne(d => d.TagNavigation)
                     .WithMany(p => p.ArticleTags)
                     .HasForeignKey(d => d.Tag)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_ArticleTags_Tag");
             });
 

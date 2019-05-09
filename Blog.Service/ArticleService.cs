@@ -87,7 +87,7 @@ namespace Blog.Service
             if (entity.Id != 0)
             {
                 entity = await GetByIdIncludeAsync(entity.Id);
-                await ResetArticleRelationalData(entity);
+                DropRelations(entity);
                 entity.UpdatedAt = DateTime.Now;
             }
 
@@ -119,10 +119,10 @@ namespace Blog.Service
                 }));
 
             await _context.SaveChangesAsync();
+            await DropUnusedTagsAndCategories();
 
             var viewModel = _mapper.Map<ArticleViewModel>(entity);
             viewModel.Path = GetArticleRoutePath(viewModel);
-
             return viewModel;
         }
 
@@ -131,28 +131,29 @@ namespace Blog.Service
         {
             var entity = await GetByIdIncludeAsync(id);
 
-            await ResetArticleRelationalData(entity);
-
+            DropRelations(entity);
             _context.Article.Remove(entity);
-
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
-        private async Task<bool> ResetArticleRelationalData(Article entity)
-        {
-            // drop relational data of the article
-            _context.ArticleCategories.RemoveRange(entity.ArticleCategories);
-            _context.ArticleTags.RemoveRange(entity.ArticleTags);
 
             // ensure relational data has been removed
             // otherwise redundancies won't remove from stmts below.
             await _context.SaveChangesAsync();
 
-            // drop redundancy tags and categories
-            _context.Tag.RemoveRange(_context.Tag.Where(x => !_context.ArticleTags.Select(y => y.Tag).Contains(x.Id)));
-            _context.Category.RemoveRange(_context.Category.Where(x => !_context.ArticleCategories.Select(y => y.Category).Contains(x.Id)));
+            await DropUnusedTagsAndCategories();
+            return true;
+        }
 
+        private void DropRelations(Article entity)
+        {
+            // drop relational data of the article
+            _context.ArticleCategories.RemoveRange(entity.ArticleCategories);
+            _context.ArticleTags.RemoveRange(entity.ArticleTags);
+        }
+
+        private async Task<bool> DropUnusedTagsAndCategories()
+        {
+            _context.Tag.RemoveRange(await _getUnusedTags(_context).ToListAsync());
+            _context.Category.RemoveRange(await _getUnusedCategories(_context).ToListAsync());
+            await _context.SaveChangesAsync();
             return true;
         }
 

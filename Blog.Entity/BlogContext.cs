@@ -1,12 +1,12 @@
 ﻿using Blog.API.Common.Constants;
-using Blog.EF.Entity.Base;
+using Blog.Entity.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Linq;
 
-namespace Blog.EF.Entity
+namespace Blog.Entity
 {
     public partial class BlogContext : DbContext
     {

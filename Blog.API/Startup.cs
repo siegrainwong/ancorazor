@@ -8,7 +8,7 @@ using Blog.API.AutoMapper;
 using Blog.API.Common.Constants;
 using Blog.API.Filters;
 using Blog.API.Logger;
-using Blog.EF.Entity;
+using Blog.Entity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;

@@ -1,39 +1,23 @@
-#region
-
+﻿using Blog.Entity.Base;
 using System;
-
-#endregion
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.Entity
 {
-    /// <summary>
-    /// Tag
-    /// </summary>
-    public class Tag
+    public partial class Tag: BaseEntity
     {
-        /// <summary>
-        /// CreatedAt
-        /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public Tag()
+        {
+            ArticleTags = new HashSet<ArticleTags>();
+        }
 
-        /// <summary>
-        /// Id
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Name
-        /// </summary>
+        [Required]
+        [StringLength(30)]
         public string Name { get; set; }
 
-        /// <summary>
-        /// Remark
-        /// </summary>
-        public string Remark { get; set; }
-
-        /// <summary>
-        /// UpdatedAt
-        /// </summary>
-        public DateTime? UpdatedAt { get; set; }
+        [InverseProperty("TagNavigation")]
+        public virtual ICollection<ArticleTags> ArticleTags { get; set; }
     }
 }

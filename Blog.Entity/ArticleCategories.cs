@@ -1,34 +1,19 @@
-#region
-
+﻿using Blog.Entity.Base;
 using System;
-
-#endregion
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.Entity
 {
-    /// <summary>
-    /// ArticleCategories
-    /// </summary>
-    public class ArticleCategories
+    public partial class ArticleCategories : BaseEntity
     {
-        /// <summary>
-        /// Article
-        /// </summary>
         public int Article { get; set; }
-
-        /// <summary>
-        /// Category
-        /// </summary>
         public int Category { get; set; }
 
-        /// <summary>
-        /// CreatedAt
-        /// </summary>
-        public DateTime CreatedAt { get; set; }
-
-        /// <summary>
-        /// Id
-        /// </summary>
-        public int Id { get; set; }
+        [ForeignKey("Article")]
+        [InverseProperty("ArticleCategories")]
+        public virtual Article ArticleNavigation { get; set; }
+        [ForeignKey("Category")]
+        [InverseProperty("ArticleCategories")]
+        public virtual Category CategoryNavigation { get; set; }
     }
 }

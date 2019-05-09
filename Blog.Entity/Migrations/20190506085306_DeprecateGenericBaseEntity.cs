@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Blog.EF.Entity.Migrations
+namespace Blog.Entity.Migrations
 {
     public partial class DeprecateGenericBaseEntity : Migration
     {

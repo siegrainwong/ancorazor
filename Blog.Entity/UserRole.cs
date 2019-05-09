@@ -1,39 +1,22 @@
-#region
-
+﻿using Blog.Entity.Base;
 using System;
-
-#endregion
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.Entity
 {
-    /// <summary>
-    /// UserRole
-    /// </summary>
-    public class UserRole
+    public partial class UserRole: BaseEntity
     {
-        /// <summary>
-        /// CreatedAt
-        /// </summary>
-        public DateTime CreatedAt { get; set; }
-
-        /// <summary>
-        /// Id
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// RoleId
-        /// </summary>
-        public int RoleId { get; set; }
-
-        /// <summary>
-        /// UpdatedAt
-        /// </summary>
-        public DateTime? UpdatedAt { get; set; }
-
-        /// <summary>
-        /// UserId
-        /// </summary>
         public int UserId { get; set; }
+        public int RoleId { get; set; }
+        public bool IsDeleted { get; set; }
+
+        [ForeignKey("RoleId")]
+        [InverseProperty("UserRole")]
+        public virtual Role Role { get; set; }
+        [ForeignKey("UserId")]
+        [InverseProperty("UserRole")]
+        public virtual Users User { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Blog.API.Messages;
-using Blog.EF.Entity;
+using Blog.Entity;
 using Blog.Service;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

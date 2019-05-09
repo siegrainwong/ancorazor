@@ -72,7 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Blog.API.Common\Blog.API.Common.csproj" />
-    <ProjectReference Include="..\Blog.EF.Entity\Blog.EF.Entity.csproj" />
+    <ProjectReference Include="..\Blog.Entity\Blog.Entity.csproj" />
     <ProjectReference Include="..\Blog.Messages\Blog.API.Messages.csproj" />
     <ProjectReference Include="..\Blog.Service\Blog.Service.csproj" />
     <ProjectReference Include="..\Siegrain.Common\Siegrain.Common.csproj" />

@@ -1,4 +1,4 @@
-﻿using Blog.EF.Entity;
+﻿using Blog.Entity;
 using Microsoft.EntityFrameworkCore;
 using Siegrain.Common;
 using System;

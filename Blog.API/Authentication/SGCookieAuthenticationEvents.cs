@@ -1,4 +1,4 @@
-﻿using Blog.EF.Entity;
+﻿using Blog.Entity;
 using Blog.Service;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

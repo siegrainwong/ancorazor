@@ -1,84 +1,42 @@
-#region
-
+﻿using Blog.Entity.Base;
 using System;
-
-#endregion
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.Entity
 {
-    /// <summary>
-    /// Article
-    /// </summary>
-    public class Article
+    public partial class Article: BaseEntity
     {
-        /// <summary>
-        /// Author
-        /// </summary>
-        public int? Author { get; set; }
-
-        /// <summary>
-        /// Category
-        /// </summary>
-        public string Category { get; set; }
-
-        /// <summary>
-        /// CommentCount
-        /// </summary>
-        public int CommentCount { get; set; }
-
-        /// <summary>
-        /// Content
-        /// </summary>
-        public string Content { get; set; }
-
-        /// <summary>
-        /// Cover
-        /// </summary>
+        public Article()
+        {
+            ArticleCategories = new HashSet<ArticleCategories>();
+            ArticleTags = new HashSet<ArticleTags>();
+        }
+        [StringLength(200)]
         public string Cover { get; set; }
-
-        /// <summary>
-        /// CreatedAt
-        /// </summary>
-        public DateTime CreatedAt { get; set; }
-
-        /// <summary>
-        /// Digest
-        /// </summary>
+        public int Author { get; set; }
+        [Required]
+        [StringLength(256)]
+        public string Title { get; set; }
+        [Required]
+        [Column(TypeName = "ntext")]
+        public string Content { get; set; }
+        [StringLength(500)]
         public string Digest { get; set; }
-
-        /// <summary>
-        /// Alias
-        /// </summary>
+        [Required]
+        [StringLength(256)]
         public string Alias { get; set; }
-
-        /// <summary>
-        /// Id
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// IsDraft
-        /// </summary>
+        public int ViewCount { get; set; }
+        public int CommentCount { get; set; }
         public bool IsDraft { get; set; }
 
-        /// <summary>
-        /// Remark
-        /// </summary>
-        public string Remark { get; set; }
-
-        /// <summary>
-        /// Title
-        /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
-        /// UpdatedAt
-        /// </summary>
-        public DateTime? UpdatedAt { get; set; }
-
-        /// <summary>
-        /// ViewCount
-        /// </summary>
-        public int ViewCount { get; set; }
+        [ForeignKey("Author")]
+        [InverseProperty("Article")]
+        public virtual Users AuthorNavigation { get; set; }
+        [InverseProperty("ArticleNavigation")]
+        public virtual ICollection<ArticleCategories> ArticleCategories { get; set; }
+        [InverseProperty("ArticleNavigation")]
+        public virtual ICollection<ArticleTags> ArticleTags { get; set; }
     }
 }

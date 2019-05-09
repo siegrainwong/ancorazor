@@ -1,63 +1,35 @@
-#region
-
+锘縰sing Blog.Entity.Base;
 using System;
-
-#endregion
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.Entity
 {
-    /// <summary>
-    /// Users
-    /// </summary>
-    public class Users
+    public partial class Users: BaseEntity
     {
-        /// <summary>
-        /// CreatedAt
-        /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public Users()
+        {
+            Article = new HashSet<Article>();
+            UserRole = new HashSet<UserRole>();
+        }
 
-        /// <summary>
-        /// Id
-        /// </summary>
-        public int Id { get; set; }
-
+        [Required]
+        [StringLength(60)]
+        public string LoginName { get; set; }
+        [Required]
+        [StringLength(256)]
+        public string Password { get; set; }
+        [StringLength(60)]
+        public string RealName { get; set; }
+        public int Status { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime AuthUpdatedAt { get; set; }
         public bool IsDeleted { get; set; }
 
-        /// <summary>
-        /// LoginName
-        /// </summary>
-        public string LoginName { get; set; }
-
-        /// <summary>
-        /// Password
-        /// </summary>
-        public string Password { get; set; }
-
-        /// <summary>
-        /// RealName
-        /// </summary>
-        public string RealName { get; set; }
-
-        /// <summary>
-        /// Remark
-        /// </summary>
-        public string Remark { get; set; }
-
-        /// <summary>
-        /// Status
-        /// </summary>
-        public int Status { get; set; }
-
-        /// <summary>
-        /// UpdatedAt
-        /// </summary>
-        public DateTime? UpdatedAt { get; set; }
-
-        /// <summary>
-        /// 上次凭据变更时间
-        /// 
-        /// 当该时间大于凭据 Cookie 中的 AuthUpdatedAt 值时，需要清除 Cookie 让用户重新登录
-        /// </summary>
-        public DateTime AuthUpdatedAt { get; set; }
+        [InverseProperty("AuthorNavigation")]
+        public virtual ICollection<Article> Article { get; set; }
+        [InverseProperty("User")]
+        public virtual ICollection<UserRole> UserRole { get; set; }
     }
 }

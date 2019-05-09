@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Blog.EF.Entity\Blog.EF.Entity.csproj" />
+        <ProjectReference Include="..\Blog.Entity\Blog.Entity.csproj" />
         <ProjectReference Include="..\Blog.Messages\Blog.API.Messages.csproj" />
     </ItemGroup>
 

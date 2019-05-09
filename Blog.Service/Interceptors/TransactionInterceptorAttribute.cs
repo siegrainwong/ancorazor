@@ -1,6 +1,6 @@
 ﻿using AspectCore.DynamicProxy;
 using AspectCore.Injector;
-using Blog.EF.Entity;
+using Blog.Entity;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;

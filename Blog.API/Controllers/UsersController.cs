@@ -1,7 +1,7 @@
 #region
 
 using Blog.API.Messages.Users;
-using Blog.EF.Entity;
+using Blog.Entity;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

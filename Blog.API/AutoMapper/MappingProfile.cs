@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Blog.API.Messages;
 using Blog.API.Messages.Article;
-using Blog.EF.Entity;
+using Blog.Entity;
 
 namespace Blog.API.AutoMapper
 {

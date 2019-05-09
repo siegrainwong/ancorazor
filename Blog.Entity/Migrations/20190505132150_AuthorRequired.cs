@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Blog.EF.Entity.Migrations
+namespace Blog.Entity.Migrations
 {
     public partial class AuthorRequired : Migration
     {

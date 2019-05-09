@@ -20,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{ADA548
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.API.Common", "Blog.API.Common\Blog.API.Common.csproj", "{1872BF42-DF9B-4D3C-ABDA-710EDC38F044}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.EF.Entity", "Blog.EF.Entity\Blog.EF.Entity.csproj", "{B379DBB2-FF6E-4A80-A29B-54BFD98EC166}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Entity", "Blog.Entity\Blog.Entity.csproj", "{B379DBB2-FF6E-4A80-A29B-54BFD98EC166}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

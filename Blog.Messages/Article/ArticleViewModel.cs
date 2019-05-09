@@ -1,4 +1,4 @@
-﻿using ArticleModel = Blog.EF.Entity.Article;
+﻿using ArticleModel = Blog.Entity.Article;
 
 namespace Blog.API.Messages.Article
 {

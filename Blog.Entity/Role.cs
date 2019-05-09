@@ -1,44 +1,24 @@
-#region
-
+﻿using Blog.Entity.Base;
 using System;
-
-#endregion
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.Entity
 {
-    /// <summary>
-    /// Role
-    /// </summary>
-    public class Role
+    public partial class Role: BaseEntity
     {
-        /// <summary>
-        /// CreatedAt
-        /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public Role()
+        {
+            UserRole = new HashSet<UserRole>();
+        }
 
-        /// <summary>
-        /// Id
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// IsEnabled
-        /// </summary>
-        public bool IsEnabled { get; set; }
-
-        /// <summary>
-        /// Name
-        /// </summary>
+        [StringLength(50)]
         public string Name { get; set; }
+        public bool IsEnabled { get; set; }
+        public bool IsDeleted { get; set; }
 
-        /// <summary>
-        /// Remark
-        /// </summary>
-        public string Remark { get; set; }
-
-        /// <summary>
-        /// UpdatedAt
-        /// </summary>
-        public DateTime? UpdatedAt { get; set; }
+        [InverseProperty("Role")]
+        public virtual ICollection<UserRole> UserRole { get; set; }
     }
 }

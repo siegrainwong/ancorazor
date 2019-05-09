@@ -5,7 +5,7 @@ using Blog.API.Common.Constants;
 using Blog.API.Messages;
 using Blog.API.Messages.Article;
 using Blog.API.Messages.Exceptions;
-using Blog.EF.Entity;
+using Blog.Entity;
 using Blog.Service.Interceptors;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +39,11 @@ namespace Blog.Service
         {
             return await _context.Article.SingleOrDefaultAsync(IsDraft(isDraft)
                 .And(x => x.Id == id));
+        }
+
+        private async Task<Article> GetByIdIncludeAsync(int id)
+        {
+            return await _getArticleIncludedAsync(_context, id);
         }
 
         public async Task<Article> GetByAliasAsync(string alias, bool? isDraft)
@@ -80,10 +85,7 @@ namespace Blog.Service
             var entity = _mapper.Map<Article>(parameter);
             if (entity.Id != 0)
             {
-                entity = await _context.Article
-                    .Include(x => x.ArticleCategories)
-                    .Include(x => x.ArticleTags)
-                    .FirstOrDefaultAsync(x => x.Id == entity.Id);
+                entity = await GetByIdIncludeAsync(entity.Id);
                 await ResetArticleRelationalData(entity);
                 entity.UpdatedAt = DateTime.Now;
             }
@@ -126,10 +128,7 @@ namespace Blog.Service
         [Transaction]
         public virtual async Task<bool> DeleteAsync(int id)
         {
-            var entity = await _context.Article
-                .Include(x => x.ArticleCategories)
-                .Include(x => x.ArticleTags)
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await GetByIdIncludeAsync(id);
 
             await ResetArticleRelationalData(entity);
 

@@ -1,10 +1,10 @@
-﻿using Blog.EF.Entity.Base;
+﻿using Blog.Entity.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Blog.EF.Entity
+namespace Blog.Entity
 {
     public partial class ArticleTags: BaseEntity
     {

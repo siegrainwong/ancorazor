@@ -1,64 +1,23 @@
-#region
-
+﻿using Blog.Entity.Base;
 using System;
-
-#endregion
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.Entity
 {
-    /// <summary>
-    /// OperationLog
-    /// </summary>
-    public class OperationLog
+    public partial class OperationLog: BaseEntity
     {
-        /// <summary>
-        /// Action
-        /// </summary>
-        public string Action { get; set; }
-
-        /// <summary>
-        /// Area
-        /// </summary>
-        public string Area { get; set; }
-
-        /// <summary>
-        /// Controller
-        /// </summary>
-        public string Controller { get; set; }
-
-        /// <summary>
-        /// CreatedAt
-        /// </summary>
-        public DateTime CreatedAt { get; set; }
-
-        /// <summary>
-        /// Guid
-        /// </summary>
-        public Guid Guid { get; set; }
-
-        /// <summary>
-        /// IPAddress
-        /// </summary>
-        public string IPAddress { get; set; }
-
-        /// <summary>
-        /// LoginName
-        /// </summary>
+        public int? UserId { get; set; }
+        [StringLength(200)]
         public string LoginName { get; set; }
-
-        /// <summary>
-        /// LogTime
-        /// </summary>
-        public DateTime LogTime { get; set; }
-
-        /// <summary>
-        /// Remark
-        /// </summary>
-        public string Remark { get; set; }
-
-        /// <summary>
-        /// UserId
-        /// </summary>
-        public int UserId { get; set; }
+        [StringLength(200)]
+        public string Area { get; set; }
+        [StringLength(200)]
+        public string Controller { get; set; }
+        [StringLength(200)]
+        public string Action { get; set; }
+        [StringLength(50)]
+        public string IPAddress { get; set; }
     }
 }

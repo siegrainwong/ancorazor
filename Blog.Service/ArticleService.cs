@@ -52,7 +52,13 @@ namespace Blog.Service
         {
             var entity = await _getArticleByAliasAsync(_context, alias);
             if (isDraft.HasValue && entity.IsDraft != isDraft) return null;
-            return entity;
+
+            var viewModel = _mapper.Map<ArticleViewModel>(entity);
+            if (viewModel.Previous != null)
+                viewModel.Previous.Path = GetArticleRoutePath(viewModel.Previous);
+            if (viewModel.Next != null)
+                viewModel.Next.Path = GetArticleRoutePath(viewModel.Next);
+            return viewModel;
         }
 
         public async Task<PaginationResponse<ArticleViewModel>> QueryByPageAsync(ArticlePaginationParameter parameters)
@@ -91,8 +97,12 @@ namespace Blog.Service
                 entity = await GetByIdIncludeAsync(parameter.Id);
                 DropRelations(entity);
                 entity.UpdatedAt = DateTime.Now;
+                _mapper.Map(parameter, entity);
             }
-            _mapper.Map(parameter, entity);
+            else
+            {
+                entity = _mapper.Map<Article>(parameter);
+            }
 
             var categories = await _context.Category
                 .Where(x => parameter.Categories.Contains(x.Name)).ToListAsync();
@@ -169,16 +179,26 @@ namespace Blog.Service
                 throw new DuplicateEntityException("Duplicate title or alias of an article.");
         }
 
+        private string GetArticleRoutePath(dynamic entity)
+        {
+            if (entity == null) return null;
+            return GetArticleRoutePath(entity.Id, entity.CreatedAt, entity.Alias, entity.Category);
+        }
+
         private string GetArticleRoutePath(ArticleViewModel viewModel)
         {
-            var id = viewModel.Id.ToString();
-            var date = viewModel.CreatedAt.ToString("yyyy/MM/dd");
-            var alias = viewModel.Alias;
+            if (viewModel == null) return null;
+
             var category = viewModel.ArticleCategories.FirstOrDefault()?.CategoryNavigation.Alias ?? Constants.Article.DefaultCategoryName;
 
+            return GetArticleRoutePath(viewModel.Id, viewModel.CreatedAt, viewModel.Alias, category);
+        }
+
+        private string GetArticleRoutePath(int id, DateTime date, string alias, string category)
+        {
             var path = _seoConfiguration.ArticleRouteMapping
-                .Replace(nameof(id), id)
-                .Replace(nameof(date), date)
+                .Replace(nameof(id), id.ToString())
+                .Replace(nameof(date), date.ToString("yyyy/MM/dd"))
                 .Replace(nameof(category), CHNToPinyin.ConvertToPinYin(category))
                 .Replace(nameof(alias), alias)
                 .ToLowerInvariant();

@@ -14,6 +14,8 @@ export default class ArticleModel extends BaseModel {
   path: string;
   cover: string = "assets/img/placeholder.jpg";
   isDraft: boolean = false;
+  previous: { title: string; path: string };
+  next: { title: string; path: string };
 
   // helper fields
   animation?: SGAnimation;

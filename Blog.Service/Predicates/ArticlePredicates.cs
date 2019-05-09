@@ -54,7 +54,27 @@ namespace Blog.Service
                         {
                             c.CategoryNavigation.Name,
                             c.CategoryNavigation.Alias
-                        })
+                        }),
+                        Previous = context.Article.Where(p => p.CreatedAt > x.CreatedAt)
+                            .OrderBy(p => p.CreatedAt).Select(p => new
+                            {
+                                p.Id,
+                                p.CreatedAt,
+                                p.Title,
+                                p.Alias,
+                                Path = "",
+                                Category = p.ArticleCategories.FirstOrDefault().CategoryNavigation.Name
+                            }).FirstOrDefault(),
+                        Next = context.Article.Where(p => p.CreatedAt < x.CreatedAt)
+                            .OrderByDescending(p => p.CreatedAt).Select(p => new
+                            {
+                                p.Id,
+                                p.CreatedAt,
+                                p.Title,
+                                p.Alias,
+                                Path = "",
+                                Category = p.ArticleCategories.FirstOrDefault().CategoryNavigation.Name
+                            }).FirstOrDefault()
                     })
                     .FirstOrDefault(x => x.Alias == alias));
 

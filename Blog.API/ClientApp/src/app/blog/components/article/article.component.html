@@ -23,8 +23,28 @@
       </div>
       <div class="row justify-content-between article-actions">
         <div class="col-6">
-          <a mat-stroked-button href="/tags/1">← Prev</a>
-          <a mat-stroked-button href="/tags/1">Next →</a>
+          <ng-container *ngIf="model.previous">
+            <a
+              mat-stroked-button
+              [title]="model.previous.title"
+              [routerLink]="'/article/' + model.previous.path"
+              >← Prev</a
+            >
+          </ng-container>
+          <ng-container *ngIf="!model.previous">
+            <a mat-stroked-button disabled>← Prev</a>
+          </ng-container>
+          <ng-container *ngIf="model.next">
+            <a
+              mat-stroked-button
+              [title]="model.next.title"
+              [routerLink]="'/article/' + model.next.path"
+              >Next →</a
+            >
+          </ng-container>
+          <ng-container *ngIf="!model.next">
+            <a mat-stroked-button disabled>Next →</a>
+          </ng-container>
         </div>
         <div class="col-6">
           <!-- TODO: Share -->

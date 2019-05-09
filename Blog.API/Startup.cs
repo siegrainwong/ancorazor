@@ -110,6 +110,7 @@ namespace Blog.API
             var mappingConfig = new MapperConfiguration(x =>
             {
                 x.AddProfile<MappingProfile>();
+                x.CreateMissingTypeMaps = true; // using dynamic map
                 x.ValidateInlineMaps = false;   // ignore unmapped properties
             });
 

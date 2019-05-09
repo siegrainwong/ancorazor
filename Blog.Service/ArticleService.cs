@@ -84,7 +84,7 @@ namespace Blog.Service
                     .Include(x => x.ArticleCategories)
                     .Include(x => x.ArticleTags)
                     .FirstOrDefaultAsync(x => x.Id == entity.Id);
-                ResetArticleRelationalData(entity);
+                await ResetArticleRelationalData(entity);
                 entity.UpdatedAt = DateTime.Now;
             }
 
@@ -131,7 +131,7 @@ namespace Blog.Service
                 .Include(x => x.ArticleTags)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            ResetArticleRelationalData(entity);
+            await ResetArticleRelationalData(entity);
 
             _context.Article.Remove(entity);
 
@@ -139,18 +139,21 @@ namespace Blog.Service
             return true;
         }
 
-        private void ResetArticleRelationalData(Article entity)
+        private async Task<bool> ResetArticleRelationalData(Article entity)
         {
-            // drop middle-table data of the article
+            // drop relational data of the article
             _context.ArticleCategories.RemoveRange(entity.ArticleCategories);
             _context.ArticleTags.RemoveRange(entity.ArticleTags);
 
-            // drop unused tags and categories
-            // 本次删除只能删与这篇文章无关的其他无用数据，因为 EF 这个时候去查依然能查到这个文章的数据。
-            // 要么先 save 再删也可以，我就让他这样算了，反正不会剩下太多冗余数据。
-            // 这个地方暂时不能用 ef extensions 的 delete from query，会造成部分数据无法 rollback，不清楚原因。
+            // ensure relational data has been removed
+            // otherwise redundancies won't remove from stmts below.
+            await _context.SaveChangesAsync();
+
+            // drop redundancy tags and categories
             _context.Tag.RemoveRange(_context.Tag.Where(x => !_context.ArticleTags.Select(y => y.Tag).Contains(x.Id)));
             _context.Category.RemoveRange(_context.Category.Where(x => !_context.ArticleCategories.Select(y => y.Category).Contains(x.Id)));
+
+            return true;
         }
 
         private void PreprocessArticleData(ArticleUpdateParameter parameter)

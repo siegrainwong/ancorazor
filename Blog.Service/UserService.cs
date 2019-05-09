@@ -31,7 +31,7 @@ namespace Blog.Service
             entity.Password = SecurePasswordHasher.Hash(password);
             if (isNewCreadential) entity.AuthUpdatedAt = DateTime.Now;
             _context.Users.Update(entity);
-            await _context.BulkSaveChangesAsync();
+            await _context.SaveChangesAsync();
             return true;
         }
     }

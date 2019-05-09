@@ -5,20 +5,34 @@
   <div class="row">
     <div
       id="viewer"
-      class="col-lg-12 col-md-12 mx-auto"
+      class="col-lg-10 col-md-10 mx-auto"
       [innerHTML]="content"
     ></div>
   </div>
   <div class="row">
-    <div class="article-tags col-lg-12 col-md-12 mx-auto">
-      <span class="text-color-light text-small">标签</span><br />
-      <a mat-stroked-button color="primary" href="/tags/C/">C#</a>
-      <a mat-stroked-button color="primary" href="/tags/async-await/"
-        >async await</a
-      >
-      <a mat-stroked-button color="primary" href="/tags/多线程/">多线程</a>
-      <a mat-stroked-button color="primary" href="/tags/异步/">异步</a>
-      <a mat-stroked-button color="primary" href="/tags/状态机/">状态机</a>
+    <div class="col-lg-10 col-md-10 mx-auto">
+      <div class="article-tags col-12">
+        <div class="color-lightgray tags-title">标签</div>
+        <a
+          mat-stroked-button
+          color="primary"
+          href="/tags/{{ tag.alias }}"
+          *ngFor="let tag of model.tags; let i = index"
+          >{{ tag.name }}</a
+        >
+      </div>
+      <div class="row justify-content-between article-actions">
+        <div class="col-6">
+          <a mat-stroked-button href="/tags/1">← Prev</a>
+          <a mat-stroked-button href="/tags/1">Next →</a>
+        </div>
+        <div class="col-6">
+          <!-- TODO: Share -->
+        </div>
+      </div>
+      <div class="row article-comments">
+        <!-- TODO: Comments -->
+      </div>
     </div>
   </div>
 </div>

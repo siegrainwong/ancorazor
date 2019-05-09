@@ -17,6 +17,9 @@ namespace Blog.Entity
         [StringLength(30)]
         public string Name { get; set; }
 
+        [StringLength(50)]
+        public string Alias { get; set; }
+
         [InverseProperty("TagNavigation")]
         public virtual ICollection<ArticleTags> ArticleTags { get; set; }
     }

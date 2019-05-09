@@ -54,8 +54,10 @@ export class ArticleComponent
 
   private async setupViewer() {
     const renderFromClient = this.store.renderFromClient;
+
     if (renderFromClient)
       await this._util.loadExternalScripts([externalScripts.highlight]);
+
     const md = require("markdown-it")({
       highlight: function(str, lang) {
         if (renderFromClient && lang && hljs.getLanguage(lang)) {

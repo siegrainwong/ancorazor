@@ -1,6 +1,7 @@
 #region
 
 using AutoMapper;
+using Blog.API.Common;
 using Blog.API.Common.Constants;
 using Blog.API.Messages;
 using Blog.API.Messages.Article;
@@ -14,6 +15,7 @@ using Siegrain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Z.EntityFramework.Plus;
@@ -46,9 +48,9 @@ namespace Blog.Service
             return await _getArticleIncludedAsync(_context, id);
         }
 
-        public async Task<Article> GetByAliasAsync(string alias, bool? isDraft)
+        public async Task<object> GetByAliasAsync(string alias, bool? isDraft)
         {
-            var entity = await _getArticleByAliasIncludedAsync(_context, alias);
+            var entity = await _getArticleByAliasAsync(_context, alias);
             if (isDraft.HasValue && entity.IsDraft != isDraft) return null;
             return entity;
         }
@@ -99,10 +101,10 @@ namespace Blog.Service
 
             var newCategories = parameter.Categories
                 .Except(categories.Select(x => x.Name))
-                .Select(x => new Category { Name = x });
+                .Select(x => new Category { Name = x, Alias = UrlHelper.UrlStringEncode(x) });
             var newTags = parameter.Tags
                 .Except(tags.Select(x => x.Name))
-                .Select(x => new Tag { Name = x });
+                .Select(x => new Tag { Name = x, Alias = UrlHelper.UrlStringEncode(x) });
 
             await _context.ArticleCategories
                 .AddRangeAsync(categories.Concat(newCategories)
@@ -160,9 +162,7 @@ namespace Blog.Service
 
         private void PreprocessArticleData(ArticleUpdateParameter parameter)
         {
-            var pinyin = CHNToPinyin.ConvertToPinYin(parameter.Alias ?? parameter.Title);
-            parameter.Alias = Regex.Replace(pinyin, Constants.Article.RouteReplaceRegex,
-                " ").Trim().Replace(" ", "-").ToLowerInvariant();
+            parameter.Alias = UrlHelper.ToUrlSafeString(parameter.Alias ?? parameter.Title, true);
 
             if (parameter.Id == 0 &&
                 _context.Article.Any(x => x.Title == parameter.Title || x.Alias == parameter.Alias))
@@ -174,7 +174,7 @@ namespace Blog.Service
             var id = viewModel.Id.ToString();
             var date = viewModel.CreatedAt.ToString("yyyy/MM/dd");
             var alias = viewModel.Alias;
-            var category = viewModel.ArticleCategories.FirstOrDefault()?.CategoryNavigation.Name ?? Constants.Article.DefaultCategoryName;
+            var category = viewModel.ArticleCategories.FirstOrDefault()?.CategoryNavigation.Alias ?? Constants.Article.DefaultCategoryName;
 
             var path = _seoConfiguration.ArticleRouteMapping
                 .Replace(nameof(id), id)

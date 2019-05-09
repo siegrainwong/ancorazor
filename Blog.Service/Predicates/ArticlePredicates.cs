@@ -31,11 +31,31 @@ namespace Blog.Service
                     .Include(x => x.ArticleTags)
                     .FirstOrDefault(x => x.Id == id));
 
-        private static readonly Func<BlogContext, string, Task<Article>> _getArticleByAliasIncludedAsync =
+        private static readonly Func<BlogContext, string, dynamic> _getArticleByAliasAsync =
             EF.CompileAsyncQuery((BlogContext context, string alias) =>
                 context.Article
-                    .Include(x => x.ArticleCategories)
-                    .Include(x => x.ArticleTags)
+                    .Select(x => new
+                    {
+                        x.Alias,
+                        x.Author,
+                        x.Content,
+                        x.Title,
+                        x.Id,
+                        x.CommentCount,
+                        x.ViewCount,
+                        x.IsDraft,
+                        x.CreatedAt,
+                        Tags = x.ArticleTags.Select(c => new
+                        {
+                            c.TagNavigation.Name,
+                            c.TagNavigation.Alias
+                        }),
+                        Categories = x.ArticleCategories.Select(c => new
+                        {
+                            c.CategoryNavigation.Name,
+                            c.CategoryNavigation.Alias
+                        })
+                    })
                     .FirstOrDefault(x => x.Alias == alias));
 
         private static readonly Func<BlogContext, AsyncEnumerable<Tag>> _getUnusedTags =

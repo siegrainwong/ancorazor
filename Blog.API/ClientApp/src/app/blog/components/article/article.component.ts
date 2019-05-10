@@ -10,7 +10,6 @@ import { SGUtil } from "src/app/shared/utils/siegrain.utils";
 import { Subscription } from "rxjs";
 import { SGTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
 import { SGAnimations } from "src/app/shared/animations/sg-animations";
-import { take, map } from "rxjs/operators";
 
 @Component({
   selector: "app-article",
@@ -30,25 +29,24 @@ export class ArticleComponent
     private _util: SGUtil,
     public store: Store
   ) {}
-  async ngOnInit() {
-    await this.getArticle();
-    this.setupViewer();
+  ngOnInit() {
+    this.getArticle();
   }
 
   ngOnDestroy() {
     this._subscription.unsubscribe();
   }
 
-  private async getArticle() {
-    let article = await this.store.routeDataChanged$
-      .pipe(
-        take(1),
-        map(x => x.article)
-      )
-      .toPromise();
-    this.model = article;
-    this._titleService.setTitle(
-      `${article.title} - ${constants.titlePlainText}`
+  private getArticle() {
+    this._subscription.add(
+      this.store.routeDataChanged$.subscribe(x => {
+        if (!x.article) return;
+        this.model = x.article;
+        this._titleService.setTitle(
+          `${this.model.title} - ${constants.titlePlainText}`
+        );
+        this.setupViewer();
+      })
     );
   }
 

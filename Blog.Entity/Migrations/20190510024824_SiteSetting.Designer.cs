@@ -4,14 +4,16 @@ using Blog.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Blog.Entity.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    partial class BlogContextModelSnapshot : ModelSnapshot
+    [Migration("20190510024824_SiteSetting")]
+    partial class SiteSetting
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,11 +265,11 @@ namespace Blog.Entity.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2019, 5, 10, 10, 55, 33, 72, DateTimeKind.Local).AddTicks(6597),
+                            CreatedAt = new DateTime(2019, 5, 10, 10, 48, 23, 648, DateTimeKind.Local).AddTicks(3712),
                             IsDeleted = false,
                             IsEnabled = true,
                             Name = "Admin",
-                            UpdatedAt = new DateTime(2019, 5, 10, 10, 55, 33, 72, DateTimeKind.Local).AddTicks(6610)
+                            UpdatedAt = new DateTime(2019, 5, 10, 10, 48, 23, 648, DateTimeKind.Local).AddTicks(3723)
                         });
                 });
 
@@ -317,18 +319,6 @@ namespace Blog.Entity.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SiteSetting");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Copyright = "ancore",
-                            CoverUrl = "assets/img/write-bg.jpg",
-                            CreatedAt = new DateTime(2019, 5, 10, 10, 55, 33, 72, DateTimeKind.Local).AddTicks(9605),
-                            SiteName = "ancore",
-                            Title = "Ancore",
-                            UpdatedAt = new DateTime(2019, 5, 10, 10, 55, 33, 72, DateTimeKind.Local).AddTicks(9608)
-                        });
                 });
 
             modelBuilder.Entity("Blog.Entity.Tag", b =>
@@ -401,10 +391,10 @@ namespace Blog.Entity.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2019, 5, 10, 10, 55, 33, 72, DateTimeKind.Local).AddTicks(8388),
+                            CreatedAt = new DateTime(2019, 5, 10, 10, 48, 23, 648, DateTimeKind.Local).AddTicks(5323),
                             IsDeleted = false,
                             RoleId = 1,
-                            UpdatedAt = new DateTime(2019, 5, 10, 10, 55, 33, 72, DateTimeKind.Local).AddTicks(8391),
+                            UpdatedAt = new DateTime(2019, 5, 10, 10, 48, 23, 648, DateTimeKind.Local).AddTicks(5326),
                             UserId = 1
                         });
                 });
@@ -456,14 +446,14 @@ namespace Blog.Entity.Migrations
                         new
                         {
                             Id = 1,
-                            AuthUpdatedAt = new DateTime(2019, 5, 10, 10, 55, 33, 70, DateTimeKind.Local).AddTicks(6482),
-                            CreatedAt = new DateTime(2019, 5, 10, 10, 55, 33, 70, DateTimeKind.Local).AddTicks(5108),
+                            AuthUpdatedAt = new DateTime(2019, 5, 10, 10, 48, 23, 646, DateTimeKind.Local).AddTicks(4594),
+                            CreatedAt = new DateTime(2019, 5, 10, 10, 48, 23, 646, DateTimeKind.Local).AddTicks(3213),
                             IsDeleted = false,
                             LoginName = "admin",
                             Password = "$SGHASH$V1$10000$RA3Eaw5yszeel1ARIe7iFp2AGWWLd80dAMwr+V4mRcAimv8u",
                             RealName = "Admin",
                             Status = 1,
-                            UpdatedAt = new DateTime(2019, 5, 10, 10, 55, 33, 70, DateTimeKind.Local).AddTicks(5988)
+                            UpdatedAt = new DateTime(2019, 5, 10, 10, 48, 23, 646, DateTimeKind.Local).AddTicks(4094)
                         });
                 });
 

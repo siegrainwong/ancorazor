@@ -3,11 +3,10 @@ import { BaseService, ISubService } from "src/app/shared/services/base.service";
 import { UserModel } from "../models/user-model";
 import { ResponseResult } from "src/app/shared/models/response-result";
 
-@Injectable({
-  providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export class UserService extends BaseService implements ISubService {
   protected initialize() {}
+  disabledCache = () => true;
   serviceName = "Users";
 
   /**

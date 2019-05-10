@@ -5,10 +5,14 @@ using AspectCore.Injector;
 using AutoMapper;
 using Blog.API.Authentication;
 using Blog.API.AutoMapper;
+using Blog.API.Common;
 using Blog.API.Common.Constants;
 using Blog.API.Filters;
 using Blog.API.Logger;
 using Blog.Entity;
+using EasyCaching.Core;
+using EasyCaching.InMemory;
+using EasyCaching.Interceptor.AspectCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -60,6 +64,8 @@ namespace Blog.API
             RegisterAppSettings(services);
             RegisterDynamicProxy(services);
             RegisterEntityFramework(services);
+            RegisterCaching(services);
+            RegisterHelper(services);
             RegisterMvc(services);
             RegisterService(services);
             RegisterSwagger(services);
@@ -105,12 +111,31 @@ namespace Blog.API
 
         #region Services
 
+        private void RegisterCaching(IServiceCollection services)
+        {
+            services.AddEasyCaching(option =>
+            {
+                // use memory cache
+                option.UseInMemory("default");
+            });
+            services.ConfigureAspectCoreInterceptor(options =>
+            {
+                // Specify which provider you want to use
+                options.CacheProviderName = "default";
+            });
+        }
+
+        private void RegisterHelper(IServiceCollection services)
+        {
+            services.AddSingleton<UrlHelper>();
+        }
+
         private void RegisterMapper(IServiceCollection services)
         {
             var mappingConfig = new MapperConfiguration(x =>
             {
                 x.AddProfile<MappingProfile>();
-                x.CreateMissingTypeMaps = true; // using dynamic map
+                x.CreateMissingTypeMaps = true; // use dynamic map
                 x.ValidateInlineMaps = false;   // ignore unmapped properties
             });
 

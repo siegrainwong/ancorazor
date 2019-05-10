@@ -4,9 +4,7 @@ import { ArticleParameters } from "../models/article-parameters";
 import { PagedResult } from "src/app/shared/models/response-result";
 import ArticleModel from "../models/article-model";
 
-@Injectable({
-  providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export class ArticleService extends BaseService implements ISubService {
   serviceName = "article";
   protected initialize() {}

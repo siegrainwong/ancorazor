@@ -50,10 +50,7 @@ namespace Blog.API.Controllers
 
             await SignIn(user);
 
-            // clear credentials
-            user.LoginName = null;
-            user.Password = null;
-            return Ok(new { user });
+            return Ok(new { user = new { user.Id, user.CreatedAt, user.RealName } });
         }
 
         [HttpPost("SignOut")]

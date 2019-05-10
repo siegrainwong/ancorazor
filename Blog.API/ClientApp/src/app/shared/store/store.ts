@@ -1,8 +1,9 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { BehaviorSubject, ReplaySubject } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 import RouteData, { RouteKinds } from "../models/route-data.model";
 import { LoggingService } from "../services/logging.service";
 import { UserModel } from "src/app/blog/models/user-model";
+import SiteSettingModel from "src/app/blog/models/site-setting.model";
 
 const UserStoreKey = "sg:user";
 
@@ -34,6 +35,9 @@ export class Store implements OnDestroy {
   set isFirstScreen(val: boolean) {
     this._isFirstScreen = val;
   }
+
+  /** 站点设置 */
+  public siteSetting: SiteSettingModel;
 
   /** 当前是否正在进行网络请求 */
   isRequesting: boolean = false;

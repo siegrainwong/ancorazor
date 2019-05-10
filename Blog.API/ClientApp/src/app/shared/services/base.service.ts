@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { environment } from "src/environments/environment";
-import { AxiosResponse, AxiosRequestConfig } from "axios";
+import { AxiosResponse } from "axios";
 import { ResponseResult } from "../models/response-result";
 import axios from "axios";
 import { LoggingService } from "./logging.service";
@@ -11,13 +11,29 @@ import { TransferState, makeStateKey } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { SGProgress } from "../utils/siegrain.progress";
-import { timeout } from "../utils/promise-delay";
+import { setupCache } from "axios-cache-adapter";
 
-@Injectable({
-  providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export abstract class BaseService implements OnDestroy {
   protected subscription = new Subscription();
+  protected settings = { disabledCache: false };
+  private _api = axios.create({
+    baseURL: environment.apiUrlBase,
+    timeout: 100000,
+    headers: { "Content-Type": "application/json" },
+    adapter: setupCache({
+      maxAge: 60 * 60 * 1000, // 1 hour
+      readOnError: (error, request) =>
+        error.response.status >= 400 && error.response.status < 600,
+      clearOnStale: false,
+      exclude: {
+        // disable cache from requests with query params
+        query: true,
+        filter: () => this.disabledCache()
+      }
+    }).adapter
+  });
+  private _url: string;
 
   constructor(
     private _wrapper: TaskWrapper,
@@ -28,7 +44,6 @@ export abstract class BaseService implements OnDestroy {
     protected logger: LoggingService,
     protected store: Store
   ) {
-    this.setupAxios();
     this.initialize();
   }
 
@@ -36,20 +51,20 @@ export abstract class BaseService implements OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  protected setupAxios() {
-    axios.defaults.baseURL = environment.apiUrlBase;
-    axios.defaults.timeout = 100000;
-    axios.defaults.headers = { "Content-Type": "application/json" };
-  }
-
   /**
    * initialize for child services
    */
   protected abstract initialize();
+  /**
+   * Set the service should be exclude from cache
+   */
+  protected disabledCache(): boolean {
+    return false;
+  }
 
   async get(url: string, query?: any): Promise<ResponseResult> {
     /**
-     * Mark: 让 Server side 的请求结果传递到 Client side 避免重复请求
+     * Mark: 让`Server side`的请求结果传递到`Client side`避免重复请求
      * https://medium.com/@evertonrobertoauler/angular-5-universal-with-transfer-state-using-angular-cli-19fe1e1d352c
      */
     const stateKey = makeStateKey(url);
@@ -66,7 +81,7 @@ export abstract class BaseService implements OnDestroy {
     }
 
     /**
-     * Mark: 让 universal 等待 API 请求并渲染完毕
+     * Mark: 让`universal`等待`API`请求并渲染完毕
      * https://github.com/angular/angular/issues/20520#issuecomment-449597926
      */
     return new Promise<ResponseResult>(resolve => {
@@ -102,7 +117,8 @@ export abstract class BaseService implements OnDestroy {
   /**
    * 请求前调用
    */
-  protected beforeRequest() {
+  protected beforeRequest(url: string) {
+    this._url = url;
     this.store.isRequesting = true;
     this._progress.progressStart();
   }
@@ -110,9 +126,15 @@ export abstract class BaseService implements OnDestroy {
   /**
    * 响应后调用
    *
-   * 写这个其实是因为axios的interceptor有bug，有时候响应太快拦不到response
+   * 写这个其实是因为`axios`的`interceptor`有bug，有时候响应太快拦不到`response`
    */
-  protected afterResponse() {
+  protected afterResponse(response?: AxiosResponse) {
+    response &&
+      response.config.method === "get" &&
+      this.logger.info(
+        `${this._url} responsed from cache`,
+        !!response.request.fromCache
+      );
     this.store.isRequesting = false;
     this._progress.progressDone();
   }
@@ -131,10 +153,10 @@ export abstract class BaseService implements OnDestroy {
     body?: any,
     query?: any
   ): Promise<ResponseResult> {
-    this.beforeRequest();
+    this.beforeRequest(url);
 
     try {
-      const res = await axios.request({
+      const res = await this._api.request({
         method: method.toString(),
         url: url,
         params: query,
@@ -161,10 +183,10 @@ export abstract class BaseService implements OnDestroy {
    * @param response
    */
   handleResponse(response: AxiosResponse): ResponseResult {
-    this.afterResponse();
+    this.afterResponse(response);
 
     let result: ResponseResult = null;
-    if (response.status >= 200 && response.status < 300)
+    if (response.status >= 200 && response.status < 400)
       result = new ResponseResult({
         data: response.data.data,
         succeed: response.data.succeed,
@@ -196,8 +218,7 @@ export abstract class BaseService implements OnDestroy {
         this.route.navigate([], { fragment: "sign-in" });
         break;
       default:
-        result.message +=
-          result.data && "\n" + (result.data.message && result.data.message);
+        if (result.data.message) result.message += "\n" + result.data.message;
         this.util.tip(result.message);
         this.logger.error(result);
     }

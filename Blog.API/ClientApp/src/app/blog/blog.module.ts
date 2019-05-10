@@ -27,6 +27,8 @@ import {
 } from "../shared/animations/sg-transition.resolve.guard";
 import { ArticleListResolveGuard } from "./guard/article-list.resolve.guard";
 import { SGProgress } from "../shared/utils/siegrain.progress";
+import { SEOService } from "./services/seo.service";
+import { CommonService } from "./services/common.service";
 
 /**
  * MARK: `providedIn: 'root'` or `providedIn: SomeModule`
@@ -63,8 +65,10 @@ import { SGProgress } from "../shared/utils/siegrain.progress";
   providers: [
     SGUtil,
     SGProgress,
+    CommonService,
     ArticleService,
     UserService,
+    SEOService,
     AuthGuard,
     ArticleResolveGuard,
     SGTransitionResolveGuard,

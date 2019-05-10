@@ -1,5 +1,4 @@
 import BaseModel from "src/app/shared/models/base-model";
-import { SGAnimation } from "src/app/shared/animations/sg-transition.model";
 
 export default class ArticleModel extends BaseModel {
   author: string;
@@ -16,9 +15,6 @@ export default class ArticleModel extends BaseModel {
   isDraft: boolean = false;
   previous: { title: string; path: string };
   next: { title: string; path: string };
-
-  // helper fields
-  animation?: SGAnimation;
 
   constructor(init?: Partial<ArticleModel>) {
     super(init);

@@ -26,13 +26,13 @@ namespace Blog.Service
 {
     public partial class ArticleService
     {
-        private readonly SEOConfiguration _seoConfiguration;
+        private readonly UrlHelper _urlHelper;
         private readonly BlogContext _context;
         private readonly IMapper _mapper;
 
-        public ArticleService(IOptions<SEOConfiguration> seoConfiguration, BlogContext context, IMapper mapper)
+        public ArticleService(UrlHelper urlHelper, BlogContext context, IMapper mapper)
         {
-            _seoConfiguration = seoConfiguration.Value;
+            _urlHelper = urlHelper;
             _context = context;
             _mapper = mapper;
         }
@@ -89,7 +89,10 @@ namespace Blog.Service
         [Transaction]
         public virtual async Task<ArticleViewModel> UpsertAsync(ArticleUpdateParameter parameter)
         {
-            PreprocessArticleData(parameter);
+            parameter.Alias = UrlHelper.ToUrlSafeString(parameter.Alias ?? parameter.Title, true);
+            if (parameter.Id == 0 &&
+                _context.Article.Any(x => x.Title == parameter.Title || x.Alias == parameter.Alias))
+                throw new DuplicateEntityException("Duplicate title or alias of an article.");
 
             Article entity = null;
             if (parameter.Id != 0)
@@ -170,39 +173,10 @@ namespace Blog.Service
             return true;
         }
 
-        private void PreprocessArticleData(ArticleUpdateParameter parameter)
-        {
-            parameter.Alias = UrlHelper.ToUrlSafeString(parameter.Alias ?? parameter.Title, true);
-
-            if (parameter.Id == 0 &&
-                _context.Article.Any(x => x.Title == parameter.Title || x.Alias == parameter.Alias))
-                throw new DuplicateEntityException("Duplicate title or alias of an article.");
-        }
-
-        private string GetArticleRoutePath(dynamic entity)
-        {
-            if (entity == null) return null;
-            return GetArticleRoutePath(entity.Id, entity.CreatedAt, entity.Alias, entity.Category);
-        }
-
         private string GetArticleRoutePath(ArticleViewModel viewModel)
         {
             if (viewModel == null) return null;
-
-            var category = viewModel.ArticleCategories.FirstOrDefault()?.CategoryNavigation.Alias ?? Constants.Article.DefaultCategoryName;
-
-            return GetArticleRoutePath(viewModel.Id, viewModel.CreatedAt, viewModel.Alias, category);
-        }
-
-        private string GetArticleRoutePath(int id, DateTime date, string alias, string category)
-        {
-            var path = _seoConfiguration.ArticleRouteMapping
-                .Replace(nameof(id), id.ToString())
-                .Replace(nameof(date), date.ToString("yyyy/MM/dd"))
-                .Replace(nameof(category), CHNToPinyin.ConvertToPinYin(category))
-                .Replace(nameof(alias), alias)
-                .ToLowerInvariant();
-            return path;
+            return _urlHelper.GetArticleRoutePath(viewModel.Id, viewModel.CreatedAt, viewModel.Alias, viewModel.ArticleCategories.FirstOrDefault()?.CategoryNavigation.Alias);
         }
     }
 }

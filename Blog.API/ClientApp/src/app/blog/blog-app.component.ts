@@ -10,6 +10,7 @@ import { externalScripts } from "../shared/constants/siegrain.constants";
 import { onScroll } from "../shared/utils/scroll-listener";
 import { Subscription } from "rxjs";
 import { UserService } from "./services/user.service";
+import { CommonService } from "./services/common.service";
 
 @Component({
   selector: "app-blog-app",
@@ -28,6 +29,7 @@ export class BlogAppComponent implements OnInit, OnDestroy {
     private _util: SGUtil,
     private _scrollDispatcher: ScrollDispatcher,
     private _userService: UserService,
+    private _commonService: CommonService,
     public store: Store,
     public transition: SGTransitionToEnter
   ) {}
@@ -36,6 +38,7 @@ export class BlogAppComponent implements OnInit, OnDestroy {
     this.subscribeRoute();
     if (!this.store.renderFromClient) return;
     this.setupUser();
+    this.setupSetting();
     this._scrollDispatcher.scrolled().subscribe(onScroll);
     this.loadExternalResources();
   }
@@ -51,6 +54,10 @@ export class BlogAppComponent implements OnInit, OnDestroy {
         this._userService.getXSRFToken();
       })
     );
+  }
+
+  async setupSetting() {
+    this.store.siteSetting = await this._commonService.getSetting();
   }
 
   private loadExternalResources() {

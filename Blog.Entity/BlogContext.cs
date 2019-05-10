@@ -26,6 +26,7 @@ namespace Blog.Entity
         public virtual DbSet<Tag> Tag { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<SiteSetting> SiteSetting { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -56,7 +57,11 @@ namespace Blog.Entity
 
             builder.Entity<Article>(entity =>
             {
-                entity.HasIndex(e => e.Id)
+                entity.HasIndex(e => e.Alias)
+                    .HasName("IX_Article_Alias")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Title)
                     .HasName("IX_Article_Title")
                     .IsUnique();
 
@@ -146,7 +151,15 @@ namespace Blog.Entity
                 entity.Property(e => e.AuthUpdatedAt).HasDefaultValueSql("(getdate())");
             });
 
-            // insert admin
+            builder.Entity<SiteSetting>(entity =>
+            {
+                entity.Property(x => x.SiteName).HasDefaultValue("ancore");
+                entity.Property(x => x.Title).HasDefaultValue("Ancore");
+                entity.Property(x => x.Copyright).HasDefaultValue("ancore");
+                entity.Property(x => x.CoverUrl).HasDefaultValue("assets/img/write-bg.jpg");
+            });
+
+            // seed data
             builder.Entity<Users>().HasData(new Users
             {
                 Id = 1,
@@ -161,7 +174,6 @@ namespace Blog.Entity
                 Remark = null,
                 IsDeleted = false
             });
-
             builder.Entity<Role>().HasData(new Role
             {
                 Id = 1,
@@ -182,7 +194,18 @@ namespace Blog.Entity
                 IsDeleted = false,
                 Remark = null
             });
-
+            builder.Entity<SiteSetting>().HasData(new SiteSetting
+            {
+                Id = 1,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                Title = "Ancore",
+                SiteName = "ancore",
+                Copyright = "ancore",
+                CoverUrl = "assets/img/write-bg.jpg",
+                Remark = null
+            });
+            
             OnModelCreatingPartial(builder);
         }
 

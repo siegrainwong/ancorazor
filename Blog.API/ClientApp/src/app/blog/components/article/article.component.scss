@@ -4,3 +4,14 @@
   margin: 20px 0;
   font-size: 16px;
 }
+
+.article-actions {
+  a.mat-stroked-button {
+    margin-right: 8px;
+    color: $gray-600;
+    border-color: $gray-600;
+    &[disabled] {
+      border-color: $gray-300;
+    }
+  }
+}

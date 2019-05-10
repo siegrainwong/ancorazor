@@ -205,10 +205,3 @@ img::-moz-selection {
     border-color: lighten($primary, 20%);
   }
 }
-.article-actions {
-  a.mat-stroked-button {
-    margin-right: 8px;
-    color: $gray-600;
-    border-color: $gray-600;
-  }
-}

@@ -27,6 +27,7 @@
             <a
               mat-stroked-button
               [title]="model.previous.title"
+              [matTooltip]="model.previous.title"
               [routerLink]="'/article/' + model.previous.path"
               >← Prev</a
             >
@@ -38,6 +39,7 @@
             <a
               mat-stroked-button
               [title]="model.next.title"
+              [matTooltip]="model.next.title"
               [routerLink]="'/article/' + model.next.path"
               >Next →</a
             >

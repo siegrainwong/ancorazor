@@ -14,18 +14,15 @@ export class HeaderComponent implements SGTransitionDelegate {
     cover: SGAnimations.fade,
     title: SGAnimations.fadeUp
   };
-
-  @Input() isEditing: boolean = false;
-  @Output() headerUpdated = new EventEmitter<ArticleModel>();
-
   constructor(private _store: Store, public transition: SGTransitionToEnter) {}
+
   private _model: ArticleModel;
   get model() {
     return this._model;
   }
   @Input() set model(val) {
     this._model = val;
-    if (this._store.renderFromClient) this.loadCover();
+    this._store.renderFromClient && this.loadCover();
   }
 
   loadCover() {
@@ -37,14 +34,5 @@ export class HeaderComponent implements SGTransitionDelegate {
       ) as HTMLElement).style.backgroundImage = "url('" + image.src + "')";
     };
     image.src = src;
-  }
-
-  onTitleChanged(val: string) {
-    this.model.title = val;
-    this.headerUpdated.emit(this.model);
-  }
-  onDigestChanged(val: string) {
-    this.model.digest = val;
-    this.headerUpdated.emit(this.model);
   }
 }

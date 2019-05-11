@@ -1,4 +1,6 @@
-<app-header [model]="headerModel"></app-header>
+<ng-container *ngIf="headerModel">
+  <app-header [model]="headerModel"></app-header>
+</ng-container>
 <div class="container" id="articleList">
   <div class="row">
     <div class="col-lg-11 col-md-11 mx-auto list" *ngIf="data">

@@ -28,7 +28,7 @@ export abstract class BaseService implements OnDestroy {
       clearOnStale: false,
       exclude: {
         // disable cache from requests with query params
-        query: true,
+        query: false,
         filter: () => this.disabledCache()
       }
     }).adapter

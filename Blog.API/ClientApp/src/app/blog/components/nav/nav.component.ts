@@ -21,10 +21,10 @@ export class NavComponent implements OnInit, OnDestroy, SGTransitionDelegate {
   public animations = {
     title: SGAnimations.fade
   };
-  private _subscription = new Subscription();
+  public title: String;
+  public navbarOpen: boolean = false;
 
-  title: String;
-  navbarOpen: boolean = false;
+  private _subscription = new Subscription();
   constructor(
     public store: Store,
     public util: SGUtil,
@@ -35,14 +35,7 @@ export class NavComponent implements OnInit, OnDestroy, SGTransitionDelegate {
   ) {}
 
   ngOnInit() {
-    // 因为生命周期的原因，首屏加载时不能显示dialog
-    this._subscription.add(
-      this._route.fragment
-        .pipe(filter(f => f == "sign-in" && !this.store.isFirstScreen))
-        .subscribe(_ => this.openDialog(false))
-    );
-    this.registerRouteChanged();
-    if (!this.store.renderFromClient) return;
+    this.registerSubscriptions();
   }
 
   ngOnDestroy() {
@@ -66,12 +59,25 @@ export class NavComponent implements OnInit, OnDestroy, SGTransitionDelegate {
       this.util.tip("Signed out", TipType.Success);
   }
 
-  registerRouteChanged() {
+  registerSubscriptions() {
     this._subscription.add(
       this.store.routeDataChanged$.subscribe(data => {
         if (data && data.kind == "home") this.title = "";
-        else this.title = constants.title;
+        else
+          this.title = this.store.siteSetting && this.store.siteSetting.title;
       })
+    );
+    this._subscription.add(
+      this.store.siteSettingChanged$.subscribe(data => {
+        const isHomePage = this.title === "";
+        if (!isHomePage) this.title = data.title;
+      })
+    );
+    this._subscription.add(
+      // 因为生命周期的原因，首屏加载时不能显示dialog
+      this._route.fragment
+        .pipe(filter(f => f == "sign-in" && !this.store.isFirstScreen))
+        .subscribe(_ => this.openDialog(false))
     );
   }
 }

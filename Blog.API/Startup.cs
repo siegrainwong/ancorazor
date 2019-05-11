@@ -44,6 +44,7 @@ namespace Blog.API
     public class Startup
     {
         private const string _ServiceName = "Blog.API";
+        private const string _CacheProviderName = "default";
 
         public IConfiguration Configuration { get; }
         public ILogger<Startup> Logger { get; }
@@ -74,7 +75,11 @@ namespace Blog.API
             RegisterSpa(services);
             ResigterProfiler(services);
 
-            return services.ToServiceContainer().Build();
+            return services.ConfigureAspectCoreInterceptor(options =>
+            {
+                // Specify which provider you want to use
+                options.CacheProviderName = _CacheProviderName;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -116,12 +121,10 @@ namespace Blog.API
             services.AddEasyCaching(option =>
             {
                 // use memory cache
-                option.UseInMemory("default");
-            });
-            services.ConfigureAspectCoreInterceptor(options =>
-            {
-                // Specify which provider you want to use
-                options.CacheProviderName = "default";
+                option.UseInMemory(options =>
+                {
+                    options.EnableLogging = true;
+                }, _CacheProviderName);
             });
         }
 

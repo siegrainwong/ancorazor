@@ -22,6 +22,7 @@ import {
 import { Subscription } from "rxjs";
 import RouteData, { RouteKinds } from "src/app/shared/models/route-data.model";
 import { SGTransitionStore } from "src/app/shared/animations/sg-transition.store";
+import { filter } from "rxjs/operators";
 
 const StaggerDuration = 200; // 列表总动画时长 = transition duration + stagger duration
 
@@ -32,11 +33,8 @@ const StaggerDuration = 200; // 列表总动画时长 = transition duration + st
 })
 export class ArticleListComponent
   implements OnInit, OnDestroy, SGCustomizeTransitionDelegate {
-  // component
-  public headerModel: ArticleModel = new ArticleModel({
-    title: constants.title,
-    cover: constants.homeCoverUrl
-  });
+  // header
+  public headerModel: ArticleModel;
   // request
   public data: PagedResult<ArticleModel>;
   public preloading: boolean = false;
@@ -60,6 +58,14 @@ export class ArticleListComponent
     this._subscription.add(
       this.store.routeDataChanged$.subscribe(async data => {
         this.data = data.list;
+      })
+    );
+    this._subscription.add(
+      this.store.siteSettingChanged$.subscribe(data => {
+        this.headerModel = new ArticleModel({
+          title: data.title,
+          cover: data.coverUrl
+        });
       })
     );
   }

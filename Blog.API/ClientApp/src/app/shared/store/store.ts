@@ -19,6 +19,7 @@ export class Store implements OnDestroy {
   ngOnDestroy(): void {
     this.userChanged$.unsubscribe();
     this.routeDataChanged$.unsubscribe();
+    this.siteSettingChanged$.unsubscribe();
   }
 
   /**
@@ -26,7 +27,7 @@ export class Store implements OnDestroy {
    **/
 
   /** 是否是客户端渲染 */
-  renderFromClient: boolean = false;
+  public renderFromClient: boolean = false;
   /** 是否是首屏加载 */
   private _isFirstScreen: boolean = true;
   get isFirstScreen(): boolean {
@@ -36,9 +37,6 @@ export class Store implements OnDestroy {
     this._isFirstScreen = val;
   }
 
-  /** 站点设置 */
-  public siteSetting: SiteSettingModel;
-
   /** 当前是否正在进行网络请求 */
   isRequesting: boolean = false;
 
@@ -46,7 +44,7 @@ export class Store implements OnDestroy {
    * === Methods ===
    **/
 
-  setupUser() {
+  public setupUser() {
     if (!this.renderFromClient) return;
     let userJson = window.localStorage.getItem(UserStoreKey);
     if (!userJson) return;
@@ -58,17 +56,15 @@ export class Store implements OnDestroy {
    * === Observables ===
    **/
 
+  // === user
   private _user: UserModel;
-  userChanged$ = new BehaviorSubject<UserModel>(this._user);
-
+  public userChanged$ = new BehaviorSubject<UserModel>(this._user);
   get userIsAvailable(): boolean {
     return this._user != null;
   }
-
   get user(): UserModel {
     return this._user;
   }
-
   set user(user: UserModel) {
     this._user = user;
     if (user) {
@@ -79,28 +75,38 @@ export class Store implements OnDestroy {
 
     this.userChanged$.next(user);
   }
-
-  signIn(user: UserModel) {
+  public signIn(user: UserModel) {
     this.user = user;
     this._logger.info("user signed in", user);
   }
-
-  signOut() {
+  public signOut() {
     this.user = null;
     this._logger.info("user signed out");
   }
 
+  // === route data
   private _routeData: RouteData = new RouteData({ kind: RouteKinds.home });
   /** An observer for `NavigationEnd` with a `RouteData` */
-  routeDataChanged$ = new BehaviorSubject<RouteData>(this._routeData);
-
+  public routeDataChanged$ = new BehaviorSubject<RouteData>(this._routeData);
   get routeData(): RouteData {
     return this._routeData;
   }
-
   set routeData(value) {
     this._routeData = value;
     this.routeDataChanged$.next(value);
     this._logger.info("route data changed", value);
+  }
+
+  // === site setting
+  private _siteSetting = new SiteSettingModel();
+  public siteSettingChanged$ = new BehaviorSubject<SiteSettingModel>(
+    this._siteSetting
+  );
+  get siteSetting() {
+    return this._siteSetting;
+  }
+  set siteSetting(val) {
+    this._siteSetting = val;
+    this.siteSettingChanged$.next(val);
   }
 }

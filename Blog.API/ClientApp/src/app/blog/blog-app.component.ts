@@ -36,9 +36,9 @@ export class BlogAppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscribeRoute();
+    this.setupSetting();
     if (!this.store.renderFromClient) return;
     this.setupUser();
-    this.setupSetting();
     this._scrollDispatcher.scrolled().subscribe(onScroll);
     this.loadExternalResources();
   }

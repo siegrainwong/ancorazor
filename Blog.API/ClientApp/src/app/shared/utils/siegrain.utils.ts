@@ -13,6 +13,7 @@ export const enum TipType {
 }
 
 export const topElementId = "#nav";
+export const XSRFTokenKey = "XSRF-TOKEN";
 
 @Injectable({ providedIn: "root" })
 export class SGUtil {
@@ -55,6 +56,25 @@ export class SGUtil {
         resolve(data);
       });
     });
+  }
+
+  /**
+   * 获取 Cookie
+   * @param name
+   */
+  public getCookie(name: string): string {
+    const nameLenPlus = name.length + 1;
+    return (
+      document.cookie
+        .split(";")
+        .map(c => c.trim())
+        .filter(cookie => {
+          return cookie.substring(0, nameLenPlus) === `${name}=`;
+        })
+        .map(cookie => {
+          return decodeURIComponent(cookie.substring(nameLenPlus));
+        })[0] || null
+    );
   }
 
   /**

@@ -45,6 +45,7 @@ namespace Blog.Service
                         x.ViewCount,
                         x.IsDraft,
                         x.CreatedAt,
+                        x.Cover,
                         Author = x.AuthorNavigation.RealName,
                         Tags = x.ArticleTags.Select(c => new
                         {

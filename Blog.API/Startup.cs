@@ -24,12 +24,14 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
+using Siegrain.Common.FileSystem;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
@@ -46,15 +48,14 @@ namespace Blog.API
         private const string _ServiceName = "Blog.API";
         private const string _CacheProviderName = "default";
 
-        public IConfiguration Configuration { get; }
-        public ILogger<Startup> Logger { get; }
-        public IHostingEnvironment HostingEnvironment { get; }
-
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        private readonly IConfiguration _configuration;
+        private readonly ILogger<Startup> _logger;
+        private readonly IHostingEnvironment _hostingEnvironment;
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILogger<Startup> logger)
         {
-            Configuration = configuration;
-            Logger = logger;
-
+            _configuration = configuration;
+            _hostingEnvironment = hostingEnvironment;
+            _logger = logger;
             SetupLogger();
         }
 
@@ -100,7 +101,7 @@ namespace Blog.API
 
         private void SetupLogger()
         {
-            var elasticUri = Configuration["ElasticConfiguration:Uri"];
+            var elasticUri = _configuration["ElasticConfiguration:Uri"];
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .Enrich.WithExceptionDetails()
@@ -130,6 +131,7 @@ namespace Blog.API
         private void RegisterHelper(IServiceCollection services)
         {
             services.AddSingleton<UrlHelper>();
+            services.AddSingleton<IFileSystem>(new LocalDiskFileSystem(Path.Combine(_hostingEnvironment.ContentRootPath, "Upload")));
         }
 
         private void RegisterMapper(IServiceCollection services)
@@ -148,8 +150,8 @@ namespace Blog.API
 
         private void RegisterAppSettings(IServiceCollection services)
         {
-            services.Configure<SEOConfiguration>(x => Configuration.GetSection(nameof(SEOConfiguration)).Bind(x));
-            services.Configure<DbConfiguration>(x => Configuration.GetSection(nameof(DbConfiguration)).Bind(x));
+            services.Configure<SEOConfiguration>(x => _configuration.GetSection(nameof(SEOConfiguration)).Bind(x));
+            services.Configure<DbConfiguration>(x => _configuration.GetSection(nameof(DbConfiguration)).Bind(x));
         }
 
         private void RegisterDynamicProxy(IServiceCollection services)
@@ -197,7 +199,7 @@ namespace Blog.API
             {
                 options.EnableSensitiveDataLogging(true);
                 options.UseSqlServer(
-                    Configuration[$"{nameof(DbConfiguration)}:{nameof(DbConfiguration.ConnectionString)}"]);
+                    _configuration[$"{nameof(DbConfiguration)}:{nameof(DbConfiguration.ConnectionString)}"]);
             });
         }
 
@@ -265,7 +267,7 @@ namespace Blog.API
 
         private void RegisterSpa(IServiceCollection services)
         {
-            var section = Configuration.GetSection("Client");
+            var section = _configuration.GetSection("Client");
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = $"{section["ClientPath"]}/dist";
@@ -311,7 +313,7 @@ namespace Blog.API
                 if (!string.IsNullOrEmpty(contentType) &&
                     contentType.ToLower().Contains("application/x-www-form-urlencoded"))
                 {
-                    Logger.LogInformation(" Form submitting detected.");
+                    _logger.LogInformation(" Form submitting detected.");
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return context.Response.WriteAsync("Bad request.");
                 }
@@ -324,6 +326,15 @@ namespace Blog.API
 
         private void ConfigureMvc(IApplicationBuilder app)
         {
+            // serve files for Upload folder
+            app.MapWhen(context => context.Request.Path.StartsWithSegments("/upload", StringComparison.OrdinalIgnoreCase),
+                config => config.UseStaticFiles(new StaticFileOptions
+                {
+                    FileProvider = new PhysicalFileProvider(
+            Path.Combine(_hostingEnvironment.ContentRootPath, "Upload")),
+                    RequestPath = "/Upload"
+                }));
+
             app.MapWhen(context => context.Request.Path.StartsWithSegments("/api"),
                 apiApp =>
                 {
@@ -354,7 +365,7 @@ namespace Blog.API
             });
 
             // MARK: ¶à SPA ³¡¾°£ºhttps://stackoverflow.com/questions/48216929/how-to-configure-asp-net-core-server-routing-for-multiple-spas-hosted-with-spase
-            var section = Configuration.GetSection("Client");
+            var section = _configuration.GetSection("Client");
             // map spa to /client and remove the prefix
             app.Map("/client", client =>
             {

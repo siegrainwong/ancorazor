@@ -15,7 +15,12 @@ export const externalScripts = {
    */
   highlight: "assets/libraries/highlight.pack.js",
   marked: "assets/libraries/marked.min.js",
-  nprogress: "assets/libraries/nprogress.min.js"
+  nprogress: "assets/libraries/nprogress.min.js",
+  filepond: "https://unpkg.com/filepond/dist/filepond.js",
+  filepondSizeValidation:
+    "https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js",
+  filepondResize:
+    "https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"
 };
 
 export const articleDefaultContent = `---

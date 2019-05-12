@@ -50,6 +50,11 @@ namespace Blog.API.Filters
                     errorCode = attribute.ErrorCode;
                     statusCode = attribute.StatusCode;
                 }
+
+                if (apiException.StatusCode.HasValue)
+                {
+                    statusCode = apiException.StatusCode.Value;
+                }
             }
 
             var errorResp = new ResponseMessage<object>

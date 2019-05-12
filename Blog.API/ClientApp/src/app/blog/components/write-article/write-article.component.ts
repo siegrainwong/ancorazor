@@ -8,8 +8,11 @@ import {
 import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
 import { LoggingService } from "src/app/shared/services/logging.service";
-import { SGTransitionToEnter } from "src/app/shared/animations/sg-transition.enter";
-import { SGUtil, topElementId } from "src/app/shared/utils/siegrain.utils";
+import {
+  SGUtil,
+  topElementId,
+  XSRFTokenKey
+} from "src/app/shared/utils/siegrain.utils";
 import {
   externalScripts,
   articleDefaultContent
@@ -19,7 +22,7 @@ import { SGTransitionDelegate } from "src/app/shared/animations/sg-transition.de
 import { SGAnimations } from "src/app/shared/animations/sg-animations";
 import { SGRouteTransitionCommands } from "src/app/shared/animations/sg-transition.model";
 import { take, map } from "rxjs/operators";
-import { SGTransitionStore } from "src/app/shared/animations/sg-transition.store";
+import { environment } from "src/environments/environment";
 const yamlFront = require("yaml-front-matter");
 
 @Component({
@@ -64,6 +67,7 @@ export class WriteArticleComponent
     }
     this.setupNav();
     this.setupEditor();
+    this.setupUploader();
   }
 
   ngOnDestroy() {
@@ -130,6 +134,35 @@ export class WriteArticleComponent
 
   private get hasFrontMatter(): boolean {
     return this._frontMatter && Object.keys(this._frontMatter).length > 2;
+  }
+
+  private async setupUploader() {
+    await this._util.loadExternalScripts([
+      externalScripts.filepond,
+      externalScripts.filepondResize,
+      externalScripts.filepondSizeValidation
+    ]);
+    FilePond.registerPlugin(
+      FilePondPluginFileValidateSize,
+      FilePondPluginImageResize
+    );
+    FilePond.create(document.querySelector("#cover-uploader"));
+    FilePond.setOptions({
+      server: {
+        url: environment.apiUrlBase,
+        process: {
+          url: "/common/upload/covers",
+          headers: {
+            "X-XSRF-TOKEN": this._util.getCookie(XSRFTokenKey)
+          },
+          onload: res => {
+            const resJson = JSON.parse(res);
+            this.model.cover = resJson.data.publicUrl;
+            return res.key;
+          }
+        }
+      }
+    });
   }
 
   /**

@@ -19,5 +19,10 @@
             public const string DuplicateEntity = "0010";
             public const string EntityNotFound = "0011";
         }
+
+        public static class UploadFilePath
+        {
+            public const string Base = "upload";
+        }
     }
 }

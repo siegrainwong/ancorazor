@@ -1,16 +1,21 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "src/app/shared/store/store";
-import { SGUtil, TipType } from "src/app/shared/utils/siegrain.utils";
+import {
+  SGUtil,
+  TipType,
+  topElementId
+} from "src/app/shared/utils/siegrain.utils";
 import { SGTransitionToEnter } from "src/app/shared/animations/sg-transition.enter";
 import { MatDialog } from "@angular/material";
 import { SignInComponent } from "../sign-in/sign-in.component";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, ActivatedRouteSnapshot } from "@angular/router";
 import { constants } from "src/app/shared/constants/siegrain.constants";
 import { Subscription } from "rxjs";
 import { UserService } from "../../services/user.service";
 import { filter } from "rxjs/operators";
 import { SGTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
 import { SGAnimations } from "src/app/shared/animations/sg-animations";
+import { SGRouteTransitionCommands } from "src/app/shared/animations/sg-transition.model";
 
 @Component({
   selector: "app-nav",
@@ -33,6 +38,10 @@ export class NavComponent implements OnInit, OnDestroy, SGTransitionDelegate {
     private _route: ActivatedRoute,
     private _service: UserService
   ) {}
+
+  transitionForComponent(nextRoute: ActivatedRouteSnapshot) {
+    return new SGRouteTransitionCommands({ scrollTo: topElementId });
+  }
 
   ngOnInit() {
     this.registerSubscriptions();

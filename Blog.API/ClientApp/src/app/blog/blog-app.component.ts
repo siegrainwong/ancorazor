@@ -11,6 +11,7 @@ import { onScroll } from "../shared/utils/scroll-listener";
 import { Subscription } from "rxjs";
 import { UserService } from "./services/user.service";
 import { CommonService } from "./services/common.service";
+import { SEOService } from "./services/seo.service";
 
 @Component({
   selector: "app-blog-app",
@@ -30,6 +31,7 @@ export class BlogAppComponent implements OnInit, OnDestroy {
     private _scrollDispatcher: ScrollDispatcher,
     private _userService: UserService,
     private _commonService: CommonService,
+    private _seoService: SEOService,
     public store: Store,
     public transition: SGTransitionToEnter
   ) {}
@@ -37,6 +39,7 @@ export class BlogAppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscribeRoute();
     this.setupSetting();
+    this._seoService.setup();
     if (!this.store.renderFromClient) return;
     this.setupUser();
     this._scrollDispatcher.scrolled().subscribe(onScroll);

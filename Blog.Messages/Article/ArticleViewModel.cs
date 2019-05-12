@@ -6,6 +6,7 @@ namespace Blog.API.Messages.Article
 {
     public class ArticleViewModel : ArticleModel
     {
+        public new string Author { get; set; }
         public string Path { get; set; }
         public IEnumerable<Category> Categories { get; set; }
         public IEnumerable<Tag> Tags { get; set; }

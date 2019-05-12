@@ -34,10 +34,10 @@ namespace Blog.Service
         private static readonly Func<BlogContext, string, dynamic> _getArticleByAliasAsync =
             EF.CompileAsyncQuery((BlogContext context, string alias) =>
                 context.Article
+                    .Include(x => x.AuthorNavigation)
                     .Select(x => new
                     {
                         x.Alias,
-                        x.Author,
                         x.Content,
                         x.Title,
                         x.Id,
@@ -45,6 +45,7 @@ namespace Blog.Service
                         x.ViewCount,
                         x.IsDraft,
                         x.CreatedAt,
+                        Author = x.AuthorNavigation.RealName,
                         Tags = x.ArticleTags.Select(c => new
                         {
                             c.TagNavigation.Name,

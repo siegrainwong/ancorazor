@@ -24,11 +24,7 @@ export class ArticleComponent
   };
   public model: ArticleModel;
   public content: string;
-  constructor(
-    private _titleService: Title,
-    private _util: SGUtil,
-    public store: Store
-  ) {}
+  constructor(private _util: SGUtil, public store: Store) {}
   ngOnInit() {
     this.getArticle();
   }
@@ -42,9 +38,6 @@ export class ArticleComponent
       this.store.routeDataChanged$.subscribe(x => {
         if (!x.article) return;
         this.model = x.article;
-        this._titleService.setTitle(
-          `${this.model.title} - ${constants.titlePlainText}`
-        );
         this.setupViewer();
       })
     );

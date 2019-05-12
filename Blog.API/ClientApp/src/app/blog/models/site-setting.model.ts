@@ -7,6 +7,7 @@ export default class SiteSettingModel extends BaseModel {
   copyright: string;
   siteName: string;
   articleTemplate?: string;
+  keywords?: string;
 
   constructor(init?: Partial<SiteSettingModel>) {
     super(init);

@@ -17,13 +17,18 @@ namespace Blog.Entity
         public string SubTitle { get; set; }
 
         /// <summary>
-        /// 用于 title 节点跟 meta og:site_name
+        /// 用于 title 节点跟 Meta og:site_name
         /// </summary>
         [Required]
         public string SiteName { get; set; }
 
         [Required]
         public string Copyright { get; set; }
+
+        /// <summary>
+        /// 用于首页的 Meta keywords
+        /// </summary>
+        public string Keywords { get; set; }
 
         /// <summary>
         /// 首页封面图

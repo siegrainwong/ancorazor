@@ -47,14 +47,12 @@ export class ArticleListComponent
   private _subscription = new Subscription();
   constructor(
     private _service: ArticleService,
-    private _titleService: Title,
     private _util: SGUtil,
     public transitionStore: SGTransitionStore,
     public store: Store
   ) {}
 
   ngOnInit() {
-    this._titleService.setTitle(`${constants.titlePlainText}`);
     this._subscription.add(
       this.store.routeDataChanged$.subscribe(async data => {
         this.data = data.list;

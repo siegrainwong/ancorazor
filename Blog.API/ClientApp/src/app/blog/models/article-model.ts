@@ -5,8 +5,8 @@ export default class ArticleModel extends BaseModel {
   title: string;
   digest: string;
   alias: string;
-  tags?: { name: string; alias: string } | string[];
-  categories?: { name: string; alias: string } | string[];
+  tags?: { name: string; alias: string }[];
+  categories?: { name: string; alias: string }[];
   content: string;
   viewCount: number = 0;
   commentCount: number = 0;

@@ -14,7 +14,7 @@ declare global {
   }
 }
 
-const enum SGProgressMode {
+export const enum SGProgressMode {
   manually,
   transition
 }
@@ -33,7 +33,7 @@ export class SGProgress implements OnDestroy {
     private _store: Store,
     private _transitionStore: SGTransitionStore
   ) {
-    this.setup();
+    this._store.renderFromClient && this.setup();
   }
 
   ngOnDestroy() {
@@ -44,10 +44,11 @@ export class SGProgress implements OnDestroy {
     return this._store.renderFromClient && window && window.NProgress;
   }
 
-  private async setup() {
-    if (!this._store.renderFromClient) return;
+  async setup() {
     await this._util.loadExternalScripts([externalScripts.nprogress]);
-    window.NProgress.configure({ showSpinner: false });
+    window.NProgress.configure({
+      showSpinner: false
+    });
     this.progressWithTransition();
   }
 
@@ -61,7 +62,7 @@ export class SGProgress implements OnDestroy {
             window.NProgress.start();
             break;
           case SGTransitionPipeline.Complete:
-            this.progressDone();
+            this.progressDone(SGProgressMode.transition);
             break;
           default:
             var total = Object.keys(SGTransitionPipeline).length / 2;
@@ -78,8 +79,9 @@ export class SGProgress implements OnDestroy {
     this._mode = SGProgressMode.manually;
   }
 
-  public progressDone() {
+  public progressDone(mode: SGProgressMode) {
     if (!this.isAvailable) return;
+    if (this._mode !== mode) return;
     window.NProgress.done();
     this.clear();
   }

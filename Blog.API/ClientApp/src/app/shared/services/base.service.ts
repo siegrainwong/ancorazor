@@ -10,7 +10,7 @@ import { TaskWrapper } from "./async-helper.service";
 import { TransferState, makeStateKey } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
-import { SGProgress } from "../utils/siegrain.progress";
+import { SGProgress, SGProgressMode } from "../utils/siegrain.progress";
 import { setupCache } from "axios-cache-adapter";
 
 @Injectable({ providedIn: "root" })
@@ -153,7 +153,7 @@ export abstract class BaseService implements OnDestroy, ISGService {
         !!response.request.fromCache
       );
     this.store.isRequesting = false;
-    this._progress.progressDone();
+    this._progress.progressDone(SGProgressMode.manually);
   }
 
   /**

@@ -17,6 +17,7 @@
         {
             public const string Default = "0001";
             public const string DuplicateEntity = "0010";
+            public const string EntityNotFound = "0011";
         }
     }
 }

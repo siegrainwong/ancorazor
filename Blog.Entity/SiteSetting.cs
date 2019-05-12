@@ -6,7 +6,7 @@ namespace Blog.Entity
     public class SiteSetting: BaseEntity
     {
         /// <summary>
-        /// 用于首页大标题
+        /// 用于首页大标题跟 NavBar 标题
         /// </summary>
         [Required]
         public string Title { get; set; }

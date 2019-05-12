@@ -77,7 +77,6 @@ namespace Blog.API
 
             return services.ConfigureAspectCoreInterceptor(options =>
             {
-                // Specify which provider you want to use
                 options.CacheProviderName = _CacheProviderName;
             });
         }

@@ -14,7 +14,8 @@ import { SGProgress } from "../utils/siegrain.progress";
 import { setupCache } from "axios-cache-adapter";
 
 @Injectable({ providedIn: "root" })
-export abstract class BaseService implements OnDestroy {
+export abstract class BaseService implements OnDestroy, ISGService {
+  serviceName = null;
   protected subscription = new Subscription();
   protected settings = { disabledCache: false };
   private _api = axios.create({
@@ -30,6 +31,22 @@ export abstract class BaseService implements OnDestroy {
         // disable cache from requests with query params
         query: false,
         filter: () => this.disabledCache()
+      },
+      // invalidate caches with same prefix on url when sending a PUT | DELETE | POST request
+      invalidate: async (cfg, req) => {
+        if (req.method === "get" || this.disabledCache() || !this.serviceName)
+          return;
+        const shouldInvalidateCachePrefix = `${environment.apiUrlBase}/${
+          this.serviceName
+        }`;
+        if (req.url.startsWith(shouldInvalidateCachePrefix)) {
+          Object.keys(cfg.store.store)
+            .filter(x => x.startsWith(shouldInvalidateCachePrefix))
+            .forEach(async x => await cfg.store.removeItem(x));
+          this.logger.info(
+            `Caches with prefix ${shouldInvalidateCachePrefix} has been removed.`
+          );
+        }
       }
     }).adapter
   });
@@ -218,7 +235,7 @@ export abstract class BaseService implements OnDestroy {
         this.route.navigate([], { fragment: "sign-in" });
         break;
       default:
-        if (result.data.message) result.message += "\n" + result.data.message;
+        if (result.data.message) result.message += "：" + result.data.message;
         this.util.tip(result.message);
         this.logger.error(result);
     }
@@ -226,7 +243,7 @@ export abstract class BaseService implements OnDestroy {
   }
 }
 
-export interface ISubService {
+export interface ISGService {
   /** 服务名称 */
   serviceName: string;
 }

@@ -1,10 +1,10 @@
 import { Injectable, OnInit } from "@angular/core";
-import { BaseService, ISubService } from "src/app/shared/services/base.service";
+import { BaseService, ISGService } from "src/app/shared/services/base.service";
 import { UserModel } from "../models/user-model";
 import { ResponseResult } from "src/app/shared/models/response-result";
 
 @Injectable({ providedIn: "root" })
-export class UserService extends BaseService implements ISubService {
+export class UserService extends BaseService implements ISGService {
   protected initialize() {}
   disabledCache = () => true;
   serviceName = "Users";

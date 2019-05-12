@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { BaseService, ISubService } from "src/app/shared/services/base.service";
+import { BaseService, ISGService } from "src/app/shared/services/base.service";
 import { ArticleParameters } from "../models/article-parameters";
 import { PagedResult } from "src/app/shared/models/response-result";
 import ArticleModel from "../models/article-model";
 
 @Injectable({ providedIn: "root" })
-export class ArticleService extends BaseService implements ISubService {
+export class ArticleService extends BaseService implements ISGService {
   serviceName = "article";
   protected initialize() {}
 

@@ -92,12 +92,13 @@ namespace Blog.Service
             parameter.Alias = UrlHelper.ToUrlSafeString(parameter.Alias ?? parameter.Title, true);
             if (parameter.Id == 0 &&
                 _context.Article.Any(x => x.Title == parameter.Title || x.Alias == parameter.Alias))
-                throw new DuplicateEntityException("Duplicate title or alias of an article.");
+                throw new DuplicateEntityException<Article>(nameof(Article.Title), nameof(Article.Alias));
 
             Article entity = null;
             if (parameter.Id != 0)
             {
                 entity = await GetByIdIncludeAsync(parameter.Id);
+                if (entity == null) throw new EntityNotFoundException<Article>();
                 DropRelations(entity);
                 entity.UpdatedAt = DateTime.Now;
                 _mapper.Map(parameter, entity);
@@ -146,6 +147,7 @@ namespace Blog.Service
         public virtual async Task<bool> DeleteAsync(int id)
         {
             var entity = await GetByIdIncludeAsync(id);
+            if (entity == null) throw new EntityNotFoundException<Article>();
 
             DropRelations(entity);
             _context.Article.Remove(entity);

@@ -35,6 +35,7 @@ namespace Blog.Service
             EF.CompileAsyncQuery((BlogContext context, string alias) =>
                 context.Article
                     .Include(x => x.AuthorNavigation)
+                    .Include(x => x.ImageStorageNavigation)
                     .Select(x => new
                     {
                         x.Alias,
@@ -45,7 +46,7 @@ namespace Blog.Service
                         x.ViewCount,
                         x.IsDraft,
                         x.CreatedAt,
-                        x.Cover,
+                        Cover = x.ImageStorageNavigation.Path,
                         Author = x.AuthorNavigation.RealName,
                         Tags = x.ArticleTags.Select(c => new
                         {

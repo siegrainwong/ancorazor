@@ -6,6 +6,9 @@
         {
             public const string DefaultCategoryName = "Uncategorized";
             public const string RouteReplaceRegex = @"([^\w\d])+";
+
+            public const int ThumbWidth = 200;
+            public const int ThumbHeight = 150;
         }
 
         public static class SiteSetting

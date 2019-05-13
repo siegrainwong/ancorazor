@@ -11,7 +11,7 @@ export default class ArticleModel extends BaseModel {
   viewCount: number = 0;
   commentCount: number = 0;
   path: string;
-  cover: string = "assets/img/placeholder.jpg";
+  cover?: string | number;
   isDraft: boolean = false;
   previous: { title: string; path: string };
   next: { title: string; path: string };

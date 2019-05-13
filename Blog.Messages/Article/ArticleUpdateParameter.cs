@@ -18,8 +18,7 @@ namespace Blog.API.Messages.Article
         [Required]
         public string Content { get; set; }
 
-        [StringLength(200, MinimumLength = 0, ErrorMessage = "Cover must be less than 200 characters.")]
-        public string Cover { get; set; }
+        public int Cover { get; set; } = 1;
 
         [Required]
         public DateTime CreatedAt { get; set; }

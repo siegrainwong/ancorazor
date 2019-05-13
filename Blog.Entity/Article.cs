@@ -13,8 +13,8 @@ namespace Blog.Entity
             ArticleCategories = new HashSet<ArticleCategories>();
             ArticleTags = new HashSet<ArticleTags>();
         }
-        [StringLength(200)]
-        public string Cover { get; set; }
+        [Required]
+        public int Cover { get; set; }
         public int Author { get; set; }
         [Required]
         [StringLength(256)]
@@ -31,6 +31,9 @@ namespace Blog.Entity
         public int CommentCount { get; set; }
         public bool IsDraft { get; set; }
 
+        [ForeignKey("Cover")]
+        [InverseProperty("Article")]
+        public virtual ImageStorage ImageStorageNavigation { get; set; }
         [ForeignKey("Author")]
         [InverseProperty("Article")]
         public virtual Users AuthorNavigation { get; set; }

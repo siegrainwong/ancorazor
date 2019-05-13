@@ -27,6 +27,7 @@ namespace Blog.Entity
         public virtual DbSet<UserRole> UserRole { get; set; }
         public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<SiteSetting> SiteSetting { get; set; }
+        public virtual DbSet<ImageStorage> ImageStorage { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -66,11 +67,18 @@ namespace Blog.Entity
                     .IsUnique();
 
                 entity.Property(e => e.Author).HasDefaultValueSql("((1))");
+                entity.Property(e => e.Cover).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.AuthorNavigation)
                     .WithMany(p => p.Article)
                     .HasForeignKey(d => d.Author)
                     .HasConstraintName("FK_Article_Users");
+
+                entity.HasOne(d => d.ImageStorageNavigation)
+                    .WithMany(p => p.Article)
+                    .HasForeignKey(d => d.Cover)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_Article_ImageStorage");
             });
 
             builder.Entity<ArticleCategories>(entity =>
@@ -151,15 +159,25 @@ namespace Blog.Entity
                 entity.Property(e => e.AuthUpdatedAt).HasDefaultValueSql("(getdate())");
             });
 
-            builder.Entity<SiteSetting>(entity =>
+            builder.Entity<SiteSetting>();
+
+            builder.Entity<ImageStorage>(entity =>
             {
-                entity.Property(x => x.SiteName).HasDefaultValue("ancore");
-                entity.Property(x => x.Title).HasDefaultValue("Ancore");
-                entity.Property(x => x.Copyright).HasDefaultValue("ancore");
-                entity.Property(x => x.CoverUrl).HasDefaultValue("assets/img/write-bg.jpg");
+                entity.HasIndex(e => e.Path)
+                    .HasName("IX_ImageStorage_Path")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.ThumbPath)
+                    .HasName("IX_ImageStorage_ThumbPath")
+                    .IsUnique();
+
+                entity.HasOne(d => d.UploaderNavigation)
+                    .WithMany(p => p.ImageStorage)
+                    .HasForeignKey(d => d.Uploader)
+                    .HasConstraintName("FK_ImageStorage_Users");
             });
 
-            // seed data
+            #region Seeds
             builder.Entity<Users>().HasData(new Users
             {
                 Id = 1,
@@ -202,11 +220,23 @@ namespace Blog.Entity
                 Title = "Ancore",
                 SiteName = "ancore",
                 Copyright = "ancore",
-                CoverUrl = "assets/img/write-bg.jpg",
+                CoverUrl = "upload/default/home-bg.jpg",
                 RouteMapping = "date/alias",
                 Remark = null
             });
-            
+            builder.Entity<ImageStorage>().HasData(new ImageStorage
+            {
+                Id = 1,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                Size = 0,
+                Uploader = 1,
+                Category = "cover",
+                Path = "upload/default/post-bg.jpg",
+                Remark = "default post cover"
+            });
+            #endregion
+
             OnModelCreatingPartial(builder);
         }
 

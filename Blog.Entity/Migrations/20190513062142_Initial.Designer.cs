@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blog.Entity.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    [Migration("20190505132150_AuthorRequired")]
-    partial class AuthorRequired
+    [Migration("20190513062142_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,8 +41,9 @@ namespace Blog.Entity.Migrations
                         .IsRequired()
                         .HasColumnType("ntext");
 
-                    b.Property<string>("Cover")
-                        .HasMaxLength(200);
+                    b.Property<int>("Cover")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("((1))");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -70,9 +71,15 @@ namespace Blog.Entity.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Alias")
+                        .IsUnique()
+                        .HasName("IX_Article_Alias");
+
                     b.HasIndex("Author");
 
-                    b.HasIndex("Id")
+                    b.HasIndex("Cover");
+
+                    b.HasIndex("Title")
                         .IsUnique()
                         .HasName("IX_Article_Title");
 
@@ -149,6 +156,9 @@ namespace Blog.Entity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Alias")
+                        .HasMaxLength(50);
+
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
@@ -177,9 +187,74 @@ namespace Blog.Entity.Migrations
                     b.ToTable("Category");
                 });
 
+            modelBuilder.Entity("Blog.Entity.ImageStorage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(500);
+
+                    b.Property<string>("Remark")
+                        .HasMaxLength(256);
+
+                    b.Property<long>("Size");
+
+                    b.Property<string>("ThumbPath")
+                        .HasMaxLength(500);
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<int>("Uploader");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Path")
+                        .IsUnique()
+                        .HasName("IX_ImageStorage_Path");
+
+                    b.HasIndex("ThumbPath")
+                        .IsUnique()
+                        .HasName("IX_ImageStorage_ThumbPath")
+                        .HasFilter("[ThumbPath] IS NOT NULL");
+
+                    b.HasIndex("Uploader");
+
+                    b.ToTable("ImageStorage");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Category = "cover",
+                            CreatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(6264),
+                            Path = "upload/default/post-bg.jpg",
+                            Remark = "default post cover",
+                            Size = 0L,
+                            UpdatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(6268),
+                            Uploader = 1
+                        });
+                });
+
             modelBuilder.Entity("Blog.Entity.OperationLog", b =>
                 {
-                    b.Property<Guid>("Id");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Action")
                         .HasMaxLength(200);
@@ -251,6 +326,75 @@ namespace Blog.Entity.Migrations
                         .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 316, DateTimeKind.Local).AddTicks(9945),
+                            IsDeleted = false,
+                            IsEnabled = true,
+                            Name = "Admin",
+                            UpdatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 316, DateTimeKind.Local).AddTicks(9957)
+                        });
+                });
+
+            modelBuilder.Entity("Blog.Entity.SiteSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ArticleTemplate");
+
+                    b.Property<string>("Copyright")
+                        .IsRequired();
+
+                    b.Property<string>("CoverUrl")
+                        .IsRequired();
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<string>("Keywords");
+
+                    b.Property<string>("Remark")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("RouteMapping")
+                        .IsRequired();
+
+                    b.Property<string>("SiteName")
+                        .IsRequired();
+
+                    b.Property<string>("SubTitle");
+
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SiteSetting");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Copyright = "ancore",
+                            CoverUrl = "upload/default/home-bg.jpg",
+                            CreatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(2693),
+                            RouteMapping = "date/alias",
+                            SiteName = "ancore",
+                            Title = "Ancore",
+                            UpdatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(2696)
+                        });
                 });
 
             modelBuilder.Entity("Blog.Entity.Tag", b =>
@@ -258,6 +402,9 @@ namespace Blog.Entity.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Alias")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -315,6 +462,17 @@ namespace Blog.Entity.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserRole");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(1512),
+                            IsDeleted = false,
+                            RoleId = 1,
+                            UpdatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(1516),
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("Blog.Entity.Users", b =>
@@ -364,14 +522,14 @@ namespace Blog.Entity.Migrations
                         new
                         {
                             Id = 1,
-                            AuthUpdatedAt = new DateTime(2019, 5, 5, 21, 21, 50, 41, DateTimeKind.Local).AddTicks(9469),
-                            CreatedAt = new DateTime(2019, 5, 5, 21, 21, 50, 41, DateTimeKind.Local).AddTicks(7967),
+                            AuthUpdatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 315, DateTimeKind.Local).AddTicks(1384),
+                            CreatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 315, DateTimeKind.Local).AddTicks(9),
                             IsDeleted = false,
                             LoginName = "admin",
                             Password = "$SGHASH$V1$10000$RA3Eaw5yszeel1ARIe7iFp2AGWWLd80dAMwr+V4mRcAimv8u",
                             RealName = "Admin",
                             Status = 1,
-                            UpdatedAt = new DateTime(2019, 5, 5, 21, 21, 50, 41, DateTimeKind.Local).AddTicks(8917)
+                            UpdatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 315, DateTimeKind.Local).AddTicks(893)
                         });
                 });
 
@@ -382,6 +540,12 @@ namespace Blog.Entity.Migrations
                         .HasForeignKey("Author")
                         .HasConstraintName("FK_Article_Users")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Blog.Entity.ImageStorage", "ImageStorageNavigation")
+                        .WithMany("Article")
+                        .HasForeignKey("Cover")
+                        .HasConstraintName("FK_Article_ImageStorage")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Blog.Entity.ArticleCategories", b =>
@@ -389,12 +553,14 @@ namespace Blog.Entity.Migrations
                     b.HasOne("Blog.Entity.Article", "ArticleNavigation")
                         .WithMany("ArticleCategories")
                         .HasForeignKey("Article")
-                        .HasConstraintName("FK_ArticleCategories_Article");
+                        .HasConstraintName("FK_ArticleCategories_Article")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Blog.Entity.Category", "CategoryNavigation")
                         .WithMany("ArticleCategories")
                         .HasForeignKey("Category")
-                        .HasConstraintName("FK_ArticleCategories_Category");
+                        .HasConstraintName("FK_ArticleCategories_Category")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Blog.Entity.ArticleTags", b =>
@@ -402,12 +568,23 @@ namespace Blog.Entity.Migrations
                     b.HasOne("Blog.Entity.Article", "ArticleNavigation")
                         .WithMany("ArticleTags")
                         .HasForeignKey("Article")
-                        .HasConstraintName("FK_ArticleTags_Article");
+                        .HasConstraintName("FK_ArticleTags_Article")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Blog.Entity.Tag", "TagNavigation")
                         .WithMany("ArticleTags")
                         .HasForeignKey("Tag")
-                        .HasConstraintName("FK_ArticleTags_Tag");
+                        .HasConstraintName("FK_ArticleTags_Tag")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Blog.Entity.ImageStorage", b =>
+                {
+                    b.HasOne("Blog.Entity.Users", "UploaderNavigation")
+                        .WithMany("ImageStorage")
+                        .HasForeignKey("Uploader")
+                        .HasConstraintName("FK_ImageStorage_Users")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Blog.Entity.UserRole", b =>

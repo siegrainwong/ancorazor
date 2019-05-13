@@ -33,6 +33,6 @@ export class HeaderComponent implements SGTransitionDelegate {
         ".header-bg"
       ) as HTMLElement).style.backgroundImage = "url('" + image.src + "')";
     };
-    image.src = src;
+    image.src = src.toString();
   }
 }

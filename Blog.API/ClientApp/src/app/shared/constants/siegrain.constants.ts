@@ -1,26 +1,33 @@
 import { random } from "src/app/shared/utils/random";
 
 export const constants = {
-  title: "siegrain🌌wang",
-  titlePlainText: "siegrain.wang",
   homeCoverUrl: `assets/img/bg${random(1, 7)}.jpg`
+};
+
+export const coverSize = {
+  width: 1600,
+  height: 1200,
+  ratio: "4:3"
 };
 
 export const externalScripts = {
   // https://github.com/Ionaru/easy-markdown-editor
   editor: "assets/libraries/easymde.min.js",
   /**
-   * 我定制的 highlight.js，部分语言不支持
-   * 定制地址：https://highlightjs.org/download/
+   * customized highlight.js
+   * ref http://highlightjs.org/download/
    */
   highlight: "assets/libraries/highlight.pack.js",
   marked: "assets/libraries/marked.min.js",
   nprogress: "assets/libraries/nprogress.min.js",
-  filepond: "https://unpkg.com/filepond/dist/filepond.js",
+  filepond: "assets/libraries/filepond/filepond.min.js",
   filepondSizeValidation:
-    "https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js",
+    "assets/libraries/filepond/filepond-plugin-file-validate-size.min.js",
   filepondResize:
-    "https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"
+    "assets/libraries/filepond/filepond-plugin-image-resize.min.js",
+  filepondTransform:
+    "assets/libraries/filepond/filepond-plugin-image-transform.min.js",
+  filepondCrop: "assets/libraries/filepond/filepond-plugin-image-crop.min.js"
 };
 
 export const articleDefaultContent = `---

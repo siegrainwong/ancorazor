@@ -12,8 +12,6 @@ import { GlobalErrorHandler } from "./shared/services/global-error-handler";
 import { Store } from "./shared/store/store";
 import { isPlatformBrowser } from "@angular/common";
 import { TaskWrapper } from "./shared/services/async-helper.service";
-import { constants } from "./shared/constants/siegrain.constants";
-import { SGUtil } from "./shared/utils/siegrain.utils";
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,7 +20,7 @@ import { SGUtil } from "./shared/utils/siegrain.utils";
     // The application ID can be any identifier which is unique on
     // the page.
     BrowserModule.withServerTransition({
-      appId: `app-${constants.titlePlainText}`
+      appId: `app-ancore`
     }),
     BrowserTransferStateModule,
     AppRoutingModule,

@@ -1,10 +1,6 @@
 import { Component, OnInit, Input, OnDestroy } from "@angular/core";
 import { ArticleService } from "../../services/article.service";
-import {
-  ActivatedRoute,
-  Router,
-  ActivatedRouteSnapshot
-} from "@angular/router";
+import { Router, ActivatedRouteSnapshot } from "@angular/router";
 import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
 import { LoggingService } from "src/app/shared/services/logging.service";
@@ -15,7 +11,8 @@ import {
 } from "src/app/shared/utils/siegrain.utils";
 import {
   externalScripts,
-  articleDefaultContent
+  articleDefaultContent,
+  coverSize
 } from "src/app/shared/constants/siegrain.constants";
 import { timeFormat } from "src/app/shared/utils/time-format";
 import { SGTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
@@ -23,7 +20,6 @@ import { SGAnimations } from "src/app/shared/animations/sg-animations";
 import { SGRouteTransitionCommands } from "src/app/shared/animations/sg-transition.model";
 import { take, map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
-const yamlFront = require("yaml-front-matter");
 
 @Component({
   selector: "app-write-article",
@@ -36,7 +32,6 @@ export class WriteArticleComponent
     editor: SGAnimations.fadeOpposite
   };
   @Input() model = new ArticleModel({
-    cover: "assets/img/write-bg.jpg",
     title: "",
     digest: ""
   });
@@ -117,6 +112,7 @@ export class WriteArticleComponent
    */
   private get lexer() {
     if (this._lexer) return this._lexer;
+    const yamlFront = require("yaml-front-matter");
 
     const self = this;
     let lex = marked.Lexer.lex;
@@ -142,40 +138,43 @@ export class WriteArticleComponent
     await this._util.loadExternalScripts([
       externalScripts.filepond,
       externalScripts.filepondResize,
-      externalScripts.filepondSizeValidation
+      externalScripts.filepondSizeValidation,
+      externalScripts.filepondCrop
     ]);
     FilePond.registerPlugin(
       FilePondPluginFileValidateSize,
-      FilePondPluginImageResize
+      FilePondPluginImageResize,
+      FilePondPluginImageTransform,
+      FilePondPluginImageCrop
     );
     FilePond.create(document.querySelector("#cover-uploader"));
     FilePond.setOptions({
       server: {
         url: environment.apiUrlBase,
         process: {
-          url: "/common/upload/covers",
+          url: "/common/upload/cover",
           headers: {
             "X-XSRF-TOKEN": this._util.getCookie(XSRFTokenKey)
           },
           onload: res => {
             const resJson = JSON.parse(res);
-            this.model.cover = resJson.data.publicUrl;
+            this.model.cover = resJson.data.id;
             return res.key;
           }
         }
-      }
+      },
+      allowImageResize: true,
+      allowImageCrop: true,
+      imageResizeTargetWidth: coverSize.width,
+      imageResizeTargetHeight: coverSize.height,
+      imageResizeMode: "cover",
+      imageCropAspectRatio: coverSize.ratio
     });
   }
 
   /**
    * Events
    */
-
-  onHeaderChanged(model: ArticleModel) {
-    this.model.title = model.title;
-    this.model.digest = model.digest;
-    this.model.cover = model.cover;
-  }
 
   async submit() {
     // validations

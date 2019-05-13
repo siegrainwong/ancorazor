@@ -12,6 +12,7 @@ namespace Blog.Entity
         {
             Article = new HashSet<Article>();
             UserRole = new HashSet<UserRole>();
+            ImageStorage = new HashSet<ImageStorage>();
         }
 
         [Required]
@@ -31,5 +32,7 @@ namespace Blog.Entity
         public virtual ICollection<Article> Article { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<UserRole> UserRole { get; set; }
+        [InverseProperty("UploaderNavigation")]
+        public virtual ICollection<ImageStorage> ImageStorage { get; set; }
     }
 }

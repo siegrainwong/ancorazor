@@ -7,15 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20190506085056_DeprecateGenericBaseEntity.cs" />
-    <Compile Remove="Migrations\20190506085056_DeprecateGenericBaseEntity.Designer.cs" />
-    <Compile Remove="Migrations\20190507080348_AddRoleSeedData.cs" />
-    <Compile Remove="Migrations\20190507080348_AddRoleSeedData.Designer.cs" />
-    <Compile Remove="Migrations\20190512081833_AddKeywords.cs" />
-    <Compile Remove="Migrations\20190512081833_AddKeywords.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.2.0" />

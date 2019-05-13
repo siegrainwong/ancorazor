@@ -27,7 +27,9 @@ export const externalScripts = {
     "assets/libraries/filepond/filepond-plugin-image-resize.min.js",
   filepondTransform:
     "assets/libraries/filepond/filepond-plugin-image-transform.min.js",
-  filepondCrop: "assets/libraries/filepond/filepond-plugin-image-crop.min.js"
+  filepondCrop: "assets/libraries/filepond/filepond-plugin-image-crop.min.js",
+  filepondTypeValidation:
+    "assets/libraries/filepond/filepond-plugin-file-validate-type.min.js"
 };
 
 export const articleDefaultContent = `---

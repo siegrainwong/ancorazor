@@ -39,15 +39,17 @@ namespace Blog.API.Controllers
         public async Task<IActionResult> UploadImage(IFormFile file, string category)
         {
             var preventedFileNameChars = new[] { '|', '\\', '?', '*', '<', '>', ':', '"', '\'' };
+            var allowedFileExtensions = new[] { ".png", ".jpg", ".bmp" };
 
             if (string.IsNullOrEmpty(category)
                 || preventedFileNameChars.Any(category.Contains)
                 || file == null || file.Length < 1)
-            {
                 throw new APIException("Empty file or invalid arguments.", HttpStatusCode.BadRequest);
-            }
 
-            var fileExt = file.FileName.Substring(file.FileName.LastIndexOf("."));
+            var fileExt = file.FileName.Substring(file.FileName.LastIndexOf(".")).ToLower();
+            if (!allowedFileExtensions.Contains(fileExt))
+                throw new APIException($"{fileExt} is not a supported extension.", HttpStatusCode.BadRequest);
+
             var fileName = $"{Guid.NewGuid().ToString("N")}{fileExt}";
             var path = $"{Constants.UploadFilePath.Base}/{category}";
 

@@ -145,10 +145,11 @@ export class WriteArticleComponent
       FilePondPluginFileValidateSize,
       FilePondPluginImageResize,
       FilePondPluginImageTransform,
-      FilePondPluginImageCrop
+      FilePondPluginImageCrop,
+      FilePondPluginFileValidateType
     );
-    FilePond.create(document.querySelector("#cover-uploader"));
     FilePond.setOptions({
+      // api
       server: {
         url: environment.apiUrlBase,
         process: {
@@ -163,13 +164,20 @@ export class WriteArticleComponent
           }
         }
       },
+      // crop/resize/transform things
       allowImageResize: true,
       allowImageCrop: true,
       imageResizeTargetWidth: coverSize.width,
       imageResizeTargetHeight: coverSize.height,
       imageResizeMode: "cover",
-      imageCropAspectRatio: coverSize.ratio
+      imageCropAspectRatio: coverSize.ratio,
+      // type validation
+      allowFileTypeValidation: true,
+      acceptedFileTypes: ["image/png", "image/jpg", "image/bmp", "image/jpeg"]
     });
+    const pond = FilePond.create(document.querySelector("#cover-uploader"));
+    pond.labelIdle =
+      'Drag & Drop your image or <span class="filepond--label-action">Browse</span>';
   }
 
   /**

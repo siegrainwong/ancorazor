@@ -177,7 +177,7 @@ export class WriteArticleComponent
     });
     const pond = FilePond.create(document.querySelector("#cover-uploader"));
     pond.labelIdle =
-      'Drag & Drop your image or <span class="filepond--label-action">Browse</span>';
+      'Drag & Drop your cover image here or <span class="filepond--label-action">Browse</span>';
   }
 
   /**

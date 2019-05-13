@@ -1,4 +1,5 @@
 ﻿using Blog.API.Common.Constants;
+using Blog.API.Messages.Exceptions;
 using Blog.Entity;
 using EasyCaching.Core.Interceptor;
 using System;
@@ -21,7 +22,9 @@ namespace Blog.Service
         [EasyCachingAble(Expiration = Constants.SiteSetting.Expiration)]
         public virtual SiteSetting GetSetting()
         {
-            return _context.SiteSetting.FirstOrDefault();
+            var setting = _context.SiteSetting.FirstOrDefault();
+            if (setting == null) throw new EntityNotFoundException<SiteSetting>();
+            return setting;
         }
 
         [EasyCachingPut]

@@ -36,7 +36,6 @@ export class SEOService implements OnDestroy {
 
   private setupSiteSEO(setting: SiteSettingModel) {
     this._titleService.setTitle(setting.siteName);
-    this._meta.addTag({ charset: "UTF-8" });
     this._meta.addTag({ property: "og:site_name", content: setting.siteName });
     setting.keywords &&
       this._meta.addTag({ name: "keywords", content: setting.keywords });

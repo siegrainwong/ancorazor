@@ -29,10 +29,10 @@ namespace Blog.API.Common
             return WebUtility.HtmlEncode(source.Replace(" ", "-"));
         }
 
-        public string GetArticleRoutePath(int id, DateTime date, string alias, string category)
+        public string GetArticleRoutePath(int id, DateTime date, string alias, string category, string template)
         {
             category = category ?? Constants.Constants.Article.DefaultCategoryName;
-            var path = _seoConfiguration.ArticleRouteMapping
+            var path = template
                 .Replace(nameof(id), id.ToString())
                 .Replace(nameof(date), date.ToString("yyyy/MM/dd"))
                 .Replace(nameof(category), CHNToPinyin.ConvertToPinYin(category))

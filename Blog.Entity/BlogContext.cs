@@ -203,6 +203,7 @@ namespace Blog.Entity
                 SiteName = "ancore",
                 Copyright = "ancore",
                 CoverUrl = "assets/img/write-bg.jpg",
+                RouteMapping = "date/alias",
                 Remark = null
             });
             

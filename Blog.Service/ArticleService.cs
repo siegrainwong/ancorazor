@@ -29,12 +29,14 @@ namespace Blog.Service
         private readonly UrlHelper _urlHelper;
         private readonly BlogContext _context;
         private readonly IMapper _mapper;
+        private readonly SiteSettingService _settingService;
 
-        public ArticleService(UrlHelper urlHelper, BlogContext context, IMapper mapper)
+        public ArticleService(UrlHelper urlHelper, BlogContext context, IMapper mapper, SiteSettingService settingService)
         {
             _urlHelper = urlHelper;
             _context = context;
             _mapper = mapper;
+            _settingService = settingService;
         }
 
         public async Task<Article> GetByIdAsync(int id, bool? isDraft)
@@ -178,7 +180,8 @@ namespace Blog.Service
         private string GetArticleRoutePath(ArticleViewModel viewModel)
         {
             if (viewModel == null) return null;
-            return _urlHelper.GetArticleRoutePath(viewModel.Id, viewModel.CreatedAt, viewModel.Alias, viewModel.ArticleCategories.FirstOrDefault()?.CategoryNavigation.Alias);
+            var setting = _settingService.GetSetting();
+            return _urlHelper.GetArticleRoutePath(viewModel.Id, viewModel.CreatedAt, viewModel.Alias, viewModel.ArticleCategories.FirstOrDefault()?.CategoryNavigation.Alias, setting.RouteMapping);
         }
     }
 }

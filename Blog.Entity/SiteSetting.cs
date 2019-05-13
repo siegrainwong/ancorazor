@@ -40,5 +40,18 @@ namespace Blog.Entity
         /// 新文章的模板
         /// </summary>
         public string ArticleTemplate { get; set; }
+
+        /// <summary>
+        /// 路由映射
+        /// </summary>
+        /// <example>
+        /// 1. id
+        /// 2. alias
+        /// 3. date/alias
+        /// 4. category/alias
+        /// 5. date/category/alias
+        /// </example>
+        [Required]
+        public string RouteMapping { get; set; }
     }
 }

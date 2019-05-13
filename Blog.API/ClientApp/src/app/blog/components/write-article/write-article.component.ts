@@ -97,9 +97,11 @@ export class WriteArticleComponent
     ]);
 
     // PS：改了很多样式在 _reset.css 里
+    var template =
+      this.store.siteSetting.articleTemplate || articleDefaultContent;
     this._editor = new EasyMDE({
       element: document.querySelector("#editor"),
-      initialValue: this.model.content || articleDefaultContent,
+      initialValue: this.model.content || template,
       autoDownloadFontAwesome: false,
       spellChecker: false,
       renderingConfig: {

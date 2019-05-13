@@ -101,6 +101,13 @@ label {
   margin-bottom: 0;
 }
 
+.collapse.navbar-collapse {
+  display: none;
+  &.show {
+    display: block;
+  }
+}
+
 /* === animate.css === */
 .animated {
   animation-fill-mode: forwards;

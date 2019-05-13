@@ -217,9 +217,9 @@ namespace Blog.Entity
                 Id = 1,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
-                Title = "Ancore",
-                SiteName = "ancore",
-                Copyright = "ancore",
+                Title = "Ancorazor",
+                SiteName = "ancorazor",
+                Copyright = "ancorazor",
                 CoverUrl = "upload/default/home-bg.jpg",
                 RouteMapping = "date/alias",
                 Remark = null

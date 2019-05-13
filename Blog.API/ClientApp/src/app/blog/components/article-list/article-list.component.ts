@@ -9,9 +9,7 @@ import {
   topElementId
 } from "src/app/shared/utils/siegrain.utils";
 import { SGAnimations } from "src/app/shared/animations/sg-animations";
-import { Title } from "@angular/platform-browser";
 import { Store } from "src/app/shared/store/store";
-import { constants } from "src/app/shared/constants/siegrain.constants";
 import { SGCustomizeTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
 import {
   SGTransitionMode,
@@ -22,7 +20,6 @@ import {
 import { Subscription } from "rxjs";
 import RouteData, { RouteKinds } from "src/app/shared/models/route-data.model";
 import { SGTransitionStore } from "src/app/shared/animations/sg-transition.store";
-import { filter } from "rxjs/operators";
 
 const StaggerDuration = 200; // 列表总动画时长 = transition duration + stagger duration
 

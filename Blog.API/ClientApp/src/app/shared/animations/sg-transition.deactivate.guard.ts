@@ -7,6 +7,7 @@ import {
 import { SGTransitionDelegate } from "./sg-transition.delegate";
 import { SGTransitionStore, SGTransitionPipeline } from "./sg-transition.store";
 import { LoggingService } from "../services/logging.service";
+import { timeout } from "../utils/promise-delay";
 
 @Injectable({
   providedIn: "root"
@@ -29,7 +30,11 @@ export class SGTransitionDeactivateGuard<T extends SGTransitionDelegate>
       component
     );
     this.setStream(SGTransitionPipeline.Ready);
-    return true;
+
+    return new Promise(async (r, j) => {
+      await timeout(10);
+      r(true);
+    });
   }
 
   private setStream(stream: SGTransitionPipeline) {

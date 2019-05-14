@@ -50,3 +50,4 @@ SmartSqlMapConfig.Development.xml
 /Blog.API/SmartSqlMapConfig.Release.xml
 /Blog.EF.Entity/appsettings.json
 /Blog.API/Upload
+/Blog.API/Logs

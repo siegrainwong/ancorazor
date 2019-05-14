@@ -111,6 +111,7 @@ namespace Blog.API
                     MinimumLogEventLevel = LogEventLevel.Information,
                     CustomFormatter = new CustomLogJsonFormmater()
                 })
+                .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
             .CreateLogger();
         }
 

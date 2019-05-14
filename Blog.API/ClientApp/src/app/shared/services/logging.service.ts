@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 
-export let isDebugMode = !environment.production;
+// const isDebugMode = !environment.production;
+const isDebugMode = true;
 
 const noop = (): any => undefined;
 

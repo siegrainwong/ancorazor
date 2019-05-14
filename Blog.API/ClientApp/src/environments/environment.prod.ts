@@ -1,4 +1,4 @@
-const apiHost = "https://sgblogcore.azurewebsites.net";
+const apiHost = "http://siegrain.wang";
 
 export const environment = {
   production: true,

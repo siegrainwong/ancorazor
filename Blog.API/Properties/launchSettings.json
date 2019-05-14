@@ -1,15 +1,18 @@
 {
-    "profiles": {
-        "Blog.API": {
-            "commandName": "Project",
-            "launchBrowser": true,
-            "launchUrl": "swagger",
-            "environmentVariables": {
-                // MARK: Smartsql 会取这个环境变量作为优先选择的配置中缀
-                // e.g. SmartSqlMapConfig.Development.xml
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "applicationUrl": "http://localhost:8088/"
-        }
+  "profiles": {
+    "Blog.API": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:8088/"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger"
     }
+  }
 }

@@ -20,6 +20,7 @@
   <!-- Include necessary folders -->
   <ItemGroup>
     <Content Include="Upload\do-not-remove.txt" CopyToOutputDirectory="PreserveNewest"></Content>
+    <Content Include="Upload\default\**" CopyToOutputDirectory="PreserveNewest"></Content>
     <Content Include="Logs\do-not-remove.txt" CopyToOutputDirectory="PreserveNewest"></Content>
   </ItemGroup>
 

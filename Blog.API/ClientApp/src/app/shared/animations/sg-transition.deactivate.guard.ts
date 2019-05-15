@@ -31,10 +31,7 @@ export class SGTransitionDeactivateGuard<T extends SGTransitionDelegate>
     );
     this.setStream(SGTransitionPipeline.Ready);
 
-    return new Promise(async (r, j) => {
-      await timeout(10);
-      r(true);
-    });
+    return true;
   }
 
   private setStream(stream: SGTransitionPipeline) {

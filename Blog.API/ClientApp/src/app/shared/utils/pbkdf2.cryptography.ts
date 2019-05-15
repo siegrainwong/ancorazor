@@ -1,6 +1,8 @@
 /**
- * Angular PBKDF2
+ * MARK: Angular PBKDF2
  * https://stackoverflow.com/questions/40459020/angular-js-cryptography-pbkdf2-and-iteration/40468218#40468218
+ *
+ * 这里特别需要注意的是，在Chrome中没有SSL时会禁用WebCrypto.
  * @param password
  * @param salt
  * @param iterations

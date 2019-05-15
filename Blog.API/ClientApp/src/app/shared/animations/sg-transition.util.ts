@@ -45,7 +45,9 @@ export class SGTransitionUtil {
 
   /** 判断是否是自定义命令 */
   private isCustomizeCommands(commands: SGTransitionCommands): boolean {
-    return commands.constructor.name === SGCustomizeTransitionCommands.name;
+    return (
+      commands["__proto__"].className() === "SGCustomizeTransitionCommands"
+    );
   }
 
   /**

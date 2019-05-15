@@ -88,6 +88,7 @@ export class SGFadeAnimation extends SGAnimation {
  */
 
 /** 过渡指令 */
+@Naming("SGTransitionCommands")
 export class SGTransitionCommands {
   /** 滚动到指定锚点 */
   scrollTo?: string;
@@ -101,6 +102,7 @@ export class SGTransitionCommands {
 }
 
 /** 离场过渡指令 */
+@Naming("SGRouteTransitionCommands")
 export class SGRouteTransitionCommands extends SGTransitionCommands {
   constructor(obj?: Partial<SGRouteTransitionCommands>) {
     super();
@@ -109,6 +111,7 @@ export class SGRouteTransitionCommands extends SGTransitionCommands {
 }
 
 /** 自定义动画过渡指令 */
+@Naming("SGCustomizeTransitionCommands")
 export class SGCustomizeTransitionCommands extends SGTransitionCommands {
   /** 要执行的动画 */
   animations!: SGAnimationData;
@@ -119,4 +122,13 @@ export class SGCustomizeTransitionCommands extends SGTransitionCommands {
     super();
     Object.assign(this, obj);
   }
+}
+
+export function Naming(name: string): ClassDecorator {
+  return function(target: any) {
+    console.log(target);
+    Object.defineProperty(target.prototype, "className", {
+      value: () => name
+    });
+  };
 }

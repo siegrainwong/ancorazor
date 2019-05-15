@@ -73,9 +73,9 @@ namespace Blog.Service
             var futureTotal = _context.Article.DeferredCount(predicate).FutureValue();
             var futureList = _context.Article.Where(predicate)
                 .Select(x => new { x.Alias, x.CommentCount, x.Title, x.CreatedAt, x.Id, x.IsDraft, x.Digest, x.ViewCount })
-                .Take(parameters.PageSize)
-                .Skip(parameters.PageSize * parameters.PageIndex)
                 .OrderByDescending(x => x.CreatedAt)
+                .Skip(parameters.PageSize * parameters.PageIndex)
+                .Take(parameters.PageSize)
                 .Future();
 
             result.Total = await futureTotal.ValueAsync();

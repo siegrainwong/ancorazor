@@ -18,6 +18,7 @@ import { timeout } from "../utils/promise-delay";
 @Injectable({
   providedIn: "root"
 })
+@TransitionGuard()
 export class SGTransitionResolveGuard implements Resolve<SGTransitionCommands> {
   private _anotherResolveGuards = new Set<any>();
   constructor(
@@ -75,7 +76,7 @@ export class SGTransitionResolveGuard implements Resolve<SGTransitionCommands> {
       let resolves = x.resolve && Object.values(x.resolve);
       resolves &&
         resolves
-          .filter(y => y.name !== SGTransitionResolveGuard.name)
+          .filter(y => !y.prototype.isTransitionGuard)
           .forEach(y => this._anotherResolveGuards.add(y));
 
       this.setupAnotherResolveGuards(childs);
@@ -128,4 +129,13 @@ export class TestDirectResolveGuard implements Resolve<ArticleModel> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return new ArticleModel();
   }
+}
+
+export function TransitionGuard(): ClassDecorator {
+  return function(target: any) {
+    console.log(target);
+    Object.defineProperty(target.prototype, "isTransitionGuard", {
+      value: () => true
+    });
+  };
 }

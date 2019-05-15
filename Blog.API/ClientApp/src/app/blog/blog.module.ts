@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { BlogRoutingModule } from "./blog-routing.module";
+import { BlogRoutingModule } from "./blog.routing";
 import { BlogAppComponent } from "./blog-app.component";
 import { NavComponent } from "./components/nav/nav.component";
 import { ArticleService } from "./services/article.service";

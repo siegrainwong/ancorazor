@@ -94,8 +94,9 @@ namespace Blog.Service
                 _context.Article.Any(x => x.Title == parameter.Title || x.Alias == parameter.Alias))
                 throw new DuplicateEntityException<Article>(nameof(Article.Title), nameof(Article.Alias));
 
+            var isUpdate = parameter.Id != 0;
             Article entity = null;
-            if (parameter.Id != 0)
+            if (isUpdate)
             {
                 entity = await GetByIdIncludeAsync(parameter.Id);
                 if (entity == null) throw new EntityNotFoundException<Article>();
@@ -126,7 +127,8 @@ namespace Blog.Service
                 .Except(tags.Select(x => x.Name))
                 .Select(x => new Tag { Name = x, Alias = UrlHelper.UrlStringEncode(x) });
 
-            await _context.Article.AddAsync(entity);
+            if (!isUpdate) await _context.Article.AddAsync(entity);
+
             await _context.ArticleTags
                 .AddRangeAsync(tags.Concat(newTags)
                 .Select(x => new ArticleTags

@@ -33,6 +33,10 @@ namespace Blog.Entity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("((1))");
 
+                    b.Property<int>("Category")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("((1))");
+
                     b.Property<int>("CommentCount");
 
                     b.Property<string>("Content")
@@ -75,6 +79,8 @@ namespace Blog.Entity.Migrations
 
                     b.HasIndex("Author");
 
+                    b.HasIndex("Category");
+
                     b.HasIndex("Cover");
 
                     b.HasIndex("Title")
@@ -82,38 +88,6 @@ namespace Blog.Entity.Migrations
                         .HasName("IX_Article_Title");
 
                     b.ToTable("Article");
-                });
-
-            modelBuilder.Entity("Blog.Entity.ArticleCategories", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Article");
-
-                    b.Property<int>("Category");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.Property<string>("Remark")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Category");
-
-                    b.HasIndex("Article", "Category");
-
-                    b.ToTable("ArticleCategories");
                 });
 
             modelBuilder.Entity("Blog.Entity.ArticleTags", b =>
@@ -155,6 +129,7 @@ namespace Blog.Entity.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Alias")
+                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedAt")
@@ -176,13 +151,28 @@ namespace Blog.Entity.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Alias")
+                        .IsUnique()
+                        .HasName("IX_Category_Alias");
+
                     b.HasIndex("Name")
                         .IsUnique()
-                        .HasName("IX_Category");
+                        .HasName("IX_Category_Name");
 
                     b.HasIndex("Name", "Id");
 
                     b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Alias = "uncategorized",
+                            CreatedAt = new DateTime(2019, 5, 15, 20, 24, 59, 960, DateTimeKind.Local).AddTicks(2625),
+                            Name = "Uncategorized",
+                            Remark = "default category",
+                            UpdatedAt = new DateTime(2019, 5, 15, 20, 24, 59, 960, DateTimeKind.Local).AddTicks(2635)
+                        });
                 });
 
             modelBuilder.Entity("Blog.Entity.ImageStorage", b =>
@@ -239,11 +229,11 @@ namespace Blog.Entity.Migrations
                         {
                             Id = 1,
                             Category = "cover",
-                            CreatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(6264),
+                            CreatedAt = new DateTime(2019, 5, 15, 20, 24, 59, 944, DateTimeKind.Local).AddTicks(5756),
                             Path = "upload/default/post-bg.jpg",
                             Remark = "default post cover",
                             Size = 0L,
-                            UpdatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(6268),
+                            UpdatedAt = new DateTime(2019, 5, 15, 20, 24, 59, 944, DateTimeKind.Local).AddTicks(5759),
                             Uploader = 1
                         });
                 });
@@ -329,11 +319,11 @@ namespace Blog.Entity.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 316, DateTimeKind.Local).AddTicks(9945),
+                            CreatedAt = new DateTime(2019, 5, 15, 20, 24, 59, 943, DateTimeKind.Local).AddTicks(9327),
                             IsDeleted = false,
                             IsEnabled = true,
                             Name = "Admin",
-                            UpdatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 316, DateTimeKind.Local).AddTicks(9957)
+                            UpdatedAt = new DateTime(2019, 5, 15, 20, 24, 59, 943, DateTimeKind.Local).AddTicks(9343)
                         });
                 });
 
@@ -385,13 +375,13 @@ namespace Blog.Entity.Migrations
                         new
                         {
                             Id = 1,
-                            Copyright = "ancore",
+                            Copyright = "ancorazor",
                             CoverUrl = "upload/default/home-bg.jpg",
-                            CreatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(2693),
+                            CreatedAt = new DateTime(2019, 5, 15, 20, 24, 59, 944, DateTimeKind.Local).AddTicks(2194),
                             RouteMapping = "date/alias",
-                            SiteName = "ancore",
-                            Title = "Ancore",
-                            UpdatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(2696)
+                            SiteName = "ancorazor",
+                            Title = "Ancorazor",
+                            UpdatedAt = new DateTime(2019, 5, 15, 20, 24, 59, 944, DateTimeKind.Local).AddTicks(2197)
                         });
                 });
 
@@ -465,10 +455,10 @@ namespace Blog.Entity.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(1512),
+                            CreatedAt = new DateTime(2019, 5, 15, 20, 24, 59, 944, DateTimeKind.Local).AddTicks(1004),
                             IsDeleted = false,
                             RoleId = 1,
-                            UpdatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(1516),
+                            UpdatedAt = new DateTime(2019, 5, 15, 20, 24, 59, 944, DateTimeKind.Local).AddTicks(1007),
                             UserId = 1
                         });
                 });
@@ -520,14 +510,14 @@ namespace Blog.Entity.Migrations
                         new
                         {
                             Id = 1,
-                            AuthUpdatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 315, DateTimeKind.Local).AddTicks(1384),
-                            CreatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 315, DateTimeKind.Local).AddTicks(9),
+                            AuthUpdatedAt = new DateTime(2019, 5, 15, 20, 24, 59, 941, DateTimeKind.Local).AddTicks(8401),
+                            CreatedAt = new DateTime(2019, 5, 15, 20, 24, 59, 936, DateTimeKind.Local).AddTicks(2725),
                             IsDeleted = false,
                             LoginName = "admin",
                             Password = "$SGHASH$V1$10000$RA3Eaw5yszeel1ARIe7iFp2AGWWLd80dAMwr+V4mRcAimv8u",
                             RealName = "Admin",
                             Status = 1,
-                            UpdatedAt = new DateTime(2019, 5, 13, 14, 21, 42, 315, DateTimeKind.Local).AddTicks(893)
+                            UpdatedAt = new DateTime(2019, 5, 15, 20, 24, 59, 941, DateTimeKind.Local).AddTicks(7867)
                         });
                 });
 
@@ -539,25 +529,16 @@ namespace Blog.Entity.Migrations
                         .HasConstraintName("FK_Article_Users")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("Blog.Entity.Category", "CategoryNavigation")
+                        .WithMany("Article")
+                        .HasForeignKey("Category")
+                        .HasConstraintName("FK_Article_Category")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Blog.Entity.ImageStorage", "ImageStorageNavigation")
                         .WithMany("Article")
                         .HasForeignKey("Cover")
                         .HasConstraintName("FK_Article_ImageStorage")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Blog.Entity.ArticleCategories", b =>
-                {
-                    b.HasOne("Blog.Entity.Article", "ArticleNavigation")
-                        .WithMany("ArticleCategories")
-                        .HasForeignKey("Article")
-                        .HasConstraintName("FK_ArticleCategories_Article")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Blog.Entity.Category", "CategoryNavigation")
-                        .WithMany("ArticleCategories")
-                        .HasForeignKey("Category")
-                        .HasConstraintName("FK_ArticleCategories_Category")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

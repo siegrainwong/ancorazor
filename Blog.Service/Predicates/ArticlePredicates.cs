@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Query;
+using Z.EntityFramework.Plus;
+using Blog.API.Messages.Article;
+using Blog.API.Messages.Exceptions;
 
 namespace Blog.Service
 {
@@ -22,20 +25,21 @@ namespace Blog.Service
         /*
          * MARK: ef core compiled queries
          * https://gunnarpeipman.com/data/ef-core-compiled-queries/
+         * 
+         * MARK: ef core `include` execute separately
+         * https://stackoverflow.com/a/34732579
          */
 
         private static readonly Func<BlogContext, int, Task<Article>> _getArticleIncludedAsync =
             EF.CompileAsyncQuery((BlogContext context, int id) =>
                 context.Article
-                    .Include(x => x.ArticleCategories)
+                    .Include(x => x.CategoryNavigation)
                     .Include(x => x.ArticleTags)
                     .FirstOrDefault(x => x.Id == id));
 
-        private static readonly Func<BlogContext, string, dynamic> _getArticleByAliasAsync =
-            EF.CompileAsyncQuery((BlogContext context, string alias) =>
-                context.Article
-                    .Include(x => x.AuthorNavigation)
-                    .Include(x => x.ImageStorageNavigation)
+        private async Task<ArticleViewModel> GetArticleByAliasAsync(string alias, bool? isDraft)
+        {
+            var futureArticle = _context.Article
                     .Select(x => new
                     {
                         x.Alias,
@@ -53,12 +57,16 @@ namespace Blog.Service
                             c.TagNavigation.Name,
                             c.TagNavigation.Alias
                         }),
-                        Categories = x.ArticleCategories.Select(c => new
-                        {
-                            c.CategoryNavigation.Name,
-                            c.CategoryNavigation.Alias
-                        }),
-                        Previous = context.Article.Where(p => p.CreatedAt > x.CreatedAt)
+                        Category = x.CategoryNavigation
+                    })
+                    .DeferredFirstOrDefault(x => x.Alias == alias).FutureValue();
+
+            var viewModel = _mapper.Map<ArticleViewModel>(await futureArticle.ValueAsync());
+
+            if (isDraft.HasValue && viewModel.IsDraft != isDraft)
+                throw new EntityNotFoundException<Article>();
+
+            var futurePrevious = _context.Article.Where(p => p.CreatedAt > viewModel.CreatedAt)
                             .OrderBy(p => p.CreatedAt).Select(p => new
                             {
                                 p.Id,
@@ -66,9 +74,10 @@ namespace Blog.Service
                                 p.Title,
                                 p.Alias,
                                 Path = "",
-                                Category = p.ArticleCategories.FirstOrDefault().CategoryNavigation.Name
-                            }).FirstOrDefault(),
-                        Next = context.Article.Where(p => p.CreatedAt < x.CreatedAt)
+                                Category = p.CategoryNavigation
+                            }).DeferredFirstOrDefault().FutureValue();
+
+            var futureNext = _context.Article.Where(p => p.CreatedAt < viewModel.CreatedAt)
                             .OrderByDescending(p => p.CreatedAt).Select(p => new
                             {
                                 p.Id,
@@ -76,10 +85,14 @@ namespace Blog.Service
                                 p.Title,
                                 p.Alias,
                                 Path = "",
-                                Category = p.ArticleCategories.FirstOrDefault().CategoryNavigation.Name
-                            }).FirstOrDefault()
-                    })
-                    .FirstOrDefault(x => x.Alias == alias));
+                                Category = p.CategoryNavigation
+                            }).DeferredFirstOrDefault().FutureValue();
+
+            viewModel.Previous = _mapper.Map<ArticleViewModel>(await futurePrevious.ValueAsync());
+            viewModel.Next = _mapper.Map<ArticleViewModel>(await futureNext.ValueAsync());
+
+            return viewModel;
+        }
 
         private static readonly Func<BlogContext, AsyncEnumerable<Tag>> _getUnusedTags =
             EF.CompileAsyncQuery((BlogContext context) =>
@@ -87,6 +100,6 @@ namespace Blog.Service
 
         private static readonly Func<BlogContext, AsyncEnumerable<Category>> _getUnusedCategories =
             EF.CompileAsyncQuery((BlogContext context) =>
-                context.Category.Where(x => !context.ArticleCategories.Select(y => y.Category).Contains(x.Id)));
+                context.Category.Where(x => !x.Article.Select(y => y.Category).Contains(x.Id)));
     }
 }

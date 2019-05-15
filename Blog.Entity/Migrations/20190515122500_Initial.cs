@@ -18,7 +18,7 @@ namespace Blog.Entity.Migrations
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "getdate()"),
                     Remark = table.Column<string>(maxLength: 256, nullable: true),
                     Name = table.Column<string>(maxLength: 30, nullable: false),
-                    Alias = table.Column<string>(maxLength: 50, nullable: true)
+                    Alias = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -191,6 +191,7 @@ namespace Blog.Entity.Migrations
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "getdate()"),
                     Remark = table.Column<string>(maxLength: 256, nullable: true),
                     Cover = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
+                    Category = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
                     Author = table.Column<int>(nullable: false, defaultValueSql: "((1))"),
                     Title = table.Column<string>(maxLength: 256, nullable: false),
                     Content = table.Column<string>(type: "ntext", nullable: false),
@@ -210,38 +211,15 @@ namespace Blog.Entity.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Article_Category",
+                        column: x => x.Category,
+                        principalTable: "Category",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Article_ImageStorage",
                         column: x => x.Cover,
                         principalTable: "ImageStorage",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ArticleCategories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "getdate()"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "getdate()"),
-                    Remark = table.Column<string>(maxLength: 256, nullable: true),
-                    Article = table.Column<int>(nullable: false),
-                    Category = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ArticleCategories", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ArticleCategories_Article",
-                        column: x => x.Article,
-                        principalTable: "Article",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ArticleCategories_Category",
-                        column: x => x.Category,
-                        principalTable: "Category",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -276,29 +254,34 @@ namespace Blog.Entity.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Category",
+                columns: new[] { "Id", "Alias", "CreatedAt", "Name", "Remark", "UpdatedAt" },
+                values: new object[] { 1, "uncategorized", new DateTime(2019, 5, 15, 20, 24, 59, 960, DateTimeKind.Local).AddTicks(2625), "Uncategorized", "default category", new DateTime(2019, 5, 15, 20, 24, 59, 960, DateTimeKind.Local).AddTicks(2635) });
+
+            migrationBuilder.InsertData(
                 table: "Role",
                 columns: new[] { "Id", "CreatedAt", "IsDeleted", "IsEnabled", "Name", "Remark", "UpdatedAt" },
-                values: new object[] { 1, new DateTime(2019, 5, 13, 14, 21, 42, 316, DateTimeKind.Local).AddTicks(9945), false, true, "Admin", null, new DateTime(2019, 5, 13, 14, 21, 42, 316, DateTimeKind.Local).AddTicks(9957) });
+                values: new object[] { 1, new DateTime(2019, 5, 15, 20, 24, 59, 943, DateTimeKind.Local).AddTicks(9327), false, true, "Admin", null, new DateTime(2019, 5, 15, 20, 24, 59, 943, DateTimeKind.Local).AddTicks(9343) });
 
             migrationBuilder.InsertData(
                 table: "SiteSetting",
                 columns: new[] { "Id", "ArticleTemplate", "Copyright", "CoverUrl", "CreatedAt", "Keywords", "Remark", "RouteMapping", "SiteName", "SubTitle", "Title", "UpdatedAt" },
-                values: new object[] { 1, null, "ancore", "upload/default/home-bg.jpg", new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(2693), null, null, "date/alias", "ancore", null, "Ancore", new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(2696) });
+                values: new object[] { 1, null, "ancorazor", "upload/default/home-bg.jpg", new DateTime(2019, 5, 15, 20, 24, 59, 944, DateTimeKind.Local).AddTicks(2194), null, null, "date/alias", "ancorazor", null, "Ancorazor", new DateTime(2019, 5, 15, 20, 24, 59, 944, DateTimeKind.Local).AddTicks(2197) });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "AuthUpdatedAt", "CreatedAt", "IsDeleted", "LoginName", "Password", "RealName", "Remark", "Status", "UpdatedAt" },
-                values: new object[] { 1, new DateTime(2019, 5, 13, 14, 21, 42, 315, DateTimeKind.Local).AddTicks(1384), new DateTime(2019, 5, 13, 14, 21, 42, 315, DateTimeKind.Local).AddTicks(9), false, "admin", "$SGHASH$V1$10000$RA3Eaw5yszeel1ARIe7iFp2AGWWLd80dAMwr+V4mRcAimv8u", "Admin", null, 1, new DateTime(2019, 5, 13, 14, 21, 42, 315, DateTimeKind.Local).AddTicks(893) });
+                values: new object[] { 1, new DateTime(2019, 5, 15, 20, 24, 59, 941, DateTimeKind.Local).AddTicks(8401), new DateTime(2019, 5, 15, 20, 24, 59, 936, DateTimeKind.Local).AddTicks(2725), false, "admin", "$SGHASH$V1$10000$RA3Eaw5yszeel1ARIe7iFp2AGWWLd80dAMwr+V4mRcAimv8u", "Admin", null, 1, new DateTime(2019, 5, 15, 20, 24, 59, 941, DateTimeKind.Local).AddTicks(7867) });
 
             migrationBuilder.InsertData(
                 table: "ImageStorage",
                 columns: new[] { "Id", "Category", "CreatedAt", "Path", "Remark", "Size", "ThumbPath", "UpdatedAt", "Uploader" },
-                values: new object[] { 1, "cover", new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(6264), "upload/default/post-bg.jpg", "default post cover", 0L, null, new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(6268), 1 });
+                values: new object[] { 1, "cover", new DateTime(2019, 5, 15, 20, 24, 59, 944, DateTimeKind.Local).AddTicks(5756), "upload/default/post-bg.jpg", "default post cover", 0L, null, new DateTime(2019, 5, 15, 20, 24, 59, 944, DateTimeKind.Local).AddTicks(5759), 1 });
 
             migrationBuilder.InsertData(
                 table: "UserRole",
                 columns: new[] { "Id", "CreatedAt", "IsDeleted", "Remark", "RoleId", "UpdatedAt", "UserId" },
-                values: new object[] { 1, new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(1512), false, null, 1, new DateTime(2019, 5, 13, 14, 21, 42, 317, DateTimeKind.Local).AddTicks(1516), 1 });
+                values: new object[] { 1, new DateTime(2019, 5, 15, 20, 24, 59, 944, DateTimeKind.Local).AddTicks(1004), false, null, 1, new DateTime(2019, 5, 15, 20, 24, 59, 944, DateTimeKind.Local).AddTicks(1007), 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Article_Alias",
@@ -312,6 +295,11 @@ namespace Blog.Entity.Migrations
                 column: "Author");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Article_Category",
+                table: "Article",
+                column: "Category");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Article_Cover",
                 table: "Article",
                 column: "Cover");
@@ -321,16 +309,6 @@ namespace Blog.Entity.Migrations
                 table: "Article",
                 column: "Title",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ArticleCategories_Category",
-                table: "ArticleCategories",
-                column: "Category");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ArticleCategories_Article_Category",
-                table: "ArticleCategories",
-                columns: new[] { "Article", "Category" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ArticleTags_Tag",
@@ -343,7 +321,13 @@ namespace Blog.Entity.Migrations
                 columns: new[] { "Article", "Tag" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Category",
+                name: "IX_Category_Alias",
+                table: "Category",
+                column: "Alias",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Category_Name",
                 table: "Category",
                 column: "Name",
                 unique: true);
@@ -397,9 +381,6 @@ namespace Blog.Entity.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ArticleCategories");
-
-            migrationBuilder.DropTable(
                 name: "ArticleTags");
 
             migrationBuilder.DropTable(
@@ -412,9 +393,6 @@ namespace Blog.Entity.Migrations
                 name: "UserRole");
 
             migrationBuilder.DropTable(
-                name: "Category");
-
-            migrationBuilder.DropTable(
                 name: "Article");
 
             migrationBuilder.DropTable(
@@ -422,6 +400,9 @@ namespace Blog.Entity.Migrations
 
             migrationBuilder.DropTable(
                 name: "Role");
+
+            migrationBuilder.DropTable(
+                name: "Category");
 
             migrationBuilder.DropTable(
                 name: "ImageStorage");

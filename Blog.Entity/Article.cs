@@ -10,11 +10,12 @@ namespace Blog.Entity
     {
         public Article()
         {
-            ArticleCategories = new HashSet<ArticleCategories>();
             ArticleTags = new HashSet<ArticleTags>();
         }
         [Required]
         public int Cover { get; set; }
+        [Required]
+        public int Category { get; set; }
         public int Author { get; set; }
         [Required]
         [StringLength(256)]
@@ -37,8 +38,9 @@ namespace Blog.Entity
         [ForeignKey("Author")]
         [InverseProperty("Article")]
         public virtual Users AuthorNavigation { get; set; }
-        [InverseProperty("ArticleNavigation")]
-        public virtual ICollection<ArticleCategories> ArticleCategories { get; set; }
+        [ForeignKey("Category")]
+        [InverseProperty("Article")]
+        public virtual Category CategoryNavigation { get; set; }
         [InverseProperty("ArticleNavigation")]
         public virtual ICollection<ArticleTags> ArticleTags { get; set; }
     }

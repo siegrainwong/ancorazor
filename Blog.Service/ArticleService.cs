@@ -52,10 +52,8 @@ namespace Blog.Service
 
         public async Task<object> GetByAliasAsync(string alias, bool? isDraft)
         {
-            var entity = await _getArticleByAliasAsync(_context, alias);
-            if (isDraft.HasValue && entity.IsDraft != isDraft) return null;
+            var viewModel = await GetArticleByAliasAsync(alias, isDraft);
 
-            var viewModel = _mapper.Map<ArticleViewModel>(entity);
             if (viewModel.Previous != null)
                 viewModel.Previous.Path = GetArticleRoutePath(viewModel.Previous);
             if (viewModel.Next != null)
@@ -72,7 +70,7 @@ namespace Blog.Service
             // TODO: 这里用扩展方法封装一下
             var futureTotal = _context.Article.DeferredCount(predicate).FutureValue();
             var futureList = _context.Article.Where(predicate)
-                .Select(x => new { x.Alias, x.CommentCount, x.Title, x.CreatedAt, x.Id, x.IsDraft, x.Digest, x.ViewCount })
+                .Select(x => new { x.Alias, x.CommentCount, x.Title, x.CreatedAt, x.Id, x.IsDraft, x.Digest, x.ViewCount, CategoryAlias = x.CategoryNavigation.Alias })
                 .OrderByDescending(x => x.CreatedAt)
                 .Skip(parameters.PageSize * parameters.PageIndex)
                 .Take(parameters.PageSize)
@@ -110,25 +108,25 @@ namespace Blog.Service
                 entity = _mapper.Map<Article>(parameter);
             }
 
-            var categories = await _context.Category
-                .Where(x => parameter.Categories.Contains(x.Name)).ToListAsync();
+            var category = await _context.Category
+                .FirstOrDefaultAsync(x => parameter.Category == x.Name);
+            if (category == null)
+            {
+                entity.CategoryNavigation = new Category
+                {
+                    Name = parameter.Category,
+                    Alias = UrlHelper.UrlStringEncode(parameter.Category),
+                };
+            }
+
             var tags = await _context.Tag
                 .Where(x => parameter.Tags.Contains(x.Name)).ToListAsync();
 
-            var newCategories = parameter.Categories
-                .Except(categories.Select(x => x.Name))
-                .Select(x => new Category { Name = x, Alias = UrlHelper.UrlStringEncode(x) });
             var newTags = parameter.Tags
                 .Except(tags.Select(x => x.Name))
                 .Select(x => new Tag { Name = x, Alias = UrlHelper.UrlStringEncode(x) });
 
-            await _context.ArticleCategories
-                .AddRangeAsync(categories.Concat(newCategories)
-                .Select(x => new ArticleCategories
-                {
-                    ArticleNavigation = entity,
-                    CategoryNavigation = x
-                }));
+            await _context.Article.AddAsync(entity);
             await _context.ArticleTags
                 .AddRangeAsync(tags.Concat(newTags)
                 .Select(x => new ArticleTags
@@ -165,7 +163,6 @@ namespace Blog.Service
         private void DropRelations(Article entity)
         {
             // drop relational data of the article
-            _context.ArticleCategories.RemoveRange(entity.ArticleCategories);
             _context.ArticleTags.RemoveRange(entity.ArticleTags);
         }
 
@@ -181,7 +178,7 @@ namespace Blog.Service
         {
             if (viewModel == null) return null;
             var setting = _settingService.GetSetting();
-            return _urlHelper.GetArticleRoutePath(viewModel.Id, viewModel.CreatedAt, viewModel.Alias, viewModel.ArticleCategories.FirstOrDefault()?.CategoryNavigation.Alias, setting.RouteMapping);
+            return _urlHelper.GetArticleRoutePath(viewModel.Id, viewModel.CreatedAt, viewModel.Alias, viewModel.CategoryAlias, setting.RouteMapping);
         }
     }
 }

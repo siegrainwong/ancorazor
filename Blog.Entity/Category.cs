@@ -10,17 +10,18 @@ namespace Blog.Entity
     {
         public Category()
         {
-            ArticleCategories = new HashSet<ArticleCategories>();
+            Article = new HashSet<Article>();
         }
 
         [Required]
         [StringLength(30)]
         public string Name { get; set; }
 
+        [Required]
         [StringLength(50)]
         public string Alias { get; set; }
 
         [InverseProperty("CategoryNavigation")]
-        public virtual ICollection<ArticleCategories> ArticleCategories { get; set; }
+        public virtual ICollection<Article> Article { get; set; }
     }
 }

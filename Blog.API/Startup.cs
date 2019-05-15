@@ -198,7 +198,6 @@ namespace Blog.API
             services.AddScoped<BlogContext, BlogContext>();
             services.AddDbContext<BlogContext>(options =>
             {
-                options.EnableSensitiveDataLogging(true);
                 options.UseSqlServer(
                     _configuration[$"{nameof(DbConfiguration)}:{nameof(DbConfiguration.ConnectionString)}"]);
             });

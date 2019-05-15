@@ -11,9 +11,10 @@ namespace Blog.API.Messages.Article
 {
     public class ArticleUpdateParameter
     {
+        // only provide single-user currently
         public int Author { get; } = 1;
 
-        public string[] Categories { get; set; } = { Constants.Article.DefaultCategoryName };
+        public string Category { get; set; } = Constants.Article.DefaultCategoryName;
 
         [Required]
         public string Content { get; set; }
@@ -30,8 +31,6 @@ namespace Blog.API.Messages.Article
 
         [Range(0, int.MaxValue)]
         public int Id { get; set; }
-
-        // only provide single-user currently
 
         public bool IsDraft { get; set; } = false;
 

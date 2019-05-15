@@ -198,7 +198,7 @@ export class WriteArticleComponent
     this.model.title = this._frontMatter.title;
     this.model.createdAt = this._frontMatter.date || timeFormat(new Date());
     this.model.tags = this._frontMatter.tags;
-    this.model.categories = this._frontMatter.categories;
+    this.model.category = this._frontMatter.category;
     this.model.digest = this._frontMatter.description;
     this.model.alias = this._frontMatter.alias;
     this.model.isDraft = !!this._frontMatter.draft;

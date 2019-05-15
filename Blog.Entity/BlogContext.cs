@@ -1,4 +1,5 @@
-﻿using Blog.API.Common.Constants;
+﻿using Blog.API.Common;
+using Blog.API.Common.Constants;
 using Blog.Entity.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +19,6 @@ namespace Blog.Entity
         }
 
         public virtual DbSet<Article> Article { get; set; }
-        public virtual DbSet<ArticleCategories> ArticleCategories { get; set; }
         public virtual DbSet<ArticleTags> ArticleTags { get; set; }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<OperationLog> OperationLog { get; set; }
@@ -68,34 +68,23 @@ namespace Blog.Entity
 
                 entity.Property(e => e.Author).HasDefaultValueSql("((1))");
                 entity.Property(e => e.Cover).HasDefaultValueSql("((1))");
+                entity.Property(e => e.Category).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.AuthorNavigation)
                     .WithMany(p => p.Article)
                     .HasForeignKey(d => d.Author)
                     .HasConstraintName("FK_Article_Users");
 
+                entity.HasOne(d => d.CategoryNavigation)
+                    .WithMany(p => p.Article)
+                    .HasForeignKey(d => d.Category)
+                    .HasConstraintName("FK_Article_Category");
+
                 entity.HasOne(d => d.ImageStorageNavigation)
                     .WithMany(p => p.Article)
                     .HasForeignKey(d => d.Cover)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_Article_ImageStorage");
-            });
-
-            builder.Entity<ArticleCategories>(entity =>
-            {
-                entity.HasIndex(e => new { e.Article, e.Category });
-
-                entity.HasOne(d => d.ArticleNavigation)
-                    .WithMany(p => p.ArticleCategories)
-                    .HasForeignKey(d => d.Article)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_ArticleCategories_Article");
-
-                entity.HasOne(d => d.CategoryNavigation)
-                    .WithMany(p => p.ArticleCategories)
-                    .HasForeignKey(d => d.Category)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_ArticleCategories_Category");
             });
 
             builder.Entity<ArticleTags>(entity =>
@@ -118,7 +107,11 @@ namespace Blog.Entity
             builder.Entity<Category>(entity =>
             {
                 entity.HasIndex(e => e.Name)
-                    .HasName("IX_Category")
+                    .HasName("IX_Category_Name")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Alias)
+                    .HasName("IX_Category_Alias")
                     .IsUnique();
 
                 entity.HasIndex(e => new { e.Name, e.Id });
@@ -178,6 +171,8 @@ namespace Blog.Entity
             });
 
             #region Seeds
+            var now = DateTime.Now;
+
             builder.Entity<Users>().HasData(new Users
             {
                 Id = 1,
@@ -186,9 +181,9 @@ namespace Blog.Entity
                 Password = "$SGHASH$V1$10000$RA3Eaw5yszeel1ARIe7iFp2AGWWLd80dAMwr+V4mRcAimv8u",
                 RealName = "Admin",
                 Status = 1,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
-                AuthUpdatedAt = DateTime.Now,
+                CreatedAt = now,
+                UpdatedAt = now,
+                AuthUpdatedAt = now,
                 Remark = null,
                 IsDeleted = false
             });
@@ -198,8 +193,8 @@ namespace Blog.Entity
                 Name = "Admin",
                 IsDeleted = false,
                 IsEnabled = true,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
+                CreatedAt = now,
+                UpdatedAt = now,
                 Remark = null
             });
             builder.Entity<UserRole>().HasData(new UserRole
@@ -207,33 +202,51 @@ namespace Blog.Entity
                 Id = 1,
                 RoleId = 1,
                 UserId = 1,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
+                CreatedAt = now,
+                UpdatedAt = now,
                 IsDeleted = false,
                 Remark = null
             });
             builder.Entity<SiteSetting>().HasData(new SiteSetting
             {
                 Id = 1,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
+                CreatedAt = now,
+                UpdatedAt = now,
                 Title = "Ancorazor",
                 SiteName = "ancorazor",
                 Copyright = "ancorazor",
                 CoverUrl = "upload/default/home-bg.jpg",
                 RouteMapping = "date/alias",
+                ArticleTemplate = @"---
+title: Enter your title here.
+category: development
+tags:
+- dotnet
+- dotnet core
+---
+
+**Hello world!**",
                 Remark = null
             });
             builder.Entity<ImageStorage>().HasData(new ImageStorage
             {
                 Id = 1,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
+                CreatedAt = now,
+                UpdatedAt = now,
                 Size = 0,
                 Uploader = 1,
                 Category = "cover",
                 Path = "upload/default/post-bg.jpg",
                 Remark = "default post cover"
+            });
+            builder.Entity<Category>().HasData(new Category
+            {
+                Id = 1,
+                Name = Constants.Article.DefaultCategoryName,
+                Alias = UrlHelper.ToUrlSafeString(Constants.Article.DefaultCategoryName, true),
+                CreatedAt = now,
+                UpdatedAt = now,
+                Remark = "default category"
             });
             #endregion
 

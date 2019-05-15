@@ -34,8 +34,7 @@ export const externalScripts = {
 
 export const articleDefaultContent = `---
 title: Enter your title here.
-categories:
-- development
+category: development
 tags:
 - dotnet
 - dotnet core

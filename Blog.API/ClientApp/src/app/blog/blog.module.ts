@@ -29,6 +29,7 @@ import { ArticleListResolveGuard } from "./guard/article-list.resolve.guard";
 import { SGProgress } from "../shared/utils/siegrain.progress";
 import { SEOService } from "./services/seo.service";
 import { CommonService } from "./services/common.service";
+import { ObservedComponentBase } from "../shared/components/observed.base";
 
 /**
  * MARK: `providedIn: 'root'` or `providedIn: SomeModule`
@@ -42,6 +43,7 @@ import { CommonService } from "./services/common.service";
  */
 @NgModule({
   declarations: [
+    ObservedComponentBase,
     BlogAppComponent,
     NavComponent,
     ArticleListComponent,

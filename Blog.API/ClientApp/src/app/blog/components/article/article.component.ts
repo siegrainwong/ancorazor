@@ -1,46 +1,40 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
-import { Title } from "@angular/platform-browser";
-import {
-  constants,
-  externalScripts
-} from "src/app/shared/constants/siegrain.constants";
+import { externalScripts } from "src/app/shared/constants/siegrain.constants";
 import { SGUtil } from "src/app/shared/utils/siegrain.utils";
-import { Subscription } from "rxjs";
 import { SGTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
 import { SGAnimations } from "src/app/shared/animations/sg-animations";
+import { ObservedComponentBase } from "src/app/shared/components/observed.base";
+import { AutoUnsubscribe } from "src/app/shared/utils/auto-unsubscribe.decorator";
 
 @Component({
   selector: "app-article",
   templateUrl: "./article.component.html",
   styleUrls: ["./article.component.scss"]
 })
-export class ArticleComponent
+@AutoUnsubscribe()
+export class ArticleComponent extends ObservedComponentBase
   implements OnInit, OnDestroy, SGTransitionDelegate {
-  private _subscription = new Subscription();
   public animations = {
     content: SGAnimations.fade
   };
   public model: ArticleModel;
   public content: string;
-  constructor(private _util: SGUtil, public store: Store) {}
+
+  private _routeChanged$;
+  constructor(private _util: SGUtil, public store: Store) {
+    super();
+  }
   ngOnInit() {
     this.getArticle();
   }
-
-  ngOnDestroy() {
-    this._subscription.unsubscribe();
-  }
-
   private getArticle() {
-    this._subscription.add(
-      this.store.routeDataChanged$.subscribe(x => {
-        if (!x.article) return;
-        this.model = x.article;
-        this.setupViewer();
-      })
-    );
+    this._routeChanged$ = this.store.routeDataChanged$.subscribe(x => {
+      if (!x.article) return;
+      this.model = x.article;
+      this.setupViewer();
+    });
   }
 
   private async setupViewer() {

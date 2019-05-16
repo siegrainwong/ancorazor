@@ -4,6 +4,8 @@ import RouteData, { RouteKinds } from "../models/route-data.model";
 import { LoggingService } from "../services/logging.service";
 import { UserModel } from "src/app/blog/models/user-model";
 import SiteSettingModel from "src/app/blog/models/site-setting.model";
+import { ObservedServiceBase } from "../components/observed.base";
+import { AutoUnsubscribe } from "../utils/auto-unsubscribe.decorator";
 
 const UserStoreKey = "sg:user";
 
@@ -13,13 +15,10 @@ const UserStoreKey = "sg:user";
 @Injectable({
   providedIn: "root"
 })
-export class Store implements OnDestroy {
-  constructor(private _logger: LoggingService) {}
-
-  ngOnDestroy(): void {
-    this.userChanged$.unsubscribe();
-    this.routeDataChanged$.unsubscribe();
-    this.siteSettingChanged$.unsubscribe();
+@AutoUnsubscribe()
+export class Store extends ObservedServiceBase implements OnDestroy {
+  constructor(private _logger: LoggingService) {
+    super();
   }
 
   /**

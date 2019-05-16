@@ -1,37 +1,34 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { Meta, Title } from "@angular/platform-browser";
-import { Subscription, combineLatest } from "rxjs";
+import { combineLatest } from "rxjs";
 import { Store } from "src/app/shared/store/store";
 import SiteSettingModel from "../models/site-setting.model";
 import ArticleModel from "../models/article-model";
+import { ObservedServiceBase } from "src/app/shared/components/observed.base";
+import { AutoUnsubscribe } from "src/app/shared/utils/auto-unsubscribe.decorator";
 
 @Injectable({ providedIn: "root" })
-export class SEOService implements OnDestroy {
-  private _subscription = new Subscription();
-
+@AutoUnsubscribe()
+export class SEOService extends ObservedServiceBase implements OnDestroy {
+  private _routeAndSettingChanged$;
   constructor(
     private _meta: Meta,
     private _store: Store,
     private _titleService: Title
   ) {
+    super();
     this.setup();
   }
 
-  ngOnDestroy() {
-    this._subscription.unsubscribe();
-  }
-
   public setup() {
-    this._subscription.add(
-      combineLatest(
-        this._store.routeDataChanged$,
-        this._store.siteSettingChanged$
-      ).subscribe(([routeData, setting]) => {
-        if (!setting.siteName) return;
-        this.setupSiteSEO(setting);
-        this.setArticleSEO(routeData.article, setting.siteName);
-      })
-    );
+    this._routeAndSettingChanged$ = combineLatest(
+      this._store.routeDataChanged$,
+      this._store.siteSettingChanged$
+    ).subscribe(([routeData, setting]) => {
+      if (!setting.siteName) return;
+      this.setupSiteSEO(setting);
+      this.setArticleSEO(routeData.article, setting.siteName);
+    });
   }
 
   private setupSiteSEO(setting: SiteSettingModel) {

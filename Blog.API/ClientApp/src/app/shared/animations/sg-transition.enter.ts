@@ -12,6 +12,8 @@ import { filter } from "rxjs/operators";
 import { SGTransitionUtil } from "./sg-transition.util";
 import { SGTransitionPipeline, SGTransitionStore } from "./sg-transition.store";
 import { SGTransition, SGTransitionDirection } from "./sg-transition";
+import { ObservedServiceBase } from "../components/observed.base";
+import { AutoUnsubscribe } from "../utils/auto-unsubscribe.decorator";
 
 /**
  * `SGTransition`入场过渡核心
@@ -19,35 +21,32 @@ import { SGTransition, SGTransitionDirection } from "./sg-transition";
 @Injectable({
   providedIn: "root"
 })
-export class SGTransitionToEnter implements OnDestroy {
-  private _subscription = new Subscription();
+@AutoUnsubscribe()
+export class SGTransitionToEnter extends ObservedServiceBase
+  implements OnDestroy {
   private _currentTransitionsBackup: SGAnimationData;
 
+  private _routeChanged$;
   constructor(
     private _store: Store,
     private _util: SGTransitionUtil,
     private _transitionStore: SGTransitionStore,
     private _core: SGTransition
   ) {
+    super();
     this.disableRouteTransitionAtFirstScreen();
     this.subscribeOnComponentEntrance();
   }
 
-  ngOnDestroy() {
-    this._subscription.unsubscribe();
-  }
-
   /** 在组件入口（`NavigationEnd`）时触发入场动画 */
   private subscribeOnComponentEntrance() {
-    this._subscription.add(
-      this._store.routeDataChanged$
-        .pipe(filter(_ => !this._store.isFirstScreen))
-        .subscribe(async data => {
-          this.setStream(SGTransitionPipeline.NavigationEnd);
-          await this.transitionToEnter(data.sg_transition);
-          this.setStream(SGTransitionPipeline.Complete);
-        })
-    );
+    this._routeChanged$ = this._store.routeDataChanged$
+      .pipe(filter(_ => !this._store.isFirstScreen))
+      .subscribe(async data => {
+        this.setStream(SGTransitionPipeline.NavigationEnd);
+        await this.transitionToEnter(data.sg_transition);
+        this.setStream(SGTransitionPipeline.Complete);
+      });
   }
 
   /**

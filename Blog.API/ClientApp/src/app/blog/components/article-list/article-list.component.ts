@@ -17,9 +17,10 @@ import {
   SGCustomizeTransitionCommands,
   SGTransitionCommands
 } from "src/app/shared/animations/sg-transition.model";
-import { Subscription } from "rxjs";
 import RouteData, { RouteKinds } from "src/app/shared/models/route-data.model";
 import { SGTransitionStore } from "src/app/shared/animations/sg-transition.store";
+import { ObservedComponentBase } from "src/app/shared/components/observed.base";
+import { AutoUnsubscribe } from "src/app/shared/utils/auto-unsubscribe.decorator";
 
 const StaggerDuration = 200; // 列表总动画时长 = transition duration + stagger duration
 
@@ -28,46 +29,42 @@ const StaggerDuration = 200; // 列表总动画时长 = transition duration + st
   templateUrl: "./article-list.component.html",
   styleUrls: ["./article-list.component.scss"]
 })
-export class ArticleListComponent
+@AutoUnsubscribe()
+export class ArticleListComponent extends ObservedComponentBase
   implements OnInit, OnDestroy, SGCustomizeTransitionDelegate {
   // header
   public headerModel: ArticleModel;
   // request
   public data: PagedResult<ArticleModel>;
   public preloading: boolean = false;
+  // observables
+  private _routeChanged$;
+  private _settingChanged$;
 
   public animations = {
     articles: SGAnimations.fadeOpposite,
     pagination: SGAnimations.pageTurnButton
   };
 
-  private _subscription = new Subscription();
   constructor(
     private _service: ArticleService,
     private _util: SGUtil,
     public transitionStore: SGTransitionStore,
     public store: Store
-  ) {}
-
-  ngOnInit() {
-    this._subscription.add(
-      this.store.routeDataChanged$.subscribe(async data => {
-        this.data = data.list;
-      })
-    );
-    this._subscription.add(
-      this.store.siteSettingChanged$.subscribe(data => {
-        this.headerModel = new ArticleModel({
-          title: data.title,
-          cover: data.coverUrl
-        });
-      })
-    );
+  ) {
+    super();
   }
 
-  ngOnDestroy() {
-    console.log(ArticleListComponent.name + " destroyed");
-    this._subscription.unsubscribe();
+  ngOnInit() {
+    this._routeChanged$ = this.store.routeDataChanged$.subscribe(data => {
+      this.data = data.list;
+    });
+    this._settingChanged$ = this.store.siteSettingChanged$.subscribe(data => {
+      this.headerModel = new ArticleModel({
+        title: data.title,
+        cover: data.coverUrl
+      });
+    });
   }
 
   transitionForComponent?(

@@ -7,6 +7,8 @@ import {
   SGTransitionPipeline
 } from "../animations/sg-transition.store";
 import { Subscription } from "rxjs";
+import { ObservedServiceBase } from "../components/observed.base";
+import { AutoUnsubscribe } from "./auto-unsubscribe.decorator";
 
 declare global {
   interface Window {
@@ -25,19 +27,17 @@ export const enum SGProgressMode {
  * ref: https://github.com/rstacruz/nprogress
  */
 @Injectable({ providedIn: "root" })
-export class SGProgress implements OnDestroy {
-  private _subsribtion = new Subscription();
+@AutoUnsubscribe()
+export class SGProgress extends ObservedServiceBase implements OnDestroy {
   private _mode: SGProgressMode;
+  private _streamChanged$;
   constructor(
     private _util: SGUtil,
     private _store: Store,
     private _transitionStore: SGTransitionStore
   ) {
+    super();
     this._store.renderFromClient && this.setup();
-  }
-
-  ngOnDestroy() {
-    this._subsribtion.unsubscribe();
   }
 
   private get isAvailable() {
@@ -53,8 +53,8 @@ export class SGProgress implements OnDestroy {
   }
 
   private async progressWithTransition() {
-    this._subsribtion.add(
-      this._transitionStore.transitionStreamChanged$.subscribe(progress => {
+    this._streamChanged$ = this._transitionStore.transitionStreamChanged$.subscribe(
+      progress => {
         if (!this.isAvailable) return;
         switch (progress) {
           case SGTransitionPipeline.Ready:
@@ -69,7 +69,7 @@ export class SGProgress implements OnDestroy {
             window.NProgress.set(progress / total);
             break;
         }
-      })
+      }
     );
   }
 

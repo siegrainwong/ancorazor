@@ -14,41 +14,14 @@ import { SGProgress, SGProgressMode } from "../utils/siegrain.progress";
 import { setupCache } from "axios-cache-adapter";
 
 @Injectable({ providedIn: "root" })
-export abstract class BaseService implements OnDestroy, ISGService {
+export abstract class BaseService implements ISGService {
   serviceName = null;
-  protected subscription = new Subscription();
   protected settings = { disabledCache: false };
   private _api = axios.create({
     baseURL: environment.apiUrlBase,
     timeout: 100000,
     headers: { "Content-Type": "application/json" },
-    adapter: setupCache({
-      maxAge: 60 * 60 * 1000, // 1 hour
-      readOnError: (error, request) =>
-        error.response.status >= 400 && error.response.status < 600,
-      clearOnStale: false,
-      exclude: {
-        // disable cache from requests with query params
-        query: false,
-        filter: () => this.disabledCache()
-      },
-      // invalidate caches with same prefix on url when sending a PUT | DELETE | POST request
-      invalidate: async (cfg, req) => {
-        if (req.method === "get" || this.disabledCache() || !this.serviceName)
-          return;
-        const shouldInvalidateCachePrefix = `${environment.apiUrlBase}/${
-          this.serviceName
-        }`;
-        if (req.url.startsWith(shouldInvalidateCachePrefix)) {
-          Object.keys(cfg.store.store)
-            .filter(x => x.startsWith(shouldInvalidateCachePrefix))
-            .forEach(async x => await cfg.store.removeItem(x));
-          this.logger.info(
-            `Caches with prefix ${shouldInvalidateCachePrefix} has been removed.`
-          );
-        }
-      }
-    }).adapter
+    adapter: this.cacheAdapter
   });
   private _url: string;
 
@@ -64,10 +37,6 @@ export abstract class BaseService implements OnDestroy, ISGService {
     this.initialize();
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
   /**
    * initialize for child services
    */
@@ -75,22 +44,20 @@ export abstract class BaseService implements OnDestroy, ISGService {
   /**
    * Set the service should be exclude from cache
    */
-  protected disabledCache(): boolean {
-    return false;
-  }
+  protected disabledCache = () => false;
 
-  async get(url: string, query?: any): Promise<ResponseResult> {
+  public async get(url: string, query?: any): Promise<ResponseResult> {
     /**
      * Mark: 让`Server side`的请求结果传递到`Client side`避免重复请求
      * https://medium.com/@evertonrobertoauler/angular-5-universal-with-transfer-state-using-angular-cli-19fe1e1d352c
      */
     const stateKey = makeStateKey(url);
-    let storedData = this._state.get(stateKey, null);
+    const storedData = this._state.get(stateKey, null);
     if (storedData) {
       this._state.remove(stateKey);
-      var response = storedData as ResponseResult;
+      const response = storedData as ResponseResult;
       if (response.succeed) {
-        this.logger.info("server side state detected: ", storedData);
+        this.logger.info("server side state fetched: ", storedData);
         return Promise.resolve(storedData as ResponseResult);
       } else {
         this.logger.error("server side request failed: ", storedData);
@@ -119,15 +86,23 @@ export abstract class BaseService implements OnDestroy, ISGService {
     });
   }
 
-  async post(url: string, body: any, query?: any): Promise<ResponseResult> {
+  public async post(
+    url: string,
+    body: any,
+    query?: any
+  ): Promise<ResponseResult> {
     return await this.handleRequest(Methods.POST, url, body, query);
   }
 
-  async put(url: string, body?: any, query?: any): Promise<ResponseResult> {
+  public async put(
+    url: string,
+    body?: any,
+    query?: any
+  ): Promise<ResponseResult> {
     return await this.handleRequest(Methods.PUT, url, body, query);
   }
 
-  async delete(url: string, query?: any): Promise<ResponseResult> {
+  public async delete(url: string, query?: any): Promise<ResponseResult> {
     return await this.handleRequest(Methods.DELETE, url, null, query);
   }
 
@@ -164,7 +139,7 @@ export abstract class BaseService implements OnDestroy, ISGService {
    * @param query QueryString
    * @param option 选项（未实装）
    */
-  async handleRequest(
+  protected async handleRequest(
     method: Methods,
     url: string,
     body?: any,
@@ -199,7 +174,7 @@ export abstract class BaseService implements OnDestroy, ISGService {
    * 响应处理
    * @param response
    */
-  handleResponse(response: AxiosResponse): ResponseResult {
+  protected handleResponse(response: AxiosResponse): ResponseResult {
     this.afterResponse(response);
 
     let result: ResponseResult = null;
@@ -227,7 +202,7 @@ export abstract class BaseService implements OnDestroy, ISGService {
    * 错误处理
    * @param result
    */
-  handleError(result: ResponseResult, code?: number): ResponseResult {
+  protected handleError(result: ResponseResult, code?: number): ResponseResult {
     switch (code) {
       case 401:
         this.util.tip("Session expired, please sign-in again.");
@@ -240,6 +215,36 @@ export abstract class BaseService implements OnDestroy, ISGService {
         this.logger.error(result);
     }
     return new ResponseResult(result);
+  }
+
+  private get cacheAdapter() {
+    return setupCache({
+      maxAge: 60 * 60 * 1000, // 1 hour
+      readOnError: (error, request) =>
+        error.response.status >= 400 && error.response.status < 600,
+      clearOnStale: false,
+      exclude: {
+        // disable cache from requests with query params
+        query: false,
+        filter: () => this.disabledCache()
+      },
+      // invalidate caches with same prefix on url when sending a PUT | DELETE | POST request
+      invalidate: async (cfg, req) => {
+        if (req.method === "get" || this.disabledCache() || !this.serviceName)
+          return;
+        const shouldInvalidateCachePrefix = `${environment.apiUrlBase}/${
+          this.serviceName
+        }`;
+        if (req.url.startsWith(shouldInvalidateCachePrefix)) {
+          Object.keys(cfg.store.store)
+            .filter(x => x.startsWith(shouldInvalidateCachePrefix))
+            .forEach(async x => await cfg.store.removeItem(x));
+          this.logger.info(
+            `Caches with prefix ${shouldInvalidateCachePrefix} has been removed.`
+          );
+        }
+      }
+    }).adapter;
   }
 }
 

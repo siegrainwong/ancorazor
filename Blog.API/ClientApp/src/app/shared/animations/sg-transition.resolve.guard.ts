@@ -133,7 +133,6 @@ export class TestDirectResolveGuard implements Resolve<ArticleModel> {
 
 export function TransitionGuard(): ClassDecorator {
   return function(target: any) {
-    console.log(target);
     Object.defineProperty(target.prototype, "isTransitionGuard", {
       value: () => true
     });

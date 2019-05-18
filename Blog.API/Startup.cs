@@ -37,7 +37,6 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using SkyWalking.AspNetCore;
-using SkyWalking.Diagnostics.EntityFrameworkCore;
 using SkyWalking.Diagnostics.HttpClient;
 using SkyWalking.Diagnostics.SqlClient;
 

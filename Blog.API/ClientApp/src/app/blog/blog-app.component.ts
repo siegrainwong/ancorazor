@@ -1,5 +1,10 @@
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  AfterContentChecked
+} from "@angular/core";
 import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { filter } from "rxjs/operators";
 import { Store } from "../shared/store/store";
@@ -20,7 +25,7 @@ import { ObservedComponentBase } from "../shared/components/observed.base";
 })
 @AutoUnsubscribe()
 export class BlogAppComponent extends ObservedComponentBase
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy, AfterContentChecked {
   private _userChanged$;
   private _routeChanged$;
   constructor(
@@ -45,6 +50,10 @@ export class BlogAppComponent extends ObservedComponentBase
     this.setupUser();
     this._scrollDispatcher.scrolled().subscribe(onScroll);
     this.loadExternalResources();
+  }
+
+  ngAfterContentChecked() {
+    console.log("ngAfterContentChecked");
   }
 
   private setupUser() {

@@ -15,7 +15,8 @@ import {
   SGTransitionMode,
   SGRouteTransitionCommands,
   SGCustomizeTransitionCommands,
-  SGTransitionCommands
+  SGTransitionCommands,
+  SGAnimation
 } from "src/app/shared/animations/sg-transition.model";
 import RouteData, { RouteKinds } from "src/app/shared/models/route-data.model";
 import { SGTransitionStore } from "src/app/shared/animations/sg-transition.store";
@@ -71,6 +72,7 @@ export class ArticleListComponent extends ObservedComponentBase
     nextRoute: ActivatedRouteSnapshot
   ): SGTransitionCommands {
     this.animations.articles = SGAnimations.fadeOpposite;
+    this.animations.pagination = SGAnimations.fadeOpposite;
     return new SGRouteTransitionCommands({ scrollTo: topElementId });
   }
 
@@ -82,6 +84,7 @@ export class ArticleListComponent extends ObservedComponentBase
     this.animations.articles = isNextPage
       ? SGAnimations.pageTurnNext
       : SGAnimations.pageTurnPrevious;
+    this.animations.pagination = SGAnimations.pageTurnButton;
 
     return new SGCustomizeTransitionCommands({
       crossRoute: true,

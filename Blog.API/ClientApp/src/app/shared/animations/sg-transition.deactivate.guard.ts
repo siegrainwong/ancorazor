@@ -7,7 +7,6 @@ import {
 import { SGTransitionDelegate } from "./sg-transition.delegate";
 import { SGTransitionStore, SGTransitionPipeline } from "./sg-transition.store";
 import { LoggingService } from "../services/logging.service";
-import { timeout } from "../utils/promise-delay";
 
 @Injectable({
   providedIn: "root"

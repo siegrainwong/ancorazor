@@ -1,7 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { timeout } from "../utils/promise-delay";
 import { Store } from "../store/store";
-import { Subscription } from "rxjs";
 import {
   SGTransitionCommands,
   SGCustomizeTransitionCommands,

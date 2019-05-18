@@ -8,7 +8,6 @@ using Blog.API.AutoMapper;
 using Blog.API.Common;
 using Blog.API.Common.Constants;
 using Blog.API.Filters;
-using Blog.API.Logger;
 using Blog.Entity;
 using EasyCaching.Core;
 using EasyCaching.InMemory;
@@ -30,7 +29,6 @@ using Newtonsoft.Json;
 using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
-using Serilog.Sinks.Elasticsearch;
 using Siegrain.Common.FileSystem;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
@@ -38,6 +36,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
+using SkyWalking.AspNetCore;
+using SkyWalking.Diagnostics.EntityFrameworkCore;
+using SkyWalking.Diagnostics.HttpClient;
+using SkyWalking.Diagnostics.SqlClient;
 
 #endregion
 
@@ -74,7 +76,7 @@ namespace Blog.API
             RegisterCors(services);
             RegisterAuthentication(services);
             RegisterSpa(services);
-            ResigterProfiler(services);
+            ResigterSkywalking(services);
 
             return services.ConfigureAspectCoreInterceptor(options =>
             {
@@ -101,17 +103,10 @@ namespace Blog.API
 
         private void SetupLogger()
         {
-            var elasticUri = _configuration["ElasticConfiguration:Uri"];
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .Enrich.WithExceptionDetails()
-                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(elasticUri))
-                {
-                    AutoRegisterTemplate = true,
-                    MinimumLogEventLevel = LogEventLevel.Information,
-                    CustomFormatter = new CustomLogJsonFormmater()
-                })
-                .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.File("Logs/log.txt")
             .CreateLogger();
         }
 
@@ -164,24 +159,21 @@ namespace Blog.API
             services.ConfigureDynamicProxy();
         }
 
-        private void ResigterProfiler(IServiceCollection services)
+        private void ResigterSkywalking(IServiceCollection services)
         {
-            // TODO: 还没弄好
-            services.AddMiniProfiler(options =>
+            /**
+             * MARK: Skywalking 快速搭建
+             * https://zhuanlan.zhihu.com/p/45084693
+             */
+            services.AddSkyWalking(option =>
             {
-                // All of this is optional. You can simply call .AddMiniProfiler() for all defaults
-
-                // (Optional) Path to use for profiler URLs, default is /mini-profiler-resources
-                options.RouteBasePath = "/profiler";
-
-                // (Optional)  To control which requests are profiled, use the Func<HttpRequest, bool> option:
-                // (default is everything should be profiled)
-                //options.ShouldProfile = request => MyShouldThisBeProfiledFunction(request);
-
-                // (Optional) Profiles are stored under a user ID, function to get it:
-                // (default is null, since above methods don't use it by default)
-                //options.UserIdProvider = request => MyGetUserIdFunction(request);
-            });
+                option.ApplicationCode = _ServiceName;
+                option.DirectServers = "127.0.0.1:11800";
+                // 每三秒采样的Trace数量,-1 为全部采集
+                option.SamplePer3Secs = -1;
+            })
+            .AddSqlClient()
+            .AddHttpClient();
         }
 
         private void RegisterEntityFramework(IServiceCollection services)
@@ -338,7 +330,6 @@ namespace Blog.API
             app.MapWhen(context => context.Request.Path.StartsWithSegments("/api"),
                 apiApp =>
                 {
-                    apiApp.UseMiniProfiler();
                     apiApp.UseMvc(routes =>
                     {
                         routes.MapRoute("default", "{controller}/{action=Index}/{id?}");

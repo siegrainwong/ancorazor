@@ -25,7 +25,7 @@ import { ObservedComponentBase } from "../shared/components/observed.base";
 })
 @AutoUnsubscribe()
 export class BlogAppComponent extends ObservedComponentBase
-  implements OnInit, OnDestroy, AfterContentChecked {
+  implements OnInit, OnDestroy {
   private _userChanged$;
   private _routeChanged$;
   constructor(
@@ -50,10 +50,6 @@ export class BlogAppComponent extends ObservedComponentBase
     this.setupUser();
     this._scrollDispatcher.scrolled().subscribe(onScroll);
     this.loadExternalResources();
-  }
-
-  ngAfterContentChecked() {
-    console.log("ngAfterContentChecked");
   }
 
   private setupUser() {

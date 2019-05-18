@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  AfterContentChecked,
+  AfterViewInit
+} from "@angular/core";
 import { ArticleService } from "../../services/article.service";
 import ArticleModel from "../../models/article-model";
 import { PagedResult } from "src/app/shared/models/response-result";

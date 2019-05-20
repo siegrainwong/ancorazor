@@ -1,7 +1,8 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 import { SGTransitionCommands } from "./sg-transition.model";
 import { SGTransitionUtil } from "./sg-transition.util";
 import { timeout } from "../utils/promise-delay";
+import { SGAnimations } from "./sg-animations";
 
 export enum SGTransitionDirection {
   enter,

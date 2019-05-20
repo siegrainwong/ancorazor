@@ -11,6 +11,7 @@ import { SGTransitionResolveGuard } from "../shared/animations/sg-transition.res
 import { ArticleResolveGuard } from "./guard/article.resolve.guard";
 import { SGTransitionDeactivateGuard } from "../shared/animations/sg-transition.deactivate.guard";
 import { ArticleListResolveGuard } from "./guard/article-list.resolve.guard";
+import { DemoComponent } from "./components/demo/demo.component";
 
 /**
  * MARK: SGTransitionDeactivateGuard && SGTransitionResolveGuard Setup
@@ -26,23 +27,23 @@ let routes: Routes = [
     children: [
       {
         path: "",
-        component: ArticleListComponent,
-        data: new RouteData({ kind: RouteKinds.home }),
+        component: DemoComponent,
+        // data: new RouteData({ kind: RouteKinds.home }),
         resolve: {
-          list: ArticleListResolveGuard,
-          sg_transition: SGTransitionResolveGuard
-        },
-        canDeactivate: [SGTransitionDeactivateGuard]
+          // list: ArticleListResolveGuard
+          // sg_transition: SGTransitionResolveGuard
+        }
+        // canDeactivate: [SGTransitionDeactivateGuard]
       },
       {
         path: "index/:index",
         component: ArticleListComponent,
         data: new RouteData({ kind: RouteKinds.homePaged }),
         resolve: {
-          list: ArticleListResolveGuard,
-          sg_transition: SGTransitionResolveGuard
-        },
-        canDeactivate: [SGTransitionDeactivateGuard]
+          list: ArticleListResolveGuard
+          // sg_transition: SGTransitionResolveGuard
+        }
+        // canDeactivate: [SGTransitionDeactivateGuard]
       },
       {
         path: "add",
@@ -50,9 +51,9 @@ let routes: Routes = [
         canActivate: [AuthGuard],
         data: new RouteData({ kind: RouteKinds.add }),
         resolve: {
-          sg_transition: SGTransitionResolveGuard
-        },
-        canDeactivate: [SGTransitionDeactivateGuard]
+          // sg_transition: SGTransitionResolveGuard
+        }
+        // canDeactivate: [SGTransitionDeactivateGuard]
       },
       {
         path: "edit/:id",
@@ -60,20 +61,20 @@ let routes: Routes = [
         canActivate: [AuthGuard],
         data: new RouteData({ kind: RouteKinds.edit }),
         resolve: {
-          article: ArticleResolveGuard,
-          sg_transition: SGTransitionResolveGuard
-        },
-        canDeactivate: [SGTransitionDeactivateGuard]
+          article: ArticleResolveGuard
+          // sg_transition: SGTransitionResolveGuard
+        }
+        // canDeactivate: [SGTransitionDeactivateGuard]
       },
       {
         path: "article/:id",
         component: ArticleComponent,
         data: new RouteData({ kind: RouteKinds.article }),
         resolve: {
-          article: ArticleResolveGuard,
-          sg_transition: SGTransitionResolveGuard
+          article: ArticleResolveGuard
+          // sg_transition: SGTransitionResolveGuard
         },
-        canDeactivate: [SGTransitionDeactivateGuard],
+        // canDeactivate: [SGTransitionDeactivateGuard],
         matcher: articleRouteMatcher
       },
       {
@@ -81,9 +82,9 @@ let routes: Routes = [
         component: AboutComponent,
         data: new RouteData({ kind: RouteKinds.about }),
         resolve: {
-          sg_transition: SGTransitionResolveGuard
-        },
-        canDeactivate: [SGTransitionDeactivateGuard]
+          // sg_transition: SGTransitionResolveGuard
+        }
+        // canDeactivate: [SGTransitionDeactivateGuard]
       }
     ]
   }

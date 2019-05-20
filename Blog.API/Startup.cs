@@ -87,11 +87,11 @@ namespace Blog.API
         {
             loggerFactory.AddSerilog();
 
-            //if (env.IsDevelopment())
-            //{
-            app.UseDeveloperExceptionPage();
-            ConfigureSwagger(app);
-            //}
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                ConfigureSwagger(app);
+            }
 
             app.UseCors();
             ConfigureAuthentication(app);
@@ -361,6 +361,7 @@ namespace Blog.API
             {
                 client.UseSpa(spa =>
                 {
+                    // TODO: 可以尝试在这时将cookie凭据传递给nodejs，要保持SSR跟CSR凭据一致。
                     spa.Options.SourcePath = section["ClientPath"];
                     spa.UseSpaPrerendering(options =>
                     {

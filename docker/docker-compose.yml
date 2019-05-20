@@ -25,6 +25,19 @@ services:
       - ES_CLUSTER_NAME=elasticsearch
       - ES_ADDRESSES=http://*:9200
 
+  api:
+    image: siegrainwong/blog-api
+    build:
+      context: ../Blog.API
+      dockerfile: Dockerfile
+    links:
+      - skywalking
+    depends_on:
+      - skywalking
+    ports:
+      - 8088:80
+    container_name: blog-api
+
 networks:
   docker-network:
     driver: bridge

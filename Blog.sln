@@ -12,15 +12,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.API.Messages", "Blog.M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Siegrain.Common", "Siegrain.Common\Siegrain.Common.csproj", "{521E7E18-5695-4122-96E4-F4CA23E22D8F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{ADA5485B-DA9F-41DC-AF7F-C3A56296BC97}"
-	ProjectSection(SolutionItems) = preProject
-		docker\docker-compose.yml = docker\docker-compose.yml
-		docker\readme.md = docker\readme.md
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.API.Common", "Blog.API.Common\Blog.API.Common.csproj", "{1872BF42-DF9B-4D3C-ABDA-710EDC38F044}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Entity", "Blog.Entity\Blog.Entity.csproj", "{B379DBB2-FF6E-4A80-A29B-54BFD98EC166}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{FECD17D6-D78E-4913-A37A-12F43D222D7C}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		build\docker-compose.yml = build\docker-compose.yml
+		Dockerfile = Dockerfile
+		build\nodejs_installer.ps1 = build\nodejs_installer.ps1
+		build\readme.md = build\readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

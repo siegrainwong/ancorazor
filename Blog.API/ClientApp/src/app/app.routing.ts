@@ -1,13 +1,8 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { DemoComponent } from "./blog/components/demo/demo.component";
 
 const routes: Routes = [
-  // { path: "", loadChildren: "./blog/blog.module#BlogModule" },
-  {
-    path: "",
-    component: DemoComponent
-  },
+  { path: "", loadChildren: "./blog/blog.module#BlogModule" },
   { path: "**", redirectTo: "" }
 ];
 @NgModule({

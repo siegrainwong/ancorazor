@@ -12,10 +12,9 @@ import { GlobalErrorHandler } from "./shared/services/global-error-handler";
 import { Store } from "./shared/store/store";
 import { isPlatformBrowser } from "@angular/common";
 import { TaskWrapper } from "./shared/services/async-helper.service";
-import { DemoComponent } from "./blog/components/demo/demo.component";
 
 @NgModule({
-  declarations: [AppComponent, DemoComponent],
+  declarations: [AppComponent],
   imports: [
     // Add .withServerTransition() to support Universal rendering.
     // The application ID can be any identifier which is unique on
@@ -28,22 +27,22 @@ import { DemoComponent } from "./blog/components/demo/demo.component";
     BrowserAnimationsModule
   ],
   providers: [
-    // LoggingService,
-    // {
-    //   provide: ErrorHandler,
-    //   useClass: GlobalErrorHandler
-    // },
-    // TaskWrapper
+    LoggingService,
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    },
+    TaskWrapper
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(
-    // logger: LoggingService,
-    // store: Store,
+    logger: LoggingService,
+    store: Store,
     @Inject(PLATFORM_ID) platformId: Object
   ) {
-    // logger.info("app.module ctor.");
-    // store.renderFromClient = isPlatformBrowser(platformId);
+    logger.info("app.module ctor.");
+    store.renderFromClient = isPlatformBrowser(platformId);
   }
 }

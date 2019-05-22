@@ -21,9 +21,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{FECD17D6
 		.dockerignore = .dockerignore
 		build\docker-compose.yml = build\docker-compose.yml
 		Dockerfile = Dockerfile
-		build\nodejs_installer.ps1 = build\nodejs_installer.ps1
 		build\readme.md = build\readme.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dashboard", "Dashboard", "{521CFD0A-0A78-433D-A4A6-A31303EF576D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

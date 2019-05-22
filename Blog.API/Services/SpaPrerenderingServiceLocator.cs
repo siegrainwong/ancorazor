@@ -28,11 +28,11 @@ namespace Blog.API.Services
 
     public class SpaPrerenderingService : ISpaPrerenderingService
     {
-        private readonly ILogger _logger;
-        public SpaPrerenderingService(ILogger logger)
-        {
-            _logger = logger;
-        }
+        //private readonly ILogger _logger;
+        //public SpaPrerenderingService(ILogger logger)
+        //{
+        //    _logger = logger;
+        //}
 
         public void Process(HttpContext httpContext, IDictionary<string, object> supplyData)
         {

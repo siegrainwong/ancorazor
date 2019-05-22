@@ -128,6 +128,7 @@ namespace Blog.API
         {
             services.AddSingleton<UrlHelper>();
             services.AddSingleton<IFileSystem>(new LocalDiskFileSystem(Path.Combine(_hostingEnvironment.ContentRootPath, "Upload")));
+            services.AddScoped<ISpaPrerenderingService, SpaPrerenderingService>();
         }
 
         private void RegisterMapper(IServiceCollection services)

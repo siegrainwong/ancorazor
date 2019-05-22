@@ -8,9 +8,23 @@ export default class SiteSettingModel extends BaseModel {
   siteName: string;
   articleTemplate?: string;
   keywords?: string;
+  private _gitment?: GitmentSetting;
+  set gitment(val) {
+    this._gitment = JSON.parse(val.toString());
+  }
+  get gitment() {
+    return this._gitment;
+  }
 
   constructor(init?: Partial<SiteSettingModel>) {
     super(init);
     Object.assign(this, init);
   }
+}
+
+export class GitmentSetting {
+  githubId: string;
+  repositoryName: string;
+  clientId: string;
+  clientSecret: string;
 }

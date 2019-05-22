@@ -1,9 +1,11 @@
-# 1. 将 microsoft/dotnet:2.1-aspnetcore-runtime 作为运行环境，运行目录为app目录，并暴露端口9020
+# Docker file of Blog.API
+
+# 1. 将 siegrainwong/aspnetcore-build 作为运行环境（包含2.2的sdk和nodejs），运行目录为app目录，并暴露端口9020
 FROM siegrainwong/aspnetcore-build:2.2 AS base
 WORKDIR /app
 EXPOSE 80
 
-# 2. 将 microsoft/dotnet:2.1-sdk 作为编译环境，编译目录为src
+# 2. 将 siegrainwong/aspnetcore-build 作为编译环境，编译目录为src
 # 然后是复制命令，这里要注意的是，此前我们已经在docker-compose.yml中设置了工作上下文为service/tasklist，所以第一个.的目录就在service/tasklist，而第二个.就是容器的工作目录/src
 # 接着就是dotnet restore命令，然后进入目录，执行publish命令，并将编译结果输出到/app目录。
 FROM siegrainwong/aspnetcore-build:2.2 AS publish

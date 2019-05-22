@@ -34,6 +34,7 @@ export class ArticleComponent extends ObservedComponentBase
       if (!x.article) return;
       this.model = x.article;
       this.setupViewer();
+      this.setupComment();
     });
   }
 
@@ -65,5 +66,22 @@ export class ArticleComponent extends ObservedComponentBase
     const yamlFront = require("yaml-front-matter");
     var content = yamlFront.loadFront(this.model.content).__content;
     this.content = md.render(content);
+  }
+
+  private async setupComment() {
+    if (!this.store.renderFromClient) return;
+    await this._util.loadExternalScripts([externalScripts.gitment]);
+
+    const setting = this.store.siteSetting && this.store.siteSetting.gitment;
+    if (!setting) return;
+    new Gitment.construct({
+      id: this.model.createdAt,
+      owner: setting.githubId,
+      repo: setting.repositoryName,
+      oauth: {
+        client_id: setting.clientId,
+        client_secret: setting.clientSecret
+      }
+    }).render(document.getElementById("comments"));
   }
 }

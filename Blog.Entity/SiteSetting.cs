@@ -1,4 +1,5 @@
 ﻿using Blog.Entity.Base;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace Blog.Entity
@@ -53,5 +54,29 @@ namespace Blog.Entity
         /// </example>
         [Required]
         public string RouteMapping { get; set; }
+
+        /// <summary>
+        /// Gitment设置
+        /// {
+        ///     GithubId
+        ///     RepositoryName
+        ///     ClientId
+        ///     ClientSecret
+        /// }
+        /// </summary>
+        [StringLength(500)]
+        public string Gitment { get; set; }
+//        gitment:
+//    # Switch
+//    enable: true
+//    # Your Github ID (Github username):
+//    github_id: Seanwong933
+//# The repo to store comments:
+//# Input repo name not url
+//    repo: siegrain.wang
+//# Your client ID:
+//    client_id: 305f788f9d37fbb4d73d
+//# Your client secret:
+//    client_secret: c14577586aa2e0e84f3d13212eebc6929542bb54
     }
 }

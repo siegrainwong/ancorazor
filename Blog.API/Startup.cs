@@ -39,6 +39,7 @@ using System.Reflection;
 using SkyWalking.AspNetCore;
 using SkyWalking.Diagnostics.HttpClient;
 using SkyWalking.Diagnostics.SqlClient;
+using Blog.API.Services;
 
 #endregion
 
@@ -370,6 +371,7 @@ namespace Blog.API
                             ? new AngularCliBuilder("build:ssr")
                             : null;
                         options.ExcludeUrls = new[] { "/sockjs-node" };
+                        options.SupplyData = SpaPrerenderingServiceLocator.GetProcessor(client);
                     });
 
                     if (env.IsDevelopment())

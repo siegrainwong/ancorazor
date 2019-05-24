@@ -3,12 +3,9 @@ pool:
 
 variables:
   tagName: '$(Build.BuildNumber)'
-  imageName: '$(dockerId)/activityreservation:$(tagName)'
+  imageName: '$(dockerId)/ancorazor:$(tagName)'
 
 steps:
-
-- script: dotnet build -c Release
-  displayName: 'dotnet build'
 
 - script: docker build -f Dockerfile -t $(imageName) .
   displayName: 'Docker build Script'
@@ -18,11 +15,11 @@ steps:
     docker push $(imageName)
   displayName: 'Push docker image'
 
-- task: SSH@0
-  displayName: 'Run shell inline on remote machine'
-  inputs:
-    sshEndpoint: 'weihanli-vm'
-    runOptions: inline
+# - task: SSH@0
+#   displayName: 'Run shell inline on remote machine'
+#   inputs:
+#     sshEndpoint: 'weihanli-vm'
+#     runOptions: inline
 
-    inline: |
-      kubectl set image deployment/activityreservation activityreservation=$(imageName) --record=true
+#     inline: |
+#       kubectl set image deployment/activityreservation activityreservation=$(imageName) --record=true

@@ -7,10 +7,6 @@ COPY . .
 WORKDIR /src/Blog.API
 RUN dotnet publish "Blog.API.csproj" -c Release -o /app
 
-# Install required packages
-RUN apk add --no-cache \
-    bash
-
 # Remove source code
 RUN rm -rf "/src";
 

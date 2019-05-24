@@ -6,7 +6,17 @@ variables:
   imageName: '$(dockerId)/ancorazor:$(tagName)'
 
 steps:
-
+- task: replacetokens@3
+  inputs:
+    rootDirectory: 'Blog.API/'
+    targetFiles: 'appsettings.json'
+    encoding: 'auto'
+    writeBOM: true
+    actionOnMissing: 'warn'
+    keepToken: false
+    tokenPrefix: '#{'
+    tokenSuffix: '}#'
+    
 - script: docker build -f Dockerfile -t $(imageName) .
   displayName: 'Docker build Script'
 

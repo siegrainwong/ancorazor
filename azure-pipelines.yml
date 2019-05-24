@@ -1,0 +1,35 @@
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+variables:
+  tagName: '$(Build.BuildNumber)'
+  imageName: '$(dockerId)/ancorazor:$(tagName)'
+
+steps:
+- task: replacetokens@3
+  inputs:
+    rootDirectory: 'Blog.API/'
+    targetFiles: 'appsettings.json'
+    encoding: 'auto'
+    writeBOM: true
+    actionOnMissing: 'warn'
+    keepToken: false
+    tokenPrefix: '#{'
+    tokenSuffix: '}#'
+    
+- script: docker build -f Dockerfile -t $(imageName) .
+  displayName: 'Docker build Script'
+
+- script: |
+    docker login -u $(dockerId) -p $(dockerPassword)
+    docker push $(imageName)
+  displayName: 'Push docker image'
+
+# - task: SSH@0
+#   displayName: 'Run shell inline on remote machine'
+#   inputs:
+#     sshEndpoint: 'weihanli-vm'
+#     runOptions: inline
+
+#     inline: |
+#       kubectl set image deployment/activityreservation activityreservation=$(imageName) --record=true

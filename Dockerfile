@@ -1,7 +1,7 @@
 # Docker file of Blog.API
 
 # Set siegrainwong/aspnetcore-build:2.2 as build env, it includes .net core 2.2 sdk and nodejs
-FROM siegrainwong/aspnetcore-build:2.2 AS publish
+FROM aspnetcore-build:2.2-alpine
 WORKDIR /src
 COPY . .
 WORKDIR /src/Blog.API

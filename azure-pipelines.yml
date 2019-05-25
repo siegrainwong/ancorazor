@@ -25,11 +25,17 @@ steps:
     docker push $(imageName)
   displayName: 'Push docker image'
 
-# - task: SSH@0
-#   displayName: 'Run shell inline on remote machine'
-#   inputs:
-#     sshEndpoint: 'weihanli-vm'
-#     runOptions: inline
+- task: CopyFiles@2
+  displayName: 'Copy docker files'
+  inputs:
+    SourceFolder: src
+    Contents: |
+     **/*.yaml
+     **/*.yml
+    TargetFolder: '$(build.ArtifactStagingDirectory)'
 
-#     inline: |
-#       kubectl set image deployment/activityreservation activityreservation=$(imageName) --record=true
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'Docker files'
+    publishLocation: 'Container'

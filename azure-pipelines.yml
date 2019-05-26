@@ -22,12 +22,12 @@ steps:
     containerRegistry: 'My Docker Hub'
     repository: 'siegrainwong/ancorazor'
     command: 'buildAndPush'
-    Dockerfile: '/Dockerfile'
+    Dockerfile: '/s/Dockerfile'
 
 - task: CopyFiles@2
   displayName: 'Copy docker files'
   inputs:
-    SourceFolder: /
+    SourceFolder: /s
     Contents: |
      **/*.yaml
      **/*.yml

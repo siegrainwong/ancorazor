@@ -2,8 +2,8 @@ pool:
   vmImage: 'Ubuntu 16.04'
 
 variables:
-  tagName: '$(buildNumber)'
-  imageName: '$(dockerId)/ancorazor:$(buildNumber)''
+  tagName: '$(Build.BuildNumber)'
+  imageName: '$(dockerId)/ancorazor:$(tagName)''
 
 steps:
 - task: replacetokens@3

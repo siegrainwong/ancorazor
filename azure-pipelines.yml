@@ -27,7 +27,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
-    Contents: '**/docker-compose.yml'
+    Contents: '/build'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: replacetokens@3

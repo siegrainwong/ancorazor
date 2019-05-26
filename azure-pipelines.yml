@@ -8,8 +8,8 @@ variables:
 steps:
 - task: replacetokens@3
   inputs:
-    rootDirectory: 'Blog.API/'
-    targetFiles: 'appsettings.json'
+    targetFiles: '**/appsettings.json
+      **/docker-compose.yml'
     encoding: 'auto'
     writeBOM: true
     actionOnMissing: 'warn'

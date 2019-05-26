@@ -16,14 +16,14 @@ steps:
     tokenPrefix: '#{'
     tokenSuffix: '}#'
 
-    
 - task: Docker@2
   inputs:
     containerRegistry: 'My Docker Hub'
     repository: 'siegrainwong/ancorazor'
     command: 'buildAndPush'
     Dockerfile: 'Dockerfile'
-
+    tags: '$(Build.BuildNumber)'
+    
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:

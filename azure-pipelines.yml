@@ -22,16 +22,13 @@ steps:
     containerRegistry: 'My Docker Hub'
     repository: 'siegrainwong/ancorazor'
     command: 'buildAndPush'
-    Dockerfile: '/s/Dockerfile'
+    Dockerfile: 'Dockerfile'
 
 - task: CopyFiles@2
-  displayName: 'Copy docker files'
+  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
-    SourceFolder: /s
-    Contents: |
-     **/*.yaml
-     **/*.yml
-    TargetFolder: '$(build.ArtifactStagingDirectory)'
+    Contents: Dockerfile
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
   inputs:

@@ -3,7 +3,7 @@ pool:
 
 variables:
   tagName: 'latest'
-  imageName: '$(dockerId)/ancorazor:$(tagName)'
+  imageName: '$(dockerId)/ancorazor:latest'
 
 steps:
 - task: replacetokens@3

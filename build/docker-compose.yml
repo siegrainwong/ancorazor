@@ -51,7 +51,7 @@ services:
     environment:
       collector.ribbon.listOfServers: oap:12800
   ancorazor:
-    image: siegrainwong/ancorazor:latest
+    image: siegrainwong/ancorazor:#{Build.BuildNumber}#
     container_name: ancorazor
     depends_on:
       - oap

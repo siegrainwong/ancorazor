@@ -2,7 +2,7 @@ pool:
   vmImage: 'Ubuntu 16.04'
 
 variables:
-  tagName: '$(Build.BuildNumber)'
+  tagName: 'latest'
   imageName: '$(dockerId)/ancorazor:$(tagName)'
 
 steps:
@@ -17,22 +17,18 @@ steps:
     tokenPrefix: '#{'
     tokenSuffix: '}#'
     
-- script: docker build -f Dockerfile -t $(imageName) .
-  displayName: 'Docker build Script'
-
-- script: |
-    docker login -u $(dockerId) -p $(dockerPassword)
-    docker push $(imageName)
-  displayName: 'Push docker image'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'My Docker Hub'
+    repository: 'siegrainwong/ancorazor'
+    command: 'buildAndPush'
+    Dockerfile: 'Dockerfile'
 
 - task: CopyFiles@2
-  displayName: 'Copy docker files'
+  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
-    SourceFolder: src
-    Contents: |
-     **/*.yaml
-     **/*.yml
-    TargetFolder: '$(build.ArtifactStagingDirectory)'
+    Contents: '**/docker-compose.yml'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
   inputs:

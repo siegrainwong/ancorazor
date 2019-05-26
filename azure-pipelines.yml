@@ -3,7 +3,7 @@ pool:
 
 variables:
   tagName: '$(Build.BuildNumber)'
-  imageName: '$(dockerId)/ancorazor:$(tagName)''
+  imageName: '$(dockerId)/ancorazor:$(tagName)'
 
 steps:
 - task: replacetokens@3

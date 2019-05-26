@@ -17,13 +17,12 @@ steps:
     tokenPrefix: '#{'
     tokenSuffix: '}#'
     
-- script: docker build -f Dockerfile -t $(imageName) .
-  displayName: 'Docker build Script'
-
-- script: |
-    docker login -u $(dockerId) -p $(dockerPassword)
-    docker push $(imageName)
-  displayName: 'Push docker image'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'My Docker Hub'
+    repository: 'siegrainwong/ancorazor'
+    command: 'buildAndPush'
+    Dockerfile: 'src/Dockerfile'
 
 - task: CopyFiles@2
   displayName: 'Copy docker files'

@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{FECD17D6
 		build\docker-compose.yml = build\docker-compose.yml
 		Dockerfile = Dockerfile
 		build\readme.md = build\readme.md
+		build\release-script.sh = build\release-script.sh
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dashboard", "Dashboard", "{521CFD0A-0A78-433D-A4A6-A31303EF576D}"

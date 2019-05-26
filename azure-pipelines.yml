@@ -8,14 +8,14 @@ variables:
 steps:
 - task: replacetokens@3
   inputs:
-    targetFiles: '**/appsettings.json
-      **/docker-compose.yml'
+    targetFiles: '**/appsettings.json'
     encoding: 'auto'
     writeBOM: true
-    actionOnMissing: 'warn'
+    actionOnMissing: 'fail'
     keepToken: false
     tokenPrefix: '#{'
     tokenSuffix: '}#'
+
     
 - task: Docker@2
   inputs:
@@ -29,6 +29,17 @@ steps:
   inputs:
     Contents: '**/docker-compose.yml'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: replacetokens@3
+  inputs:
+    rootDirectory: '$(Build.ArtifactStagingDirectory)'
+    targetFiles: '**/docker-compose.yml'
+    encoding: 'auto'
+    writeBOM: true
+    actionOnMissing: 'fail'
+    keepToken: false
+    tokenPrefix: '#{'
+    tokenSuffix: '}#'
 
 - task: PublishBuildArtifacts@1
   inputs:

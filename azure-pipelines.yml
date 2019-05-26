@@ -2,7 +2,7 @@ pool:
   vmImage: 'Ubuntu 16.04'
 
 variables:
-  tagName: '$(Build.BuildNumber)'
+  tagName: 'latest'
   imageName: '$(dockerId)/ancorazor:$(tagName)'
 
 steps:
@@ -27,7 +27,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
-    Contents: '**/Dockerfile'
+    Contents: '**/docker-compose.yml'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1

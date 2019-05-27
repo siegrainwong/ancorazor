@@ -19,6 +19,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{FECD17D6-D78E-4913-A37A-12F43D222D7C}"
 	ProjectSection(SolutionItems) = preProject
 		.dockerignore = .dockerignore
+		build\docker-compose.prod.yml = build\docker-compose.prod.yml
 		build\docker-compose.yml = build\docker-compose.yml
 		Dockerfile = Dockerfile
 		build\readme.md = build\readme.md
@@ -26,6 +27,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{FECD17D6
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dashboard", "Dashboard", "{521CFD0A-0A78-433D-A4A6-A31303EF576D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{EE7D2A50-C286-4BFB-B855-D204886A2B58}"
+	ProjectSection(SolutionItems) = preProject
+		build\config\alarm-settings.yml = build\config\alarm-settings.yml
+		build\config\application.yml = build\config\application.yml
+		build\config\component-libraries.yml = build\config\component-libraries.yml
+		build\config\datasource-settings.properties = build\config\datasource-settings.properties
+		build\config\log4j2.xml = build\config\log4j2.xml
+		build\config\nginx.conf = build\config\nginx.conf
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +76,7 @@ Global
 		{CEA52B07-9E7F-4A4D-AF6D-4C43E7255D0E} = {20C12BB6-7202-46F4-9A92-3528FFC2B91B}
 		{A3F5E63D-3621-4406-B0A1-76A6EA02C96E} = {20C12BB6-7202-46F4-9A92-3528FFC2B91B}
 		{1872BF42-DF9B-4D3C-ABDA-710EDC38F044} = {20C12BB6-7202-46F4-9A92-3528FFC2B91B}
+		{EE7D2A50-C286-4BFB-B855-D204886A2B58} = {FECD17D6-D78E-4913-A37A-12F43D222D7C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {15D44F91-9990-4376-AE34-DA10D7EF66F0}

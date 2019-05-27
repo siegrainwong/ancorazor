@@ -7,9 +7,6 @@ COPY . .
 WORKDIR /src/Blog.API
 RUN dotnet publish "Blog.API.csproj" -c Release -o /app
 
-# Remove source code
-#RUN rm -rf "/src";
-
 WORKDIR /app
 
 EXPOSE 8088

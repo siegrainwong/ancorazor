@@ -96,6 +96,7 @@ namespace Blog.API
 
             app.UseCors();
             ConfigureAuthentication(app);
+            ConfigureEntityFramework(app);
             app.UseHttpsRedirection();
             ConfigureMvc(app);
             ConfigureSpa(app, env);
@@ -162,10 +163,6 @@ namespace Blog.API
 
         private void ResigterSkywalking(IServiceCollection services)
         {
-            /**
-             * MARK: Skywalking ¿ìËÙ´î½¨
-             * https://zhuanlan.zhihu.com/p/45084693
-             */
             services.AddSkyWalking(option =>
             {
                 option.ApplicationCode = _ServiceName;
@@ -315,6 +312,15 @@ namespace Blog.API
             });
 
             app.UseAuthentication();
+        }
+
+        private void ConfigureEntityFramework(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<BlogContext>();
+                context.Database.Migrate();
+            }
         }
 
         private void ConfigureMvc(IApplicationBuilder app)

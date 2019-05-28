@@ -4,6 +4,7 @@ pool:
 variables:
   tagName: '$(Build.BuildNumber)'
   imageName: '$(dockerId)/ancorazor:$(tagName)'
+  system.debug: true
 
 steps:
 - task: replacetokens@3

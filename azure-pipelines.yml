@@ -20,7 +20,7 @@ steps:
 # build & push with multiple tags
 - script: |
     docker build -t $(imageName):$(tagName) -t $(imageName):latest .
-    docker login -u $(dockerId) -p $(dockerPassword) $(imageName)
+    docker login -u $(dockerId) -password-stdin $(dockerPassword)
     docker push $(imageName):$(tagName)
     docker push $(imageName):latest
 

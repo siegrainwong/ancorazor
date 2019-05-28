@@ -68,7 +68,6 @@ services:
     environment:
       ACCEPT_EULA: Y
       MSSQL_PID: Developer
-      SA_PASSWORD: Weck1000232
     ports:
       - 1433:1433
   ancorazor:
@@ -85,6 +84,4 @@ services:
       - nginx
       - mssql
     restart: always
-    volumes:
-      - ../Blog.API/appsettings.Development.json:/app/appsettings.json
     

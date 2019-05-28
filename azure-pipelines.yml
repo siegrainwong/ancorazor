@@ -1,5 +1,5 @@
 pool:
-  vmImage: 'Hosted Windows 2019 with VS2019'
+  vmImage: 'vs2017-win2016'
 
 variables:
   tagName: '$(Build.BuildNumber)'

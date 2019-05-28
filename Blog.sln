@@ -38,6 +38,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{EE7D2A
 		build\config\nginx.conf = build\config\nginx.conf
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.API.Tests", "Blog.API.Tests\Blog.API.Tests.csproj", "{46F658F1-3C5C-4AE0-8AB3-7C45C2EB9454}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{B379DBB2-FF6E-4A80-A29B-54BFD98EC166}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B379DBB2-FF6E-4A80-A29B-54BFD98EC166}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B379DBB2-FF6E-4A80-A29B-54BFD98EC166}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46F658F1-3C5C-4AE0-8AB3-7C45C2EB9454}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46F658F1-3C5C-4AE0-8AB3-7C45C2EB9454}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46F658F1-3C5C-4AE0-8AB3-7C45C2EB9454}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46F658F1-3C5C-4AE0-8AB3-7C45C2EB9454}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,6 +83,7 @@ Global
 		{A3F5E63D-3621-4406-B0A1-76A6EA02C96E} = {20C12BB6-7202-46F4-9A92-3528FFC2B91B}
 		{1872BF42-DF9B-4D3C-ABDA-710EDC38F044} = {20C12BB6-7202-46F4-9A92-3528FFC2B91B}
 		{EE7D2A50-C286-4BFB-B855-D204886A2B58} = {FECD17D6-D78E-4913-A37A-12F43D222D7C}
+		{46F658F1-3C5C-4AE0-8AB3-7C45C2EB9454} = {20C12BB6-7202-46F4-9A92-3528FFC2B91B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {15D44F91-9990-4376-AE34-DA10D7EF66F0}

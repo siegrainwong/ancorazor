@@ -1,7 +1,7 @@
 set -ex
 cd #{ScriptDirectory}#
 
-docker-compose up -d
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 # reset sa password using a query
 docker exec -it mssql /opt/mssql-tools/bin/sqlcmd \

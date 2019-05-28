@@ -1,5 +1,5 @@
 pool:
-  vmImage: 'Ubuntu 16.04'
+  vmImage: 'Hosted Windows 2019 with VS2019'
 
 variables:
   tagName: '$(Build.BuildNumber)'
@@ -16,10 +16,6 @@ steps:
     keepToken: false
     tokenPrefix: '#{'
     tokenSuffix: '}#'
-
-- task: DockerInstaller@0
-  inputs:
-    dockerVersion: '17.09.0-ce'
     
 # build & push with multiple tags
 - script: |

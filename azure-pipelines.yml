@@ -3,7 +3,7 @@ pool:
 
 variables:
   tagName: '$(Build.BuildNumber)'
-  imageName: '$(dockerId)/ancorazor:$(tagName)'
+  imageName: '$(dockerId)/ancorazor'
   system.debug: true
 
 steps:
@@ -17,27 +17,12 @@ steps:
     tokenPrefix: '#{'
     tokenSuffix: '}#'
 
-#- task: DockerInstaller@0
-#  inputs:
-#    dockerVersion: '17.09.0-ce'
-
-- task: Docker@2
-  inputs:
-    containerRegistry: 'My Docker Hub'
-    repository: 'siegrainwong/ancorazor'
-    command: 'build'
-    Dockerfile: '**/Dockerfile'
-    tags: '$(tagName)
-    latest'
-
-# - task: Docker@2
-#   inputs:
-#     containerRegistry: 'My Docker Hub'
-#     repository: 'siegrainwong/ancorazor'
-#     command: 'buildAndPush'
-#     Dockerfile: 'Dockerfile'
-#     tags: $(tagName)
-#       latest'
+# build & push with multiple tags
+- script: |
+    docker build -t $(dockerId)/$(imageName):$(tagName) -t $(dockerId)/$(imageName):latest .
+    docker login -u $(dockerId) -p $(dockerPassword) $(imageName)
+    docker push $(imageName):$(tagName)
+    docker push $(imageName):latest
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'

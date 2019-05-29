@@ -32,7 +32,6 @@ namespace Blog.Tests.Common
         
             var htmlContent = homeRes.ReadAllContent();
             const string tokenStart = "window.__RequestVerificationToken";
-            // ReSharper disable once StringLastIndexOfIsCultureSpecific.1
             var tokenHtmlContent = htmlContent.Substring(htmlContent.LastIndexOf(tokenStart));
             var tokenPattern = new Regex(@"^window\.__RequestVerificationToken[^']+'(?<token>[^']+)';");
 

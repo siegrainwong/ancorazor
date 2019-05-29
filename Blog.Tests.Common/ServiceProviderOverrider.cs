@@ -7,10 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Blog.Tests.Common
 {
     class ServiceProviderOverrider
-    {
-        // ReSharper disable AssignNullToNotNullAttribute
-        // ReSharper disable PossibleNullReferenceException
-        
+    {   
         private readonly List<ServiceDescriptor> _originalDescriptors;
         private readonly IServiceProvider _serviceProvider;
         private readonly Dictionary<Type, object> _builtInItems = new Dictionary<Type, object>();

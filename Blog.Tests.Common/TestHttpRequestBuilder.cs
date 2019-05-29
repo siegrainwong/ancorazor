@@ -4,8 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using Discussion.Core.Models;
-using Discussion.Core.Mvc;
+using Blog.API.Messages;
+//using Blog.API.Messages;
+using Blog.Entity;
 using Blog.Tests.Common.AssertionExtensions;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Net.Http.Headers;
@@ -114,25 +115,25 @@ namespace Blog.Tests.Common
             return this;
         }
 
-        public ResponseAssertion ShouldBeHandled(User user = null)
+        public ResponseAssertion ShouldBeHandled(Users user = null)
         {
             var response = SendRequest();
             return new ResponseAssertion(response, this);
         }
 
-        public ResponseAssertion ShouldSuccess(User user = null)
+        public ResponseAssertion ShouldSuccess(Users user = null)
         {
             return ShouldBeHandled(user)
                 .WithResponse(ResponseAssertion.Is2XxSuccess);
         }
 
-        public ResponseAssertion ShouldSuccessWithRedirect(User user = null)
+        public ResponseAssertion ShouldSuccessWithRedirect(Users user = null)
         {
             return ShouldBeHandled(user)
                 .WithResponse(ResponseAssertion.IsSuccessRedirect);
         }
         
-        public ResponseAssertion ShouldFail(User user = null)
+        public ResponseAssertion ShouldFail(Users user = null)
         {
             return ShouldBeHandled(user)
                 .WithResponse(res => !ResponseAssertion.Is2XxSuccess(res) && !ResponseAssertion.IsSuccessRedirect(res));
@@ -222,11 +223,11 @@ namespace Blog.Tests.Common
             }
             
             
-            public ResponseAssertion WithApiResult(Action<ApiResponse, JObject> assertion)
+            public ResponseAssertion WithApiResult<T>(Action<ResponseMessage<T>, JObject> assertion)
             {
-                return WithJson<ApiResponse>(api =>
+                return WithJson<ResponseMessage<T>>(api =>
                 {
-                    assertion(api, api.Result as JObject);
+                    assertion(api, api.Data as JObject);
                 });
             }
             

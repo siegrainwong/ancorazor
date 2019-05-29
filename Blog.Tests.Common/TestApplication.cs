@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Security.Claims;
-using Discussion.Core;
-using Discussion.Core.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
@@ -87,12 +85,8 @@ namespace Blog.Tests.Common
                     return httpContextFactory;
                 });
             });
-            var connectionStringEVKey = $"DOTNETCLUB_{ServiceExtensions.ConfigKeyConnectionString}";
-            if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable(connectionStringEVKey)))
-            {
-                Environment.SetEnvironmentVariable(connectionStringEVKey, " ");
-            }
-            Environment.SetEnvironmentVariable("DOTNETCLUB_Logging:Console:LogLevel:Default", "Warning");
+            
+            Environment.SetEnvironmentVariable("SGConnectionString", "Data Source=.;Initial Catalog=siegrain.blog;Integrated Security=True");
             
             WebHostConfiguration.Configure(hostBuilder);
             hostBuilder.ConfigureLogging(loggingBuilder =>

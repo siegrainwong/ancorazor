@@ -26,4 +26,4 @@ services:
     environment:
       SA_PASSWORD: #{MSSQL_SA_PASSWORD}#
   ancorazor:
-    image: siegrainwong/ancorazor: #{Build.BuildNumber}#
+    image: siegrainwong/ancorazor:#{Build.BuildNumber}#

@@ -10,10 +10,3 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 docker exec -i mssql /opt/mssql-tools/bin/sqlcmd \
    -S localhost -U SA -P '#{MSSQL_SA_PASSWORD}#' \
    -Q 'ALTER LOGIN SA WITH PASSWORD="#{MSSQL_SA_PASSWORD}#"'
-
-# test mssql connection
-docker exec -i mssql "bash"
-/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '#{MSSQL_SA_PASSWORD}#'
-SELECT Name from sys.Databases
-go
-quit

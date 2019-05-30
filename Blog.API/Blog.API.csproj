@@ -36,8 +36,6 @@
   
   <!-- webpack -->
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
-    <!-- Rebind node-sass -->
-    <!--<Exec WorkingDirectory="$(SpaRoot)" Command="npm rebuild node-sass" />-->
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm i" />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod" />

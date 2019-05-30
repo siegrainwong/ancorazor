@@ -21,7 +21,6 @@ namespace Blog.API
                 .UseConfiguration(config)
                 .UseIISIntegration()
                 .UseStartup<Startup>()
-                .UseUrls("http://0.0.0.0:8088/")
                 .Build();
         }
 

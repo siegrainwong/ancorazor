@@ -66,15 +66,15 @@ services:
     links:
       - skywalking-oap
       - mssql
+    ports:
+      - 8088
     restart: always
   nginx:
     image: nginx:1.15.12-alpine
     container_name: nginx
     ports:
-      - 80:80 # ancorazor
+      - 80:80
       - 443:443
-      - 9200:9200 # elasticsearch
-      - 8080:8080 # skywalking-ui
     restart: always
     links:
       - ancorazor

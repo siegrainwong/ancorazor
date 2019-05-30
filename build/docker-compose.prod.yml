@@ -27,3 +27,7 @@ services:
       SA_PASSWORD: #{MSSQL_SA_PASSWORD}#
   ancorazor:
     image: siegrainwong/ancorazor:#{Build.BuildNumber}#
+  nginx:
+    ports:
+      - 80:80
+      - 443:443

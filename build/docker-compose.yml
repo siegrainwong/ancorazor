@@ -21,36 +21,33 @@ services:
     container_name: elasticsearch
     restart: always
     ports:
-      - 9200:9200
-      - 9300:9300
+      - 9300
     environment:
       discovery.type: single-node
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-  oap:
+  skywalking-oap:
     image: siegrainwong/skywalking-oap
-    container_name: oap
+    container_name: skywalking-oap
     depends_on:
       - elasticsearch
     links:
       - elasticsearch
     restart: always
     ports:
-      - 11800:11800
-      - 12800:12800
+      - 11800
+      - 12800
     volumes:
       - ./config:/skywalking/config:ro
-  ui:
+  skywalking-ui:
     image: siegrainwong/skywalking-ui
-    container_name: ui
+    container_name: skywalking-ui
     depends_on:
       - oap
     links:
       - oap
     restart: always
-    ports:
-      - 8080:8080
     environment:
-      collector.ribbon.listOfServers: oap:12800
+      collector.ribbon.listOfServers: skywalking-oap:12800
   mssql:
     image: mcr.microsoft.com/mssql/server:2017-latest
     container_name: mssql
@@ -59,12 +56,10 @@ services:
       ACCEPT_EULA: Y
       MSSQL_PID: Developer
     ports:
-      - 1433:1433
+      - 1433
   ancorazor:
     image: siegrainwong/ancorazor:latest
     container_name: ancorazor
-    ports:
-      - 8088:8088
     depends_on:
       - oap
       - mssql
@@ -76,9 +71,10 @@ services:
     image: nginx:1.15.12-alpine
     container_name: nginx
     ports:
-      - 80:80
+      - 80:80 # ancorazor
       - 443:443
-      - 8089:8089
+      - 9200:9200 # elasticsearch
+      - 8080:8080 # skywalking-ui
     restart: always
     links:
       - ancorazor

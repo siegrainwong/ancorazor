@@ -166,7 +166,7 @@ namespace Blog.API
             services.AddSkyWalking(option =>
             {
                 option.ApplicationCode = _ServiceName;
-                option.DirectServers = "oap:11800";
+                option.DirectServers = "skywalking-oap:11800";
                 // 每三秒采样的Trace数量,-1 为全部采集
                 option.SamplePer3Secs = -1;
             })

@@ -1,5 +1,4 @@
 const apiHost = "http://siegrain.wang";
-// const apiHost = "http://localhost:8088";
 
 export const environment = {
   production: true,

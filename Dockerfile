@@ -1,7 +1,6 @@
-# Docker file of Blog.API
+# Dockerfile of Blog.API
 
-# Set siegrainwong/aspnetcore-build:2.2 as build env, it includes .net core 2.2 sdk and nodejs
-#FROM siegrainwong/aspnetcore-build:2.2-alpine
+# Set siegrainwong/aspnetcore-build:2.2 as bionic base image, it includes .net core 2.2 sdk and nodejs
 FROM siegrainwong/aspnetcore-build:2.2-bionic
 WORKDIR /src
 COPY . .

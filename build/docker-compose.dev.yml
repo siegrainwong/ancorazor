@@ -14,14 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+
 version: '3.3'
 services:
   elasticsearch:
     environment:
-      ELASTIC_PASSWORD: #{ELASTIC_PASSWORD}#
+      ELASTIC_PASSWORD: Fuckyou
   mssql:
     environment:
-      SA_PASSWORD: #{MSSQL_SA_PASSWORD}#
+      SA_PASSWORD: Fuckme123!@#
   ancorazor:
     volumes:
       - ../Blog.API/appsettings.Development.json:/app/appsettings.json

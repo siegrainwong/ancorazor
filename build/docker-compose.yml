@@ -42,9 +42,9 @@ services:
     image: siegrainwong/skywalking-ui
     container_name: skywalking-ui
     depends_on:
-      - oap
+      - skywalking-oap
     links:
-      - oap
+      - skywalking-oap
     restart: always
     environment:
       collector.ribbon.listOfServers: skywalking-oap:12800
@@ -61,10 +61,10 @@ services:
     image: siegrainwong/ancorazor:latest
     container_name: ancorazor
     depends_on:
-      - oap
+      - skywalking-oap
       - mssql
     links:
-      - oap
+      - skywalking-oap
       - mssql
     restart: always
   nginx:

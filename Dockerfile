@@ -6,6 +6,8 @@ FROM siegrainwong/aspnetcore-build:2.2-bionic
 WORKDIR /src
 COPY . .
 WORKDIR /src/Blog.API
+
+RUN npm rebuild node-sass
 RUN dotnet publish "Blog.API.csproj" -c Release -o /app
 
 WORKDIR /app

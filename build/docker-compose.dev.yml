@@ -23,11 +23,13 @@ services:
       ELASTIC_PASSWORD: Fuckyou
   mssql:
     environment:
-      SA_PASSWORD: Fuckme123!@#
+      SA_PASSWORD: 'Fuckme123!@#'
   ancorazor:
     volumes:
       - ../Blog.API/appsettings.Development.json:/app/appsettings.json
+  skywalking-ui:
+    ports:
+      - 8080:8080
   nginx:
     ports:
-      - 9200:9200 # elasticsearch
-      - 8080:8080 # skywalking-ui
+      - 9200:9200

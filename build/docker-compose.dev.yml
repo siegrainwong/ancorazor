@@ -27,9 +27,8 @@ services:
   ancorazor:
     volumes:
       - ../Blog.API/appsettings.Development.json:/app/appsettings.json
+    ports:
+      - 8088:8088
   skywalking-ui:
     ports:
       - 8080:8080
-  nginx:
-    ports:
-      - 9200:9200

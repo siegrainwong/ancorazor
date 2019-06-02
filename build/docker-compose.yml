@@ -45,6 +45,8 @@ services:
       - skywalking-oap
     links:
       - skywalking-oap
+    ports:
+      - 8080
     restart: always
     environment:
       collector.ribbon.listOfServers: skywalking-oap:12800
@@ -60,26 +62,26 @@ services:
   ancorazor:
     image: siegrainwong/ancorazor:latest
     container_name: ancorazor
-    depends_on:
-      - skywalking-oap
-      - mssql
-    links:
-      - skywalking-oap
-      - mssql
     ports:
       - 8088
-    restart: always
-  nginx:
-    image: nginx:1.15.12-alpine
-    container_name: nginx
-    ports:
-      - 80:80
-      - 443:443
-    restart: always
-    links:
-      - ancorazor
     depends_on:
-      - ancorazor
-    volumes:
-      - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+      - skywalking-oap
+      - mssql
+    links:
+      - skywalking-oap
+      - mssql
+    restart: always
+  #nginx:
+  #  image: nginx:1.15.12-alpine
+  #  container_name: nginx
+  #  ports:
+  #    - 80:80
+  #    - 443:443
+  #  restart: always
+  #  links:
+  #    - ancorazor
+  #  depends_on:
+  #    - ancorazor
+  #  volumes:
+  #    - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
     

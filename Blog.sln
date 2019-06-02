@@ -40,11 +40,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{EE7D2A
 		build\config\nginx.conf = build\config\nginx.conf
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.API.Tests", "Blog.API.Tests\Blog.API.Tests.csproj", "{46F658F1-3C5C-4AE0-8AB3-7C45C2EB9454}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.API.Tests", "Blog.API.Tests\Blog.API.Tests.csproj", "{46F658F1-3C5C-4AE0-8AB3-7C45C2EB9454}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F1590BB5-E6FB-4009-8BE3-38CC5AFA6C0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Tests.Common", "Blog.Tests.Common\Blog.Tests.Common.csproj", "{D73BA09A-9D42-4839-84A6-129977B11DDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Tests.Common", "Blog.Tests.Common\Blog.Tests.Common.csproj", "{D73BA09A-9D42-4839-84A6-129977B11DDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

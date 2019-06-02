@@ -1,5 +1,13 @@
-# Getting start with docker
+## Development
 
+Run powershell script
+```ps
+dev.ps1
 ```
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+
+## Production
+
+Run bash script
+```bash
+bash release-script.sh
 ```

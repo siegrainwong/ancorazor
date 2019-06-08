@@ -22,11 +22,13 @@ services:
     environment:
       ELASTIC_PASSWORD: Fuckyou
   mssql:
+    ports:
+      - 1433:1433
     environment:
       SA_PASSWORD: 'Fuckme123!@#'
   ancorazor:
     volumes:
-      - ../Blog.API/appsettings.Development.json:/app/appsettings.json
+      - ../Blog.API/appsettings.Development.docker.json:/app/appsettings.json
     ports:
       - 8088:8088
   skywalking-ui:

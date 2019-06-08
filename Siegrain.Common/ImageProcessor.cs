@@ -13,6 +13,7 @@ namespace Siegrain.Common
         public static Task SaveWithThumbnailAsync(IFormFile file, int width, int height, string path, string fileName, string thumbPrefix = "thumb_")
         {
             path = string.Concat(path.Replace("/", DirectorySeparator), DirectorySeparator);
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
 
             var fullPath = string.Concat(path, fileName);
             var thumbFullPath = string.Concat(path, thumbPrefix, fileName);

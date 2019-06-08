@@ -229,6 +229,10 @@ label {
   code:not(.hljs-code) {
     @include inline-code-block();
   }
+
+  a {
+    text-decoration: #000;
+  }
 }
 
 .editor-preview-side {

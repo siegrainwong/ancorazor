@@ -16,7 +16,7 @@ namespace Siegrain.Common.FileSystem
         }
 
 
-       public Task<bool> FileExistsAsync(string path)
+        public Task<bool> FileExistsAsync(string path)
         {
             return Task.FromResult(File.Exists(MapStorage(path)));
         }
@@ -28,7 +28,7 @@ namespace Siegrain.Common.FileSystem
                 .GetFiles()
                 .Select(f => (IFile)(new LocalDiskFile(f, _storagePath)))
                 .ToList();
-            
+
             return await Task.FromResult(files);
         }
 
@@ -51,14 +51,14 @@ namespace Siegrain.Common.FileSystem
         }
 
         public async Task<IFile> CreateFileAsync(string path)
-        {   
+        {
             var fullPath = MapStorage(path);
             var dir = new FileInfo(fullPath).DirectoryName;
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
             }
-            
+
             File.Create(fullPath).Dispose();
             return await Task.FromResult(CreateFileObject(fullPath));
         }
@@ -76,7 +76,8 @@ namespace Siegrain.Common.FileSystem
         public bool SupportGeneratingPublicUrl => false;
 
 
-        private string MapStorage(string path) {
+        private string MapStorage(string path)
+        {
             string mappedPath = string.IsNullOrEmpty(path) ? _storagePath : Path.Combine(_storagePath, path);
             var normalizedPath = Path.GetFullPath(mappedPath);
             if (!normalizedPath.StartsWith(_storagePath, StringComparison.OrdinalIgnoreCase))
@@ -86,11 +87,11 @@ namespace Siegrain.Common.FileSystem
 
             return normalizedPath;
         }
-        
-        
+
+
         static readonly string PathSeparator = Path.DirectorySeparatorChar.ToString();
-        
-        
+
+
         private class LocalDiskFile : IFile
         {
             private readonly FileInfo _fileInfo;

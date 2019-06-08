@@ -201,7 +201,8 @@ export class WriteArticleComponent
     this.model.category = this._frontMatter.category;
     this.model.digest = this._frontMatter.description;
     this.model.alias = this._frontMatter.alias;
-    this.model.isDraft = !!this._frontMatter.draft;
+    const isDraft = (this._frontMatter.draft as string).toLowerCase();
+    this.model.isDraft = isDraft === "true" || isDraft === "yes";
 
     // submit
     this._logger.info("submiting: ", this.model);

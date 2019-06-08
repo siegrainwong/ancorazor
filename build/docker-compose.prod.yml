@@ -34,12 +34,6 @@ services:
     environment:
       VIRTUAL_HOST: siegrain.wang
       VIRTUAL_PORT: 8088
-  #nginx:
-  #  ports:
-  #    - 80:80
-  #    - 443:443
-  #  volumes:
-  #    - /var/run/docker.sock:/tmp/docker.sock:ro
   nginx-proxy:
     container_name: nginx-proxy
     image: jwilder/nginx-proxy:alpine

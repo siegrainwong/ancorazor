@@ -46,6 +46,8 @@ namespace Blog.Entity
         {
             builder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
 
+            #region Structures
+
             // set default value of parent entity
             foreach (var entityType in builder.Model.GetEntityTypes()
                 .Where(e => typeof(BaseEntity).IsAssignableFrom(e.ClrType)))
@@ -169,6 +171,8 @@ namespace Blog.Entity
                     .HasForeignKey(d => d.Uploader)
                     .HasConstraintName("FK_ImageStorage_Users");
             });
+
+            #endregion
 
             #region Seeds
             var now = DateTime.Now;

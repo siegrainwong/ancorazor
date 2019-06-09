@@ -59,15 +59,3 @@ services:
       MSSQL_PID: Developer
     ports:
       - 1433
-  ancorazor:
-    image: siegrainwong/ancorazor:latest
-    container_name: ancorazor
-    ports:
-      - 8088
-    depends_on:
-      - skywalking-oap
-      - mssql
-    links:
-      - skywalking-oap
-      - mssql
-    restart: always

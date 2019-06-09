@@ -27,10 +27,19 @@ services:
     environment:
       SA_PASSWORD: 'Fuckme123!@#'
   ancorazor:
-    volumes:
-      - ../Blog.API/appsettings.Development.docker.json:/app/appsettings.json
+    container_name: ancorazor
+    image: siegrainwong/ancorazor:latest
     ports:
       - 8088:8088
+    depends_on:
+      - skywalking-oap
+      - mssql
+    links:
+      - skywalking-oap
+      - mssql
+    volumes:
+      - ../Blog.API/appsettings.Development.docker.json:/app/appsettings.json
+    restart: always
   skywalking-ui:
     ports:
       - 8080:8080

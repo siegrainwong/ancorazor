@@ -34,6 +34,13 @@ services:
     environment:
       VIRTUAL_HOST: siegrain.wang
       VIRTUAL_PORT: 8088
+    depends_on:
+      - skywalking-oap
+      - mssql
+    links:
+      - skywalking-oap
+      - mssql
+    restart: always
   nginx-proxy:
     container_name: nginx-proxy
     image: jwilder/nginx-proxy:alpine

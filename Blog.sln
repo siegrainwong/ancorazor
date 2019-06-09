@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{FECD17D6
 	ProjectSection(SolutionItems) = preProject
 		.dockerignore = .dockerignore
 		build\dev.ps1 = build\dev.ps1
+		build\dev.sh = build\dev.sh
 		build\docker-compose.dev.yml = build\docker-compose.dev.yml
 		build\docker-compose.prod.yml = build\docker-compose.prod.yml
 		build\docker-compose.yml = build\docker-compose.yml

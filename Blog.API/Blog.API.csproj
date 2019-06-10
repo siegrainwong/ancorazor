@@ -3,20 +3,15 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <!-- Client path-->
     <SpaRoot>ClientApp\</SpaRoot>
-    <!-- Wether enable the SSR -->
-    <BuildServerSideRenderer>true</BuildServerSideRenderer>
     <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
     <UserSecretsId>24dec880-1d4c-4d3c-8102-9aef836b6ee3</UserSecretsId>
     <LangVersion>7.1</LangVersion>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
-  </PropertyGroup>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
 
-  <!-- Exclude client project -->
-  <!--<ItemGroup>
-    <Content Remove="$(SpaRoot)**" />
-    <None Remove="$(SpaRoot)**" />
-    <Watch Include="**\*.cs" Exclude="$(SpaRoot)**\*;$(DefaultExcludes)" />
-  </ItemGroup>-->
+    <!-- Wether enable the SSR -->
+    <BuildServerSideRenderer>true</BuildServerSideRenderer>
+  </PropertyGroup>
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
@@ -38,9 +33,15 @@
       <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
     </Exec>
     <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    
     <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm rebuild node-sass" />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+  </Target>
+
+  <!--There has some error if you don't rebuild this in docker/linux-->
+  <Target Name="RebuildNodeSass" AfterTargets="DebugEnsureNodeEnv" Condition=" '$(Configuration)' == 'Debug'">
+    <Message Importance="high" Text="Rebuilding node-sass..." />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm rebuild node-sass" />
   </Target>
   
   <!-- webpack -->

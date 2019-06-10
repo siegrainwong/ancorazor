@@ -149,7 +149,7 @@ export abstract class BaseService implements ISGService {
 
     try {
       const res = await this._api.request({
-        method: method.toString(),
+        method: method,
         url: url,
         params: query,
         data: body,

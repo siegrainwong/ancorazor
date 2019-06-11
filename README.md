@@ -16,10 +16,11 @@ Make sure you have these already installed on your machine.
 2. Nodejs 10+
 3. SQL Server(optional with docker-compose)
 
-### Build regularly
-1. Replace connection string in appsettings.Development.json
-2. `cd path-to-ancorazor/Blog.API` then `dotnet watch run`
-3. Open `localhost:8088`
+### Build
+1. `git clone https://github.com/Seanwong933/ancorazor.git`
+2. Replace connection string in `ancorazor/Blog.API/appsettings.Development.json`(optional depends on your condition)
+3. `cd path-to-ancorazor/Blog.API` then `dotnet watch run`
+4. Open `localhost:8088`
 
 ### Build with docker-compose
 1. `cd path-to-ancorazor/build` then run `dev.ps1` on windows or `dev.sh` on linux.

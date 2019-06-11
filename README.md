@@ -40,3 +40,5 @@ TODO
 ## To-do
 - [ ] Comment
 - [ ] Admin dashboard
+
+Or you can see more details in [projects](https://github.com/Seanwong933/ancorazor/projects/1).

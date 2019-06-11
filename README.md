@@ -23,7 +23,7 @@ Make sure you have these already installed on your machine.
 4. Open `localhost:8088`, the default username/password is admin/123456.
 
 
-*NOTICE: It's better to use this way while developing cause I haven't figure out how to debugging .net core spa in docker yet.*
+*NOTICE: It's better to use this way while developing cause I haven't figure out how to debug .net core spa in docker yet.*
 
 ### Build with docker-compose
 `cd path-to-ancorazor/build`

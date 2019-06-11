@@ -23,6 +23,7 @@ Make sure you have these already installed on your machine.
 
 ### Build with docker-compose
 1. `cd path-to-ancorazor/build` then run `dev.ps1` on windows or `dev.sh` on linux.
+
 *NOTICE: It's better to use regular way while develop cause I haven't figure out how to debug .net core spa in docker yet.*
 
 This would launch SQL Server, Skywalking, nginx and ancorazor in your docker.
@@ -31,6 +32,9 @@ This would launch SQL Server, Skywalking, nginx and ancorazor in your docker.
 
 ## Release(CI/CD)
 I recommend you use azure devops to release this to production, all my pipelines are public here.
+
+## Structure
+TODO
 
 ## To-do
 - [ ] Comment

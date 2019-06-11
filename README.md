@@ -32,7 +32,7 @@ This would launch SQL Server, Skywalking, nginx and ancorazor in your docker.
 - Ancorazor: `localhost:8080`
 
 ## Release(CI/CD)
-I recommend you use azure devops to release this to production, all my pipelines are public here.
+I recommend you use azure devops to release this to production, all my pipelines are public [here](https://dev.azure.com/siegrainwong/Ancorazor/_build?definitionId=5).
 
 ## Structure
 TODO

@@ -22,7 +22,8 @@ Make sure you have these already installed on your machine.
 3. `cd path-to-ancorazor/Blog.API` then `dotnet watch run`
 4. Open `localhost:8088`, the default username/password is admin/123456.
 
-*NOTICE: It's better to use this way while developing cause I haven't figure out how to debug .net core spa in docker yet.*
+
+*NOTICE: It's better to use this way while developing cause I haven't figure out how to debugging .net core spa in docker yet.*
 
 ### Build with docker-compose
 `cd path-to-ancorazor/build`
@@ -30,6 +31,7 @@ Make sure you have these already installed on your machine.
 Replace all `F:\Projects\ancorazor\` in `dev.ps1` to yours path then run this script.
 #### linux
 Run `path-to-ancorazor/build/dev.sh`
+
 
 This would launch sql server, skywalking, nginx and ancorazor in your docker.
 - Skywalking: `localhost:8080`, the default account/password is admin/admin.

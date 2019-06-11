@@ -2,7 +2,7 @@
 
 [![Build status](https://dev.azure.com/siegrainwong/SGBlogCore/_apis/build/status/SGBlogCore-Azure%20Web%20App%20CI)](https://dev.azure.com/siegrainwong/SGBlogCore/_build/latest?definitionId=2)
 
-Ancorazor is a blog system built by dotnet core 2.2 and angular 7(ssr supported for sure) with pretty smooth transition effects.
+Ancorazor is a blog system built by dotnet core 2.2 and angular 7 (ssr supported for sure) with a very smooth transition effects.
 
 [Live demo](http://siegrain.wang).
 

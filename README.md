@@ -46,3 +46,9 @@ TODO
 - [ ] Admin dashboard
 
 Or you can see more details in [projects](https://github.com/Seanwong933/ancorazor/projects/1).
+
+## Acknowledgements
+[startbootstrap-clean-blog, the template provider.](https://github.com/BlackrockDigital/startbootstrap-clean-blog)
+
+## Licence
+MIT

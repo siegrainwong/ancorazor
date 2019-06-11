@@ -28,8 +28,8 @@ Make sure you have these already installed on your machine.
 *NOTICE: It's better to use regular way while develop cause I haven't figure out how to debug .net core spa in docker yet.*
 
 This would launch SQL Server, Skywalking, nginx and ancorazor in your docker.
-- Skywalking: localhost:8080, default account/password: admin admin
-- Ancorazor: localhost:8080
+- Skywalking: `localhost:8080`, default account/password: admin admin
+- Ancorazor: `localhost:8080`
 
 ## Release(CI/CD)
 I recommend you use azure devops to release this to production, all my pipelines are public here.

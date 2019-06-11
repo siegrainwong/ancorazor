@@ -7,7 +7,6 @@ docker exec -i mssql /opt/mssql-tools/bin/sqlcmd `
 	-U SA -P "Fuckme123!@#" `
 	-Q "ALTER LOGIN SA WITH PASSWORD='Fuckme123!@#'"
 
-# FIXME: 用这种方式.net core启动地特别慢，需要2分钟才能进入main方法。
 docker run --rm -it `
 	-v F:\Projects\siegrain.blog\:/app/ `
 	-v F:\Projects\siegrain.blog\Blog.API\appsettings.Development.docker.json:/app/Blog.API/appsettings.Development.json `

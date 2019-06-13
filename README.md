@@ -38,7 +38,7 @@ This would launch sql server, skywalking, nginx and ancorazor in your docker.
 - Ancorazor: `localhost:8088`, the default username/password is admin/123456.
 
 ## Release(CI/CD)
-I recommend you use azure devops to release this to production, all my pipelines are public [here](https://dev.azure.com/siegrainwong/Ancorazor/_build?definitionId=5).
+I recommend you use azure devops to release this to production, all my pipelines are public [here](https://dev.azure.com/siegrainwong/Ancorazor/_build?definitionId=6).
 
 ## Structure
 TODO

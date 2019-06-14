@@ -38,7 +38,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{EE7D2A
 		build\config\component-libraries.yml = build\config\component-libraries.yml
 		build\config\datasource-settings.properties = build\config\datasource-settings.properties
 		build\config\log4j2.xml = build\config\log4j2.xml
-		build\config\nginx.conf = build\config\nginx.conf
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.API.Tests", "Blog.API.Tests\Blog.API.Tests.csproj", "{46F658F1-3C5C-4AE0-8AB3-7C45C2EB9454}"

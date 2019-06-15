@@ -58,8 +58,7 @@ services:
     container_name: letsencrypt
     environment:
       DEFAULT_EMAIL: siegrainwong@gmail.com
-    volumes_from: # mount volumes from another container
-      - nginx-proxy
+      NGINX_PROXY_CONTAINER: nginx-proxy
     volumes:
       - certs://etc/nginx/certs:rw
       - //var/run/docker.sock:/var/run/docker.sock:ro

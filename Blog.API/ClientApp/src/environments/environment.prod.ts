@@ -1,4 +1,4 @@
-const apiHost = "http://siegrain.wang";
+const apiHost = "https://siegrain.wang";
 
 export const environment = {
   production: true,

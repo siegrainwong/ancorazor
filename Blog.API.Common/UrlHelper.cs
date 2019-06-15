@@ -15,7 +15,7 @@ namespace Blog.API.Common
             _seoConfiguration = seoConfiguration.Value;
         }
 
-        public static string ToUrlSafeString(string source, bool convertToPinyin)
+        public static string ToUrlSafeString(string source, bool convertToPinyin = true)
         {
             var str = convertToPinyin ? CHNToPinyin.ConvertToPinYin(source) : source;
             return Regex.Replace(str, Constants.Constants.Article.RouteReplaceRegex, " ")

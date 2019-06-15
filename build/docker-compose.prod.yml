@@ -19,9 +19,6 @@
 
 version: '3.3'
 services:
-  elasticsearch:
-    environment:
-      ELASTIC_PASSWORD: #{ELASTIC_PASSWORD}#
   mssql:
     environment:
       SA_PASSWORD: #{MSSQL_SA_PASSWORD}#
@@ -29,11 +26,13 @@ services:
     environment:
       VIRTUAL_HOST: apm.siegrain.wang
       VIRTUAL_PORT: 8080
+      LETSENCRYPT_HOST: apm.siegrain.wang
   ancorazor:
     image: siegrainwong/ancorazor:#{Build.BuildNumber}#
     environment:
       VIRTUAL_HOST: siegrain.wang
       VIRTUAL_PORT: 8088
+      LETSENCRYPT_HOST: siegrain.wang
     depends_on:
       - skywalking-oap
       - mssql
@@ -48,4 +47,26 @@ services:
       - 80:80
       - 443:443
     volumes:
+      - conf://etc/nginx/conf.d
+      - vhost://etc/nginx/vhost.d
+      - html://usr/share/nginx/html # for http challenge
+      - dhparam://etc/nginx/dhparam
+      - certs://etc/nginx/certs:ro  # store certificates
       - //var/run/docker.sock:/tmp/docker.sock
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt
+    environment:
+      DEFAULT_EMAIL: siegrainwong@gmail.com
+    volumes_from: # mount volumes from another container
+      - nginx-proxy
+    volumes:
+      - certs://etc/nginx/certs:rw
+      - //var/run/docker.sock:/var/run/docker.sock:ro
+    network_mode: bridge
+volumes:
+  conf:
+  vhost:
+  html:
+  dhparam:
+  certs:

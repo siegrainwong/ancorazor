@@ -61,12 +61,12 @@ namespace Blog.Service
                     })
                     .DeferredFirstOrDefault(x => x.Alias == alias).FutureValue();
 
-            var viewModel = _mapper.Map<ArticleViewModel>(await futureArticle.ValueAsync());
+            var article = _mapper.Map<ArticleViewModel>(await futureArticle.ValueAsync());
 
-            if (isDraft.HasValue && viewModel.IsDraft != isDraft)
+            if (isDraft.HasValue && article.IsDraft != isDraft)
                 throw new EntityNotFoundException<Article>();
 
-            var futurePrevious = _context.Article.Where(p => p.CreatedAt > viewModel.CreatedAt)
+            var futurePrevious = _context.Article.Where(p => p.Id < article.Id)
                             .OrderBy(p => p.CreatedAt).Select(p => new
                             {
                                 p.Id,
@@ -77,7 +77,7 @@ namespace Blog.Service
                                 Category = p.CategoryNavigation
                             }).DeferredFirstOrDefault().FutureValue();
 
-            var futureNext = _context.Article.Where(p => p.CreatedAt < viewModel.CreatedAt)
+            var futureNext = _context.Article.Where(p => p.Id > article.Id)
                             .OrderByDescending(p => p.CreatedAt).Select(p => new
                             {
                                 p.Id,
@@ -88,10 +88,10 @@ namespace Blog.Service
                                 Category = p.CategoryNavigation
                             }).DeferredFirstOrDefault().FutureValue();
 
-            viewModel.Previous = _mapper.Map<ArticleViewModel>(await futurePrevious.ValueAsync());
-            viewModel.Next = _mapper.Map<ArticleViewModel>(await futureNext.ValueAsync());
+            article.Previous = _mapper.Map<ArticleViewModel>(await futurePrevious.ValueAsync());
+            article.Next = _mapper.Map<ArticleViewModel>(await futureNext.ValueAsync());
 
-            return viewModel;
+            return article;
         }
 
         private static readonly Func<BlogContext, AsyncEnumerable<Tag>> _getUnusedTags =

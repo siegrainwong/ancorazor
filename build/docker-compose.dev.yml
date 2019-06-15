@@ -18,9 +18,6 @@
 
 version: '3.3'
 services:
-  elasticsearch:
-    environment:
-      ELASTIC_PASSWORD: Fuckyou
   mssql:
     ports:
       - 1433:1433

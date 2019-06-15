@@ -58,7 +58,7 @@ services:
       ACCEPT_EULA: Y
       MSSQL_PID: Developer
     volumes:
-      ancorazor:/var/opt/mssql
+      - ancorazor://var/opt/mssql
     ports:
       - 1433
 volumes:

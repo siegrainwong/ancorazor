@@ -8,7 +8,8 @@ export const enum RouteKinds {
   add = "add",
   edit = "edit",
   article = "article",
-  about = "about"
+  about = "about",
+  notfound = "notfound"
 }
 
 export default class RouteData {

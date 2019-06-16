@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, Input } from "@angular/core";
 import { Store } from "src/app/shared/store/store";
 import {
   SGUtil,
@@ -16,6 +16,9 @@ import { SGAnimations } from "src/app/shared/animations/sg-animations";
 import { SGRouteTransitionCommands } from "src/app/shared/animations/sg-transition.model";
 import { ObservedComponentBase } from "src/app/shared/components/observed.base";
 import { AutoUnsubscribe } from "src/app/shared/utils/auto-unsubscribe.decorator";
+import { RouteKinds } from "src/app/shared/models/route-data.model";
+
+const fixedPages = [RouteKinds.edit, RouteKinds.notfound, RouteKinds.add];
 
 @Component({
   selector: "app-nav",
@@ -30,6 +33,7 @@ export class NavComponent extends ObservedComponentBase
   };
   public title: String;
   public navbarOpen: boolean = false;
+  public alwaysFixed: boolean = false;
 
   private _routeChanged$;
   private _settingChanged$;
@@ -72,8 +76,11 @@ export class NavComponent extends ObservedComponentBase
 
   registerSubscriptions() {
     this._routeChanged$ = this.store.routeDataChanged$.subscribe(data => {
-      if (data && data.kind == "home") this.title = "";
+      if (data.kind == RouteKinds.home || data.kind == RouteKinds.homePaged)
+        this.title = "";
       else this.title = this.store.siteSetting && this.store.siteSetting.title;
+
+      this.alwaysFixed = fixedPages.indexOf(data.kind as RouteKinds) > 0;
     });
     this._settingChanged$ = this.store.siteSettingChanged$.subscribe(data => {
       const isHomePage = this.title === "";

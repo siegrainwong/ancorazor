@@ -65,6 +65,7 @@ export class SGProgress extends ObservedServiceBase implements OnDestroy {
             this.progressDone(SGProgressMode.transition);
             break;
           default:
+            if (this._mode != SGProgressMode.transition) return;
             var total = Object.keys(SGTransitionPipeline).length / 2;
             window.NProgress.set(progress / total);
             break;

@@ -11,6 +11,7 @@ import { SGTransitionResolveGuard } from "../shared/animations/sg-transition.res
 import { ArticleResolveGuard } from "./guard/article.resolve.guard";
 import { SGTransitionDeactivateGuard } from "../shared/animations/sg-transition.deactivate.guard";
 import { ArticleListResolveGuard } from "./guard/article-list.resolve.guard";
+import { PageNotFoundComponent } from "./components/page-not-found/page-not-found.component";
 
 /**
  * MARK: SGTransitionDeactivateGuard && SGTransitionResolveGuard Setup
@@ -84,7 +85,17 @@ let routes: Routes = [
           sg_transition: SGTransitionResolveGuard
         },
         canDeactivate: [SGTransitionDeactivateGuard]
-      }
+      },
+      {
+        path: "notfound",
+        component: PageNotFoundComponent,
+        data: new RouteData({ kind: RouteKinds.notfound }),
+        resolve: {
+          sg_transition: SGTransitionResolveGuard
+        },
+        canDeactivate: [SGTransitionDeactivateGuard]
+      },
+      { path: "**", redirectTo: "/notfound" }
     ]
   }
 ];

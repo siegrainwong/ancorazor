@@ -30,6 +30,7 @@ import { SGProgress } from "../shared/utils/siegrain.progress";
 import { SEOService } from "./services/seo.service";
 import { CommonService } from "./services/common.service";
 import { ObservedComponentBase } from "../shared/components/observed.base";
+import { PageNotFoundComponent } from "./components/page-not-found/page-not-found.component";
 
 /**
  * MARK: `providedIn: 'root'` or `providedIn: SomeModule`
@@ -53,6 +54,7 @@ import { ObservedComponentBase } from "../shared/components/observed.base";
     AboutComponent,
     ArticleComponent,
     SignInComponent,
+    PageNotFoundComponent,
     ConfirmDialog
   ],
   entryComponents: [SignInComponent, ConfirmDialog],

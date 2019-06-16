@@ -273,6 +273,7 @@ tags:
             builder.Entity<Article>().HasData(new Article
             {
                 Id = 1,
+                Cover = 1,
                 Title = "Welcome to ancorazor!",
                 Digest = "Learn how to write a post.",
                 Alias = UrlHelper.ToUrlSafeString("Welcome to ancorazor!"),
@@ -361,6 +362,7 @@ Thanks for reading this guide, hope you can enjoy your writing."
             }, new Article
             {
                 Id = 2,
+                Cover = 1,
                 Title = "欢迎使用ancorazor!",
                 Digest = "本文将向你演示如何写一篇文章.",
                 Alias = UrlHelper.ToUrlSafeString("Getting start with ancorazor"),
@@ -479,6 +481,17 @@ Ancorazor **没有提供类似于自动保存的功能**，所以建议在 .md �
                 Tag = 2,
                 CreatedAt = now,
                 UpdatedAt = now
+            });
+            builder.Entity<ImageStorage>().HasData(new ImageStorage
+            {
+                Id = 1,
+                CreatedAt = now,
+                UpdatedAt = now,
+                Size = 0,
+                Uploader = 1,
+                Category = "cover",
+                Path = "upload/default/post-bg.jpg",
+                Remark = "default post cover"
             });
 
             #endregion

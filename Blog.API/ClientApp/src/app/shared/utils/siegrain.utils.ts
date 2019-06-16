@@ -12,7 +12,7 @@ export const enum TipType {
   Danger = "❌"
 }
 
-export const topElementId = "#content";
+export const topElementId = "#body";
 export const XSRFTokenKey = "XSRF-TOKEN";
 
 @Injectable({ providedIn: "root" })

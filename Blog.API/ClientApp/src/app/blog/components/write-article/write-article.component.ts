@@ -20,16 +20,16 @@ import { SGAnimations } from "src/app/shared/animations/sg-animations";
 import { SGRouteTransitionCommands } from "src/app/shared/animations/sg-transition.model";
 import { take, map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
+import { ObservedComponentBase } from "src/app/shared/components/observed.base";
 
 @Component({
   selector: "app-write-article",
   templateUrl: "./write-article.component.html",
   styleUrls: ["./write-article.component.scss"]
 })
-export class WriteArticleComponent
-  implements OnInit, OnDestroy, SGTransitionDelegate {
+export class WriteArticleComponent implements OnInit, SGTransitionDelegate {
   public animations = {
-    editor: SGAnimations.fadeOpposite
+    editor: SGAnimations.fade
   };
   @Input() model = new ArticleModel({
     title: "",
@@ -60,29 +60,15 @@ export class WriteArticleComponent
       this.isEditing = true;
       this.model = article;
     }
-    this.setupNav();
+    // this.setupNav();
     this.setupEditor();
     this.setupUploader();
-  }
-
-  ngOnDestroy() {
-    this.restoreNav();
   }
 
   transitionForComponent?(
     nextRoute: ActivatedRouteSnapshot
   ): SGRouteTransitionCommands {
     return new SGRouteTransitionCommands({ scrollTo: topElementId });
-  }
-
-  private setupNav() {
-    let nav = document.querySelector("#mainNav");
-    nav.classList.add("is-visible", "is-fixed");
-  }
-
-  private restoreNav() {
-    let nav = document.querySelector("#mainNav");
-    nav.classList.remove("is-visible", "is-fixed");
   }
 
   private async setupEditor() {

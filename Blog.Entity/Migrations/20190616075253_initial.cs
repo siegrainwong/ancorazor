@@ -259,14 +259,14 @@ namespace Blog.Entity.Migrations
                 columns: new[] { "Id", "Alias", "CreatedAt", "Name", "Remark", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, "uncategorized", new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), "Uncategorized", "default category", new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330) },
-                    { 2, "tutorial", new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), "tutorial", "category for demostration", new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330) }
+                    { 1, "uncategorized", new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), "Uncategorized", "default category", new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800) },
+                    { 2, "tutorial", new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), "tutorial", "category for demostration", new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Role",
                 columns: new[] { "Id", "CreatedAt", "IsDeleted", "IsEnabled", "Name", "Remark", "UpdatedAt" },
-                values: new object[] { 1, new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), false, true, "Admin", null, new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330) });
+                values: new object[] { 1, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), false, true, "Admin", null, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800) });
 
             migrationBuilder.InsertData(
                 table: "SiteSetting",
@@ -279,25 +279,35 @@ tags:
 - dotnet core
 ---
 
-**Hello world!**", "ancorazor", "upload/default/home-bg.jpg", new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), null, null, null, "date/alias", "ancorazor", null, "Ancorazor", new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330) });
+**Hello world!**", "ancorazor", "upload/default/home-bg.jpg", new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), null, null, null, "date/alias", "ancorazor", null, "Ancorazor", new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800) });
 
             migrationBuilder.InsertData(
                 table: "Tag",
                 columns: new[] { "Id", "Alias", "CreatedAt", "Name", "Remark", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, "markdown", new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), "markdown", "tag for demostration", new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330) },
-                    { 2, "yaml-front-matter", new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), "yaml-front-matter", "tag for demostration", new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330) }
+                    { 1, "markdown", new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), "markdown", "tag for demostration", new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800) },
+                    { 2, "yaml-front-matter", new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), "yaml-front-matter", "tag for demostration", new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "AuthUpdatedAt", "CreatedAt", "IsDeleted", "LoginName", "Password", "RealName", "Remark", "Status", "UpdatedAt" },
-                values: new object[] { 1, new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), false, "admin", "$SGHASH$V1$10000$RA3Eaw5yszeel1ARIe7iFp2AGWWLd80dAMwr+V4mRcAimv8u", "Admin", null, 1, new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330) });
+                values: new object[] { 1, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), false, "admin", "$SGHASH$V1$10000$RA3Eaw5yszeel1ARIe7iFp2AGWWLd80dAMwr+V4mRcAimv8u", "Admin", null, 1, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800) });
+
+            migrationBuilder.InsertData(
+                table: "ImageStorage",
+                columns: new[] { "Id", "Category", "CreatedAt", "Path", "Remark", "Size", "ThumbPath", "UpdatedAt", "Uploader" },
+                values: new object[] { 1, "cover", new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), "upload/default/post-bg.jpg", "default post cover", 0L, null, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), 1 });
+
+            migrationBuilder.InsertData(
+                table: "UserRole",
+                columns: new[] { "Id", "CreatedAt", "IsDeleted", "Remark", "RoleId", "UpdatedAt", "UserId" },
+                values: new object[] { 1, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), false, null, 1, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), 1 });
 
             migrationBuilder.InsertData(
                 table: "Article",
-                columns: new[] { "Id", "Alias", "Category", "CommentCount", "Content", "CreatedAt", "Digest", "IsDraft", "Remark", "Title", "UpdatedAt", "ViewCount" },
+                columns: new[] { "Id", "Alias", "Category", "CommentCount", "Content", "Cover", "CreatedAt", "Digest", "IsDraft", "Remark", "Title", "UpdatedAt", "ViewCount" },
                 values: new object[] { 1, "welcome-to-ancorazor", 2, 0, @"---
 title: Welcome to ancorazor!
 description: Learn how to write a post.
@@ -375,11 +385,11 @@ Then just paste that markdown to here, pretty simple.
 # Tips
 Ancorazor has no autosave or something like that, so you'd be better finishing your writing in a .md file first or post this as a draft.
 
-Thanks for reading this guide, hope you can enjoy your writing.", new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), "Learn how to write a post.", false, null, "Welcome to ancorazor!", new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), 0 });
+Thanks for reading this guide, hope you can enjoy your writing.", 1, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), "Learn how to write a post.", false, null, "Welcome to ancorazor!", new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), 0 });
 
             migrationBuilder.InsertData(
                 table: "Article",
-                columns: new[] { "Id", "Alias", "Category", "CommentCount", "Content", "CreatedAt", "Digest", "IsDraft", "Remark", "Title", "UpdatedAt", "ViewCount" },
+                columns: new[] { "Id", "Alias", "Category", "CommentCount", "Content", "Cover", "CreatedAt", "Digest", "IsDraft", "Remark", "Title", "UpdatedAt", "ViewCount" },
                 values: new object[] { 2, "getting-start-with-ancorazor", 2, 0, @"---
 title: 欢迎使用ancorazor!
 alias: Getting start with ancorazor
@@ -458,22 +468,17 @@ date: 2019/6/8
 # 提示
 Ancorazor **没有提供类似于自动保存的功能**，所以建议在 .md 文件里或者其他 markdown 编辑器中写好后再粘贴进来发布。
 
-感谢阅读本篇教程，祝您写作愉快~", new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), "本文将向你演示如何写一篇文章.", false, null, "欢迎使用ancorazor!", new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), 0 });
-
-            migrationBuilder.InsertData(
-                table: "UserRole",
-                columns: new[] { "Id", "CreatedAt", "IsDeleted", "Remark", "RoleId", "UpdatedAt", "UserId" },
-                values: new object[] { 1, new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), false, null, 1, new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), 1 });
+感谢阅读本篇教程，祝您写作愉快~", 1, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), "本文将向你演示如何写一篇文章.", false, null, "欢迎使用ancorazor!", new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), 0 });
 
             migrationBuilder.InsertData(
                 table: "ArticleTags",
                 columns: new[] { "Id", "Article", "CreatedAt", "Remark", "Tag", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), null, 1, new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330) },
-                    { 2, 1, new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), null, 2, new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330) },
-                    { 3, 2, new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), null, 1, new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330) },
-                    { 4, 2, new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330), null, 2, new DateTime(2019, 6, 16, 14, 35, 2, 379, DateTimeKind.Local).AddTicks(7330) }
+                    { 1, 1, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), null, 1, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800) },
+                    { 2, 1, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), null, 2, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800) },
+                    { 3, 2, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), null, 1, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800) },
+                    { 4, 2, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800), null, 2, new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800) }
                 });
 
             migrationBuilder.CreateIndex(

@@ -1,6 +1,7 @@
 const apiHost = "http://localhost:8088";
 
 export const environment = {
+  host: apiHost,
   production: false,
   apiUrlBase: `${apiHost}/api`
 };

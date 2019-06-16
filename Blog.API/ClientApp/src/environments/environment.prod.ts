@@ -1,6 +1,7 @@
 const apiHost = "https://siegrain.wang";
 
 export const environment = {
+  host: apiHost,
   production: true,
   apiUrlBase: `${apiHost}/api`
 };

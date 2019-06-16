@@ -83,7 +83,7 @@ export class ArticleComponent extends ObservedComponentBase
     const setting = this.store.siteSetting && this.store.siteSetting.gitment;
     if (!setting) return;
     new Gitment.construct({
-      id: this.model.createdAt,
+      id: this.model.id,
       owner: setting.githubId,
       repo: setting.repositoryName,
       oauth: {

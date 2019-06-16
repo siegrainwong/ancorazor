@@ -8,7 +8,11 @@ export class CommonService extends BaseService implements ISGService {
   protected initialize() {}
 
   async getSetting(): Promise<SiteSettingModel> {
-    var res = await this.get(`${this.serviceName}/setting`);
-    return res.succeed && res.data;
+    const res = await this.get(`${this.serviceName}/setting`);
+    if (!res.succeed) return null;
+    let model = res.data as SiteSettingModel;
+    if (model.gitment)
+      model.gitment = super.deserializeJsonFromBackend(model.gitment);
+    return model;
   }
 }

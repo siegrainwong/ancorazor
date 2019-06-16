@@ -42,7 +42,7 @@ export class BlogAppComponent extends ObservedComponentBase
     super();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.subscribeRoute();
     this.setupSetting();
     this._seoService.setup();
@@ -50,6 +50,8 @@ export class BlogAppComponent extends ObservedComponentBase
     this.setupUser();
     this._scrollDispatcher.scrolled().subscribe(onScroll);
     this.loadExternalResources();
+
+    // this.setupSetting();
   }
 
   private setupUser() {

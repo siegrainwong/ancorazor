@@ -246,6 +246,11 @@ export abstract class BaseService implements ISGService {
       }
     }).adapter;
   }
+
+  protected deserializeJsonFromBackend(json) {
+    if (typeof json !== "string") return json;
+    return this.util.toCamel(JSON.parse(unescape(json)));
+  }
 }
 
 export interface ISGService {

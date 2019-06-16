@@ -27,5 +27,10 @@
         {
             public const string Base = "upload";
         }
+
+        public static class EnvVar
+        {
+            public const string GitmentKey = "GITMENT_SK";
+        }
     }
 }

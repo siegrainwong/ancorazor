@@ -232,17 +232,6 @@ tags:
 **Hello world!**",
                 Remark = null
             });
-            builder.Entity<ImageStorage>().HasData(new ImageStorage
-            {
-                Id = 1,
-                CreatedAt = now,
-                UpdatedAt = now,
-                Size = 0,
-                Uploader = 1,
-                Category = "cover",
-                Path = "upload/default/post-bg.jpg",
-                Remark = "default post cover"
-            });
             builder.Entity<Category>().HasData(new Category
             {
                 Id = 1,

@@ -2,11 +2,13 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import ArticleModel from "../../models/article-model";
 import { Store } from "src/app/shared/store/store";
 import { externalScripts } from "src/app/shared/constants/siegrain.constants";
-import { SGUtil } from "src/app/shared/utils/siegrain.utils";
+import { SGUtil, topElementId } from "src/app/shared/utils/siegrain.utils";
 import { SGTransitionDelegate } from "src/app/shared/animations/sg-transition.delegate";
 import { SGAnimations } from "src/app/shared/animations/sg-animations";
 import { ObservedComponentBase } from "src/app/shared/components/observed.base";
 import { AutoUnsubscribe } from "src/app/shared/utils/auto-unsubscribe.decorator";
+import { SGRouteTransitionCommands } from "src/app/shared/animations/sg-transition.model";
+import { ActivatedRouteSnapshot } from "@angular/router";
 
 @Component({
   selector: "app-article",
@@ -28,6 +30,12 @@ export class ArticleComponent extends ObservedComponentBase
   }
   ngOnInit() {
     this.getArticle();
+  }
+
+  transitionForComponent?(
+    nextRoute: ActivatedRouteSnapshot
+  ): SGRouteTransitionCommands {
+    return new SGRouteTransitionCommands({ scrollTo: topElementId });
   }
   private getArticle() {
     this._routeChanged$ = this.store.routeDataChanged$.subscribe(x => {

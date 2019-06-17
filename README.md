@@ -1,6 +1,7 @@
 # Ancorazor
 
 [![Build Status](https://dev.azure.com/siegrainwong/Ancorazor/_apis/build/status/ancorazor?branchName=master)](https://dev.azure.com/siegrainwong/Ancorazor/_build/latest?definitionId=6&branchName=master)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsiegrainwong%2Fancorazor.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsiegrainwong%2Fancorazor?ref=badge_shield)
 
 Ancorazor is a blog system built by dotnet core 2.2 and angular 7 (ssr supported) with a very smooth transition effects.
 

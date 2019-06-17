@@ -1,0 +1,2 @@
+﻿Do not remove this txt file or this folder.
+It's defined in .csproj for release purpose.

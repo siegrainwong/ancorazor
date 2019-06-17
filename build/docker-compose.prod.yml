@@ -27,6 +27,8 @@ services:
       VIRTUAL_HOST: apm.siegrain.wang
       VIRTUAL_PORT: 8080
       LETSENCRYPT_HOST: apm.siegrain.wang
+    volumes:
+      - ./config/skywalking-ui-config/webapp.prod.yaml:/apache-skywalking-apm-bin/webapp/webapp.yaml:ro
   ancorazor:
     image: siegrainwong/ancorazor:#{Build.BuildNumber}#
     environment:

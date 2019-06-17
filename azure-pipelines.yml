@@ -34,7 +34,8 @@ steps:
 - task: replacetokens@3
   inputs:
     rootDirectory: '$(Build.ArtifactStagingDirectory)'
-    targetFiles: '**/docker-compose.prod.yml'
+    targetFiles: '**/docker-compose.prod.yml
+    **/webapp.prod.yml'
     encoding: 'auto'
     writeBOM: true
     actionOnMissing: 'fail'

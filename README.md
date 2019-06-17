@@ -44,8 +44,10 @@ I recommend you use azure devops to release this to production, all my pipelines
 TODO
 
 ## To-do
-- [ ] Comment
+- [x] Comment
 - [ ] Admin dashboard
+- [ ] Search
+- [ ] Categories & tags page
 
 Or you can see more details in [projects](https://github.com/Seanwong933/ancorazor/projects/1).
 

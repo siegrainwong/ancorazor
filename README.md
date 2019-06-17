@@ -6,7 +6,7 @@ Ancorazor is a blog system built by dotnet core 2.2 and angular 7 (ssr supported
 
 [Live demo](https://siegrain.wang).
 
-*NOTICE: It's still in progress and has no admin dashboard, so... it's not a good time to use it on production. :)*
+*NOTICE: It's still in progress and has no admin dashboard, so... try it if you brave. :)*
 
 ## Getting start
 

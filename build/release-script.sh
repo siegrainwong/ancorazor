@@ -8,7 +8,4 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 # remove previous version of ancorazor images
 # redirect error log to a txt file because this command will cause an error if there are no images to remove
-docker rmi $(docker images -a siegrainwong/ancorazor \
-				-f "before=siegrainwong/ancorazor:#{Build.BuildNumber}#" -q) 2>ignore.txt
-
-rm -rf ignore.txt
+docker rmi $(docker images -a siegrainwong/ancorazor -f "before=siegrainwong/ancorazor:#{Build.BuildNumber}#" -q 2> /dev/null) 2> /dev/null

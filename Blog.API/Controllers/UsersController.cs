@@ -62,19 +62,6 @@ namespace Blog.API.Controllers
 
         /// <summary>
         /// 在 SPA 初始化、凭据更换时刷新 XSRF Token
-        ///
-        /// MARK: XSRFToken refresh 为什么采取接口方案刷新？
-        /// 
-        /// TODO: 
-        ///     这里好像可以在请求SignIn、SignOut接口的结尾再请求一波这个接口，直接把新的XSRFToken附上去？
-        ///     登录后操作Header, Set-Cookie，把Cookie提取出来直接附加到Header里面去然后调用这个接口。
-        ///     同理调用完注销接口后清掉Header中对应cookie即可。
-        ///     那Cookie过期后怎么办？。。。在AuthenticationEvents里面判断吗？
-        /// 
-        /// 1. 因为不希望 SSR 时传递凭据，前端也需要做很多兼容处理。
-        /// 2. XSRF Token 无法设置到首页上，估计也是 SSR 的锅，要设置只能把 Cookie 放在 main.js 上，非常怪异。
-        /// 3. 本来是想尝试让请求过来时判断一下如果有凭据自动把 XSRFToken Cookie Append 到 Request.Cookie 上，但你 Append 不了 .AspNetCore.Antiforgery Cookie
-        /// 还是迂回实现算了。
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]

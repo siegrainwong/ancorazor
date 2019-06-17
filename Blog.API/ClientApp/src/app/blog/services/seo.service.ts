@@ -55,7 +55,8 @@ export class SEOService extends ObservedServiceBase implements OnDestroy {
         name: "description",
         content: article.digest
       });
-    article.tags.length &&
+    article.tags &&
+      article.tags.length &&
       this._meta.addTag({
         name: "keywords",
         content: article.tags.map(x => x.name).join(", ")

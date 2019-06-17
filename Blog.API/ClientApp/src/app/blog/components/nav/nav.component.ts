@@ -80,7 +80,7 @@ export class NavComponent extends ObservedComponentBase
         this.title = "";
       else this.title = this.store.siteSetting && this.store.siteSetting.title;
 
-      this.alwaysFixed = fixedPages.indexOf(data.kind as RouteKinds) > 0;
+      this.alwaysFixed = fixedPages.indexOf(data.kind as RouteKinds) > -1;
     });
     this._settingChanged$ = this.store.siteSettingChanged$.subscribe(data => {
       const isHomePage = this.title === "";

@@ -45,7 +45,7 @@ namespace Blog.Service
                 .And(x => x.Id == id));
         }
 
-        private async Task<Article> GetByIdIncludeAsync(int id)
+        private async Task<Article> GetByIdIncludedAsync(int id)
         {
             return await _getArticleIncludedAsync(_context, id);
         }
@@ -98,7 +98,7 @@ namespace Blog.Service
             Article entity = null;
             if (isUpdate)
             {
-                entity = await GetByIdIncludeAsync(parameter.Id);
+                entity = await GetByIdIncludedAsync(parameter.Id);
                 if (entity == null) throw new EntityNotFoundException<Article>();
                 DropRelations(entity);
                 entity.UpdatedAt = DateTime.Now;
@@ -109,7 +109,7 @@ namespace Blog.Service
                 entity = _mapper.Map<Article>(parameter);
             }
 
-            var category = await _context.Category
+            var category = await _context.Category.Select(x => new { x.Id, x.Name })
                 .FirstOrDefaultAsync(x => parameter.Category == x.Name);
             if (category == null)
             {
@@ -118,6 +118,10 @@ namespace Blog.Service
                     Name = parameter.Category,
                     Alias = UrlHelper.UrlStringEncode(parameter.Category),
                 };
+            }
+            else
+            {
+                entity.Category = category.Id;
             }
 
             var tags = await _context.Tag
@@ -148,7 +152,7 @@ namespace Blog.Service
         [Transaction]
         public virtual async Task<bool> DeleteAsync(int id)
         {
-            var entity = await GetByIdIncludeAsync(id);
+            var entity = await GetByIdIncludedAsync(id);
             if (entity == null) throw new EntityNotFoundException<Article>();
 
             DropRelations(entity);

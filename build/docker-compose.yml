@@ -25,6 +25,8 @@ services:
     environment:
       discovery.type: single-node
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+    volumes:
+      - elasticsearch://usr/share/elasticsearch/data
   skywalking-oap:
     image: siegrainwong/skywalking-oap
     container_name: skywalking-oap
@@ -63,3 +65,4 @@ services:
       - 1433
 volumes:
   ancorazor:
+  elasticsearch:

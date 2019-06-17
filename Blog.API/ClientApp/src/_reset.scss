@@ -159,7 +159,10 @@ label {
   pre,
   code {
     @include code-block();
-    font-size: 14px;
+    font-size: 16px;
+  }
+  img {
+    max-width: 100%;
   }
   > pre {
     background: linear-gradient(
@@ -216,8 +219,8 @@ label {
   margin: 0 4px;
   background: linear-gradient(
     to right,
-    rgba(123, 88, 255, 0.25),
-    rgba(49, 138, 255, 0.25)
+    rgba(63, 10, 255, 0.1),
+    rgba(16, 119, 255, 0.1)
   );
 }
 

@@ -1,4 +1,4 @@
-# Dockerfile of Blog.API
+# Dockerfile of Ancorazor.API
 
 # Set siegrainwong/aspnetcore-build:2.2-bionic as base image, it includes .net core 2.2 sdk and nodejs
 FROM siegrainwong/aspnetcore-build:2.2-bionic
@@ -7,10 +7,10 @@ COPY . .
 WORKDIR /src/Blog.API
 
 RUN npm rebuild node-sass
-RUN dotnet publish "Blog.API.csproj" -c Release -o /app
+RUN dotnet publish "Ancorazor.API.csproj" -c Release -o /app
 
 WORKDIR /app
 
 EXPOSE 8088
 
-CMD ["dotnet", "Blog.API.dll"]
+CMD ["dotnet", "Ancorazor.API.dll"]

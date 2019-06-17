@@ -44,10 +44,10 @@ public/
 .nuxt/
 dist/
 *.pubxml
-/Blog.API/Properties/PublishProfiles
+/Ancorazor.API/Properties/PublishProfiles
 SmartSqlMapConfig.Development.xml
-/Blog.API/SmartSqlMapConfig.Production.xml
-/Blog.API/SmartSqlMapConfig.Release.xml
-/Blog.EF.Entity/appsettings.json
-/Blog.API/Upload
-/Blog.API/Logs
+/Ancorazor.API/SmartSqlMapConfig.Production.xml
+/Ancorazor.API/SmartSqlMapConfig.Release.xml
+/Ancorazor.EF.Entity/appsettings.json
+/Ancorazor.API/Upload
+/Ancorazor.API/Logs

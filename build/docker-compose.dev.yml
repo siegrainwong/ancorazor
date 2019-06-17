@@ -35,7 +35,7 @@ services:
   #    - skywalking-oap
   #    - mssql
   #  volumes:
-  #    - ../Blog.API/appsettings.Development.docker.json:/app/appsettings.json
+  #    - ../Ancorazor.API/appsettings.Development.docker.json:/app/appsettings.json
   #  restart: always
   skywalking-ui:
     ports:

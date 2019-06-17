@@ -2,11 +2,11 @@
 
 [![Build Status](https://dev.azure.com/siegrainwong/Ancorazor/_apis/build/status/ancorazor?branchName=master)](https://dev.azure.com/siegrainwong/Ancorazor/_build/latest?definitionId=6&branchName=master)
 
-Ancorazor is a blog system built by dotnet core 2.2 and angular 7 (ssr supported for sure) with a very smooth transition effects.
+Ancorazor is a blog system built by dotnet core 2.2 and angular 7 (ssr supported) with a very smooth transition effects.
 
-[Live demo](http://siegrain.wang).
+[Live demo](https://siegrain.wang).
 
-*NOTICE: It's still in progress and has no admin dashboard, so... try it if you are brave :)*
+*NOTICE: It's still in progress and has no management page, so... try it if you brave. :)*
 
 ## Getting start
 
@@ -44,8 +44,10 @@ I recommend you use azure devops to release this to production, all my pipelines
 TODO
 
 ## To-do
-- [ ] Comment
-- [ ] Admin dashboard
+- [x] Comment
+- [ ] Management page
+- [ ] Search
+- [ ] Categories & tags page
 
 Or you can see more details in [projects](https://github.com/Seanwong933/ancorazor/projects/1).
 

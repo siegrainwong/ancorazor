@@ -34,8 +34,8 @@ steps:
 - task: replacetokens@3
   inputs:
     rootDirectory: '$(Build.ArtifactStagingDirectory)'
-    targetFiles: '**/docker-compose.prod.yml
-    **/webapp.prod.yml'
+    targetFiles: 'build/docker-compose.prod.yml
+    build/skywalking-ui-config/webapp.prod.yml'
     encoding: 'auto'
     writeBOM: true
     actionOnMissing: 'fail'

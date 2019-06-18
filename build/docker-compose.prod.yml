@@ -27,8 +27,10 @@ services:
       VIRTUAL_HOST: apm.siegrain.wang
       VIRTUAL_PORT: 8080
       LETSENCRYPT_HOST: apm.siegrain.wang
+      # worked but admin still loginable
       security.user.#{SW_USERNAME}#.password: #{SW_PASSWORD}#
     volumes:
+      # not work 
       - ./skywalking-ui-config/webapp.prod.yml:/apache-skywalking-apm-bin/webapp/webapp.yml:ro
   ancorazor:
     image: siegrainwong/ancorazor:#{Build.BuildNumber}#

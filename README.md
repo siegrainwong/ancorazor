@@ -1,7 +1,8 @@
 # Ancorazor
 
-[![Build Status](https://dev.azure.com/siegrainwong/Ancorazor/_apis/build/status/ancorazor?branchName=master)](https://dev.azure.com/siegrainwong/Ancorazor/_build/latest?definitionId=6&branchName=master)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsiegrainwong%2Fancorazor.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsiegrainwong%2Fancorazor?ref=badge_shield)
+[![Codacy grade](https://img.shields.io/codacy/grade/00a15dd7811e42b7ae6aea01a966fee0.svg?logo=codacy&style=for-the-badge)](https://app.codacy.com/app/siegrainwong/ancorazor?utm_source=github.com&utm_medium=referral&utm_content=siegrainwong/ancorazor&utm_campaign=Badge_Grade_Dashboard)
+[![Azure DevOps builds](https://img.shields.io/azure-devops/build/siegrainwong/75cdd93a-e41e-4158-ace3-88dab60c3343/6.svg?label=azure%20pipelines&logo=azure%20pipelines&style=for-the-badge)](https://dev.azure.com/siegrainwong/Ancorazor/_build/latest?definitionId=6&branchName=master)
+[![LICENSE](https://img.shields.io/badge/license-Anti--996%20&%20MIT-blue.svg?style=for-the-badge)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 
 Ancorazor is a blog system built by dotnet core 2.2 and angular 7 (ssr supported) with a very smooth transition effects.
 
@@ -56,4 +57,7 @@ Or you can see more details in [projects](https://github.com/Seanwong933/ancoraz
 [Template provider: startbootstrap-clean-blog](https://github.com/BlackrockDigital/startbootstrap-clean-blog)
 
 ## Licence
-MIT
+Anti-996 & MIT
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsiegrainwong%2Fancorazor.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsiegrainwong%2Fancorazor?ref=badge_large)

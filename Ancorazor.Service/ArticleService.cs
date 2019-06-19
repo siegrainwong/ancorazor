@@ -58,7 +58,25 @@ namespace Ancorazor.Service
                 viewModel.Previous.Path = GetArticleRoutePath(viewModel.Previous);
             if (viewModel.Next != null)
                 viewModel.Next.Path = GetArticleRoutePath(viewModel.Next);
+
+            // not wait
+            _ = IncreaseViewCount(viewModel.Id);
             return viewModel;
+        }
+
+        /// <summary>
+        /// 阅读量加一
+        /// 
+        /// TODO: 延迟累加，不要每次都怼数据库
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private async Task<bool> IncreaseViewCount(int id)
+        {
+            var article = await _context.Article.FindAsync(id);
+            article.ViewCount++;
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<PaginationResponse<ArticleViewModel>> QueryByPageAsync(ArticlePaginationParameter parameters)

@@ -9,6 +9,7 @@ import { ObservedComponentBase } from "src/app/shared/components/observed.base";
 import { AutoUnsubscribe } from "src/app/shared/utils/auto-unsubscribe.decorator";
 import { SGRouteTransitionCommands } from "src/app/shared/animations/sg-transition.model";
 import { ActivatedRouteSnapshot } from "@angular/router";
+import { timeout } from "src/app/shared/utils/promise-delay";
 
 @Component({
   selector: "app-article",
@@ -82,6 +83,7 @@ export class ArticleComponent extends ObservedComponentBase
 
     const setting = this.store.siteSetting && this.store.siteSetting.gitment;
     if (!setting) return;
+    await timeout(10); // waiting for render
     new Gitment.construct({
       id: this.model.id,
       owner: setting.githubId,

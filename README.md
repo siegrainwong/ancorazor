@@ -1,5 +1,6 @@
 # Ancorazor
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/00a15dd7811e42b7ae6aea01a966fee0)](https://app.codacy.com/app/siegrainwong/ancorazor?utm_source=github.com&utm_medium=referral&utm_content=siegrainwong/ancorazor&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://dev.azure.com/siegrainwong/Ancorazor/_apis/build/status/ancorazor?branchName=master)](https://dev.azure.com/siegrainwong/Ancorazor/_build/latest?definitionId=6&branchName=master)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsiegrainwong%2Fancorazor.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsiegrainwong%2Fancorazor?ref=badge_shield)
 

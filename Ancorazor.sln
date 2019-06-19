@@ -46,6 +46,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F1590BB5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ancorazor.Tests.Common", "Ancorazor.Tests.Common\Ancorazor.Tests.Common.csproj", "{D73BA09A-9D42-4839-84A6-129977B11DDF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{CF992B81-3E81-4CCD-AF3F-400BA1DF66C0}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		azure-pipelines.yml = azure-pipelines.yml
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "skywalking-ui-config", "skywalking-ui-config", "{51729D02-E74A-450E-92FA-F8E535E918E4}"
+	ProjectSection(SolutionItems) = preProject
+		build\skywalking-ui-config\webapp.prod.yml = build\skywalking-ui-config\webapp.prod.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +108,7 @@ Global
 		{EE7D2A50-C286-4BFB-B855-D204886A2B58} = {FECD17D6-D78E-4913-A37A-12F43D222D7C}
 		{46F658F1-3C5C-4AE0-8AB3-7C45C2EB9454} = {F1590BB5-E6FB-4009-8BE3-38CC5AFA6C0B}
 		{D73BA09A-9D42-4839-84A6-129977B11DDF} = {F1590BB5-E6FB-4009-8BE3-38CC5AFA6C0B}
+		{51729D02-E74A-450E-92FA-F8E535E918E4} = {FECD17D6-D78E-4913-A37A-12F43D222D7C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {15D44F91-9990-4376-AE34-DA10D7EF66F0}

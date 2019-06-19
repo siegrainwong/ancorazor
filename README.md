@@ -57,7 +57,7 @@ Or you can see more details in [projects](https://github.com/Seanwong933/ancoraz
 [Template provider: startbootstrap-clean-blog](https://github.com/BlackrockDigital/startbootstrap-clean-blog)
 
 ## Licence
-MIT
+MIT & Anti-996
 
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsiegrainwong%2Fancorazor.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsiegrainwong%2Fancorazor?ref=badge_large)

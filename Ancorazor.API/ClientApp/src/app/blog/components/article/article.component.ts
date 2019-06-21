@@ -85,7 +85,7 @@ export class ArticleComponent extends ObservedComponentBase
     if (!setting) return;
     await timeout(10); // waiting for render
     new Gitment.construct({
-      id: this.model.id,
+      id: this.model.id.toString(),
       owner: setting.githubId,
       repo: setting.repositoryName,
       oauth: {

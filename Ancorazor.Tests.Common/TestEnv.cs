@@ -33,7 +33,7 @@ namespace Ancorazor.Tests.Common {
 
         public static string RuntimeLauncherPath()
         {
-            var isWindows = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
             var envVarSeparateChar = isWindows ? ';' : ':';
             var commandName = isWindows ? "dotnet.exe" : "dotnet";
 
@@ -45,7 +45,8 @@ namespace Ancorazor.Tests.Common {
             foreach (string envPath in (Environment.GetEnvironmentVariable("PATH") ?? "").Split(envVarSeparateChar))
             {
                 var path = envPath.Trim();
-                if (!string.IsNullOrWhiteSpace(path) && File.Exists(path = Path.Combine(path, executableName)))
+                var isExists = !string.IsNullOrWhiteSpace(path) && File.Exists(path = Path.Combine(path, executableName));
+                if (isExists)
                 {
                     return Path.GetFullPath(path);
                 }

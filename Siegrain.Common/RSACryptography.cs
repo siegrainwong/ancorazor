@@ -10,7 +10,7 @@ namespace Siegrain.Common
     {
         public static RSA CreateRsaFromPrivateKey(string privateKey)
         {
-            var privateKeyBits = System.Convert.FromBase64String(privateKey.Replace("\n", ""));
+            var privateKeyBits = Convert.FromBase64String(privateKey.Replace("\n", ""));
             var rsa = RSA.Create();
             var RSAparams = new RSAParameters();
 
@@ -99,8 +99,7 @@ namespace Siegrain.Common
                     else
                         return null;
 
-                    var seq = new byte[15];
-                    seq = binr.ReadBytes(15);
+                    var seq = binr.ReadBytes(15);
                     if (!CompareBytearrays(seq, SeqOID))
                         return null;
 

@@ -25,8 +25,8 @@ namespace Siegrain.Common
         public static string Hash(string password, int iterations)
         {
             // 1. 用 CPRNG 算盐
-            byte[] salt;
-            new RNGCryptoServiceProvider().GetBytes(salt = new byte[SaltSize]);
+            var salt = new byte[SaltSize];
+            new RNGCryptoServiceProvider().GetBytes(salt);
 
             // 2. 密码哈希
             var pbkdf2 = new Rfc2898DeriveBytes(password, salt, iterations);

@@ -64,7 +64,7 @@ namespace Ancorazor.API.Filters
                 Succeed = false
             };
 
-            context.Result = new JsonResult(errorResp) { StatusCode = (int)statusCode }; ;
+            context.Result = new JsonResult(errorResp) { StatusCode = (int)statusCode };
         }
     }
 }

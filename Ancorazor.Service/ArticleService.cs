@@ -63,7 +63,7 @@ namespace Ancorazor.Service
         }
 
         /// <summary>
-        /// 阅读量加一
+        /// 阅读量+1
         /// 
         /// TODO: 延迟累加，不要每次都怼数据库
         /// </summary>
@@ -105,6 +105,7 @@ namespace Ancorazor.Service
         [Transaction]
         public virtual async Task<ArticleViewModel> UpsertAsync(ArticleUpdateParameter parameter)
         {
+            // validation
             parameter.Alias = UrlHelper.ToUrlSafeString(parameter.Alias ?? parameter.Title, true);
             if (parameter.Id == 0 &&
                 _context.Article.Any(x => x.Title == parameter.Title || x.Alias == parameter.Alias))
@@ -125,6 +126,7 @@ namespace Ancorazor.Service
                 entity = _mapper.Map<Article>(parameter);
             }
 
+            // category
             var category = await _context.Category.Select(x => new { x.Id, x.Name })
                 .FirstOrDefaultAsync(x => parameter.Category == x.Name);
             if (category == null)
@@ -140,6 +142,7 @@ namespace Ancorazor.Service
                 entity.Category = category.Id;
             }
 
+            // tags
             var tags = await _context.Tag
                 .Where(x => parameter.Tags.Contains(x.Name)).ToListAsync();
 
@@ -147,8 +150,8 @@ namespace Ancorazor.Service
                 .Except(tags.Select(x => x.Name))
                 .Select(x => new Tag { Name = x, Alias = UrlHelper.UrlStringEncode(x) });
 
+            // upsert
             if (!isUpdate) await _context.Article.AddAsync(entity);
-
             await _context.ArticleTags
                 .AddRangeAsync(tags.Concat(newTags)
                 .Select(x => new ArticleTags

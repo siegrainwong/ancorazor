@@ -48,7 +48,7 @@ namespace Ancorazor.Entity
 
             #region Structures
 
-            // set default value of parent entity
+            // set default value of base entity
             foreach (var entityType in builder.Model.GetEntityTypes()
                 .Where(e => typeof(BaseEntity).IsAssignableFrom(e.ClrType)))
             {
@@ -368,7 +368,7 @@ Thanks for reading this guide, hope you can enjoy your writing."
                 Alias = UrlHelper.ToUrlSafeString("Getting start with ancorazor"),
                 IsDraft = false,
                 Category = 2,
-                CreatedAt = now,
+                CreatedAt = now.AddDays(-1),
                 UpdatedAt = now,
                 Content = @"---
 title: 欢迎使用ancorazor!

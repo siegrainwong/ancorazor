@@ -51,6 +51,7 @@ TODO
 - [ ] Management page
 - [ ] Search
 - [ ] Categories & tags page
+- [ ] Tests
 
 Or refer [projects](https://github.com/Seanwong933/ancorazor/projects/1).
 

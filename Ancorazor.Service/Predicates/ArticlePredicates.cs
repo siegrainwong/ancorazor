@@ -66,7 +66,7 @@ namespace Ancorazor.Service
             if (isDraft.HasValue && article.IsDraft != isDraft)
                 throw new EntityNotFoundException<Article>();
 
-            var futurePrevious = _context.Article.Where(p => p.Id < article.Id)
+            var futurePrevious = _context.Article.Where(p => p.CreatedAt > article.CreatedAt)
                             .OrderBy(p => p.CreatedAt).Select(p => new
                             {
                                 p.Id,
@@ -77,7 +77,7 @@ namespace Ancorazor.Service
                                 Category = p.CategoryNavigation
                             }).DeferredFirstOrDefault().FutureValue();
 
-            var futureNext = _context.Article.Where(p => p.Id > article.Id)
+            var futureNext = _context.Article.Where(p => p.CreatedAt < article.CreatedAt)
                             .OrderByDescending(p => p.CreatedAt).Select(p => new
                             {
                                 p.Id,

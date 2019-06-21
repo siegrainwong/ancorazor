@@ -2,7 +2,7 @@
 
 Ancorazor 是一个基于 .NET Core 2.2 和 Angular 7 的极简博客系统。
 
-[Live demo](https://siegrain.wang).
+[Demo](https://siegrain.wang)
 
 *注意: 项目依然在开发中，而且还没有做后台，不过前台也有基本的管理功能，处于勉强能用的阶段。*
 

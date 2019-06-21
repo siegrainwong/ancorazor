@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ancorazor.Entity
 {
-    public partial class UserRole: BaseEntity
+    public class UserRole: BaseEntity
     {
         public int UserId { get; set; }
         public int RoleId { get; set; }

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ancorazor.Entity
 {
-    public partial class ArticleTags: BaseEntity
+    public class ArticleTags: BaseEntity
     {
         public int Article { get; set; }
         public int Tag { get; set; }

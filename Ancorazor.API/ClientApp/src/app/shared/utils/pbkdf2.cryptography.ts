@@ -1,3 +1,20 @@
+function stringToArrayBuffer(byteString: string) {
+  var byteArray = new Uint8Array(byteString.length);
+  for (var i = 0; i < byteString.length; i++) {
+    byteArray[i] = byteString.codePointAt(i);
+  }
+  return byteArray;
+}
+
+function arrayBufferToString(buffer: ArrayBuffer) {
+  var byteArray = new Uint8Array(buffer);
+  var byteString = "";
+  for (var i = 0; i < byteArray.byteLength; i++) {
+    byteString += String.fromCodePoint(byteArray[i]);
+  }
+  return byteString;
+}
+
 /**
  * MARK: Angular PBKDF2
  * https://stackoverflow.com/questions/40459020/angular-js-cryptography-pbkdf2-and-iteration/40468218#40468218
@@ -46,23 +63,4 @@ export function deriveAKey(
         res(keyB64);
       });
   });
-}
-
-//Utility functions
-
-function stringToArrayBuffer(byteString: string) {
-  var byteArray = new Uint8Array(byteString.length);
-  for (var i = 0; i < byteString.length; i++) {
-    byteArray[i] = byteString.codePointAt(i);
-  }
-  return byteArray;
-}
-
-function arrayBufferToString(buffer: ArrayBuffer) {
-  var byteArray = new Uint8Array(buffer);
-  var byteString = "";
-  for (var i = 0; i < byteArray.byteLength; i++) {
-    byteString += String.fromCodePoint(byteArray[i]);
-  }
-  return byteString;
 }

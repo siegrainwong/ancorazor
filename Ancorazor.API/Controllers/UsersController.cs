@@ -71,7 +71,7 @@ namespace Ancorazor.API.Controllers
         public IActionResult GetXSRFToken()
         {
             var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
-            Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false });
+            Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false });
             return Ok();
         }
 

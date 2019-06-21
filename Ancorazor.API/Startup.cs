@@ -128,7 +128,6 @@ namespace Ancorazor.API
 
         private void RegisterHelper(IServiceCollection services)
         {
-            services.AddSingleton<UrlHelper>();
             services.AddSingleton<IFileSystem>(new LocalDiskFileSystem(Path.Combine(_hostingEnvironment.ContentRootPath, "Upload")));
             services.AddScoped<ISpaPrerenderingService, SpaPrerenderingService>();
         }

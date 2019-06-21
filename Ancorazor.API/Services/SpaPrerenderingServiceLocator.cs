@@ -13,7 +13,7 @@ namespace Ancorazor.API.Services
     {
         public static Action<HttpContext, IDictionary<string, object>> GetProcessor(IApplicationBuilder app)
         {
-            return (HttpContext httpContext, IDictionary<string, object> supplyData) =>
+            return (httpContext, supplyData) =>
             {
                 var service = app.ApplicationServices.CreateScope().ServiceProvider.GetService<ISpaPrerenderingService>();
                 service.Process(httpContext, supplyData);

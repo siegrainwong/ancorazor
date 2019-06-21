@@ -7,14 +7,8 @@ using System.Text.RegularExpressions;
 
 namespace Ancorazor.API.Common
 {
-    public class UrlHelper
+    public static class UrlHelper
     {
-        private readonly SEOConfiguration _seoConfiguration;
-        public UrlHelper(IOptions<SEOConfiguration> seoConfiguration)
-        {
-            _seoConfiguration = seoConfiguration.Value;
-        }
-
         public static string ToUrlSafeString(string source, bool convertToPinyin = true)
         {
             var str = convertToPinyin ? CHNToPinyin.ConvertToPinYin(source) : source;
@@ -29,7 +23,7 @@ namespace Ancorazor.API.Common
             return WebUtility.HtmlEncode(source.Replace(" ", "-"));
         }
 
-        public string GetArticleRoutePath(int id, DateTime date, string alias, string category, string template)
+        public static string GetArticleRoutePath(int id, DateTime date, string alias, string category, string template)
         {
             category = category ?? Constants.Constants.Article.DefaultCategoryName;
             var path = template

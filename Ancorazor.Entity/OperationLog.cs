@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ancorazor.Entity
 {
-    public partial class OperationLog: BaseEntity
+    public class OperationLog: BaseEntity
     {
         public int? UserId { get; set; }
         [StringLength(200)]

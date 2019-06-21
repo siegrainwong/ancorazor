@@ -87,6 +87,17 @@ export class SGFadeAnimation extends SGAnimation {
  * === Transition Commands ===
  */
 
+/**
+ * 打个ClassName的标记进去
+ */
+export function ClassName(name: string): ClassDecorator {
+  return function(target: any) {
+    Object.defineProperty(target.prototype, "className", {
+      value: () => name
+    });
+  };
+}
+
 /** 过渡指令 */
 @ClassName("SGTransitionCommands")
 export class SGTransitionCommands {
@@ -122,12 +133,4 @@ export class SGCustomizeTransitionCommands extends SGTransitionCommands {
     super();
     Object.assign(this, obj);
   }
-}
-
-export function ClassName(name: string): ClassDecorator {
-  return function(target: any) {
-    Object.defineProperty(target.prototype, "className", {
-      value: () => name
-    });
-  };
 }

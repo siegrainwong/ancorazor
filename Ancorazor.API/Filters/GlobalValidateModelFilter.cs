@@ -15,17 +15,16 @@ namespace Ancorazor.API.Filters
 {
     public class GlobalValidateModelFilter : IActionFilter
     {
-        private readonly IHostingEnvironment _env;
         private readonly ILogger<GlobalValidateModelFilter> _logger;
 
-        public GlobalValidateModelFilter(IHostingEnvironment env, ILogger<GlobalValidateModelFilter> logger)
+        public GlobalValidateModelFilter(ILogger<GlobalValidateModelFilter> logger)
         {
-            _env = env;
             _logger = logger;
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
+            // do nothing
         }
 
         public void OnActionExecuting(ActionExecutingContext context)

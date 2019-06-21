@@ -46,14 +46,14 @@ namespace Ancorazor.API.Authentication
         {
             context.Response.Headers.Remove("Location");
             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(false);
         }
 
         public override async Task RedirectToAccessDenied(RedirectContext<CookieAuthenticationOptions> context)
         {
             context.Response.Headers.Remove("Location");
             context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(false);
         }
 
         public override Task RedirectToLogout(RedirectContext<CookieAuthenticationOptions> context)

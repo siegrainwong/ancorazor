@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Siegrain.Common
 {
-    public class CHNToPinyin
+    public static class CHNToPinyin
     {
         /// <summary> 
         /// 将字符串转换成拼音 

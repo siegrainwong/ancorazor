@@ -6,6 +6,6 @@ namespace Ancorazor.API.Messages
 {
     public class QueryParameter
     {
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; }
     }
 }

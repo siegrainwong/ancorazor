@@ -26,14 +26,12 @@ namespace Ancorazor.Service
 {
     public partial class ArticleService
     {
-        private readonly UrlHelper _urlHelper;
         private readonly BlogContext _context;
         private readonly IMapper _mapper;
         private readonly SiteSettingService _settingService;
 
-        public ArticleService(UrlHelper urlHelper, BlogContext context, IMapper mapper, SiteSettingService settingService)
+        public ArticleService(BlogContext context, IMapper mapper, SiteSettingService settingService)
         {
-            _urlHelper = urlHelper;
             _context = context;
             _mapper = mapper;
             _settingService = settingService;
@@ -202,7 +200,7 @@ namespace Ancorazor.Service
         {
             if (viewModel == null) return null;
             var setting = _settingService.GetSetting();
-            return _urlHelper.GetArticleRoutePath(viewModel.Id, viewModel.CreatedAt, viewModel.Alias, viewModel.CategoryAlias, setting.RouteMapping);
+            return UrlHelper.GetArticleRoutePath(viewModel.Id, viewModel.CreatedAt, viewModel.Alias, viewModel.CategoryAlias, setting.RouteMapping);
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Ancorazor.Entity
 {
-    public partial class BlogContext : DbContext
+    public class BlogContext : DbContext
     {
         public BlogContext() { }
 
@@ -497,10 +497,6 @@ Ancorazor **没有提供类似于自动保存的功能**，所以建议在 .md �
             #endregion
 
             #endregion
-
-            OnModelCreatingPartial(builder);
         }
-
-        partial void OnModelCreatingPartial(ModelBuilder builder);
     }
 }

@@ -51,6 +51,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{
 		.gitignore = .gitignore
 		azure-pipelines.yml = azure-pipelines.yml
 		LICENSE = LICENSE
+		README-CN.md = README-CN.md
 		README.md = README.md
 	EndProjectSection
 EndProject

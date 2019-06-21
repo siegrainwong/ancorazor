@@ -4,7 +4,7 @@
 [![Azure DevOps builds](https://img.shields.io/azure-devops/build/siegrainwong/75cdd93a-e41e-4158-ace3-88dab60c3343/6.svg?label=azure%20pipelines&logo=azure%20pipelines&style=for-the-badge)](https://dev.azure.com/siegrainwong/Ancorazor/_build/latest?definitionId=6&branchName=master)
 [![LICENSE](https://img.shields.io/badge/license-Anti--996%20&%20MIT-blue.svg?style=for-the-badge)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 
-[ÖÐÎÄ¼ò½é](https://github.com/siegrainwong/ancorazor/blob/master/README-CN.md)
+[ä¸­æ–‡ç®€ä»‹](https://github.com/siegrainwong/ancorazor/blob/master/README-CN.md)
 
 ---
 

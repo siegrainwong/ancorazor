@@ -45,10 +45,10 @@ namespace Ancorazor.Tests.Common {
             foreach (string envPath in (Environment.GetEnvironmentVariable("PATH") ?? "").Split(envVarSeparateChar))
             {
                 var path = envPath.Trim();
-                var isExists = !string.IsNullOrWhiteSpace(path) && File.Exists(path = Path.Combine(path, executableName));
-                if (isExists)
+                var fullPath = Path.Combine(path, executableName);
+                if (!string.IsNullOrWhiteSpace(path) && File.Exists(fullPath))
                 {
-                    return Path.GetFullPath(path);
+                    return Path.GetFullPath(fullPath);
                 }
             }
 

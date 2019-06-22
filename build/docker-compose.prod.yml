@@ -72,6 +72,11 @@ services:
       - certs://etc/nginx/certs:rw
       - //var/run/docker.sock:/var/run/docker.sock:ro
     network_mode: bridge
+  portainer:
+    environment:
+      VIRTUAL_HOST: pt.siegrain.wang
+      VIRTUAL_PORT: 9000
+      LETSENCRYPT_HOST: pt.siegrain.wang
 volumes:
   conf:
   vhost:

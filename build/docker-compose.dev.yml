@@ -40,3 +40,6 @@ services:
   skywalking-ui:
     ports:
       - 8080:8080
+  portainer:
+    ports:
+      - 9000:9000

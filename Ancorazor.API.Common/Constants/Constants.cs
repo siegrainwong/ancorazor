@@ -25,7 +25,7 @@
 
         public static class UploadFilePath
         {
-            public const string Base = "upload";
+            public const string Base = "Upload";
         }
 
         public static class EnvVar

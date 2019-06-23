@@ -9,8 +9,8 @@ namespace Siegrain.Common
 {
     public class ImageProcessor
     {
-        private readonly ILogger _logger;
-        public ImageProcessor(ILogger logger)
+        private readonly ILogger<ImageProcessor> _logger;
+        public ImageProcessor(ILogger<ImageProcessor> logger)
         {
             _logger = logger;
         }
@@ -30,7 +30,7 @@ namespace Siegrain.Common
                 image.Mutate(x => x.Resize(width, height));
                 image.Save(thumbFullPath);
             }
-            _logger.LogInformation($"Image saved on path: {fullPath}");
+            _logger.LogCritical($"Image saved on path: {fullPath}");
             return Task.CompletedTask;
         }
     }

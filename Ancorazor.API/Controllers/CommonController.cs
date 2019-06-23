@@ -23,9 +23,9 @@ namespace Ancorazor.API.Controllers
         private readonly SiteSettingService _settingService;
         private readonly ImageStorageService _imageService;
         private readonly ImageProcessor _imageProcessor;
-        private readonly ILogger _logger;
+        private readonly ILogger<CommonController> _logger;
 
-        public CommonController(SiteSettingService settingService, UserService userService, ImageStorageService imageService, ImageProcessor imageProcessor, ILogger logger) : base(userService)
+        public CommonController(SiteSettingService settingService, UserService userService, ImageStorageService imageService, ImageProcessor imageProcessor, ILogger<CommonController> logger) : base(userService)
         {
             _settingService = settingService;
             _imageService = imageService;

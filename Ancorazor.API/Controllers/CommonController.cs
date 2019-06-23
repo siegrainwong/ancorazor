@@ -6,6 +6,7 @@ using Ancorazor.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Siegrain.Common;
 using Siegrain.Common.FileSystem;
 using System;
@@ -21,11 +22,15 @@ namespace Ancorazor.API.Controllers
     {
         private readonly SiteSettingService _settingService;
         private readonly ImageStorageService _imageService;
+        private readonly ImageProcessor _imageProcessor;
+        private readonly ILogger _logger;
 
-        public CommonController(SiteSettingService settingService, UserService userService, ImageStorageService imageService) : base(userService)
+        public CommonController(SiteSettingService settingService, UserService userService, ImageStorageService imageService, ImageProcessor imageProcessor, ILogger logger) : base(userService)
         {
             _settingService = settingService;
             _imageService = imageService;
+            _imageProcessor = imageProcessor;
+            _logger = logger;
         }
 
         [HttpGet("Setting")]
@@ -53,6 +58,8 @@ namespace Ancorazor.API.Controllers
             var fileName = $"{Guid.NewGuid().ToString("N")}{fileExt}";
             var path = $"{Constants.UploadFilePath.Base}/{category}";
 
+            _logger.LogInformation($"An image will upload to {path}");
+
             var entity = new ImageStorage
             {
                 Category = category,
@@ -62,7 +69,7 @@ namespace Ancorazor.API.Controllers
                 Uploader = (await GetCurrentUser()).Id
             };
 
-            await ImageProcessor.SaveWithThumbnailAsync(file, Constants.Article.ThumbWidth, Constants.Article.ThumbHeight, path, fileName);
+            await _imageProcessor.SaveWithThumbnailAsync(file, Constants.Article.ThumbWidth, Constants.Article.ThumbHeight, path, fileName);
 
             return Ok(new { Id = await _imageService.InsertAsync(entity) });
         }

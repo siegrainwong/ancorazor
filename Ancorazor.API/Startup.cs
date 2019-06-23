@@ -41,6 +41,7 @@ using SkyWalking.Diagnostics.HttpClient;
 using SkyWalking.Diagnostics.SqlClient;
 using Ancorazor.API.Services;
 using Serilog.Core;
+using Siegrain.Common;
 
 #endregion
 
@@ -70,7 +71,7 @@ namespace Ancorazor.API
             RegisterDynamicProxy(services);
             RegisterEntityFramework(services);
             RegisterCaching(services);
-            RegisterHelper(services);
+            RegisterUtilities(services);
             RegisterMvc(services);
             RegisterService(services);
             RegisterSwagger(services);
@@ -126,9 +127,10 @@ namespace Ancorazor.API
             });
         }
 
-        private void RegisterHelper(IServiceCollection services)
+        private void RegisterUtilities(IServiceCollection services)
         {
             services.AddSingleton<IFileSystem>(new LocalDiskFileSystem(Path.Combine(_hostingEnvironment.ContentRootPath, "Upload")));
+            services.AddSingleton<ImageProcessor>();
             services.AddScoped<ISpaPrerenderingService, SpaPrerenderingService>();
         }
 

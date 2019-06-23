@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using System.IO;
@@ -6,11 +7,17 @@ using System.Threading.Tasks;
 
 namespace Siegrain.Common
 {
-    public static class ImageProcessor
+    public class ImageProcessor
     {
+        private readonly ILogger _logger;
+        public ImageProcessor(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public static readonly string DirectorySeparator = Path.DirectorySeparatorChar.ToString();
 
-        public static Task SaveWithThumbnailAsync(IFormFile file, int width, int height, string path, string fileName, string thumbPrefix = "thumb_")
+        public Task SaveWithThumbnailAsync(IFormFile file, int width, int height, string path, string fileName, string thumbPrefix = "thumb_")
         {
             var directoryPath = string.Concat(path.Replace("/", DirectorySeparator), DirectorySeparator);
             if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
@@ -23,6 +30,7 @@ namespace Siegrain.Common
                 image.Mutate(x => x.Resize(width, height));
                 image.Save(thumbFullPath);
             }
+            _logger.LogInformation($"Image saved on path: {fullPath}");
             return Task.CompletedTask;
         }
     }

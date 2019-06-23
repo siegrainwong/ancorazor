@@ -46,7 +46,7 @@ services:
       - mssql
     restart: always
     volumes:
-      - ancorazor_assets://app/Upload:rw
+      - ancorazor_assets:/app/Upload:rw
   nginx-proxy:
     container_name: nginx-proxy
     image: jwilder/nginx-proxy:alpine
@@ -54,13 +54,13 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - conf://etc/nginx/conf.d
-      - vhost://etc/nginx/vhost.d
-      - html://usr/share/nginx/html
-      - dhparam://etc/nginx/dhparam
-      - certs://etc/nginx/certs:ro
-      - //etc/nginx/htpasswd
-      - //var/run/docker.sock:/tmp/docker.sock
+      - conf:/etc/nginx/conf.d
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - dhparam:/etc/nginx/dhparam
+      - certs:/etc/nginx/certs:ro
+      - /etc/nginx/htpasswd:ro
+      - /var/run/docker.sock:/tmp/docker.sock
   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: letsencrypt
@@ -68,12 +68,12 @@ services:
       DEFAULT_EMAIL: siegrainwong@gmail.com
       NGINX_PROXY_CONTAINER: nginx-proxy
     volumes:
-      - conf://etc/nginx/conf.d
-      - vhost://etc/nginx/vhost.d
-      - html://usr/share/nginx/html
-      - dhparam://etc/nginx/dhparam
-      - certs://etc/nginx/certs:rw
-      - //var/run/docker.sock:/var/run/docker.sock:ro
+      - conf:/etc/nginx/conf.d
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - dhparam:/etc/nginx/dhparam
+      - certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     network_mode: bridge
   portainer:
     environment:

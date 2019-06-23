@@ -1,5 +1,5 @@
 # add basic auth for skywalking
-sudo htpasswd -db -c /etc/nginx/htpasswd/apm.siegrain.wang/.htpasswd $(SW_USERNAME) $(SW_PASSWORD)
+# sudo htpasswd -db -c /etc/nginx/htpasswd/apm.siegrain.wang/.htpasswd $(SW_USERNAME) $(SW_PASSWORD)
 
 # release-script for azure release pipeline
 cd ~/ancorazor/build

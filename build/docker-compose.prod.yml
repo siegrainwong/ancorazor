@@ -59,7 +59,7 @@ services:
       - html:/usr/share/nginx/html
       - dhparam:/etc/nginx/dhparam
       - certs:/etc/nginx/certs:ro
-      - auth:/etc/nginx/htpasswd
+      - ./htpasswd:/etc/nginx/htpasswd
       - /var/run/docker.sock:/tmp/docker.sock
   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
@@ -86,5 +86,4 @@ volumes:
   html:
   dhparam:
   certs:
-  auth:
   ancorazor_assets:

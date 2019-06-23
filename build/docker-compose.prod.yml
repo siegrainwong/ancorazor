@@ -45,6 +45,8 @@ services:
       - skywalking-oap
       - mssql
     restart: always
+    volumes:
+      - ancorazor_assets: //app/Upload
   nginx-proxy:
     container_name: nginx-proxy
     image: jwilder/nginx-proxy:alpine
@@ -83,3 +85,4 @@ volumes:
   html:
   dhparam:
   certs:
+  ancorazor_assets:

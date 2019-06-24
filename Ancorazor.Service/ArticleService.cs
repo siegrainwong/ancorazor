@@ -19,6 +19,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Z.EntityFramework.Plus;
+using EasyCaching.Core.Interceptor;
 
 #endregion
 
@@ -48,6 +49,7 @@ namespace Ancorazor.Service
             return await _getArticleIncludedAsync(_context, id);
         }
 
+        [EasyCachingAble(Expiration = Constants.Article.Expiration, CacheKeyPrefix = Constants.Article.CachePrefix)]
         public async Task<object> GetByAliasAsync(string alias, bool? isDraft)
         {
             var viewModel = await GetArticleByAliasAsync(alias, isDraft);
@@ -57,8 +59,7 @@ namespace Ancorazor.Service
             if (viewModel.Next != null)
                 viewModel.Next.Path = GetArticleRoutePath(viewModel.Next);
 
-            // not wait
-            _ = IncreaseViewCount(viewModel.Id);
+            await IncreaseViewCount(viewModel.Id);
             return viewModel;
         }
 
@@ -73,10 +74,12 @@ namespace Ancorazor.Service
         {
             var article = await _context.Article.FindAsync(id);
             article.ViewCount++;
+            _context.Article.Update(article);
             await _context.SaveChangesAsync();
             return true;
         }
 
+        [EasyCachingAble(Expiration = Constants.Article.Expiration, CacheKeyPrefix = Constants.Article.CachePrefix)]
         public async Task<PaginationResponse<ArticleViewModel>> QueryByPageAsync(ArticlePaginationParameter parameters)
         {
             var predicate = PredicateBuilder.New<Article>(true);
@@ -102,6 +105,7 @@ namespace Ancorazor.Service
             return result;
         }
 
+        [EasyCachingPut(CacheKeyPrefix = Constants.Article.CachePrefix)]
         [Transaction]
         public virtual async Task<ArticleViewModel> UpsertAsync(ArticleUpdateParameter parameter)
         {
@@ -179,6 +183,7 @@ namespace Ancorazor.Service
             return entity;
         }
 
+        [EasyCachingEvict(CacheKeyPrefix = Constants.Article.CachePrefix)]
         [Transaction]
         public virtual async Task<bool> DeleteAsync(int id)
         {

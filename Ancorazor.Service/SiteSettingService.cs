@@ -1,13 +1,8 @@
 ﻿using Ancorazor.API.Common.Constants;
 using Ancorazor.API.Messages.Exceptions;
-using Ancorazor.API.Messages.Settings;
 using Ancorazor.Entity;
 using EasyCaching.Core.Interceptor;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Ancorazor.Service
@@ -21,7 +16,7 @@ namespace Ancorazor.Service
             _context = context;
         }
 
-        [EasyCachingAble(Expiration = Constants.SiteSetting.Expiration)]
+        [EasyCachingAble(Expiration = Constants.SiteSetting.Expiration, CacheKeyPrefix = Constants.SiteSetting.CachePrefix)]
         public virtual SiteSetting GetSetting()
         {
             var setting = _context.SiteSetting.FirstOrDefault();
@@ -29,7 +24,7 @@ namespace Ancorazor.Service
             return setting;
         }
 
-        [EasyCachingPut]
+        [EasyCachingPut(CacheKeyPrefix = Constants.SiteSetting.CachePrefix)]
         public virtual async Task<bool> UpdateSetting(SiteSetting entity)
         {
             _context.SiteSetting.Update(entity);

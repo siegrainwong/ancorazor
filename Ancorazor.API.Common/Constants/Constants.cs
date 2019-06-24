@@ -9,10 +9,14 @@
 
             public const int ThumbWidth = 200;
             public const int ThumbHeight = 150;
+
+            public const string CachePrefix = "Article";
+            public const int Expiration = 60 * 60 * 24;
         }
 
         public static class SiteSetting
         {
+            public const string CachePrefix = "SiteSetting";
             public const int Expiration = 60 * 60 * 24;
         }
 

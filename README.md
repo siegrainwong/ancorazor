@@ -4,62 +4,76 @@
 [![Azure DevOps builds](https://img.shields.io/azure-devops/build/siegrainwong/75cdd93a-e41e-4158-ace3-88dab60c3343/6.svg?label=azure%20pipelines&logo=azure%20pipelines&style=for-the-badge)](https://dev.azure.com/siegrainwong/Ancorazor/_build/latest?definitionId=6&branchName=master)
 [![LICENSE](https://img.shields.io/badge/license-Anti--996%20&%20MIT-blue.svg?style=for-the-badge)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 
-[涓枃绠�浠媇(https://github.com/siegrainwong/ancorazor/blob/master/README-CN.md)
+[English Readme](https://github.com/siegrainwong/ancorazor/blob/master/README-EN.md)
 
 ---
 
-Ancorazor is a blog system built by dotnet core 2.2 and angular 7 (ssr supported) with a very smooth transition effects.
+Ancorazor 是一个基于 .NET Core 2.2 和 Angular 7 的极简博客系统。
 
 [Demo](https://siegrain.wang)
 
-*It's still in progress and has no management page, so... try it if you brave. :)*
+_项目依然在开发中，而且还没有做后台，不过前台也有基本的管理功能，处于勉强能用的阶段。_
 
-## Getting start
+## 启动项目
 
-### Requirements
-Make sure you have these already installed on your machine.
+### 开发环境
+
+确保您的环境已经有这些东西了：
+
 1. .NET Core 2.2 SDK
 2. Nodejs 10+
-3. SQL Server(optional with docker-compose)
+3. SQL Server(有 docker-compose 可以不用这个)
 
-### Build
+### 常规启动
+
 1. `git clone https://github.com/siegrainwong/ancorazor.git`
-2. Replace connection string in `ancorazor/Ancorazor.API/appsettings.Development.json`(optional depends on your condition)
-3. `cd path-to-ancorazor/Ancorazor.API` then `dotnet watch run`
-4. Open `localhost:8088`, the default username/password is admin/123456.
+2. 替换`ancorazor/Ancorazor.API/appsettings.Development.json`中的连接字符串(可选，取决于你本地的 SQL Server 配置，一般不需要替换)
+3. 用 `cd path-to-ancorazor/Ancorazor.API` 进入目录后执行 `dotnet watch run`
+4. 打开 `localhost:8088`, 默认用户名密码 admin/123456.
 
-### Build with docker-compose
+### docker-compose 启动
+
 `cd path-to-ancorazor/build`
+
 #### windows
-Replace all `F:\Projects\ancorazor\` in `dev.ps1` to yours path then run this script.
+
+把在`dev.ps1`里面这样的`F:\Projects\ancorazor\`路径字符串替换成你的，然后运行这个脚本
+
 #### linux
-Run `path-to-ancorazor/build/dev.sh`
 
+运行 `path-to-ancorazor/build/dev.sh`
 
-This would launch sql server, skywalking, nginx and ancorazor together in your docker.
-- Skywalking: `localhost:8080`, the default account/password is admin/admin.
-- Ancorazor: `localhost:8088`, the default username/password is admin/123456.
+docker-compose 会将 sql server、skywalking、nginx 和 ancorazor 一并启动。
 
-## Release(CI/CD)
-I recommend you use azure devops to release this to production, all my pipelines are public [here](https://dev.azure.com/siegrainwong/Ancorazor/_build?definitionId=6).
+- Skywalking: `localhost:8080`, 默认用户名密码 is admin/admin.
+- Ancorazor: `localhost:8088`, 默认用户名密码 is admin/123456.
 
-## Structure
+## 发布(CI/CD)
+
+我会在之后写一篇教程如何在`Azure DevOps`上进行 CI/CD，现在你也可以参考 [azure-pipelines.yml](https://github.com/siegrainwong/ancorazor/blob/master/azure-pipelines.yml)。
+
+## 项目结构
+
 TODO
 
 ## To-do
+
 - [x] Comment
 - [ ] Management page
 - [ ] Search
 - [ ] Categories & tags page
 - [ ] Tests
 
-Or refer [projects](https://github.com/Seanwong933/ancorazor/projects/1).
+或参考 [project](https://github.com/siegrainwong/ancorazor/projects/1).
 
-## Acknowledgements
-[Template provider: startbootstrap-clean-blog](https://github.com/BlackrockDigital/startbootstrap-clean-blog)
+## 致谢
+
+[模板: startbootstrap-clean-blog](https://github.com/BlackrockDigital/startbootstrap-clean-blog)
+
+##
 
 ## Licence
-Anti-996 & MIT
 
+Anti-996 & MIT
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsiegrainwong%2Fancorazor.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsiegrainwong%2Fancorazor?ref=badge_large)

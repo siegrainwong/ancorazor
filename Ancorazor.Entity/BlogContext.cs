@@ -339,7 +339,7 @@ From top to bottom:
 2. alias：optional, using on url.
 3. description：optional, will display below the title.
 4. draft：optional, means this article only visible for authorized user,  valid inputs are `true\false\yes\no`.
-5. category：optional, categorize an article and can be used on part of the url depends on your site setting, ancorazor doesn't support *multiple categories*  so use category instead.
+5. category：optional, categorize an article and can be used on part of the url depends on your site setting, ancorazor doesn't support *multiple categories*.
 6. tags：optional
 7. date：optional
 
@@ -430,7 +430,7 @@ date: 2019/6/8
 2. alias 别名：可选，用于 Url 的显示，中文会自动转换为拼音，不填写的话会从 title 上取
 3. description 描述：可选，会显示在列表和文章的标题下方
 4. draft 草稿：可选，草稿只有你自己能看见，有效值为`true\false\yes\no`
-5. category 分类：可选，为文章分类，且可在站点配置中将其作为 Url 的一部分，注意 ancorazor 只支持单分类不支持多分类，所以不要写 categories
+5. category 分类：可选，为文章分类，且可在站点配置中将其作为 Url 的一部分，注意 ancorazor 只支持单分类不支持多分类
 6. tags 标签：可选
 7. date 文章日期：可选
 

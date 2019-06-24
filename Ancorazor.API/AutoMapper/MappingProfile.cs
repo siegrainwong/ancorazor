@@ -11,7 +11,11 @@ namespace Ancorazor.API.AutoMapper
         {
             CreateMap<Article, ArticleViewModel>();
             CreateMap<ArticleViewModel, Article>();
-            CreateMap<ArticleUpdateParameter, Article>().ForMember(x => x.Category, o => o.Ignore());
+            CreateMap<ArticleUpdateParameter, Article>()
+                .ForMember(x => x.Category, o => o.Ignore())
+                .ForAllMembers(o => o.Condition(
+                    (source, destination, sourceMember, destMember) => 
+                    (sourceMember != null)));
         }
     }
 }

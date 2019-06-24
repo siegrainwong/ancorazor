@@ -220,8 +220,14 @@ export abstract class BaseService implements ISGService {
   private get cacheAdapter() {
     return setupCache({
       maxAge: 60 * 60 * 1000, // 1 hour
-      readOnError: (error, request) =>
-        error.response.status >= 400 && error.response.status < 600,
+      readOnError: (error, request) => {
+        if (error.response) {
+          return error.response.status >= 400 && error.response.status < 600;
+        } else {
+          this.util.tip(error.message);
+          return false;
+        }
+      },
       clearOnStale: false,
       exclude: {
         // disable cache from requests with query params

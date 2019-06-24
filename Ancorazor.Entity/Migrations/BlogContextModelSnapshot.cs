@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ancorazor.Entity.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    class BlogContextModelSnapshot : ModelSnapshot
+    partial class BlogContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -155,7 +155,7 @@ From top to bottom:
 2. alias：optional, using on url.
 3. description：optional, will display below the title.
 4. draft：optional, means this article only visible for authorized user,  valid inputs are `true\false\yes\no`.
-5. category：optional, categorize an article and can be used on part of the url depends on your site setting, ancorazor doesn't support *multiple categories*  so use category instead.
+5. category：optional, categorize an article and can be used on part of the url depends on your site setting, ancorazor doesn't support *multiple categories*.
 6. tags：optional
 7. date：optional
 
@@ -176,11 +176,11 @@ Ancorazor has no autosave or something like that, so you'd be better finishing y
 
 Thanks for reading this guide, hope you can enjoy your writing.",
                             Cover = 1,
-                            CreatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            CreatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             Digest = "Learn how to write a post.",
                             IsDraft = false,
                             Title = "Welcome to ancorazor!",
-                            UpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            UpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             ViewCount = 0
                         },
                         new
@@ -250,7 +250,7 @@ date: 2019/6/8
 2. alias 别名：可选，用于 Url 的显示，中文会自动转换为拼音，不填写的话会从 title 上取
 3. description 描述：可选，会显示在列表和文章的标题下方
 4. draft 草稿：可选，草稿只有你自己能看见，有效值为`true\false\yes\no`
-5. category 分类：可选，为文章分类，且可在站点配置中将其作为 Url 的一部分，注意 ancorazor 只支持单分类不支持多分类，所以不要写 categories
+5. category 分类：可选，为文章分类，且可在站点配置中将其作为 Url 的一部分，注意 ancorazor 只支持单分类不支持多分类
 6. tags 标签：可选
 7. date 文章日期：可选
 
@@ -270,11 +270,11 @@ Ancorazor **没有提供类似于自动保存的功能**，所以建议在 .md �
 
 感谢阅读本篇教程，祝您写作愉快~",
                             Cover = 1,
-                            CreatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            CreatedAt = new DateTime(2019, 6, 23, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             Digest = "本文将向你演示如何写一篇文章.",
                             IsDraft = false,
                             Title = "欢迎使用ancorazor!",
-                            UpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            UpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             ViewCount = 0
                         });
                 });
@@ -315,33 +315,33 @@ Ancorazor **没有提供类似于自动保存的功能**，所以建议在 .md �
                         {
                             Id = 1,
                             Article = 1,
-                            CreatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            CreatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             Tag = 1,
-                            UpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800)
+                            UpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597)
                         },
                         new
                         {
                             Id = 2,
                             Article = 1,
-                            CreatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            CreatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             Tag = 2,
-                            UpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800)
+                            UpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597)
                         },
                         new
                         {
                             Id = 3,
                             Article = 2,
-                            CreatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            CreatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             Tag = 1,
-                            UpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800)
+                            UpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597)
                         },
                         new
                         {
                             Id = 4,
                             Article = 2,
-                            CreatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            CreatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             Tag = 2,
-                            UpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800)
+                            UpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597)
                         });
                 });
 
@@ -391,19 +391,19 @@ Ancorazor **没有提供类似于自动保存的功能**，所以建议在 .md �
                         {
                             Id = 1,
                             Alias = "uncategorized",
-                            CreatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            CreatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             Name = "Uncategorized",
                             Remark = "default category",
-                            UpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800)
+                            UpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597)
                         },
                         new
                         {
                             Id = 2,
                             Alias = "tutorial",
-                            CreatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            CreatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             Name = "tutorial",
                             Remark = "category for demostration",
-                            UpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800)
+                            UpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597)
                         });
                 });
 
@@ -461,11 +461,11 @@ Ancorazor **没有提供类似于自动保存的功能**，所以建议在 .md �
                         {
                             Id = 1,
                             Category = "cover",
-                            CreatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            CreatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             Path = "upload/default/post-bg.jpg",
                             Remark = "default post cover",
                             Size = 0L,
-                            UpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            UpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             Uploader = 1
                         });
                 });
@@ -551,11 +551,11 @@ Ancorazor **没有提供类似于自动保存的功能**，所以建议在 .md �
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            CreatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             IsDeleted = false,
                             IsEnabled = true,
                             Name = "Admin",
-                            UpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800)
+                            UpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597)
                         });
                 });
 
@@ -621,11 +621,11 @@ tags:
 **Hello world!**",
                             Copyright = "ancorazor",
                             CoverUrl = "upload/default/home-bg.jpg",
-                            CreatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            CreatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             RouteMapping = "date/alias",
                             SiteName = "ancorazor",
                             Title = "Ancorazor",
-                            UpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800)
+                            UpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597)
                         });
                 });
 
@@ -666,19 +666,19 @@ tags:
                         {
                             Id = 1,
                             Alias = "markdown",
-                            CreatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            CreatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             Name = "markdown",
                             Remark = "tag for demostration",
-                            UpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800)
+                            UpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597)
                         },
                         new
                         {
                             Id = 2,
                             Alias = "yaml-front-matter",
-                            CreatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            CreatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             Name = "yaml-front-matter",
                             Remark = "tag for demostration",
-                            UpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800)
+                            UpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597)
                         });
                 });
 
@@ -719,10 +719,10 @@ tags:
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            CreatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             IsDeleted = false,
                             RoleId = 1,
-                            UpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            UpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             UserId = 1
                         });
                 });
@@ -774,14 +774,14 @@ tags:
                         new
                         {
                             Id = 1,
-                            AuthUpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
-                            CreatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800),
+                            AuthUpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
+                            CreatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597),
                             IsDeleted = false,
                             LoginName = "admin",
                             Password = "$SGHASH$V1$10000$RA3Eaw5yszeel1ARIe7iFp2AGWWLd80dAMwr+V4mRcAimv8u",
                             RealName = "Admin",
                             Status = 1,
-                            UpdatedAt = new DateTime(2019, 6, 16, 15, 52, 53, 173, DateTimeKind.Local).AddTicks(9800)
+                            UpdatedAt = new DateTime(2019, 6, 24, 22, 23, 37, 348, DateTimeKind.Local).AddTicks(3597)
                         });
                 });
 

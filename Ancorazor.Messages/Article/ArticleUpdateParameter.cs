@@ -21,8 +21,7 @@ namespace Ancorazor.API.Messages.Article
 
         public int Cover { get; set; } = 1;
 
-        [Required]
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         [StringLength(500, MinimumLength = 0, ErrorMessage = "Digest must be less than 500 characters.")]
         public string Digest { get; set; }

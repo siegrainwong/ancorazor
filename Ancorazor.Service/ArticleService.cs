@@ -111,20 +111,7 @@ namespace Ancorazor.Service
                 _context.Article.Any(x => x.Title == parameter.Title || x.Alias == parameter.Alias))
                 throw new DuplicateEntityException<Article>(nameof(Article.Title), nameof(Article.Alias));
 
-            var isUpdate = parameter.Id != 0;
-            Article entity = null;
-            if (isUpdate)
-            {
-                entity = await GetByIdIncludedAsync(parameter.Id);
-                if (entity == null) throw new EntityNotFoundException<Article>();
-                DropRelations(entity);
-                entity.UpdatedAt = DateTime.Now;
-                _mapper.Map(parameter, entity);
-            }
-            else
-            {
-                entity = _mapper.Map<Article>(parameter);
-            }
+            var entity = await MappingFromParameter(parameter);
 
             // category
             var category = await _context.Category.Select(x => new { x.Id, x.Name })
@@ -151,7 +138,7 @@ namespace Ancorazor.Service
                 .Select(x => new Tag { Name = x, Alias = UrlHelper.UrlStringEncode(x) });
 
             // upsert
-            if (!isUpdate) await _context.Article.AddAsync(entity);
+            if (parameter.Id == 0) await _context.Article.AddAsync(entity);
             await _context.ArticleTags
                 .AddRangeAsync(tags.Concat(newTags)
                 .Select(x => new ArticleTags
@@ -166,6 +153,30 @@ namespace Ancorazor.Service
             var viewModel = _mapper.Map<ArticleViewModel>(entity);
             viewModel.Path = GetArticleRoutePath(viewModel);
             return viewModel;
+        }
+
+        private async Task<Article> MappingFromParameter(ArticleUpdateParameter parameter)
+        {
+            var isUpdate = parameter.Id != 0;
+            Article entity;
+            if (isUpdate)
+            {
+                entity = await GetByIdIncludedAsync(parameter.Id);
+                if (entity == null) throw new EntityNotFoundException<Article>();
+
+                DropRelations(entity);
+
+                var createdAt = entity.CreatedAt;
+                entity = _mapper.Map(parameter, entity);
+                if (!parameter.CreatedAt.HasValue) entity.CreatedAt = createdAt;
+                entity.UpdatedAt = DateTime.Now;
+            }
+            else
+            {
+                entity = _mapper.Map<Article>(parameter);
+            }
+
+            return entity;
         }
 
         [Transaction]

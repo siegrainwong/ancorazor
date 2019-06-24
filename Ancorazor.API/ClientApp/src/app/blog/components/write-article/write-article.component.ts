@@ -182,9 +182,13 @@ export class WriteArticleComponent implements OnInit, SGTransitionDelegate {
     // assemble
     this.model.content = this._editor.value();
     this.model.title = this._frontMatter.title;
-    this.model.createdAt = this._frontMatter.date || timeFormat(new Date());
+    this.model.createdAt = this._frontMatter.date;
     this.model.tags = this._frontMatter.tags;
     this.model.category = this._frontMatter.category;
+    if (this._frontMatter.categories && !this.model.category)
+      this.model.category =
+        Array.isArray(this._frontMatter.categories) &&
+        this._frontMatter.categories[0];
     this.model.digest = this._frontMatter.description;
     this.model.alias = this._frontMatter.alias;
     const isDraft =

@@ -60,10 +60,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "skywalking-ui-config", "sky
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "htpasswd", "htpasswd", "{34771CF0-E782-4090-AB01-F33B5369BF08}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "apm.siegrain.wang", "apm.siegrain.wang", "{1A759EDB-54C9-486D-BDDE-52E164595E5E}"
 	ProjectSection(SolutionItems) = preProject
-		build\htpasswd\apm.siegrain.wang\.htpasswd = build\htpasswd\apm.siegrain.wang\.htpasswd
+		build\htpasswd\apm.siegrain.wang = build\htpasswd\apm.siegrain.wang
 	EndProjectSection
 EndProject
 Global
@@ -117,7 +115,6 @@ Global
 		{D73BA09A-9D42-4839-84A6-129977B11DDF} = {F1590BB5-E6FB-4009-8BE3-38CC5AFA6C0B}
 		{51729D02-E74A-450E-92FA-F8E535E918E4} = {FECD17D6-D78E-4913-A37A-12F43D222D7C}
 		{34771CF0-E782-4090-AB01-F33B5369BF08} = {FECD17D6-D78E-4913-A37A-12F43D222D7C}
-		{1A759EDB-54C9-486D-BDDE-52E164595E5E} = {34771CF0-E782-4090-AB01-F33B5369BF08}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {15D44F91-9990-4376-AE34-DA10D7EF66F0}

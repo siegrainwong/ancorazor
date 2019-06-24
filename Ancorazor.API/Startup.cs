@@ -98,7 +98,7 @@ namespace Ancorazor.API
 
             app.UseCors();
             ConfigureAuthentication(app);
-            ConfigureEntityFramework(app);
+            ConfigureEntityFramework(app, env);
             app.UseHttpsRedirection();
             ConfigureMvc(app);
             ConfigureSpa(app, env);
@@ -311,8 +311,10 @@ namespace Ancorazor.API
             app.UseAuthentication();
         }
 
-        private void ConfigureEntityFramework(IApplicationBuilder app)
+        private void ConfigureEntityFramework(IApplicationBuilder app, IHostingEnvironment env)
         {
+            if (!env.IsDevelopment()) return;
+
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<BlogContext>();

@@ -8,17 +8,17 @@
 
 ---
 
-Ancorazor is a blog system built by dotnet core 2.2 and angular 7 (ssr supported).
+Ancorazor is a blog system built with dotnet core 2.2 and angular 7 (ssr supported).
 
 [Demo](https://siegrain.wang)
 
-_It's still in progress and has no management page, so... try it if you brave. :)_
+_It's still a work in progress and has no management page, so... try it if don't mind that :)_
 
 ## Getting start
 
 ### Requirements
 
-Make sure you have these already installed on your machine.
+Make sure your machine has these dependancies installed.
 
 1. .NET Core 2.2 SDK
 2. Nodejs 10+
@@ -27,7 +27,7 @@ Make sure you have these already installed on your machine.
 ### Build
 
 1. `git clone https://github.com/siegrainwong/ancorazor.git`
-2. Replace connection string in `ancorazor/Ancorazor.API/appsettings.Development.json`(optional depends on your condition)
+2. Replace connection string in `ancorazor/Ancorazor.API/appsettings.Development.json`(optional, depends on your use case)
 3. `cd path-to-ancorazor/Ancorazor.API` then `dotnet watch run`
 4. Open `localhost:8088`, the default username/password is admin/123456.
 
@@ -37,13 +37,13 @@ Make sure you have these already installed on your machine.
 
 #### windows
 
-Replace all `F:\Projects\ancorazor\` in `dev.ps1` to yours path then run this script.
+Replace all `F:\Projects\ancorazor\` in `dev.ps1` with your project path then run this script.
 
 #### linux
 
 Run `path-to-ancorazor/build/dev.sh`
 
-This would launch sql server, skywalking, nginx and ancorazor together in your docker.
+This will launch sql server, skywalking, nginx and ancorazor simultaneously in your docker.
 
 - Skywalking: `localhost:8080`, the default account/password is admin/admin.
 - Ancorazor: `localhost:8088`, the default username/password is admin/123456.

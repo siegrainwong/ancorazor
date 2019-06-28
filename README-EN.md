@@ -14,6 +14,14 @@ Ancorazor is a blog system built with dotnet core 2.2 and angular 7 (ssr support
 
 _It's still a work in progress and has no management page, so... try it if don't mind that :)_
 
+## Gif Demostration
+
+GIF 13M
+
+![ancorazor gif demostration](https://ws1.sinaimg.cn/large/8e22171agy1g4h8udnyokg20vq0ntu19.gif)
+
+The transition module is based on `animate.css` and made by myself.
+
 ## Getting start
 
 ### Requirements

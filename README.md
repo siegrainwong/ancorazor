@@ -14,6 +14,14 @@ Ancorazor 是一个基于 .NET Core 2.2 和 Angular 7 的极简博客系统。
 
 _项目依然在开发中，而且还没有做后台，不过前台也有基本的管理功能，处于勉强能用的阶段。_
 
+## 演示
+
+GIF 13M
+
+![ancorazor gif demostration](https://ws1.sinaimg.cn/large/8e22171agy1g4h8udnyokg20vq0ntu19.gif)
+
+转场动画模块是我花了较大精力基于`animate.css`写的，因为觉得`Angular animation`不太好用，2333。
+
 ## 启动项目
 
 ### 开发环境

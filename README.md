@@ -16,7 +16,7 @@ _ÏîÄ¿ÒÀÈ»ÔÚ¿ª·¢ÖÐ£¬¶øÇÒ»¹Ã»ÓÐ×öºóÌ¨£¬²»¹ýÇ°Ì¨Ò²ÓÐ»ù±¾µÄ¹ÜÀí¹¦ÄÜ£¬´¦ÓÚÃãÇ¿ÄÜÓÃµÄ½
 
 ## ÑÝÊ¾
 
-GIF 9M
+GIF 3M
 
 ![ancorazor gif demostration](https://s2.ax1x.com/2019/06/28/ZMxQs0.gif)
 

@@ -16,7 +16,7 @@ _It's still a work in progress and has no management page, so... try it if don't
 
 ## Gif Demostration
 
-GIF 9M
+GIF 3M
 
 ![ancorazor gif demostration](https://s2.ax1x.com/2019/06/28/ZMxQs0.gif)
 

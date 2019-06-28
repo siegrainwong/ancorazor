@@ -1,0 +1,12 @@
+User-agent: EasouSpider
+Request-rate: 1/2 # load 1 page per 2 seconds
+Crawl-delay: 10
+Disallow: /
+
+User-agent: MSNBot
+Request-rate: 1/2 # load 1 page per 2 seconds
+Crawl-delay: 10
+Disallow: /
+
+User-Agent: *
+Disallow: /

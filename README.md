@@ -18,7 +18,7 @@ _ÏîÄ¿ÒÀÈ»ÔÚ¿ª·¢ÖĞ£¬¶øÇÒ»¹Ã»ÓĞ×öºóÌ¨£¬²»¹ıÇ°Ì¨Ò²ÓĞ»ù±¾µÄ¹ÜÀí¹¦ÄÜ£¬´¦ÓÚÃãÇ¿ÄÜÓÃµÄ½
 
 GIF 13M
 
-![ancorazor gif demostration](https://ws1.sinaimg.cn/large/8e22171agy1g4h8udnyokg20vq0ntu19.gif)
+![ancorazor gif demostration](https://github.com/siegrainwong/ancorazor/blob/master/main.gif)
 
 ×ª³¡¶¯»­Ä£¿éÊÇÎÒ»¨ÁË½Ï´ó¾«Á¦»ùÓÚ`animate.css`Ğ´µÄ£¬ÒòÎª¾õµÃ`Angular animation`²»Ì«ºÃÓÃ£¬2333¡£
 

@@ -18,7 +18,7 @@ _It's still a work in progress and has no management page, so... try it if don't
 
 GIF 13M
 
-![ancorazor gif demostration](https://ws1.sinaimg.cn/large/8e22171agy1g4h8udnyokg20vq0ntu19.gif)
+![ancorazor gif demostration](https://github.com/siegrainwong/ancorazor/blob/master/main.gif)
 
 The transition module is based on `animate.css` and made by myself.
 

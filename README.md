@@ -16,9 +16,9 @@ _ÏîÄ¿ÒÀÈ»ÔÚ¿ª·¢ÖĞ£¬¶øÇÒ»¹Ã»ÓĞ×öºóÌ¨£¬²»¹ıÇ°Ì¨Ò²ÓĞ»ù±¾µÄ¹ÜÀí¹¦ÄÜ£¬´¦ÓÚÃãÇ¿ÄÜÓÃµÄ½
 
 ## ÑİÊ¾
 
-GIF 13M
+GIF 9M
 
-![ancorazor gif demostration](https://github.com/siegrainwong/ancorazor/blob/master/main.gif)
+![ancorazor gif demostration](https://s2.ax1x.com/2019/06/28/ZMqIdH.gif)
 
 ×ª³¡¶¯»­Ä£¿éÊÇÎÒ»¨ÁË½Ï´ó¾«Á¦»ùÓÚ`animate.css`Ğ´µÄ£¬ÒòÎª¾õµÃ`Angular animation`²»Ì«ºÃÓÃ£¬2333¡£
 

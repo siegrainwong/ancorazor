@@ -4,6 +4,8 @@
 FROM siegrainwong/aspnetcore-build:2.2-bionic as publish
 WORKDIR /src
 COPY . .
+RUN dotnet restore "Ancorazor.API/Ancorazor.API.csproj"
+COPY . .
 WORKDIR /src/Ancorazor.API
 RUN npm rebuild node-sass
 RUN dotnet publish "Ancorazor.API.csproj" -c Release -o /app

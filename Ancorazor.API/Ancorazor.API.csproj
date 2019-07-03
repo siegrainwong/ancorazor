@@ -6,7 +6,7 @@
     <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
     <UserSecretsId>24dec880-1d4c-4d3c-8102-9aef836b6ee3</UserSecretsId>
     <LangVersion>7.1</LangVersion>
-    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
 
     <!-- Wether enable the SSR -->

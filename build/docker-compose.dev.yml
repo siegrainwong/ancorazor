@@ -37,6 +37,11 @@ services:
   #  volumes:
   #    - ../Ancorazor.API/appsettings.Development.docker.json:/app/appsettings.json
   #  restart: always
+   # environment:
+   #     ASPNETCORE_HOSTINGSTARTUPASSEMBLIES: SkyAPM.Agent.AspNetCore
+   #     SKYWALKING__SERVICENAME: ancorazor
+   # 
+        
   skywalking-ui:
     ports:
       - 8080:8080

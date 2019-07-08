@@ -8,4 +8,6 @@ docker run --rm -it `
 	--link mssql `
 	--name ancorazor_dev `
 	--network build_default `
+	--env ASPNETCORE_HOSTINGSTARTUPASSEMBLIES=SkyAPM.Agent.AspNetCore `
+	--env SKYWALKING__SERVICENAME=ancorazor `
  	-w /app/Ancorazor.API siegrainwong/aspnetcore-build:2.2-bionic dotnet watch run

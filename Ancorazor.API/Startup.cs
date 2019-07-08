@@ -1,11 +1,9 @@
 #region
 
 using AspectCore.Extensions.DependencyInjection;
-using AspectCore.Injector;
 using AutoMapper;
 using Ancorazor.API.Authentication;
 using Ancorazor.API.AutoMapper;
-using Ancorazor.API.Common;
 using Ancorazor.API.Common.Constants;
 using Ancorazor.API.Filters;
 using Ancorazor.Entity;
@@ -27,7 +25,6 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Serilog;
-using Serilog.Events;
 using Serilog.Exceptions;
 using Siegrain.Common.FileSystem;
 using Swashbuckle.AspNetCore.Swagger;
@@ -36,11 +33,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
-using SkyWalking.AspNetCore;
-using SkyWalking.Diagnostics.HttpClient;
-using SkyWalking.Diagnostics.SqlClient;
 using Ancorazor.API.Services;
-using Serilog.Core;
 using Siegrain.Common;
 
 #endregion
@@ -78,7 +71,6 @@ namespace Ancorazor.API
             RegisterCors(services);
             RegisterAuthentication(services);
             RegisterSpa(services);
-            ResigterSkywalking(services);
 
             return services.ConfigureAspectCoreInterceptor(options =>
             {
@@ -161,19 +153,6 @@ namespace Ancorazor.API
              ref: https://github.com/dotnetcore/AspectCore-Framework/blob/master/docs/1.%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.md
              */
             services.ConfigureDynamicProxy();
-        }
-
-        private void ResigterSkywalking(IServiceCollection services)
-        {
-            services.AddSkyWalking(option =>
-            {
-                option.ApplicationCode = _ServiceName;
-                option.DirectServers = "skywalking-oap:11800";
-                // 每三秒采样的Trace数量,-1 为全部采集
-                option.SamplePer3Secs = -1;
-            })
-            .AddSqlClient()
-            .AddHttpClient();
         }
 
         private void RegisterEntityFramework(IServiceCollection services)

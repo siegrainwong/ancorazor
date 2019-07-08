@@ -25,10 +25,14 @@ services:
     environment:
       discovery.type: single-node
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
       - elasticsearch://usr/share/elasticsearch/data
   skywalking-oap:
-    image: siegrainwong/skywalking-oap
+    image: siegrainwong/skywalking-oap:6.1.0
     container_name: skywalking-oap
     depends_on:
       - elasticsearch
@@ -38,10 +42,11 @@ services:
     ports:
       - 11800
       - 12800
-    volumes:
-      - ./config:/skywalking/config:ro
+    environment:
+      SW_STORAGE: elasticsearch
+      SW_STORAGE_ES_CLUSTER_NODES: elasticsearch:9200
   skywalking-ui:
-    image: siegrainwong/skywalking-ui
+    image: apache/skywalking-ui:6.1.0
     container_name: skywalking-ui
     depends_on:
       - skywalking-oap
@@ -51,7 +56,7 @@ services:
       - 8080
     restart: always
     environment:
-      collector.ribbon.listOfServers: skywalking-oap:12800
+      SW_OAP_ADDRESS: skywalking-oap:12800
   mssql:
     image: mcr.microsoft.com/mssql/server:2017-latest
     container_name: mssql

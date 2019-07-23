@@ -1,6 +1,3 @@
-# add basic auth for skywalking
-# sudo htpasswd -db -c /etc/nginx/htpasswd/apm.siegrain.wang/.htpasswd $(SW_USERNAME) $(SW_PASSWORD)
-
 # release-script for azure release pipeline
 cd ~/ancorazor/build
 
@@ -9,7 +6,7 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d 2> docker-
 cat docker-compose.log
 
 # this command would failed if there's no images to remove, so redirect this too.
-docker rmi $(docker images -a siegrainwong/ancorazor -f "before=siegrainwong/ancorazor:#{Build.BuildNumber}#" -q 2> /dev/null) 2> remove-unused-images.log
+docker rmi $(docker images -a siegrainwong/ancorazor -f "before=siegrainwong/ancorazor:20190628.6" -q 2> /dev/null) 2> remove-unused-images.log
 cat remove-unused-images.log
 
 # warm up

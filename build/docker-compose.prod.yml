@@ -52,6 +52,7 @@ services:
   nginx-proxy:
     container_name: nginx-proxy
     image: jwilder/nginx-proxy:alpine
+    restart: always
     ports:
       - 80:80
       - 443:443
@@ -66,6 +67,7 @@ services:
   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: letsencrypt
+    restart: always
     environment:
       DEFAULT_EMAIL: siegrainwong@gmail.com
       NGINX_PROXY_CONTAINER: nginx-proxy

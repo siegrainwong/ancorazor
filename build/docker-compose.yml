@@ -58,7 +58,7 @@ services:
   #  environment:
   #    SW_OAP_ADDRESS: skywalking-oap:12800
   mssql:
-    image: mcr.microsoft.com/mssql/server:2017-latest
+    image: justin2004/mssql_server_tiny
     container_name: mssql
     restart: always
     environment:

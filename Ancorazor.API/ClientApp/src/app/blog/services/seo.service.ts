@@ -25,7 +25,7 @@ export class SEOService extends ObservedServiceBase implements OnDestroy {
       this._store.routeDataChanged$,
       this._store.siteSettingChanged$
     ).subscribe(([routeData, setting]) => {
-      if (!setting.siteName) return;
+      if (!setting || !setting.siteName) return;
       this.setupSiteSEO(setting);
       this.setArticleSEO(routeData.article, setting.siteName);
     });

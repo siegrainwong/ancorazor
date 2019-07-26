@@ -41,10 +41,8 @@ services:
       ASPNETCORE_HOSTINGSTARTUPASSEMBLIES: SkyAPM.Agent.AspNetCore
       SKYWALKING__SERVICENAME: ancorazor
     depends_on:
-      - skywalking-oap
       - mssql
     links:
-      - skywalking-oap
       - mssql
     restart: always
     volumes:

@@ -16,47 +16,47 @@
 
 version: '3.3'
 services:
-  elasticsearch:
-    image: wutang/elasticsearch-shanghai-zone:6.3.2
-    container_name: elasticsearch
-    restart: always
-    ports:
-      - 9300
-    environment:
-      discovery.type: single-node
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - elasticsearch://usr/share/elasticsearch/data
-  skywalking-oap:
-    image: siegrainwong/skywalking-oap:6.1.0
-    container_name: skywalking-oap
-    depends_on:
-      - elasticsearch
-    links:
-      - elasticsearch
-    restart: always
-    ports:
-      - 11800
-      - 12800
-    environment:
-      SW_STORAGE: elasticsearch
-      SW_STORAGE_ES_CLUSTER_NODES: elasticsearch:9200
-  skywalking-ui:
-    image: apache/skywalking-ui:6.1.0
-    container_name: skywalking-ui
-    depends_on:
-      - skywalking-oap
-    links:
-      - skywalking-oap
-    ports:
-      - 8080
-    restart: always
-    environment:
-      SW_OAP_ADDRESS: skywalking-oap:12800
+  #elasticsearch:
+  #  image: wutang/elasticsearch-shanghai-zone:6.3.2
+  #  container_name: elasticsearch
+  #  restart: always
+  #  ports:
+  #    - 9300
+  #  environment:
+  #    discovery.type: single-node
+  #    ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+  #  ulimits:
+  #    memlock:
+  #      soft: -1
+  #      hard: -1
+  #  volumes:
+  #    - elasticsearch://usr/share/elasticsearch/data
+  #skywalking-oap:
+  #  image: siegrainwong/skywalking-oap:6.1.0
+  #  container_name: skywalking-oap
+  #  depends_on:
+  #    - elasticsearch
+  #  links:
+  #    - elasticsearch
+  #  restart: always
+  #  ports:
+  #    - 11800
+  #    - 12800
+  #  environment:
+  #    SW_STORAGE: elasticsearch
+  #    SW_STORAGE_ES_CLUSTER_NODES: elasticsearch:9200
+  #skywalking-ui:
+  #  image: apache/skywalking-ui:6.1.0
+  #  container_name: skywalking-ui
+  #  depends_on:
+  #    - skywalking-oap
+  #  links:
+  #    - skywalking-oap
+  #  ports:
+  #    - 8080
+  #  restart: always
+  #  environment:
+  #    SW_OAP_ADDRESS: skywalking-oap:12800
   mssql:
     image: mcr.microsoft.com/mssql/server:2017-latest
     container_name: mssql
@@ -80,5 +80,5 @@ services:
       - portainer_data:/data
 volumes:
   ancorazor:
-  elasticsearch:
+  #elasticsearch:
   portainer_data:

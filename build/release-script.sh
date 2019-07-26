@@ -5,9 +5,5 @@ cd ~/ancorazor/build
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d 2> docker-compose.log
 cat docker-compose.log
 
-# this command would failed if there's no images to remove, so redirect this too.
-docker rmi $(docker images -a siegrainwong/ancorazor -f "before=siegrainwong/ancorazor:20190628.6" -q 2> /dev/null) 2> remove-unused-images.log
-cat remove-unused-images.log
-
 # warm up
 curl https://siegrain.wang -o warm-up.log

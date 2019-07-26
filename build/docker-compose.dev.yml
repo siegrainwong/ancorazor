@@ -42,9 +42,9 @@ services:
    #     SKYWALKING__SERVICENAME: ancorazor
    # 
         
-  skywalking-ui:
-    ports:
-      - 8080:8080
+  #skywalking-ui:
+  #  ports:
+  #    - 8080:8080
   portainer:
     ports:
       - 9000:9000

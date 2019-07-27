@@ -105,6 +105,7 @@ export class Store extends ObservedServiceBase implements OnDestroy {
     return this._siteSetting;
   }
   set siteSetting(val) {
+    if (!val) return;
     this._siteSetting = val;
     this.siteSettingChanged$.next(val);
   }

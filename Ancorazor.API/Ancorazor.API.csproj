@@ -83,7 +83,6 @@
     <PackageReference Include="Serilog.Exceptions" Version="5.0.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.4" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.1.0" />
-    <PackageReference Include="SkyAPM.Agent.AspNetCore" Version="0.9.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>
 
@@ -101,11 +100,6 @@
     <ProjectReference Include="..\Ancorazor.Messages\Ancorazor.API.Messages.csproj" />
     <ProjectReference Include="..\Ancorazor.Service\Ancorazor.Service.csproj" />
     <ProjectReference Include="..\Siegrain.Common\Siegrain.Common.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Update="skyapm.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

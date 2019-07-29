@@ -20,6 +20,8 @@
 version: '3.3'
 services:
   mssql:
+    ports:
+      - 1433:1433
     environment:
       SA_PASSWORD: #{MSSQL_SA_PASSWORD}#
   #skywalking-ui:

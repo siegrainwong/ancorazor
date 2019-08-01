@@ -20,8 +20,6 @@
 version: '3.3'
 services:
   mssql:
-    ports:
-      - 1433:1433
     environment:
       SA_PASSWORD: #{MSSQL_SA_PASSWORD}#
   #skywalking-ui:
@@ -35,8 +33,6 @@ services:
   #    # not work 
   #    - ./skywalking-ui-config/webapp.prod.yml:/apache-skywalking-apm-bin/webapp/webapp.yml:ro
   ancorazor:
-    ports:
-      - 8088:8088
     image: siegrainwong/ancorazor:#{Build.BuildNumber}#
     environment:
       VIRTUAL_HOST: siegrain.wang

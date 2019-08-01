@@ -91,7 +91,7 @@ namespace Ancorazor.API
             app.UseCors();
             ConfigureAuthentication(app);
             ConfigureEntityFramework(app, env);
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             ConfigureMvc(app);
             ConfigureSpa(app, env);
         }

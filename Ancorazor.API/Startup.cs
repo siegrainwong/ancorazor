@@ -292,7 +292,8 @@ namespace Ancorazor.API
 
         private void ConfigureEntityFramework(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //if (!env.IsDevelopment()) return;
+            // disable auto migration in production
+            if (!env.IsDevelopment()) return;
 
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {

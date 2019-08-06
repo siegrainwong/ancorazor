@@ -95,6 +95,7 @@ let routes: Routes = [
         },
         canDeactivate: [SGTransitionDeactivateGuard]
       },
+      { path: "client/:id", redirectTo: "/" },
       { path: "**", redirectTo: "/notfound" }
     ]
   }

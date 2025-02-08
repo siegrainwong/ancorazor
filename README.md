@@ -29,8 +29,19 @@ GIF 3M
 确保您的环境已经有这些东西了：
 
 1. .NET Core 2.2 SDK
-2. Nodejs 10+
+2. Nodejs 12
 3. SQL Server(有 docker-compose 可以不用这个)
+
+### 2025-02-08 更新启动方式
+
+出于一些奇怪的原因最近又要跑这个项目做演示，更新一下启动方式。
+
+1. 安装 [nvm-windows](https://github.com/coreybutler/nvm-windows)、安装 .NET Core 2.2 SDK、安装 SQL Express 2022
+2. `dotnet restore`
+3. `nvm install 12`，报错说找不到 npm 就去 [nodejs previous releases](https://nodejs.org/zh-cn/about/previous-releases) 里找到 12 的包扔进 `C:\Users\Siegrain\AppData\Local\nvm` 对应版本的目录中也能用
+4. 安装 7.2.3 的 [Angular CLI](https://github.com/angular/angular-cli)
+5. 在 ClientApp 里 `yarn` 一下，然后 `yarn start`，没有报错就停掉，如果报`node-sass`就把`node_modules`干掉再`yarn`
+6. 回 `Ancorazor.API` 目录跑 `dotnet watch run`
 
 ### 常规启动
 

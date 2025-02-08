@@ -21,7 +21,7 @@ export abstract class BaseService implements ISGService {
     baseURL: environment.apiUrlBase,
     timeout: 100000,
     headers: { "Content-Type": "application/json" },
-    adapter: this.cacheAdapter
+    adapter: this.cacheAdapter,
   });
   private _url: string;
 
@@ -51,7 +51,7 @@ export abstract class BaseService implements ISGService {
      * Mark: 让`Server side`的请求结果传递到`Client side`避免重复请求
      * https://medium.com/@evertonrobertoauler/angular-5-universal-with-transfer-state-using-angular-cli-19fe1e1d352c
      */
-    const stateKey = makeStateKey(url);
+    const stateKey = makeStateKey<ResponseResult>(url);
     const storedData = this._state.get(stateKey, null);
     if (storedData) {
       this._state.remove(stateKey);
@@ -68,7 +68,7 @@ export abstract class BaseService implements ISGService {
      * Mark: 让`universal`等待`API`请求并渲染完毕
      * https://github.com/angular/angular/issues/20520#issuecomment-449597926
      */
-    return new Promise<ResponseResult>(resolve => {
+    return new Promise<ResponseResult>((resolve) => {
       if (!this.store.renderFromClient)
         this.logger.info(
           "Server side requesting",
@@ -76,7 +76,7 @@ export abstract class BaseService implements ISGService {
         );
       this._wrapper
         .doTask(this.handleRequest(Methods.GET, url, null, query))
-        .subscribe(result => {
+        .subscribe((result) => {
           if (!this.store.renderFromClient) {
             this._state.set(stateKey, result);
             this.logger.info("transfer state stored: ", result);
@@ -153,7 +153,7 @@ export abstract class BaseService implements ISGService {
         url: url,
         params: query,
         data: body,
-        withCredentials: false
+        withCredentials: false,
       });
       return this.handleResponse(res);
     } catch (error) {
@@ -164,7 +164,7 @@ export abstract class BaseService implements ISGService {
         this.util.tip(error);
         this.logger.error(error);
         return new ResponseResult({
-          message: `${error.message} for url: ${error.request.url}`
+          message: `${error.message} for url: ${error.request.url}`,
         });
       }
     }
@@ -182,13 +182,13 @@ export abstract class BaseService implements ISGService {
       result = new ResponseResult({
         data: response.data.data,
         succeed: response.data.succeed,
-        message: response.data.message
+        message: response.data.message,
       });
     else {
       return this.handleError(
         new ResponseResult({
           message: `Request failed : ${response.status} ${response.statusText}`,
-          data: response.data
+          data: response.data,
         }),
         response.status
       );
@@ -232,24 +232,22 @@ export abstract class BaseService implements ISGService {
       exclude: {
         // disable cache from requests with query params
         query: false,
-        filter: () => this.disabledCache()
+        filter: () => this.disabledCache(),
       },
       // invalidate caches with same prefix on url when sending a PUT | DELETE | POST request
       invalidate: async (cfg, req) => {
         if (req.method === "get" || this.disabledCache() || !this.serviceName)
           return;
-        const shouldInvalidateCachePrefix = `${environment.apiUrlBase}/${
-          this.serviceName
-        }`;
+        const shouldInvalidateCachePrefix = `${environment.apiUrlBase}/${this.serviceName}`;
         if (req.url.startsWith(shouldInvalidateCachePrefix)) {
-          Object.keys(cfg.store.store)
-            .filter(x => x.startsWith(shouldInvalidateCachePrefix))
-            .forEach(async x => await cfg.store.removeItem(x));
+          Object.keys(cfg.store)
+            .filter((x) => x.startsWith(shouldInvalidateCachePrefix))
+            .forEach((x) => delete cfg.store[x]);
           this.logger.info(
             `Caches with prefix ${shouldInvalidateCachePrefix} has been removed.`
           );
         }
-      }
+      },
     }).adapter;
   }
 
@@ -268,5 +266,5 @@ const enum Methods {
   GET = "GET",
   POST = "POST",
   PUT = "PUT",
-  DELETE = "DELETE"
+  DELETE = "DELETE",
 }
